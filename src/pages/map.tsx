@@ -94,7 +94,9 @@ export default function Page() {
           }}
           style={{ width: "100%", height: "100%" }}
           // mapStyle="mapbox://styles/mapbox/streets-v9"
-          mapStyle="mapbox://styles/rechenberger/cljkelien006n01o429b9440e"
+          mapStyle="mapbox://styles/mapbox/dark-v10"
+          // mapStyle="mapbox://styles/rechenberger/cljkelien006n01o429b9440e"
+          // mapStyle="mapbox://styles/rechenberger/cljklaom7007001r5hfwlcrfu"
           mapboxAccessToken={env.NEXT_PUBLIC_MAPBOX_TOKEN}
           onMove={(e) => {
             setCenterDebounced({
