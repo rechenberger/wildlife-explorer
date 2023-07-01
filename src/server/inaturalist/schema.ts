@@ -22,6 +22,7 @@ export const Taxon = z.object({
   native: z.boolean(),
   parent_id: z.number(),
   name: z.string(),
+  preferred_common_name: z.string().optional(),
   rank: z.string(),
   extinct: z.boolean(),
   id: z.number(),

@@ -1,9 +1,12 @@
 import { User2 } from "lucide-react"
+import dynamic from "next/dynamic"
 import Image from "next/image"
 import Link from "next/link"
 import { Map, Marker } from "react-map-gl"
 import { env } from "~/env.mjs"
 import { api } from "~/utils/api"
+
+const JsonViewer = dynamic(() => import("../client/JsonViewer"), { ssr: false })
 
 export default function Page() {
   const { data } = api.wildlife.find.useQuery({
@@ -59,6 +62,9 @@ export default function Page() {
                   href={observation.taxon.wikipedia_url ?? "#"}
                   target="_blank"
                   className="group relative flex aspect-square h-12 items-center justify-center rounded-full bg-yellow-500 p-1 transition-transform hover:scale-[3]"
+                  onMouseEnter={() => {
+                    console.log(observation.taxon)
+                  }}
                 >
                   {/* <Squirrel size={24} className="animate text-white" /> */}
                   <Image
@@ -70,7 +76,8 @@ export default function Page() {
                     height={1}
                   />
                   <div className="absolute -bottom-4 line-clamp-1 hidden whitespace-nowrap rounded-full bg-yellow-500 p-1 text-[4px] font-bold leading-none text-white group-hover:flex">
-                    {observation.taxon.name}
+                    {observation.taxon.preferred_common_name ||
+                      observation.taxon.name}
                   </div>
                 </Link>
               </Marker>
