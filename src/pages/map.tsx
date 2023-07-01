@@ -1,12 +1,9 @@
 import { User2 } from "lucide-react"
-import dynamic from "next/dynamic"
 import Image from "next/image"
 import Link from "next/link"
 import { Map, Marker } from "react-map-gl"
 import { env } from "~/env.mjs"
 import { api } from "~/utils/api"
-
-const JsonViewer = dynamic(() => import("../client/JsonViewer"), { ssr: false })
 
 export default function Page() {
   const { data } = api.wildlife.find.useQuery({
