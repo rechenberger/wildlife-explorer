@@ -1,17 +1,20 @@
 import { z } from "zod";
 import {
   createTRPCRouter,
-  publicProcedure,
   protectedProcedure,
+  publicProcedure,
 } from "~/server/api/trpc";
+
+import Pokedex from "pokedex-promise-v2";
+const P = new Pokedex({});
 
 export const exampleRouter = createTRPCRouter({
   hello: publicProcedure
     .input(z.object({ text: z.string() }))
-    .query(({ input }) => {
-      return {
-        greeting: `Hello ${input.text}`,
-      };
+    .query(async ({}) => {
+      const result = await P.getPokemonsList();
+
+      return result;
     }),
 
   getAll: publicProcedure.query(({ ctx }) => {
