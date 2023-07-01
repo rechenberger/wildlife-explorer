@@ -125,7 +125,7 @@ export default function Page() {
                 key={index}
                 latitude={point[0]}
                 longitude={point[1]}
-                anchor="bottom"
+                anchor="center"
               >
                 <div className="relative aspect-square rounded-full bg-blue-500 p-0.5">
                   <Footprints size={12} className="animate text-white" />
@@ -137,7 +137,7 @@ export default function Page() {
           <Marker
             latitude={50.928435947011906}
             longitude={6.930087265110956}
-            anchor="bottom"
+            anchor="center"
           >
             <div className="relative aspect-square rounded-full border-2 bg-blue-500 ring-2 ring-blue-400">
               <User2 size={24} className="animate text-white" />
@@ -156,9 +156,7 @@ export default function Page() {
                 key={observation.id}
                 latitude={observation.geojson.coordinates[1]}
                 longitude={observation.geojson.coordinates[0]}
-                anchor="bottom"
-                // offsetLeft={-20}
-                // offsetTop={-10}
+                anchor="center"
               >
                 <Link
                   href={
