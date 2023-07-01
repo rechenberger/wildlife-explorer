@@ -58,7 +58,7 @@ export default function Page() {
                 <Link
                   href={observation.taxon.wikipedia_url ?? "#"}
                   target="_blank"
-                  className="flex aspect-square h-12 items-center justify-center rounded-full bg-yellow-500 p-1"
+                  className="group relative flex aspect-square h-12 items-center justify-center rounded-full bg-yellow-500 p-1 transition-transform hover:scale-[3]"
                 >
                   {/* <Squirrel size={24} className="animate text-white" /> */}
                   <Image
@@ -69,6 +69,9 @@ export default function Page() {
                     width={1}
                     height={1}
                   />
+                  <div className="absolute -bottom-4 line-clamp-1 hidden whitespace-nowrap rounded-full bg-yellow-500 p-1 text-[4px] font-bold leading-none text-white group-hover:flex">
+                    {observation.taxon.name}
+                  </div>
                 </Link>
               </Marker>
             )
