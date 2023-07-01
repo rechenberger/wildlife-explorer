@@ -5,7 +5,8 @@ import { api } from "~/utils/api"
 
 export default function Page() {
   const { data } = api.wildlife.find.useQuery({
-    text: "abc",
+    lat: 50.928435947011906,
+    lng: 6.930087265110956,
   })
   return (
     <>

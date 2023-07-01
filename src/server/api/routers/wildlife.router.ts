@@ -4,10 +4,11 @@ import { Observation } from "~/server/inaturalist/schema"
 
 export const wildlifeRouter = createTRPCRouter({
   find: publicProcedure
-    .input(z.object({ text: z.string() }))
-    .query(async ({}) => {
+    .input(z.object({ lat: z.number(), lng: z.number() }))
+    .query(async ({ input }) => {
+      const { lat, lng } = input
       const response = await fetch(
-        "https://api.inaturalist.org/v1/observations?taxon_id=1&lat=50&lng=6&radius=10&order=desc&order_by=created_at"
+        `https://api.inaturalist.org/v1/observations?taxon_id=1&lat=${lat}&lng=${lng}&radius=10&order=desc&order_by=created_at`
       )
       const data = await response.json()
       const schema = z.object({
