@@ -1,5 +1,6 @@
+import * as turf from "@turf/turf"
 import { debounce } from "lodash-es"
-import { Loader2, User2 } from "lucide-react"
+import { Footprints, Loader2, User2 } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { useMemo, useState } from "react"
@@ -11,6 +12,31 @@ import * as polyline from "@mapbox/polyline"
 
 const geometry = "e~yuHwohi@Ff@kFpCYEgCpA}A^QzAAp@NfEHd@UJh@xF"
 const decodedGeometry = polyline.decode(geometry)
+
+console.log("decodedGeometry", decodedGeometry)
+
+const totalDuration = 328
+// Calculate the total distance of the path in meters
+let totalDistance = 0
+for (let i = 0; i < decodedGeometry.length - 1; i++) {
+  const from = turf.point(decodedGeometry[i]!)
+  const to = turf.point(decodedGeometry[i + 1]!)
+  const distance = turf.distance(from, to) * 1000 // convert to meters
+  // console.log("distance", distance)
+  totalDistance += distance
+}
+
+// Calculate the duration for each segment
+const durations = []
+for (let i = 0; i < decodedGeometry.length - 1; i++) {
+  const from = turf.point(decodedGeometry[i]!)
+  const to = turf.point(decodedGeometry[i + 1]!)
+  const distance = turf.distance(from, to) * 1000 // convert to meters
+  const duration = (distance / totalDistance) * totalDuration // distribute the total duration
+  durations.push(duration)
+}
+
+console.log("durations", durations)
 
 const geojson = {
   type: "Feature",
@@ -93,12 +119,25 @@ export default function Page() {
               }}
             />
           </Source>
+          {decodedGeometry.map((point, index) => {
+            return (
+              <Marker
+                key={index}
+                latitude={point[0]}
+                longitude={point[1]}
+                anchor="bottom"
+              >
+                <div className="relative aspect-square rounded-full border-2 bg-blue-500 ring-2 ring-blue-400">
+                  <Footprints size={24} className="animate text-white" />
+                  <div className="absolute inset-0 animate-ping rounded-full ring-2 ring-blue-400" />
+                </div>
+              </Marker>
+            )
+          })}
           <Marker
             latitude={50.928435947011906}
             longitude={6.930087265110956}
             anchor="bottom"
-            // offsetLeft={-20}
-            // offsetTop={-10}
           >
             <div className="relative aspect-square rounded-full border-2 bg-blue-500 ring-2 ring-blue-400">
               <User2 size={24} className="animate text-white" />
