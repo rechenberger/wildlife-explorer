@@ -37,20 +37,28 @@ export default function Page() {
               <div className="absolute inset-0 animate-ping rounded-full ring-2 ring-blue-400" />
             </div>
           </Marker>
-          {data?.results.map((observation) => (
-            <Marker
-              key={observation.id}
-              latitude={observation.geojson.coordinates[1]!}
-              longitude={observation.geojson.coordinates[0]!}
-              anchor="bottom"
-              // offsetLeft={-20}
-              // offsetTop={-10}
-            >
-              <div className="flex aspect-square h-8 items-center justify-center rounded-full bg-yellow-500 p-1">
-                <Squirrel size={24} className="animate text-white" />
-              </div>
-            </Marker>
-          ))}
+          {data?.results.map((observation) => {
+            if (
+              !observation.geojson.coordinates[0] ||
+              !observation.geojson.coordinates[1]
+            ) {
+              return null
+            }
+            return (
+              <Marker
+                key={observation.id}
+                latitude={observation.geojson.coordinates[1]}
+                longitude={observation.geojson.coordinates[0]}
+                anchor="bottom"
+                // offsetLeft={-20}
+                // offsetTop={-10}
+              >
+                <div className="flex aspect-square h-8 items-center justify-center rounded-full bg-yellow-500 p-1">
+                  <Squirrel size={24} className="animate text-white" />
+                </div>
+              </Marker>
+            )
+          })}
         </Map>
       </main>
     </>
