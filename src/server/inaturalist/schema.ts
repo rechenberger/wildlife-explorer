@@ -79,7 +79,7 @@ export const User = z.object({
 
 export const Observation = z.object({
   quality_grade: z.string(),
-  time_observed_at: z.string(),
+  time_observed_at: z.string().nullable(),
   taxon_geoprivacy: z.any(),
   annotations: z.array(z.any()),
   uuid: z.string(),
