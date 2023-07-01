@@ -41,16 +41,18 @@ export const Taxon = z.object({
     unresolved: z.number(),
   }),
   atlas_id: z.any(),
-  default_photo: z.object({
-    id: z.number(),
-    license_code: z.any(),
-    attribution: z.string(),
-    url: z.string(),
-    original_dimensions: z.object({}),
-    flags: z.array(z.any()),
-    square_url: z.string(),
-    medium_url: z.string(),
-  }),
+  default_photo: z
+    .object({
+      id: z.number(),
+      license_code: z.any(),
+      attribution: z.string(),
+      url: z.string(),
+      original_dimensions: z.object({}),
+      flags: z.array(z.any()),
+      square_url: z.string(),
+      medium_url: z.string(),
+    })
+    .nullable(),
   iconic_taxon_name: z.string(),
 })
 

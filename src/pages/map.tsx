@@ -9,7 +9,7 @@ import { api } from "~/utils/api"
 
 function calculateRadiusFromZoomLevel(zoomLevel: number): number {
   const earthCircumferenceKm = 40075.017
-  const radiusAtZoom0 = earthCircumferenceKm / 2
+  const radiusAtZoom0 = earthCircumferenceKm / 1
   return radiusAtZoom0 / Math.pow(2, zoomLevel)
 }
 
@@ -90,7 +90,9 @@ export default function Page() {
                 // offsetTop={-10}
               >
                 <Link
-                  href={observation.taxon.wikipedia_url ?? "#"}
+                  href={
+                    observation.uri ?? observation.taxon.wikipedia_url ?? "#"
+                  }
                   target="_blank"
                   className="group relative flex aspect-square h-12 items-center justify-center rounded-full bg-yellow-500 p-1 transition-transform hover:scale-[3]"
                   onMouseEnter={() => {
@@ -98,14 +100,16 @@ export default function Page() {
                   }}
                 >
                   {/* <Squirrel size={24} className="animate text-white" /> */}
-                  <Image
-                    src={observation.taxon.default_photo.square_url}
-                    className="h-full w-full rounded-full"
-                    alt={"Observation"}
-                    unoptimized
-                    width={1}
-                    height={1}
-                  />
+                  {observation.taxon.default_photo && (
+                    <Image
+                      src={observation.taxon.default_photo.square_url}
+                      className="h-full w-full rounded-full"
+                      alt={"Observation"}
+                      unoptimized
+                      width={1}
+                      height={1}
+                    />
+                  )}
                   <div className="absolute -bottom-4 line-clamp-1 hidden whitespace-nowrap rounded-full bg-yellow-500 p-1 text-[4px] font-bold leading-none text-white group-hover:flex">
                     {observation.taxon.preferred_common_name ||
                       observation.taxon.name}
