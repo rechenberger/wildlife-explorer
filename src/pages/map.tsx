@@ -1,15 +1,26 @@
+import { debounce } from "lodash-es"
 import { User2 } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
+import { useMemo, useState } from "react"
 import { Map, Marker } from "react-map-gl"
 import { env } from "~/env.mjs"
 import { api } from "~/utils/api"
 
 export default function Page() {
-  const { data } = api.wildlife.find.useQuery({
+  const [center, setCenter] = useState({
     lat: 50.928435947011906,
     lng: 6.930087265110956,
   })
+
+  const { data } = api.wildlife.find.useQuery(center)
+
+  const setCenterDebounced = useMemo(() => {
+    return debounce((newCenter: { lat: number; lng: number }) => {
+      setCenter(newCenter)
+    }, 1000)
+  }, [])
+
   return (
     <>
       <main className="flex h-[100svh] w-full">
@@ -25,7 +36,12 @@ export default function Page() {
           // mapStyle="mapbox://styles/mapbox/streets-v9"
           mapStyle="mapbox://styles/rechenberger/cljkelien006n01o429b9440e"
           mapboxAccessToken={env.NEXT_PUBLIC_MAPBOX_TOKEN}
-          onMove={(e) => console.log(e)}
+          onMove={(e) => {
+            setCenterDebounced({
+              lat: e.viewState.latitude,
+              lng: e.viewState.longitude,
+            })
+          }}
         >
           <Marker
             latitude={50.928435947011906}
