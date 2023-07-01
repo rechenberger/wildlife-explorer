@@ -1,5 +1,5 @@
-import { debounce, take } from "lodash-es"
-import { User2 } from "lucide-react"
+import { debounce } from "lodash-es"
+import { Loader2, User2 } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { useMemo, useState } from "react"
@@ -13,17 +13,24 @@ export default function Page() {
     lng: 6.930087265110956,
   })
 
-  const { data } = api.wildlife.find.useQuery(center)
+  const { data, isFetching } = api.wildlife.find.useQuery(center, {
+    keepPreviousData: true,
+  })
 
   const setCenterDebounced = useMemo(() => {
     return debounce((newCenter: { lat: number; lng: number }) => {
       setCenter(newCenter)
-    }, 1000)
+    }, 100)
   }, [])
 
   return (
     <>
-      <main className="flex h-[100svh] w-full">
+      <main className="relative flex h-[100svh] w-full">
+        {isFetching && (
+          <div className="absolute right-2 top-2 z-50 animate-spin opacity-60">
+            <Loader2 />
+          </div>
+        )}
         <Map
           mapLib={import("mapbox-gl")}
           initialViewState={{
@@ -55,7 +62,7 @@ export default function Page() {
               <div className="absolute inset-0 animate-ping rounded-full ring-2 ring-blue-400" />
             </div>
           </Marker>
-          {take(data?.results, 3).map((observation) => {
+          {data?.results.map((observation) => {
             if (
               !observation.geojson.coordinates[0] ||
               !observation.geojson.coordinates[1]

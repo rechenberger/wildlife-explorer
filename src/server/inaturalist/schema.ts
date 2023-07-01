@@ -107,7 +107,7 @@ export const Observation = z.object({
   description: z.string().nullable(),
   time_zone_offset: z.string(),
   project_ids_with_curator_id: z.array(z.any()),
-  observed_on: z.string(),
+  observed_on: z.string().nullable(),
   observed_on_string: z.string().nullable(),
   updated_at: z.string(),
   sounds: z.array(z.any()),
