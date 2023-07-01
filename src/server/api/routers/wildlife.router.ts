@@ -4,10 +4,11 @@ import { Observation } from "~/server/inaturalist/schema"
 
 export const wildlifeRouter = createTRPCRouter({
   find: publicProcedure
-    .input(z.object({ lat: z.number(), lng: z.number() }))
+    .input(
+      z.object({ lat: z.number(), lng: z.number(), radiusInKm: z.number() })
+    )
     .query(async ({ input }) => {
-      const { lat, lng } = input
-      const radiusInKm = 0.5
+      const { lat, lng, radiusInKm } = input
       const url = `https://api.inaturalist.org/v1/observations?taxon_id=1&lat=${lat}&lng=${lng}&radius=${radiusInKm}&order=desc&order_by=created_at&per_page=200&locale=de`
       console.log(url)
       const response = await fetch(url)

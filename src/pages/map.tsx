@@ -7,10 +7,17 @@ import { Map, Marker } from "react-map-gl"
 import { env } from "~/env.mjs"
 import { api } from "~/utils/api"
 
+function calculateRadiusFromZoomLevel(zoomLevel: number): number {
+  const earthCircumferenceKm = 40075.017
+  const radiusAtZoom0 = earthCircumferenceKm / 2
+  return radiusAtZoom0 / Math.pow(2, zoomLevel)
+}
+
 export default function Page() {
   const [center, setCenter] = useState({
     lat: 50.928435947011906,
     lng: 6.930087265110956,
+    radiusInKm: 0.5,
   })
 
   const { data, isFetching } = api.wildlife.find.useQuery(center, {
@@ -18,9 +25,12 @@ export default function Page() {
   })
 
   const setCenterDebounced = useMemo(() => {
-    return debounce((newCenter: { lat: number; lng: number }) => {
-      setCenter(newCenter)
-    }, 100)
+    return debounce(
+      (newCenter: { lat: number; lng: number; radiusInKm: number }) => {
+        setCenter(newCenter)
+      },
+      100
+    )
   }, [])
 
   return (
@@ -47,6 +57,7 @@ export default function Page() {
             setCenterDebounced({
               lat: e.viewState.latitude,
               lng: e.viewState.longitude,
+              radiusInKm: calculateRadiusFromZoomLevel(e.viewState.zoom),
             })
           }}
         >
