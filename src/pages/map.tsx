@@ -1,8 +1,12 @@
-import { User2 } from "lucide-react"
+import { Squirrel, User2 } from "lucide-react"
 import { Map, Marker } from "react-map-gl"
 import { env } from "~/env.mjs"
+import { api } from "~/utils/api"
 
 export default function Page() {
+  const { data } = api.wildlife.find.useQuery({
+    text: "abc",
+  })
   return (
     <>
       <main className="flex h-[100svh] w-full">
@@ -32,6 +36,20 @@ export default function Page() {
               <div className="absolute inset-0 animate-ping rounded-full ring-2 ring-blue-400" />
             </div>
           </Marker>
+          {data?.results.map((observation) => (
+            <Marker
+              key={observation.id}
+              latitude={observation.geojson.coordinates[1]!}
+              longitude={observation.geojson.coordinates[0]!}
+              anchor="bottom"
+              // offsetLeft={-20}
+              // offsetTop={-10}
+            >
+              <div className="flex aspect-square h-8 items-center justify-center rounded-full bg-yellow-500 p-1">
+                <Squirrel size={24} className="animate text-white" />
+              </div>
+            </Marker>
+          ))}
         </Map>
       </main>
     </>
