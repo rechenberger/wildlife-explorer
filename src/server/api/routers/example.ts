@@ -9,7 +9,9 @@ export const exampleRouter = createTRPCRouter({
     .input(z.object({ text: z.string() }))
     .query(async ({}) => {
       // const result = await P.getPokemonsList()
-      const result = await P.getPokemonByName(1)
+      // const result = await P.getPokemonByName(1)
+      // const result = await P.getStatsList()
+      const result = await P.getStatByName("hp")
       // result.
 
       return result
