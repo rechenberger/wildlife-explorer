@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@mapbox/mapbox-sdk": "^0.15.2",
+    "@mapbox/polyline": "^1.2.0",
     "@next-auth/prisma-adapter": "^1.0.5",
     "@prisma/client": "^4.14.0",
     "@t3-oss/env-nextjs": "^0.3.1",
@@ -37,6 +38,7 @@
     "@types/lodash-es": "^4.17.7",
     "@types/mapbox-gl": "^2.7.11",
     "@types/mapbox__mapbox-sdk": "^0.13.4",
+    "@types/mapbox__polyline": "^1.0.2",
     "@types/node": "^18.16.0",
     "@types/prettier": "^2.7.2",
     "@types/react": "^18.2.6",

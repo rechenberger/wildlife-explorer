@@ -3,9 +3,23 @@ import { Loader2, User2 } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { useMemo, useState } from "react"
-import { Map, Marker } from "react-map-gl"
+import { Layer, Map, Marker, Source } from "react-map-gl"
 import { env } from "~/env.mjs"
 import { api } from "~/utils/api"
+
+import * as polyline from "@mapbox/polyline"
+
+const geometry = "e~yuHwohi@Ff@kFpCYEgCpA}A^QzAAp@NfEHd@UJh@xF"
+const decodedGeometry = polyline.decode(geometry)
+
+const geojson = {
+  type: "Feature",
+  properties: {},
+  geometry: {
+    type: "LineString",
+    coordinates: decodedGeometry.map((point) => [point[1], point[0]]), // flip lat and lon
+  },
+}
 
 function calculateRadiusFromZoomLevel(zoomLevel: number): number {
   const earthCircumferenceKm = 40075.017
@@ -64,6 +78,21 @@ export default function Page() {
             })
           }}
         >
+          <Source id="route" type="geojson" data={geojson}>
+            <Layer
+              id="route"
+              type="line"
+              source="route"
+              layout={{
+                "line-join": "round",
+                "line-cap": "round",
+              }}
+              paint={{
+                "line-color": "#888",
+                "line-width": 8,
+              }}
+            />
+          </Source>
           <Marker
             latitude={50.928435947011906}
             longitude={6.930087265110956}
