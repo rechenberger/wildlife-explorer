@@ -1,4 +1,5 @@
-import { Squirrel, User2 } from "lucide-react"
+import { User2 } from "lucide-react"
+import Image from "next/image"
 import Link from "next/link"
 import { Map, Marker } from "react-map-gl"
 import { env } from "~/env.mjs"
@@ -57,9 +58,17 @@ export default function Page() {
                 <Link
                   href={observation.taxon.wikipedia_url ?? "#"}
                   target="_blank"
-                  className="flex aspect-square h-8 items-center justify-center rounded-full bg-yellow-500 p-1"
+                  className="flex aspect-square h-12 items-center justify-center rounded-full bg-yellow-500 p-1"
                 >
-                  <Squirrel size={24} className="animate text-white" />
+                  {/* <Squirrel size={24} className="animate text-white" /> */}
+                  <Image
+                    src={observation.taxon.default_photo.square_url}
+                    className="h-full w-full rounded-full"
+                    alt={"Observation"}
+                    unoptimized
+                    width={1}
+                    height={1}
+                  />
                 </Link>
               </Marker>
             )

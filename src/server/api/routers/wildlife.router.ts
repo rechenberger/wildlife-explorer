@@ -8,9 +8,9 @@ export const wildlifeRouter = createTRPCRouter({
     .query(async ({ input }) => {
       const { lat, lng } = input
       const radiusInKm = 0.5
-      const response = await fetch(
-        `https://api.inaturalist.org/v1/observations?taxon_id=1&lat=${lat}&lng=${lng}&radius=${radiusInKm}&order=desc&order_by=created_at`
-      )
+      const url = `https://api.inaturalist.org/v1/observations?taxon_id=1&lat=${lat}&lng=${lng}&radius=${radiusInKm}&order=desc&order_by=created_at`
+      console.log(url)
+      const response = await fetch(url)
       const data = await response.json()
       const schema = z.object({
         total_results: z.number(),
