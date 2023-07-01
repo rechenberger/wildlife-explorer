@@ -24,6 +24,9 @@ export default function Page() {
     keepPreviousData: true,
   })
 
+  const { mutateAsync: calcNavigation } =
+    api.navigation.calcNavigation.useMutation()
+
   const setCenterDebounced = useMemo(() => {
     return debounce(
       (newCenter: { lat: number; lng: number; radiusInKm: number }) => {
@@ -97,6 +100,24 @@ export default function Page() {
                   className="group relative flex aspect-square h-12 items-center justify-center rounded-full bg-yellow-500 p-1 transition-transform hover:scale-[3]"
                   onMouseEnter={() => {
                     console.log(observation.taxon)
+                  }}
+                  onClick={async (e) => {
+                    e.preventDefault()
+                    // TODO:
+                    if (
+                      !observation.geojson.coordinates[0] ||
+                      !observation.geojson.coordinates[1]
+                    ) {
+                      return
+                    }
+                    const result = await calcNavigation({
+                      from: center,
+                      to: {
+                        lat: observation.geojson.coordinates[1],
+                        lng: observation.geojson.coordinates[0],
+                      },
+                    })
+                    console.log(result)
                   }}
                 >
                   {/* <Squirrel size={24} className="animate text-white" /> */}

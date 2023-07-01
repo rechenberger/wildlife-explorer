@@ -1,5 +1,6 @@
 import { exampleRouter } from "~/server/api/routers/example"
 import { createTRPCRouter } from "~/server/api/trpc"
+import { navigationRouter } from "./routers/navigation.router"
 import { wildlifeRouter } from "./routers/wildlife.router"
 
 /**
@@ -10,6 +11,7 @@ import { wildlifeRouter } from "./routers/wildlife.router"
 export const appRouter = createTRPCRouter({
   example: exampleRouter,
   wildlife: wildlifeRouter,
+  navigation: navigationRouter,
 })
 
 // export type definition of API
