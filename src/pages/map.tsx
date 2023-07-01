@@ -1,4 +1,5 @@
 import { Squirrel, User2 } from "lucide-react"
+import Link from "next/link"
 import { Map, Marker } from "react-map-gl"
 import { env } from "~/env.mjs"
 import { api } from "~/utils/api"
@@ -53,9 +54,13 @@ export default function Page() {
                 // offsetLeft={-20}
                 // offsetTop={-10}
               >
-                <div className="flex aspect-square h-8 items-center justify-center rounded-full bg-yellow-500 p-1">
+                <Link
+                  href={observation.taxon.wikipedia_url ?? "#"}
+                  target="_blank"
+                  className="flex aspect-square h-8 items-center justify-center rounded-full bg-yellow-500 p-1"
+                >
                   <Squirrel size={24} className="animate text-white" />
-                </div>
+                </Link>
               </Marker>
             )
           })}
