@@ -114,7 +114,7 @@ export default function Page() {
                 "line-cap": "round",
               }}
               paint={{
-                "line-color": "#888",
+                "line-color": "#60a5fa",
                 "line-width": 8,
               }}
             />
@@ -127,9 +127,9 @@ export default function Page() {
                 longitude={point[1]}
                 anchor="bottom"
               >
-                <div className="relative aspect-square rounded-full border-2 bg-blue-500 ring-2 ring-blue-400">
-                  <Footprints size={24} className="animate text-white" />
-                  <div className="absolute inset-0 animate-ping rounded-full ring-2 ring-blue-400" />
+                <div className="relative aspect-square rounded-full bg-blue-500 p-0.5">
+                  <Footprints size={12} className="animate text-white" />
+                  {/* <div className="absolute inset-0 animate-ping rounded-full ring-2 ring-blue-400" /> */}
                 </div>
               </Marker>
             )
