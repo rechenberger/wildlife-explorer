@@ -1,6 +1,8 @@
-import { signIn, signOut, useSession } from "next-auth/react"
+import dynamic from "next/dynamic"
 import Head from "next/head"
 import { api } from "~/utils/api"
+
+const JsonViewer = dynamic(() => import("../client/JsonViewer"), { ssr: false })
 
 export default function Home() {
   const hello = api.example.hello.useQuery({ text: "from tRPC" })
@@ -17,37 +19,13 @@ export default function Home() {
             Poke
           </h1>
           <div className="flex flex-col items-center gap-2">
-            <pre className="text-2xl text-white">
+            <JsonViewer value={hello.data} />
+            {/* <pre className="text-sm text-white">
               {JSON.stringify(hello.data, null, 2)}
-            </pre>
-            <AuthShowcase />
+            </pre> */}
           </div>
         </div>
       </main>
     </>
-  )
-}
-
-function AuthShowcase() {
-  const { data: sessionData } = useSession()
-
-  const { data: secretMessage } = api.example.getSecretMessage.useQuery(
-    undefined, // no input
-    { enabled: sessionData?.user !== undefined }
-  )
-
-  return (
-    <div className="flex flex-col items-center justify-center gap-4">
-      <p className="text-center text-2xl text-white">
-        {sessionData && <span>Logged in as {sessionData.user?.name}</span>}
-        {secretMessage && <span> - {secretMessage}</span>}
-      </p>
-      <button
-        className="rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20"
-        onClick={sessionData ? () => void signOut() : () => void signIn()}
-      >
-        {sessionData ? "Sign out" : "Sign in"}
-      </button>
-    </div>
   )
 }

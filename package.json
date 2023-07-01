@@ -23,6 +23,7 @@
     "pokedex-promise-v2": "^4.1.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-json-view": "^1.21.3",
     "superjson": "1.12.2",
     "zod": "^3.21.4"
   },
