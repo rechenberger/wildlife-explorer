@@ -128,7 +128,7 @@ export default function Page() {
                 anchor="center"
               >
                 <div className="relative aspect-square rounded-full border border-white bg-blue-500 p-0.5">
-                  <Footprints size={12} className="animate text-white" />
+                  <Footprints size={8} className="animate text-white" />
                   {/* <div className="absolute inset-0 animate-ping rounded-full ring-2 ring-blue-400" /> */}
                 </div>
               </Marker>
