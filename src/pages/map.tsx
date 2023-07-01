@@ -1,4 +1,4 @@
-import { debounce } from "lodash-es"
+import { debounce, take } from "lodash-es"
 import { User2 } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
@@ -55,7 +55,7 @@ export default function Page() {
               <div className="absolute inset-0 animate-ping rounded-full ring-2 ring-blue-400" />
             </div>
           </Marker>
-          {data?.results.map((observation) => {
+          {take(data?.results, 3).map((observation) => {
             if (
               !observation.geojson.coordinates[0] ||
               !observation.geojson.coordinates[1]

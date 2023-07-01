@@ -84,7 +84,7 @@ export const Observation = z.object({
   taxon_geoprivacy: z.any(),
   annotations: z.array(z.any()),
   uuid: z.string(),
-  observed_on_details: DateDetails,
+  observed_on_details: DateDetails.nullable(),
   id: z.number(),
   cached_votes_total: z.number(),
   identifications_most_agree: z.boolean(),
