@@ -1,3 +1,4 @@
+import { ArrowUp } from "lucide-react"
 import { signIn, signOut, useSession } from "next-auth/react"
 
 export const LoginButton = () => {
@@ -7,10 +8,13 @@ export const LoginButton = () => {
     return (
       <>
         <button
-          className="rounded bg-black px-2 py-1 text-sm text-white"
+          className="flex flex-row items-center gap-2 rounded bg-black px-2 py-1 text-sm text-white"
           onClick={() => signIn("discord")}
         >
-          Login with Discord
+          <div className="rotate-90">
+            <ArrowUp size={14} className="animate-bounce" />
+          </div>
+          <div>Login with Discord</div>
         </button>
       </>
     )
