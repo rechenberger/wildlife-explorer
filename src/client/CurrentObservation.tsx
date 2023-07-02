@@ -78,7 +78,7 @@ export const CurrentObservation = () => {
         <div className="flex flex-row gap-2">
           {location && (
             <button
-              className="rounded bg-black px-2 py-1 text-white"
+              className="rounded bg-black px-2 py-1 text-sm text-white"
               onClick={() => {
                 navigate(location)
               }}
@@ -88,7 +88,7 @@ export const CurrentObservation = () => {
           )}
           <button
             className={cn(
-              "rounded bg-black px-2 py-1 text-white",
+              "rounded bg-black px-2 py-1 text-sm text-white",
               catching && "cursor-progress opacity-50"
             )}
             disabled={catching}
