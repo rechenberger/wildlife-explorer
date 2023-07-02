@@ -23,4 +23,6 @@ export const wildlifeRouter = createTRPCRouter({
       playerId: ctx.player.id,
     })
   }),
+
+  scan: playerProcedure.mutation(async ({}) => {}),
 })
