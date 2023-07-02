@@ -1,4 +1,5 @@
 import { atom, useAtomValue } from "jotai"
+import { last } from "lodash-es"
 import { Footprints } from "lucide-react"
 import { useMemo } from "react"
 import { Layer, Marker, Source } from "react-map-gl"
@@ -19,12 +20,14 @@ const pointsAtom = atom((get) => {
 
     const isLast = idx === result.timingLegs.length - 1
     if (isLast) {
-      return [leg.from, leg.to]
+      return [leg.from]
     } else {
       return [leg.from]
     }
   })
-  points = [playerLocation, ...points]
+  const lastPoint = last(result.timingLegs)?.to
+  if (!lastPoint) return []
+  points = [playerLocation, ...points, lastPoint]
   return points
 })
 
