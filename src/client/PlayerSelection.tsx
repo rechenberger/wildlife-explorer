@@ -1,17 +1,30 @@
 import { map, orderBy } from "lodash-es"
-import { User } from "lucide-react"
+import { ArrowLeft, User } from "lucide-react"
 import { useSession } from "next-auth/react"
 import Link from "next/link"
+import { useState } from "react"
 import { api } from "~/utils/api"
 import { LoginButton } from "./LoginButton"
+import { PlayerCreationForm } from "./PlayerCreationForm"
 import { TimeAgo } from "./TimeAgo"
 import { cn } from "./cn"
 
 export const PlayerSelection = () => {
   const session = useSession()
   const isLoggedIn = !!session.data
-  const { data: players } = api.player.getMyPlayers.useQuery()
-  const title = isLoggedIn ? "Choose Character" : "Welcome"
+  const [creating, setCreating] = useState(false)
+  const title = isLoggedIn
+    ? creating
+      ? "Create Character"
+      : "Choose Character"
+    : "Welcome"
+  const { data: players } = api.player.getMyPlayers.useQuery(undefined, {
+    onSuccess: (players) => {
+      if (!players.length) {
+        setCreating(true)
+      }
+    },
+  })
   return (
     <>
       <div className="fixed flex w-full max-w-sm flex-col rounded-xl bg-white text-black shadow">
@@ -21,10 +34,17 @@ export const PlayerSelection = () => {
             isLoggedIn && "border-b"
           )}
         >
+          {creating && (
+            <button onClick={() => setCreating(false)}>
+              <ArrowLeft size={16} />
+            </button>
+          )}
           <div className="flex-1">{title}</div>
           <LoginButton />
         </div>
-        {isLoggedIn &&
+        {creating && <PlayerCreationForm />}
+        {!creating &&
+          isLoggedIn &&
           map(
             orderBy(players, (p) => p.updatedAt, "desc"),
             (player) => (
@@ -42,13 +62,13 @@ export const PlayerSelection = () => {
               </Link>
             )
           )}
-        {isLoggedIn && (
-          <Link
-            href={"/player/create"}
+        {!creating && isLoggedIn && (
+          <button
+            onClick={() => setCreating(true)}
             className="m-4 rounded bg-black px-2 py-1 text-center text-sm text-white"
           >
             Create New Character
-          </Link>
+          </button>
         )}
       </div>
     </>
