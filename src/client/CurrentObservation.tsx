@@ -5,6 +5,7 @@ import { toast } from "sonner"
 import { api } from "~/utils/api"
 import { Away } from "./Away"
 import { useWildlife } from "./WildlifeMarkers"
+import { cn } from "./cn"
 import { useNavigation } from "./useNavigation"
 import { usePlayer } from "./usePlayer"
 
@@ -21,11 +22,12 @@ export const CurrentObservation = () => {
 
   const { playerId } = usePlayer()
   const trpc = api.useContext()
-  const { mutateAsync: doCatch } = api.catch.catch.useMutation({
-    onSettled: () => {
-      trpc.catch.invalidate()
-    },
-  })
+  const { mutateAsync: doCatch, isLoading: catching } =
+    api.catch.catch.useMutation({
+      onSettled: () => {
+        trpc.catch.invalidate()
+      },
+    })
 
   if (!w) return null
 
@@ -90,15 +92,21 @@ export const CurrentObservation = () => {
             </button>
           )}
           <button
-            className="rounded bg-black px-2 py-1 text-white"
+            className={cn(
+              "rounded bg-black px-2 py-1 text-white",
+              catching && "cursor-progress opacity-50"
+            )}
+            disabled={catching}
             onClick={async () => {
               if (!playerId) return
-              const result = await doCatch({ observationId: w.id, playerId })
-              if (result.success) {
-                toast.success("You caught it!")
-              } else {
-                toast.error(result.reason || "Failed to catch")
-              }
+              toast.promise(doCatch({ observationId: w.id, playerId }), {
+                loading: "Catching...",
+                success: (result) =>
+                  result.success
+                    ? "You caught it!"
+                    : result.reason || "Failed to catch",
+                error: "Failed to catch",
+              })
             }}
           >
             Catch
