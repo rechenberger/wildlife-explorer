@@ -63,7 +63,7 @@ export const WildlifeMarkers = () => {
               href={w.metadata.observationUrl ?? w.metadata.taxonWikiUrl ?? "#"}
               target="_blank"
               className={cn(
-                "group relative flex aspect-square h-12 items-center justify-center rounded-full bg-amber-400 p-1 shadow transition-transform hover:scale-[3]",
+                "group relative flex aspect-square h-12 items-center justify-center rounded-full bg-amber-400 p-1 shadow transition-transform md:hover:scale-[3]",
                 !!w.caughtAt && "bg-green-500 opacity-50",
                 onCooldown && "bg-gray-400 opacity-50",
                 navigatingtoObservationId === w.observationId && "bg-blue-500"
@@ -111,7 +111,7 @@ export const WildlifeMarkers = () => {
                   </div>
                 </>
               ) : null}
-              <div className="absolute -bottom-4 line-clamp-1 hidden whitespace-nowrap rounded-full bg-amber-400 p-1 text-[4px] font-bold leading-none text-white shadow group-hover:flex">
+              <div className="absolute -bottom-4 line-clamp-1 hidden whitespace-nowrap rounded-full bg-amber-400 p-1 text-[4px] font-bold leading-none text-white shadow md:group-hover:flex">
                 {w.metadata.name}
               </div>
             </Link>
