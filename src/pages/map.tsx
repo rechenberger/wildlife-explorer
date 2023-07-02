@@ -1,6 +1,6 @@
 import { useSetAtom } from "jotai"
 import { debounce } from "lodash-es"
-import { Loader2, User2 } from "lucide-react"
+import { Loader2 } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { useMemo, useState } from "react"
@@ -74,7 +74,7 @@ export default function Page() {
           <Walker />
           <WalkerMarker />
 
-          <Marker
+          {/* <Marker
             latitude={50.928435947011906}
             longitude={6.930087265110956}
             anchor="center"
@@ -83,7 +83,7 @@ export default function Page() {
               <User2 size={24} className="animate text-white" />
               <div className="absolute inset-0 animate-ping rounded-full ring-2 ring-blue-400" />
             </div>
-          </Marker>
+          </Marker> */}
           {data?.results.map((observation) => {
             if (
               !observation.geojson.coordinates[0] ||
@@ -116,7 +116,7 @@ export default function Page() {
                     ) {
                       return
                     }
-                    const result = await calcNavigation([
+                    await calcNavigation([
                       {
                         from: center,
                         to: {
@@ -125,7 +125,6 @@ export default function Page() {
                         },
                       },
                     ])
-                    console.log(result)
                   }}
                 >
                   {/* <Squirrel size={24} className="animate text-white" /> */}
