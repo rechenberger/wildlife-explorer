@@ -4,11 +4,9 @@ import { z } from "zod"
 import {
   DEFAULT_CATCH_SUCCESS_RATE,
   DEFAULT_RESPAWN_TIME_IN_MINUTES,
-  RADIUS_IN_KM_SEE_WILDLIFE,
   RADIUS_IN_M_CATCH_WILDLIFE,
 } from "~/config"
 import { createTRPCRouter } from "~/server/api/trpc"
-import { findWildlife } from "~/server/lib/findWildlife"
 import { calcDistanceInMeter } from "~/server/lib/latLng"
 import { playerProcedure } from "../middleware/playerProcedure"
 
@@ -29,23 +27,25 @@ export const catchRouter = createTRPCRouter({
       })
     )
     .mutation(async ({ ctx, input }) => {
-      const observations = await findWildlife({
-        lat: ctx.player.lat,
-        lng: ctx.player.lng,
-        radiusInKm: RADIUS_IN_KM_SEE_WILDLIFE,
-        prisma: ctx.prisma,
-        playerId: ctx.player.id,
+      const wildlife = await ctx.prisma.wildlife.findUnique({
+        where: {
+          observationId: input.observationId,
+        },
+        include: {
+          catches: {
+            where: {
+              playerId: ctx.player.id,
+            },
+          },
+        },
       })
-      const observation = observations.find(
-        (observation) => observation.observationId === input.observationId
-      )
-      if (!observation) {
+      if (!wildlife) {
         throw new TRPCError({
           code: "NOT_FOUND",
           message: "No observation found",
         })
       }
-      const distanceInMeter = calcDistanceInMeter(observation, ctx.player)
+      const distanceInMeter = calcDistanceInMeter(wildlife, ctx.player)
       const isClose = distanceInMeter < RADIUS_IN_M_CATCH_WILDLIFE
       if (!isClose) {
         return {
@@ -54,22 +54,14 @@ export const catchRouter = createTRPCRouter({
         }
       }
 
-      if (
-        observation.status?.respawnsAt &&
-        observation.status.respawnsAt > new Date()
-      ) {
+      if (wildlife.respawnsAt > new Date()) {
         return {
           success: false,
           reason: "Wildlife respawns soon™️",
         }
       }
 
-      const caught = await ctx.prisma.catch.findFirst({
-        where: {
-          observationId: observation.observationId,
-          playerId: ctx.player.id,
-        },
-      })
+      const caught = wildlife.catches.length > 0
       if (caught) {
         return {
           success: false,
@@ -81,16 +73,11 @@ export const catchRouter = createTRPCRouter({
       const isLucky = luck > DEFAULT_CATCH_SUCCESS_RATE
 
       const respawnsAt = addMinutes(new Date(), DEFAULT_RESPAWN_TIME_IN_MINUTES)
-
-      await ctx.prisma.observationStatus.upsert({
+      await ctx.prisma.wildlife.update({
         where: {
-          id: observation.observationId,
+          id: wildlife.id,
         },
-        update: {
-          respawnsAt,
-        },
-        create: {
-          id: observation.observationId,
+        data: {
           respawnsAt,
         },
       })
@@ -105,7 +92,8 @@ export const catchRouter = createTRPCRouter({
       await ctx.prisma.catch.create({
         data: {
           playerId: ctx.player.id,
-          observationId: observation.observationId,
+          wildlifeId: wildlife.id,
+          observationId: wildlife.observationId,
         },
       })
 
