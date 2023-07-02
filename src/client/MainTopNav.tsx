@@ -12,12 +12,12 @@ const carterOne = Carter_One({
 export const MainTopNav = () => {
   return (
     <>
-      <div className="fixed inset-x-0 top-0 z-10 flex flex-row gap-2 p-2 md:px-4 md:py-8">
-        <div className="hidden flex-1 flex-row items-center justify-start md:flex"></div>
+      <div className="fixed inset-x-0 top-0 z-10 flex flex-row p-2 md:px-4 md:py-8">
+        <div className="flex flex-1 flex-row items-center justify-start"></div>
         <BrushStrokeBackground>
           <Link
             href="/"
-            className="flex flex-row items-center gap-2 text-base text-amber-400 [text-shadow:_1px_1px_4px_rgb(0_0_0_/_80%)] md:text-6xl"
+            className="-mx-4 flex flex-row items-center gap-2 text-2xl text-amber-400 [text-shadow:_1px_1px_4px_rgb(0_0_0_/_80%)] md:text-6xl"
           >
             <Image
               src={logo}
