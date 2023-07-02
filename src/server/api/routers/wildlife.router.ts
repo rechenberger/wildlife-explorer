@@ -1,3 +1,5 @@
+import { subSeconds } from "date-fns"
+import { filter, map } from "lodash-es"
 import { z } from "zod"
 import { RADIUS_IN_KM_SEE_WILDLIFE } from "~/config"
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc"
@@ -24,5 +26,46 @@ export const wildlifeRouter = createTRPCRouter({
     })
   }),
 
-  scan: playerProcedure.mutation(async ({}) => {}),
+  scan: playerProcedure.mutation(async ({ ctx }) => {
+    const observations = await findObservations({
+      lat: ctx.player.lat,
+      lng: ctx.player.lng,
+      radiusInKm: RADIUS_IN_KM_SEE_WILDLIFE,
+    })
+
+    const now = new Date()
+    const wildlifes = await Promise.all(
+      map(observations, async (o) => {
+        const data = {
+          observationId: o.observationId,
+          lat: o.lat,
+          lng: o.lng,
+          metadata: o,
+          taxonId: o.taxonId,
+        }
+        return await ctx.prisma.wildlife.upsert({
+          where: {
+            observationId: o.observationId,
+          },
+          create: {
+            ...data,
+            respawnsAt: new Date(),
+            foundById: ctx.player.id,
+          },
+          update: data,
+        })
+      })
+    )
+
+    const countAll = wildlifes.length
+    const countFound = filter(
+      wildlifes,
+      (w) => w.foundById === ctx.player.id && w.updatedAt >= subSeconds(now, 10)
+    ).length
+
+    return {
+      countAll,
+      countFound,
+    }
+  }),
 })
