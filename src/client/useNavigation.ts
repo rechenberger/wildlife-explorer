@@ -5,12 +5,15 @@ import { calcNavigationAtom } from "./WalkerRoute"
 
 export const navigatingToObservationIdAtom = atom<number | null>(null)
 export const isNavigatingAtom = atom(false)
+export const navigationEtaAtom = atom<Date | null>(null)
+export const navigationDistanceInMeterAtom = atom(0)
 
 export const useNavigation = () => {
   const store = useStore()
   const calcNavigation = useSetAtom(calcNavigationAtom)
   const setObservationId = useSetAtom(navigatingToObservationIdAtom)
   const setIsNavigating = useSetAtom(isNavigatingAtom)
+  const setNavigationEta = useSetAtom(navigationEtaAtom)
 
   const navigate = useCallback(
     async ({
@@ -23,7 +26,7 @@ export const useNavigation = () => {
       observationId?: number
     }) => {
       setObservationId(observationId || null)
-      await calcNavigation([
+      const navigation = await calcNavigation([
         {
           from: store.get(playerLocationAtom),
           to: {
@@ -32,9 +35,11 @@ export const useNavigation = () => {
           },
         },
       ])
+
       setIsNavigating(true)
+      setNavigationEta(navigation.eta)
     },
-    [calcNavigation, setObservationId, store]
+    [calcNavigation, setIsNavigating, setNavigationEta, setObservationId, store]
   )
 
   return { navigate }

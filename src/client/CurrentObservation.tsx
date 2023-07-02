@@ -54,14 +54,14 @@ export const CurrentObservation = () => {
             <div className="flex flex-row items-center gap-1 text-sm font-bold text-gray-500">
               <Clock size={16} className="inline-block" />
               <span>Respawn</span>
-              <TimeAgo date={w.status.respawnsAt} />
+              <TimeAgo date={w.status.respawnsAt} addSuffix />
             </div>
           )}
           {!!w.caughtAt && (
             <div className="flex flex-row items-center gap-1 text-sm font-bold text-green-600">
               <Check size={16} className="inline-block" />
               <span>Caught</span>
-              <TimeAgo date={w.caughtAt} />
+              <TimeAgo date={w.caughtAt} addSuffix />
             </div>
           )}
         </div>

@@ -9,6 +9,7 @@ import { calcNavigationAtom } from "./WalkerRoute"
 import {
   isNavigatingAtom,
   navigatingToObservationIdAtom,
+  navigationEtaAtom,
 } from "./useNavigation"
 import { usePlayer } from "./usePlayer"
 
@@ -59,6 +60,7 @@ export const WalkerMarker = () => {
       // const playerLocation = store.get(playerLocationAtom)
       // markerRef.current.setLngLat(playerLocation)
       store.set(isNavigatingAtom, false)
+      store.set(navigationEtaAtom, null)
       store.set(navigatingToObservationIdAtom, null)
       return
     }

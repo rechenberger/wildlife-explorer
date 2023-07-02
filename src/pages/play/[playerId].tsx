@@ -1,4 +1,5 @@
 import { CurrentObservation } from "~/client/CurrentObservation"
+import { Eta } from "~/client/Eta"
 import { MainLayout } from "~/client/MainLayout"
 import { MapBase } from "~/client/MapBase"
 import { OtherPlayers } from "~/client/OtherPlayers"
@@ -12,6 +13,7 @@ export default function Page() {
   return (
     <MainLayout>
       <MapBase>
+        <Eta />
         <WildlifeMarkers />
         <OtherPlayers />
         <WalkerRoute />

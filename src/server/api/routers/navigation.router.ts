@@ -41,17 +41,20 @@ export const navigationRouter = createTRPCRouter({
           message: "No route found",
         })
       }
+      const startingAtTimestamp = Date.now()
 
       const totalDurationInSeconds = route.duration / GLOBAL_REALTIME_MULTIPLIER
       const { timingLegs, totalDistanceInMeter } = calcTimingLegs({
         geometry: route.geometry,
         totalDurationInSeconds,
+        startingAtTimestamp,
       })
 
       return {
         timingLegs,
         totalDistanceInMeter,
         totalDurationInSeconds: route.duration,
+        eta: new Date(startingAtTimestamp + totalDurationInSeconds * 1000),
       }
     }),
 })
