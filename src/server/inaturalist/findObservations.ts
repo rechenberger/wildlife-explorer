@@ -33,6 +33,8 @@ export const findObservations = async ({
         taxonId: o.taxon.id,
         taxonAncestorIds: o.taxon.ancestor_ids,
         name: o.taxon.preferred_common_name || o.taxon.name,
+        taxonName: o.taxon.name,
+        taxonCommonName: o.taxon.preferred_common_name,
         lat,
         lng,
         taxonImageUrlSquare: o.taxon.default_photo?.square_url,
