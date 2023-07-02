@@ -5,8 +5,8 @@ import Image from "next/image"
 import Link from "next/link"
 import { useMemo, useState } from "react"
 import { Map, Marker } from "react-map-gl"
-import { Walker, calcNavigationAtom } from "~/client/Walker"
 import { WalkerMarker, playerLocationAtom } from "~/client/WalkerMarker"
+import { WalkerRoute, calcNavigationAtom } from "~/client/WalkerRoute"
 import { env } from "~/env.mjs"
 import { api } from "~/utils/api"
 
@@ -73,7 +73,7 @@ export default function Page() {
             })
           }}
         >
-          <Walker />
+          <WalkerRoute />
           <WalkerMarker />
 
           {/* <Marker

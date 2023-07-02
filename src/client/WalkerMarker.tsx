@@ -3,7 +3,7 @@ import { findLast, last } from "lodash-es"
 import { User2 } from "lucide-react"
 import { useCallback, useEffect, useRef } from "react"
 import { Marker } from "react-map-gl"
-import { calcNavigationAtom } from "./Walker"
+import { calcNavigationAtom } from "./WalkerRoute"
 
 export const playerLocationAtom = atom({
   lat: 50.928435947011906,

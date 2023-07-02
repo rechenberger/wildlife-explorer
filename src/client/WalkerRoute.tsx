@@ -28,7 +28,7 @@ const pointsAtom = atom((get) => {
   return points
 })
 
-export const Walker = () => {
+export const WalkerRoute = () => {
   const result = useAtomValue(calcNavigationAtom)
   const points = useAtomValue(pointsAtom)
 
