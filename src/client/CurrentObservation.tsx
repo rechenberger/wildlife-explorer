@@ -46,7 +46,10 @@ export const CurrentObservation = () => {
     <>
       <div
         className="fixed inset-0 cursor-pointer bg-black/20 md:hidden"
-        onClick={() => setCurrentObservationId(null)}
+        onClick={(e) => {
+          e.stopPropagation()
+          setCurrentObservationId(null)
+        }}
       />
       <div className="fixed bottom-0 right-0 z-20 flex w-full max-w-md flex-col gap-4 rounded-t-xl bg-white p-4 text-black shadow md:bottom-8 md:right-8 md:rounded-xl">
         <div className="flex flex-row items-center gap-2">
