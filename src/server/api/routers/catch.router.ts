@@ -64,6 +64,19 @@ export const catchRouter = createTRPCRouter({
         }
       }
 
+      const caught = await ctx.prisma.catch.findFirst({
+        where: {
+          observationId: observation.id,
+          playerId: ctx.player.id,
+        },
+      })
+      if (caught) {
+        return {
+          success: false,
+          reason: "Wildlife already caught",
+        }
+      }
+
       const luck = Math.random()
       const isLucky = luck > DEFAULT_CATCH_SUCCESS_RATE
 
