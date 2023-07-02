@@ -10,22 +10,32 @@ export const calcNavigationAtom =
 export const Walker = () => {
   const result = useAtomValue(calcNavigationAtom)
 
+  const points = useMemo(() => {
+    if (!result) return []
+    const points = result.timingLegs.flatMap((leg, idx) => {
+      const isLast = idx === result.timingLegs.length - 1
+      if (isLast) {
+        return [leg.from, leg.to]
+      } else {
+        return [leg.from]
+      }
+    })
+    return points
+  }, [result])
+
   const geoJson = useMemo(
     () =>
-      result
+      points?.length
         ? {
             type: "Feature",
             properties: {},
             geometry: {
               type: "LineString",
-              coordinates: result.timingLegs.map((leg) => [
-                leg.from.lng,
-                leg.from.lat,
-              ]),
+              coordinates: points.map((p) => [p.lng, p.lat]),
             },
           }
         : null,
-    [result]
+    [points]
   )
 
   if (!result) return null
@@ -47,12 +57,12 @@ export const Walker = () => {
           }}
         />
       </Source>
-      {result.timingLegs.map((leg, index) => {
+      {points.map((point, index) => {
         return (
           <Marker
             key={index}
-            latitude={leg.from.lat}
-            longitude={leg.from.lng}
+            latitude={point.lat}
+            longitude={point.lng}
             anchor="center"
           >
             <div className="relative aspect-square rounded-full border border-white bg-blue-500 p-0.5">
