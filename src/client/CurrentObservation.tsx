@@ -54,6 +54,9 @@ export const CurrentObservation = () => {
             <X size={16} />
           </button>
         </div>
+        <div className="-mt-4 text-xs italic opacity-60">
+          Found by {w.foundBy.name} <TimeAgo date={w.createdAt} addSuffix />
+        </div>
         <div className="-mt-2 flex flex-row flex-wrap justify-between gap-2">
           {location && <Away location={location} />}
           {onCooldown && (

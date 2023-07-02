@@ -40,6 +40,11 @@ export const wildlifeRouter = createTRPCRouter({
             playerId: ctx.player.id,
           },
         },
+        foundBy: {
+          select: {
+            name: true,
+          },
+        },
       },
     })
 
