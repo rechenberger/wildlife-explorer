@@ -6,7 +6,10 @@ export const LoginButton = () => {
   if (!session.data)
     return (
       <>
-        <button className="rounded bg-black px-2 py-1" onClick={() => signIn()}>
+        <button
+          className="rounded bg-black px-2 py-1 text-sm text-white"
+          onClick={() => signIn()}
+        >
           Login
         </button>
       </>
@@ -14,7 +17,10 @@ export const LoginButton = () => {
 
   return (
     <>
-      <button className="rounded bg-black px-2 py-1" onClick={() => signOut()}>
+      <button
+        className="rounded bg-black px-2 py-1 text-sm text-white"
+        onClick={() => signOut()}
+      >
         Logout
       </button>
     </>

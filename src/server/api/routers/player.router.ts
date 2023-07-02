@@ -6,6 +6,15 @@ import { z } from "zod"
 import { playerProcedure } from "../middleware/playerProcedure"
 
 export const playerRouter = createTRPCRouter({
+  getMyPlayers: protectedProcedure.query(async ({ ctx }) => {
+    const players = await ctx.prisma.player.findMany({
+      where: {
+        userId: ctx.session.user.id,
+      },
+    })
+    return players
+  }),
+
   getMe: protectedProcedure
     .input(
       z.object({

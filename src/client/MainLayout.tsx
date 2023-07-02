@@ -10,7 +10,7 @@ export const MainLayout = ({ children }: { children?: ReactNode }) => {
         <link rel="icon" href="/favicon.ico" />
         <meta name="theme-color" content="#72A5A6"></meta>
       </Head>
-      <main className="relative flex h-[100svh] w-full flex-col items-center bg-gradient-to-br from-cyan-500  to-amber-600 text-white">
+      <main className="relative flex h-[100svh] w-full flex-col items-center justify-center bg-gradient-to-br  from-cyan-500 to-amber-600 text-white">
         <MainTopNav />
         {children}
       </main>
