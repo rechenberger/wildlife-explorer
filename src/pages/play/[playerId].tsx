@@ -6,7 +6,7 @@ import { WildlifeMarkers } from "~/client/WildlifeMarkers"
 import { usePlayer } from "~/client/usePlayer"
 
 export default function Page() {
-  const { player } = usePlayer()
+  usePlayer()
   return (
     <MainLayout>
       <MapBase>
