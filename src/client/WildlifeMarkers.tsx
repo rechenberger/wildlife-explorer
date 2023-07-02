@@ -1,10 +1,11 @@
 import { useSetAtom } from "jotai"
-import { Loader2 } from "lucide-react"
+import { Check, Loader2 } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { Marker } from "react-map-gl"
 import { api } from "~/utils/api"
 import { currentObservationIdAtom } from "./CurrentObservation"
+import { cn } from "./cn"
 import { usePlayer } from "./usePlayer"
 
 export const useWildlife = () => {
@@ -52,7 +53,10 @@ export const WildlifeMarkers = () => {
             <Link
               href={w.observationUrl ?? w.wikiUrl ?? "#"}
               target="_blank"
-              className="group relative flex aspect-square h-12 items-center justify-center rounded-full bg-amber-400 p-1 shadow transition-transform hover:scale-[3]"
+              className={cn(
+                "group relative flex aspect-square h-12 items-center justify-center rounded-full bg-amber-400 p-1 shadow transition-transform hover:scale-[3]",
+                w.isCaught && "bg-green-500"
+              )}
               // onMouseEnter={() => {
               //   console.log(w)
               // }}
@@ -71,12 +75,23 @@ export const WildlifeMarkers = () => {
               {w.imgUrl && (
                 <Image
                   src={w.imgUrl}
-                  className="h-full w-full rounded-full"
+                  className={cn(
+                    "h-full w-full rounded-full",
+                    w.isCaught && "grayscale"
+                  )}
                   alt={"Observation"}
                   unoptimized
                   width={1}
                   height={1}
                 />
+              )}
+              {w.isCaught && (
+                <>
+                  <div className="absolute inset-0 flex items-center justify-center rounded-full bg-green-500 opacity-40"></div>
+                  <div className="absolute inset-0 flex items-center justify-center ">
+                    <Check size={32} className="text-white" />
+                  </div>
+                </>
               )}
               <div className="absolute -bottom-4 line-clamp-1 hidden whitespace-nowrap rounded-full bg-amber-400 p-1 text-[4px] font-bold leading-none text-white shadow group-hover:flex">
                 {w.name}

@@ -2,6 +2,7 @@ import { z } from "zod"
 import { RADIUS_IN_KM_SEE_WILDLIFE } from "~/config"
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc"
 import { findObservations } from "~/server/inaturalist/findObservations"
+import { findWildlife } from "~/server/lib/findWildlife"
 import { playerProcedure } from "../middleware/playerProcedure"
 
 export const wildlifeRouter = createTRPCRouter({
@@ -14,10 +15,12 @@ export const wildlifeRouter = createTRPCRouter({
     }),
 
   nearMe: playerProcedure.query(async ({ ctx }) => {
-    return findObservations({
+    return findWildlife({
       lat: ctx.player.lat,
       lng: ctx.player.lng,
       radiusInKm: RADIUS_IN_KM_SEE_WILDLIFE,
+      prisma: ctx.prisma,
+      playerId: ctx.player.id,
     })
   }),
 })
