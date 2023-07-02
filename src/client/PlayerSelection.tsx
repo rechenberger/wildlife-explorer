@@ -18,13 +18,20 @@ export const PlayerSelection = () => {
       ? "Create Character"
       : "Choose Character"
     : "Welcome"
-  const { data: players } = api.player.getMyPlayers.useQuery(undefined, {
-    onSuccess: (players) => {
-      if (!players.length) {
-        setCreating(true)
-      }
-    },
-  })
+  const { data: players, isInitialLoading } = api.player.getMyPlayers.useQuery(
+    undefined,
+    {
+      onSuccess: (players) => {
+        if (!players.length) {
+          setCreating(true)
+        }
+      },
+      enabled: isLoggedIn,
+    }
+  )
+
+  if (session.status === "loading" || isInitialLoading) return null
+
   return (
     <>
       <div className="fixed flex w-full max-w-xs flex-col rounded-xl bg-white text-black shadow md:max-w-sm">
