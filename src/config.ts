@@ -5,3 +5,4 @@ export const DEFAULT_LOCATION = {
 }
 export const RADIUS_IN_KM_SEE_WILDLIFE = 0.5
 export const RADIUS_IN_M_CATCH_WILDLIFE = 15
+export const DEFAULT_CATCH_SUCCESS_RATE = 0.5

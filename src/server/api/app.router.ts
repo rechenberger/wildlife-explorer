@@ -1,5 +1,6 @@
 import { exampleRouter } from "~/server/api/routers/example.router"
 import { createTRPCRouter } from "~/server/api/trpc"
+import { catchRouter } from "./routers/catch.router"
 import { navigationRouter } from "./routers/navigation.router"
 import { playerRouter } from "./routers/player.router"
 import { wildlifeRouter } from "./routers/wildlife.router"
@@ -14,6 +15,7 @@ export const appRouter = createTRPCRouter({
   wildlife: wildlifeRouter,
   navigation: navigationRouter,
   player: playerRouter,
+  catch: catchRouter,
 })
 
 // export type definition of API
