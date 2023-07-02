@@ -76,9 +76,10 @@ model Player {
     lat  Float
     lng  Float
 
-    userId  String
-    user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
-    catches Catch[]
+    userId        String
+    user          User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+    catches       Catch[]
+    foundWildlife Wildlife[]
 }
 
 model ObservationStatus {
@@ -101,5 +102,27 @@ model Catch {
     playerId String
     player   Player @relation(fields: [playerId], references: [id], onDelete: Cascade)
 
+    wildlifeId String?
+    wildlife   Wildlife? @relation(fields: [wildlifeId], references: [id], onDelete: Cascade)
+
     @@unique([observationId, playerId])
+}
+
+model Wildlife {
+    id        String   @id @default(cuid())
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    respawnsAt DateTime
+    catches    Catch[]
+
+    observationId Int  @unique
+    taxonId       Int
+    metadata      Json
+
+    foundById String
+    foundBy   Player @relation(fields: [foundById], references: [id], onDelete: Cascade)
+
+    lat Float
+    lng Float
 }
