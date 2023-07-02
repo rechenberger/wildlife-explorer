@@ -17,7 +17,7 @@ export const CurrentObservation = () => {
 
   return (
     <>
-      <div className="fixed bottom-8 right-8 flex w-full max-w-md flex-col gap-4 rounded-xl bg-black/20 p-4">
+      <div className="fixed bottom-8 right-8 flex w-full max-w-md flex-col gap-4 rounded-xl bg-white/80 p-4 text-black shadow">
         <div className="text-2xl">{w.name}</div>
         {w.imgUrlMedium && (
           <div className="-mx-4">
@@ -33,7 +33,7 @@ export const CurrentObservation = () => {
         )}
         <div className="flex flex-row gap-2">
           <button
-            className="rounded bg-black px-2 py-1"
+            className="rounded bg-black px-2 py-1 text-white"
             onClick={() => {
               if (!w.lat || !w.lng) return
               navigate({
@@ -44,9 +44,12 @@ export const CurrentObservation = () => {
           >
             Navigate here
           </button>
-          <button className="rounded bg-black px-2 py-1" onClick={() => {}}>
+          {/* <button
+            className="rounded bg-black px-2 py-1 text-white"
+            onClick={() => {}}
+          >
             Catch
-          </button>
+          </button> */}
         </div>
       </div>
     </>
