@@ -1,23 +1,31 @@
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc"
 
 import { TRPCError } from "@trpc/server"
+import { filter } from "lodash-es"
 import { z } from "zod"
 import { playerProcedure } from "../middleware/playerProcedure"
 
 export const playerRouter = createTRPCRouter({
-  getMe: protectedProcedure.query(async ({ ctx }) => {
-    const player = await ctx.prisma.player.findFirst({
-      where: {
-        userId: ctx.session.user.id,
-      },
-    })
-    if (!player) {
-      throw new TRPCError({
-        code: "NOT_FOUND",
+  getMe: protectedProcedure
+    .input(
+      z.object({
+        playerId: z.string().optional(),
       })
-    }
-    return player
-  }),
+    )
+    .query(async ({ ctx, input }) => {
+      const player = await ctx.prisma.player.findFirst({
+        where: {
+          userId: ctx.session.user.id,
+          id: input.playerId,
+        },
+      })
+      if (!player) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+        })
+      }
+      return player
+    }),
   createMe: protectedProcedure
     .input(z.object({ name: z.string(), lat: z.number(), lng: z.number() }))
     .mutation(async ({ ctx, input }) => {
@@ -43,4 +51,9 @@ export const playerRouter = createTRPCRouter({
         },
       })
     }),
+
+  others: playerProcedure.query(async ({ ctx }) => {
+    const players = await ctx.prisma.player.findMany({})
+    return filter(players, (player) => player.id !== ctx.player.id)
+  }),
 })

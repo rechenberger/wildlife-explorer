@@ -1,5 +1,6 @@
 import { MainLayout } from "~/client/MainLayout"
 import { MapBase } from "~/client/MapBase"
+import { OtherPlayers } from "~/client/OtherPlayers"
 import { WalkerMarker } from "~/client/WalkerMarker"
 import { WalkerRoute } from "~/client/WalkerRoute"
 import { WildlifeMarkers } from "~/client/WildlifeMarkers"
@@ -11,6 +12,7 @@ export default function Page() {
     <MainLayout>
       <MapBase>
         <WildlifeMarkers />
+        <OtherPlayers />
         <WalkerRoute />
         <WalkerMarker />
       </MapBase>
