@@ -1,4 +1,4 @@
-import { useAtomValue } from "jotai"
+import { atom, useAtomValue } from "jotai"
 import { Footprints } from "lucide-react"
 import { useMemo } from "react"
 import { Layer, Marker, Source } from "react-map-gl"
@@ -7,21 +7,25 @@ import { apiJotai } from "~/utils/api"
 export const calcNavigationAtom =
   apiJotai.navigation.calcNavigation.atomWithMutation()
 
+const pointsAtom = atom((get) => {
+  const result = get(calcNavigationAtom)
+  if (!result) return []
+  const points = result.timingLegs.flatMap((leg, idx) => {
+    // if (leg.startingAtTimestamp < Date.now()) return []
+
+    const isLast = idx === result.timingLegs.length - 1
+    if (isLast) {
+      return [leg.from, leg.to]
+    } else {
+      return [leg.from]
+    }
+  })
+  return points
+})
+
 export const Walker = () => {
   const result = useAtomValue(calcNavigationAtom)
-
-  const points = useMemo(() => {
-    if (!result) return []
-    const points = result.timingLegs.flatMap((leg, idx) => {
-      const isLast = idx === result.timingLegs.length - 1
-      if (isLast) {
-        return [leg.from, leg.to]
-      } else {
-        return [leg.from]
-      }
-    })
-    return points
-  }, [result])
+  const points = useAtomValue(pointsAtom)
 
   const geoJson = useMemo(
     () =>
