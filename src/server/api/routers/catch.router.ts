@@ -1,7 +1,9 @@
 import { TRPCError } from "@trpc/server"
+import { addMinutes } from "date-fns"
 import { z } from "zod"
 import {
   DEFAULT_CATCH_SUCCESS_RATE,
+  DEFAULT_RESPAWN_TIME_IN_MINUTES,
   RADIUS_IN_KM_SEE_WILDLIFE,
   RADIUS_IN_M_CATCH_WILDLIFE,
 } from "~/config"
@@ -43,6 +45,21 @@ export const catchRouter = createTRPCRouter({
 
       const luck = Math.random()
       const isLucky = luck > DEFAULT_CATCH_SUCCESS_RATE
+
+      const respawnsAt = addMinutes(new Date(), DEFAULT_RESPAWN_TIME_IN_MINUTES)
+
+      await ctx.prisma.observationStatus.upsert({
+        where: {
+          id: observation.id,
+        },
+        update: {
+          respawnsAt,
+        },
+        create: {
+          id: observation.id,
+          respawnsAt,
+        },
+      })
 
       if (!isLucky) {
         return {

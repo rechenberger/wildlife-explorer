@@ -1,6 +1,5 @@
 import Head from "next/head"
 import { type ReactNode } from "react"
-import { Toaster } from "sonner"
 import { MainTopNav } from "./MainTopNav"
 
 export const MainLayout = ({ children }: { children?: ReactNode }) => {

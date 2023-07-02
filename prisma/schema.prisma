@@ -96,7 +96,7 @@ model Catched {
     updatedAt DateTime @updatedAt
 
     observationId     Int
-    observationStatus ObservationStatus? @relation(fields: [observationId], references: [id], onDelete: NoAction)
+    observationStatus ObservationStatus @relation(fields: [observationId], references: [id], onDelete: Cascade)
 
     playerId String
     player   Player @relation(fields: [playerId], references: [id], onDelete: Cascade)
