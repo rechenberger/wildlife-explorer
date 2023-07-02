@@ -26,6 +26,7 @@ export const OtherPlayers = () => {
             latitude={player.lat}
             longitude={player.lng}
             anchor="center"
+            style={{ zIndex: 25 }}
           >
             <div className="flex flex-col items-center">
               <div className="relative aspect-square rounded-full border-2 bg-purple-500 ring-2 ring-purple-400">
