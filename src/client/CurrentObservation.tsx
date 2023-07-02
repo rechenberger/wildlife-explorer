@@ -47,8 +47,8 @@ export const CurrentObservation = () => {
           {location && <Away location={location} />}
           <div className="flex-1" />
           {w.status && (
-            <div>
-              Respawn:{" "}
+            <div className="text-sm font-bold text-gray-500">
+              Respawn{" "}
               {w.status.respawnsAt.toLocaleTimeString(undefined, {
                 hour12: false,
                 // minute: "2-digit",
@@ -57,8 +57,13 @@ export const CurrentObservation = () => {
             </div>
           )}
           {!!w.caughtAt && (
-            <div className="text-xs text-green-500">
-              Caught {w.caughtAt?.toLocaleTimeString()}
+            <div className="text-sm font-bold text-green-500">
+              Caught{" "}
+              {w.caughtAt?.toLocaleTimeString(undefined, {
+                hour12: false,
+                // minute: "2-digit",
+                timeStyle: "short",
+              })}
             </div>
           )}
         </div>
