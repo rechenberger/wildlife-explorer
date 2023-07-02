@@ -3,7 +3,6 @@ import Image from "next/image"
 import Link from "next/link"
 import logo from "../../public/favicon.png"
 import { BrushStrokeBackground } from "./BrushStrokeBackground"
-import { LoginButton } from "./LoginButton"
 
 const carterOne = Carter_One({
   weight: "400",
@@ -29,7 +28,7 @@ export const MainTopNav = () => {
           </Link>
         </BrushStrokeBackground>
         <div className="flex flex-1 flex-row items-center justify-end">
-          <LoginButton />
+          {/* <LoginButton /> */}
         </div>
       </div>
     </>
