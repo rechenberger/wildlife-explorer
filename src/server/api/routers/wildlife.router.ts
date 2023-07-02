@@ -87,7 +87,7 @@ export const wildlifeRouter = createTRPCRouter({
     const countAll = wildlifes.length
     const countFound = filter(
       wildlifes,
-      (w) => w.foundById === ctx.player.id && w.updatedAt >= subSeconds(now, 10)
+      (w) => w.foundById === ctx.player.id && w.createdAt >= subSeconds(now, 10)
     ).length
 
     return {
