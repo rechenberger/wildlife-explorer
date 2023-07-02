@@ -1,11 +1,10 @@
-import { z } from "zod"
-import { createTRPCRouter, publicProcedure } from "~/server/api/trpc"
-
 import MapboxClient from "@mapbox/mapbox-sdk/services/directions"
 import { TRPCError } from "@trpc/server"
 import { first } from "lodash-es"
+import { z } from "zod"
 import { GLOBAL_REALTIME_MULTIPLIER } from "~/config"
 import { env } from "~/env.mjs"
+import { createTRPCRouter, publicProcedure } from "~/server/api/trpc"
 import { calcTimingLegs } from "~/server/lib/calcTimingLegs"
 
 const baseClient = MapboxClient({ accessToken: env.NEXT_PUBLIC_MAPBOX_TOKEN })
