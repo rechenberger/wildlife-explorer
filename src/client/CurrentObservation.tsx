@@ -28,6 +28,7 @@ export const CurrentObservation = () => {
     api.catch.catch.useMutation({
       onSettled: () => {
         trpc.catch.invalidate()
+        trpc.wildlife.invalidate()
       },
     })
 
