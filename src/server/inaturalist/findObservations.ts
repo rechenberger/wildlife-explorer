@@ -37,6 +37,7 @@ export const findObservations = async ({
         imgUrlMedium: o.taxon.default_photo?.medium_url,
         observationUrl: o.uri,
         wikiUrl: o.taxon.wikipedia_url,
+        // imagesObservation: map(o.photos, (p) => p.url),
       },
     ]
   })

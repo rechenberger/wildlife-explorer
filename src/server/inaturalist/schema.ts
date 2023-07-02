@@ -149,7 +149,19 @@ export const Observation = z.object({
   identifications: z.array(z.any()),
   project_observations: z.array(z.any()),
   observation_photos: z.array(z.any()),
-  photos: z.array(z.any()),
+  photos: z.array(
+    z.object({
+      id: z.number(),
+      license_code: z.string().nullable(),
+      original_dimensions: z.object({
+        width: z.number(),
+        height: z.number(),
+      }),
+      url: z.string(),
+      attribution: z.string(),
+      flags: z.array(z.any()),
+    })
+  ),
   faves: z.array(z.any()),
   non_owner_ids: z.array(z.any()),
 })
