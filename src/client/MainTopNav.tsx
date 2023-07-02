@@ -17,12 +17,12 @@ export const MainTopNav = () => {
         <BrushStrokeBackground>
           <Link
             href="/"
-            className="-mx-4 flex flex-row items-center gap-2 text-2xl text-amber-400 [text-shadow:_1px_1px_4px_rgb(0_0_0_/_80%)] md:text-6xl"
+            className="-mx-8 -my-2 flex flex-row items-center gap-2 text-2xl text-amber-400 [text-shadow:_1px_1px_4px_rgb(0_0_0_/_80%)] md:-mx-8 md:my-0 md:text-6xl"
           >
             <Image
               src={logo}
               alt="Wildlife Explorer Logo"
-              className="aspect-square h-8 w-8 rounded-full md:h-20 md:w-20"
+              className="aspect-square h-10 w-10 rounded-full md:h-20 md:w-20"
             />
             <span className={carterOne.className}>Wildlife Explorer</span>
           </Link>
