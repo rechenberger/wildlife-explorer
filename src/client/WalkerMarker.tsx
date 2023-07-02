@@ -112,6 +112,9 @@ export const WalkerMarker = () => {
         latitude={store.get(playerLocationAtom).lat}
         longitude={store.get(playerLocationAtom).lng}
         anchor="center"
+        style={{
+          zIndex: 30,
+        }}
       >
         <div className="relative aspect-square rounded-full border-2 bg-blue-500 ring-2 ring-blue-400">
           <User2 size={24} className="animate text-white" />

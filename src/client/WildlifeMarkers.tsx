@@ -58,6 +58,9 @@ export const WildlifeMarkers = () => {
             latitude={w.lat}
             longitude={w.lng}
             anchor="center"
+            style={{
+              zIndex: 10,
+            }}
           >
             <Link
               href={w.metadata.observationUrl ?? w.metadata.taxonWikiUrl ?? "#"}
