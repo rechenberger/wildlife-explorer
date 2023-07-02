@@ -21,6 +21,7 @@
     "@trpc/react-query": "^10.26.0",
     "@trpc/server": "^10.26.0",
     "@turf/turf": "^6.5.0",
+    "clsx": "^1.2.1",
     "date-fns": "^2.30.0",
     "jotai": "^2.2.1",
     "jotai-trpc": "^0.5.1",
@@ -35,6 +36,7 @@
     "react-json-view": "^1.21.3",
     "react-map-gl": "^7.1.0",
     "superjson": "1.12.2",
+    "tailwind-merge": "^1.13.2",
     "zod": "^3.21.4"
   },
   "devDependencies": {

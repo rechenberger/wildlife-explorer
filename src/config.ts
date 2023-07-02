@@ -4,3 +4,4 @@ export const DEFAULT_LOCATION = {
   lng: 6.930087265110956,
 }
 export const RADIUS_IN_KM_SEE_WILDLIFE = 0.5
+export const RADIUS_IN_M_CATCH_WILDLIFE = 15
