@@ -1,4 +1,4 @@
-import { useSetAtom } from "jotai"
+import { useSetAtom, useStore } from "jotai"
 import { debounce } from "lodash-es"
 import { Loader2 } from "lucide-react"
 import Image from "next/image"
@@ -6,7 +6,7 @@ import Link from "next/link"
 import { useMemo, useState } from "react"
 import { Map, Marker } from "react-map-gl"
 import { Walker, calcNavigationAtom } from "~/client/Walker"
-import { WalkerMarker } from "~/client/WalkerMarker"
+import { WalkerMarker, playerLocationAtom } from "~/client/WalkerMarker"
 import { env } from "~/env.mjs"
 import { api } from "~/utils/api"
 
@@ -22,6 +22,8 @@ export default function Page() {
     lng: 6.930087265110956,
     radiusInKm: 0.5,
   })
+
+  const store = useStore()
 
   const { data, isFetching } = api.wildlife.find.useQuery(center, {
     keepPreviousData: true,
@@ -118,7 +120,7 @@ export default function Page() {
                     }
                     await calcNavigation([
                       {
-                        from: center,
+                        from: store.get(playerLocationAtom) || center,
                         to: {
                           lat: observation.geojson.coordinates[1],
                           lng: observation.geojson.coordinates[0],
