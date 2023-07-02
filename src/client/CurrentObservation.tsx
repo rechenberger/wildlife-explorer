@@ -4,6 +4,7 @@ import dynamic from "next/dynamic"
 import Image from "next/image"
 import Link from "next/link"
 import { toast } from "sonner"
+import { SHOW_OBSERVATION_JSON } from "~/config"
 import { api } from "~/utils/api"
 import { Away } from "./Away"
 import { TimeAgo } from "./TimeAgo"
@@ -81,7 +82,7 @@ export const CurrentObservation = () => {
             />
           </div>
         )}
-        {process.env.NODE_ENV === "development" && (
+        {SHOW_OBSERVATION_JSON && (
           <div className="overflow-hidden text-[10px]">
             <JsonViewer value={w} theme="light" />
           </div>

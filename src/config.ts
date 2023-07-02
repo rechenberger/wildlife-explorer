@@ -9,3 +9,5 @@ export const DEFAULT_CATCH_SUCCESS_RATE = 0.5
 export const DEFAULT_RESPAWN_TIME_IN_MINUTES = 10
 export const WILDLIFE_REFETCH_INTERVAL_IN_MS = 10_000
 export const OTHER_PLAYER_REFETCH_INTERVAL_IN_MS = 1000
+export const SHOW_OBSERVATION_JSON =
+  false && process.env.NODE_ENV === "development"
