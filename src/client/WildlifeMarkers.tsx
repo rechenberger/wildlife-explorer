@@ -20,7 +20,7 @@ export const WildlifeMarkers = () => {
   return (
     <>
       {isFetching && (
-        <div className="absolute right-2 top-2 z-50 animate-spin text-yellow-500">
+        <div className="absolute right-2 top-2 z-50 animate-spin text-amber-400">
           <Loader2 />
         </div>
       )}
@@ -41,7 +41,7 @@ export const WildlifeMarkers = () => {
             <Link
               href={observation.uri ?? observation.taxon.wikipedia_url ?? "#"}
               target="_blank"
-              className="group relative flex aspect-square h-12 items-center justify-center rounded-full bg-yellow-500 p-1 transition-transform hover:scale-[3]"
+              className="group relative flex aspect-square h-12 items-center justify-center rounded-full bg-amber-400 p-1 shadow transition-transform hover:scale-[3]"
               onMouseEnter={() => {
                 console.log(observation.taxon)
               }}
@@ -75,7 +75,7 @@ export const WildlifeMarkers = () => {
                   height={1}
                 />
               )}
-              <div className="absolute -bottom-4 line-clamp-1 hidden whitespace-nowrap rounded-full bg-yellow-500 p-1 text-[4px] font-bold leading-none text-white group-hover:flex">
+              <div className="absolute -bottom-4 line-clamp-1 hidden whitespace-nowrap rounded-full bg-amber-400 p-1 text-[4px] font-bold leading-none text-white shadow group-hover:flex">
                 {observation.taxon.preferred_common_name ||
                   observation.taxon.name}
               </div>
