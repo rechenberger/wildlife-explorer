@@ -8,9 +8,9 @@ export const LoginButton = () => {
       <>
         <button
           className="rounded bg-black px-2 py-1 text-sm text-white"
-          onClick={() => signIn()}
+          onClick={() => signIn("discord")}
         >
-          Login
+          Login with Discord
         </button>
       </>
     )

@@ -11,12 +11,15 @@ export const PlayerSelection = () => {
   const session = useSession()
   const isLoggedIn = !!session.data
   const { data: players } = api.player.getMyPlayers.useQuery()
-  const title = isLoggedIn ? "Choose Character" : "Login to Play"
+  const title = isLoggedIn ? "Choose Character" : "Welcome"
   return (
     <>
       <div className="fixed flex w-full max-w-sm flex-col rounded-xl bg-white text-black shadow">
         <div
-          className={cn("flex flex-row gap-2 p-4", isLoggedIn && "border-b")}
+          className={cn(
+            "flex flex-row items-center gap-2 p-4",
+            isLoggedIn && "border-b"
+          )}
         >
           <div className="flex-1">{title}</div>
           <LoginButton />
