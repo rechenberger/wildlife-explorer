@@ -57,7 +57,7 @@ export const MapBase = ({
           latitude: latLng.lat,
           longitude: latLng.lng,
           pitch: isOverview ? 0 : 45,
-          zoom: isOverview ? 2 : 15,
+          zoom: isOverview ? 2 : 16,
         }}
         style={{ width: "100%", height: "100%" }}
         projection={"globe" as any}
