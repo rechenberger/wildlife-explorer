@@ -54,7 +54,12 @@ export const WildlifeMarkers = () => {
           return null
         }
         return (
-          <Marker key={w.id} latitude={w.lat} longitude={w.lng} anchor="center">
+          <Marker
+            key={w.observationId}
+            latitude={w.lat}
+            longitude={w.lng}
+            anchor="center"
+          >
             <Link
               href={w.observationUrl ?? w.wikiUrl ?? "#"}
               target="_blank"
@@ -62,7 +67,7 @@ export const WildlifeMarkers = () => {
                 "group relative flex aspect-square h-12 items-center justify-center rounded-full bg-amber-400 p-1 shadow transition-transform hover:scale-[3]",
                 !!w.caughtAt && "bg-green-500 opacity-50",
                 onCooldown && "bg-gray-400 opacity-50",
-                navigatingtoObservationId === w.id && "bg-blue-500"
+                navigatingtoObservationId === w.observationId && "bg-blue-500"
               )}
               // onMouseEnter={() => {
               //   console.log(w)
@@ -70,7 +75,7 @@ export const WildlifeMarkers = () => {
               onClick={async (e) => {
                 e.stopPropagation()
                 e.preventDefault()
-                setCurrentObservationId(w.id)
+                setCurrentObservationId(w.observationId)
                 // if (!w.lat || !w.lng) return
                 // navigate({
                 //   lat: w.lat,

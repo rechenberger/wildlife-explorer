@@ -24,8 +24,9 @@ export const findWildlife = async ({
   const x = map(observations, (observation) => {
     return {
       ...observation,
-      caughtAt: catches.find((c) => c.observationId === observation.id)
-        ?.createdAt,
+      caughtAt: catches.find(
+        (c) => c.observationId === observation.observationId
+      )?.createdAt,
     }
   })
 
@@ -33,7 +34,7 @@ export const findWildlife = async ({
     map(x, async (w) => {
       const status = await prisma.observationStatus.findUnique({
         where: {
-          id: w.id,
+          id: w.observationId,
         },
       })
       return {

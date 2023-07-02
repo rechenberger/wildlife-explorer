@@ -37,7 +37,7 @@ export const catchRouter = createTRPCRouter({
         playerId: ctx.player.id,
       })
       const observation = observations.find(
-        (observation) => observation.id === input.observationId
+        (observation) => observation.observationId === input.observationId
       )
       if (!observation) {
         throw new TRPCError({
@@ -66,7 +66,7 @@ export const catchRouter = createTRPCRouter({
 
       const caught = await ctx.prisma.catch.findFirst({
         where: {
-          observationId: observation.id,
+          observationId: observation.observationId,
           playerId: ctx.player.id,
         },
       })
@@ -84,13 +84,13 @@ export const catchRouter = createTRPCRouter({
 
       await ctx.prisma.observationStatus.upsert({
         where: {
-          id: observation.id,
+          id: observation.observationId,
         },
         update: {
           respawnsAt,
         },
         create: {
-          id: observation.id,
+          id: observation.observationId,
           respawnsAt,
         },
       })
@@ -105,7 +105,7 @@ export const catchRouter = createTRPCRouter({
       await ctx.prisma.catch.create({
         data: {
           playerId: ctx.player.id,
-          observationId: observation.id,
+          observationId: observation.observationId,
         },
       })
 

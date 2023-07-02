@@ -22,7 +22,7 @@ export const CurrentObservation = () => {
   const currentObservationId = useAtomValue(currentObservationIdAtom)
   const setCurrentObservationId = useSetAtom(currentObservationIdAtom)
 
-  const w = wildlife?.find((w) => w.id === currentObservationId)
+  const w = wildlife?.find((w) => w.observationId === currentObservationId)
 
   const navigatingToObservationId = useAtomValue(navigatingToObservationIdAtom)
   const { navigate } = useNavigation()
@@ -113,11 +113,11 @@ export const CurrentObservation = () => {
             <button
               className={cn(
                 "rounded bg-black px-2 py-1 text-sm text-white",
-                navigatingToObservationId === w.id &&
+                navigatingToObservationId === w.observationId &&
                   "cursor-progress bg-blue-500 opacity-50"
               )}
               onClick={() => {
-                navigate({ ...location, observationId: w.id })
+                navigate({ ...location, observationId: w.observationId })
               }}
             >
               Navigate here
@@ -132,15 +132,18 @@ export const CurrentObservation = () => {
             onClick={async () => {
               if (!playerId) return
 
-              toast.promise(doCatch({ observationId: w.id, playerId }), {
-                loading: "Catching...",
-                success: (result) =>
-                  result.success
-                    ? "You caught it! 🎉"
-                    : result.reason || "Failed to catch. Try again.",
-                error: "Failed to catch. Try again.",
-                icon: <></>,
-              })
+              toast.promise(
+                doCatch({ observationId: w.observationId, playerId }),
+                {
+                  loading: "Catching...",
+                  success: (result) =>
+                    result.success
+                      ? "You caught it! 🎉"
+                      : result.reason || "Failed to catch. Try again.",
+                  error: "Failed to catch. Try again.",
+                  icon: <></>,
+                }
+              )
             }}
           >
             Catch

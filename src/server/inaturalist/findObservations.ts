@@ -1,5 +1,5 @@
 import { z } from "zod"
-import { WildlifeMetadata } from "../schema/WildlifeMetadata"
+import { type WildlifeMetadata } from "../schema/WildlifeMetadata"
 import { Observation } from "./schema"
 
 export const findObservations = async ({
@@ -31,7 +31,7 @@ export const findObservations = async ({
     return [
       {
         // ids:
-        id: o.id,
+        observationId: o.id,
         taxonId: o.taxon.id,
 
         // UI:
