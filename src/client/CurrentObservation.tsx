@@ -4,6 +4,7 @@ import Image from "next/image"
 import { toast } from "sonner"
 import { api } from "~/utils/api"
 import { Away } from "./Away"
+import { TimeAgo } from "./TimeAgo"
 import { useWildlife } from "./WildlifeMarkers"
 import { cn } from "./cn"
 import { useNavigation } from "./useNavigation"
@@ -49,25 +50,17 @@ export const CurrentObservation = () => {
         <div className="-mt-2 flex flex-row justify-between gap-2">
           {location && <Away location={location} />}
           {w.status && onCooldown && (
-            <div className="flex flex-row items-center text-sm font-bold text-gray-500">
-              <Clock size={16} className="mr-1 inline-block" />
-              Respawn{" "}
-              {w.status.respawnsAt.toLocaleTimeString(undefined, {
-                hour12: false,
-                // minute: "2-digit",
-                timeStyle: "short",
-              })}
+            <div className="flex flex-row items-center gap-1 text-sm font-bold text-gray-500">
+              <Clock size={16} className="inline-block" />
+              <span>Respawn</span>
+              <TimeAgo date={w.status.respawnsAt} />
             </div>
           )}
           {!!w.caughtAt && (
-            <div className="flex flex-row items-center text-sm font-bold text-green-600">
-              <Check size={16} className="mr-1 inline-block" />
-              Caught{" "}
-              {w.caughtAt?.toLocaleTimeString(undefined, {
-                hour12: false,
-                // minute: "2-digit",
-                timeStyle: "short",
-              })}
+            <div className="flex flex-row items-center gap-1 text-sm font-bold text-green-600">
+              <Check size={16} className="inline-block" />
+              <span>Caught</span>
+              <TimeAgo date={w.caughtAt} />
             </div>
           )}
         </div>
