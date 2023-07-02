@@ -31,7 +31,7 @@ export const BrushStrokeBackground = ({
             </rect>
           </clipPath>
           <clipPath id="clip" clipPathUnits="objectBoundingBox">
-            <use href="#brush-shape" clip-path="url(#rect-cp)" />
+            <use href="#brush-shape" clipPath="url(#rect-cp)" />
           </clipPath>
 
           <path
