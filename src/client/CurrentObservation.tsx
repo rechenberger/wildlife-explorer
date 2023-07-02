@@ -126,9 +126,9 @@ export const CurrentObservation = () => {
                 loading: "Catching...",
                 success: (result) =>
                   result.success
-                    ? "You caught it!"
+                    ? "You caught it! 🎉"
                     : result.reason || "Failed to catch. Try again.",
-                error: "Failed to catch",
+                error: "Failed to catch. Try again.",
               })
             }}
           >

@@ -50,7 +50,7 @@ export const catchRouter = createTRPCRouter({
       if (!isClose) {
         return {
           success: false,
-          reason: "too far away",
+          reason: "Too far away 😫",
         }
       }
 
@@ -73,7 +73,7 @@ export const catchRouter = createTRPCRouter({
       if (caught) {
         return {
           success: false,
-          reason: "Wildlife already caught",
+          reason: "Wildlife already caught 🤓",
         }
       }
 
@@ -98,7 +98,7 @@ export const catchRouter = createTRPCRouter({
       if (!isLucky) {
         return {
           success: false,
-          reason: "Wildlife escaped",
+          reason: "Wildlife escaped 💨",
         }
       }
 
