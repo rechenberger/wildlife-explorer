@@ -78,10 +78,11 @@ export const CurrentObservation = () => {
             />
           </div>
         )}
-        <div className="flex flex-row flex-wrap gap-2">
+        <div className="flex flex-row flex-wrap items-center gap-2">
           {w.observationUrl && (
             <Link
               href={w.observationUrl}
+              target="_blank"
               className="flex flex-row items-center gap-1 rounded px-1 py-0.5 hover:bg-black/10"
             >
               <ExternalLink size={12} />
@@ -91,6 +92,7 @@ export const CurrentObservation = () => {
           {w.wikiUrl && (
             <Link
               href={w.wikiUrl}
+              target="_blank"
               className="flex flex-row items-center gap-1 rounded px-1 py-0.5 hover:bg-black/10"
             >
               <ExternalLink size={12} />
