@@ -40,13 +40,13 @@ export const CurrentObservation = () => {
   if (!w) return null
 
   const location = w.lat && w.lng ? { lat: w.lat, lng: w.lng } : null
-  const onCooldown = w.status?.respawnsAt && w.status.respawnsAt > new Date()
+  const onCooldown = w.respawnsAt > new Date()
 
   return (
     <>
       <div className="fixed bottom-0 right-0 flex w-full max-w-md flex-col gap-4 rounded-t-xl bg-white p-4 text-black shadow md:bottom-8 md:right-8 md:rounded-xl">
         <div className="flex flex-row items-center gap-2">
-          <div className="flex-1 truncate text-2xl">{w.name}</div>
+          <div className="flex-1 truncate text-2xl">{w.metadata.name}</div>
           <button
             className="shrink-0"
             onClick={() => setCurrentObservationId(null)}
@@ -56,11 +56,11 @@ export const CurrentObservation = () => {
         </div>
         <div className="-mt-2 flex flex-row flex-wrap justify-between gap-2">
           {location && <Away location={location} />}
-          {w.status && onCooldown && (
+          {onCooldown && (
             <div className="flex flex-row items-center gap-1 text-sm font-bold text-gray-500">
               <Clock size={16} className="inline-block" />
               <span>Respawn</span>
-              <TimeAgo date={w.status.respawnsAt} addSuffix />
+              <TimeAgo date={w.respawnsAt} addSuffix />
             </div>
           )}
           {!!w.caughtAt && (
@@ -71,10 +71,10 @@ export const CurrentObservation = () => {
             </div>
           )}
         </div>
-        {w.taxonImageUrlMedium && (
+        {w.metadata.taxonImageUrlMedium && (
           <div className="relative -mx-4 aspect-square">
             <Image
-              src={w.taxonImageUrlMedium}
+              src={w.metadata.taxonImageUrlMedium}
               className="w-full object-cover object-center"
               alt={"Observation"}
               unoptimized
@@ -88,9 +88,9 @@ export const CurrentObservation = () => {
           </div>
         )}
         <div className="flex flex-row flex-wrap items-center gap-2">
-          {w.observationUrl && (
+          {w.metadata.observationUrl && (
             <Link
-              href={w.observationUrl}
+              href={w.metadata.observationUrl}
               target="_blank"
               className="flex flex-row items-center gap-1 rounded px-1 py-0.5 hover:bg-black/10"
             >
@@ -98,9 +98,9 @@ export const CurrentObservation = () => {
               <div>iNaturalist</div>
             </Link>
           )}
-          {w.taxonWikiUrl && (
+          {w.metadata.taxonWikiUrl && (
             <Link
-              href={w.taxonWikiUrl}
+              href={w.metadata.taxonWikiUrl}
               target="_blank"
               className="flex flex-row items-center gap-1 rounded px-1 py-0.5 hover:bg-black/10"
             >

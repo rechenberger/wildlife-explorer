@@ -48,8 +48,7 @@ export const WildlifeMarkers = () => {
         </div>
       )}
       {wildlife?.map((w) => {
-        const onCooldown =
-          w.status?.respawnsAt && w.status.respawnsAt > new Date()
+        const onCooldown = w.respawnsAt > new Date()
         if (!w.lat || !w.lng) {
           return null
         }
@@ -61,7 +60,7 @@ export const WildlifeMarkers = () => {
             anchor="center"
           >
             <Link
-              href={w.observationUrl ?? w.taxonWikiUrl ?? "#"}
+              href={w.metadata.observationUrl ?? w.metadata.taxonWikiUrl ?? "#"}
               target="_blank"
               className={cn(
                 "group relative flex aspect-square h-12 items-center justify-center rounded-full bg-amber-400 p-1 shadow transition-transform hover:scale-[3]",
@@ -84,9 +83,9 @@ export const WildlifeMarkers = () => {
               }}
             >
               {/* <Squirrel size={24} className="animate text-white" /> */}
-              {w.taxonImageUrlSquare && (
+              {w.metadata.taxonImageUrlSquare && (
                 <Image
-                  src={w.taxonImageUrlSquare}
+                  src={w.metadata.taxonImageUrlSquare}
                   className={cn(
                     "h-full w-full rounded-full",
                     !!w.caughtAt && "grayscale"
@@ -113,7 +112,7 @@ export const WildlifeMarkers = () => {
                 </>
               ) : null}
               <div className="absolute -bottom-4 line-clamp-1 hidden whitespace-nowrap rounded-full bg-amber-400 p-1 text-[4px] font-bold leading-none text-white shadow group-hover:flex">
-                {w.name}
+                {w.metadata.name}
               </div>
             </Link>
           </Marker>

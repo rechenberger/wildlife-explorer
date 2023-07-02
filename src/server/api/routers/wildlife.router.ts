@@ -1,10 +1,11 @@
 import { subSeconds } from "date-fns"
-import { filter, map } from "lodash-es"
+import { filter, first, map } from "lodash-es"
 import { z } from "zod"
 import { RADIUS_IN_KM_SEE_WILDLIFE } from "~/config"
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc"
 import { findObservations } from "~/server/inaturalist/findObservations"
-import { findWildlife } from "~/server/lib/findWildlife"
+import { calculateBoundingBox } from "~/server/lib/latLng"
+import { WildlifeMetadata } from "~/server/schema/WildlifeMetadata"
 import { playerProcedure } from "../middleware/playerProcedure"
 
 export const wildlifeRouter = createTRPCRouter({
@@ -17,13 +18,39 @@ export const wildlifeRouter = createTRPCRouter({
     }),
 
   nearMe: playerProcedure.query(async ({ ctx }) => {
-    return findWildlife({
-      lat: ctx.player.lat,
-      lng: ctx.player.lng,
+    const bbox = calculateBoundingBox({
+      center: ctx.player,
       radiusInKm: RADIUS_IN_KM_SEE_WILDLIFE,
-      prisma: ctx.prisma,
-      playerId: ctx.player.id,
     })
+
+    const wildlifeRaw = await ctx.prisma.wildlife.findMany({
+      where: {
+        lat: {
+          gte: bbox.minLat,
+          lte: bbox.maxLat,
+        },
+        lng: {
+          gte: bbox.minLng,
+          lte: bbox.maxLng,
+        },
+      },
+      include: {
+        catches: {
+          where: {
+            playerId: ctx.player.id,
+          },
+        },
+      },
+    })
+
+    const wildlife = map(wildlifeRaw, (w) => {
+      return {
+        ...w,
+        metadata: WildlifeMetadata.parse(w.metadata),
+        caughtAt: first(w.catches)?.createdAt,
+      }
+    })
+    return wildlife
   }),
 
   scan: playerProcedure.mutation(async ({ ctx }) => {
