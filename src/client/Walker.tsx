@@ -3,15 +3,19 @@ import { Footprints } from "lucide-react"
 import { useMemo } from "react"
 import { Layer, Marker, Source } from "react-map-gl"
 import { apiJotai } from "~/utils/api"
+import { playerLocationAtom } from "./WalkerMarker"
 
 export const calcNavigationAtom =
   apiJotai.navigation.calcNavigation.atomWithMutation()
 
+const SHOW_FOOTSTEPS = false
+
 const pointsAtom = atom((get) => {
   const result = get(calcNavigationAtom)
+  const playerLocation = get(playerLocationAtom)
   if (!result) return []
-  const points = result.timingLegs.flatMap((leg, idx) => {
-    // if (leg.startingAtTimestamp < Date.now()) return []
+  let points = result.timingLegs.flatMap((leg, idx) => {
+    if (leg.startingAtTimestamp < Date.now()) return []
 
     const isLast = idx === result.timingLegs.length - 1
     if (isLast) {
@@ -20,6 +24,7 @@ const pointsAtom = atom((get) => {
       return [leg.from]
     }
   })
+  points = [playerLocation, ...points]
   return points
 })
 
@@ -61,21 +66,22 @@ export const Walker = () => {
           }}
         />
       </Source>
-      {points.map((point, index) => {
-        return (
-          <Marker
-            key={index}
-            latitude={point.lat}
-            longitude={point.lng}
-            anchor="center"
-          >
-            <div className="relative aspect-square rounded-full border border-white bg-blue-500 p-0.5">
-              <Footprints size={8} className="animate text-white" />
-              {/* <div className="absolute inset-0 animate-ping rounded-full ring-2 ring-blue-400" /> */}
-            </div>
-          </Marker>
-        )
-      })}
+      {SHOW_FOOTSTEPS &&
+        points.map((point, index) => {
+          return (
+            <Marker
+              key={index}
+              latitude={point.lat}
+              longitude={point.lng}
+              anchor="center"
+            >
+              <div className="relative aspect-square rounded-full border border-white bg-blue-500 p-0.5">
+                <Footprints size={8} className="animate text-white" />
+                {/* <div className="absolute inset-0 animate-ping rounded-full ring-2 ring-blue-400" /> */}
+              </div>
+            </Marker>
+          )
+        })}
     </>
   )
 }

@@ -1,12 +1,18 @@
-import { useAtomValue } from "jotai"
+import { atom, useAtomValue, useSetAtom } from "jotai"
 import { findLast, last } from "lodash-es"
 import { User2 } from "lucide-react"
 import { useCallback, useEffect, useRef } from "react"
 import { Marker } from "react-map-gl"
 import { calcNavigationAtom } from "./Walker"
 
+export const playerLocationAtom = atom({
+  lat: 50.928435947011906,
+  lng: 6.930087265110956,
+})
+
 export const WalkerMarker = () => {
   const result = useAtomValue(calcNavigationAtom)
+  const setPlayerLocation = useSetAtom(playerLocationAtom)
 
   const markerRef = useRef<mapboxgl.Marker | null>(null)
   const frameRef = useRef<number | undefined>()
@@ -36,9 +42,15 @@ export const WalkerMarker = () => {
     markerRef.current.setLngLat({
       lat,
       lng,
-    }),
-      (frameRef.current = requestAnimationFrame(animateMarker))
-  }, [result?.timingLegs])
+    })
+
+    setPlayerLocation({
+      lat,
+      lng,
+    })
+
+    frameRef.current = requestAnimationFrame(animateMarker)
+  }, [result?.timingLegs, setPlayerLocation])
 
   useEffect(() => {
     animateMarker()
