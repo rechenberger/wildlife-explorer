@@ -1,17 +1,15 @@
+import { useSetAtom } from "jotai"
 import { Loader2 } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { Marker } from "react-map-gl"
 import { api } from "~/utils/api"
+import { currentObservationIdAtom } from "./CurrentObservation"
 import { usePlayer } from "./usePlayer"
 
-export const WildlifeMarkers = () => {
-  // const mapState = useAtomValue(mapStateAtom)
-  // const { data: wildlifes, isFetching } = api.wildlife.find.useQuery(mapState, {
-  //   keepPreviousData: true,
-  // })
+export const useWildlife = () => {
   const { playerId } = usePlayer()
-  const { data: wildlifes, isFetching } = api.wildlife.nearMe.useQuery(
+  const { data: wildlife, isFetching } = api.wildlife.nearMe.useQuery(
     {
       playerId: playerId!,
     },
@@ -21,6 +19,20 @@ export const WildlifeMarkers = () => {
       refetchInterval: 1000,
     }
   )
+  return {
+    wildlife,
+    isFetching,
+  }
+}
+
+export const WildlifeMarkers = () => {
+  // const mapState = useAtomValue(mapStateAtom)
+  // const { data: wildlifes, isFetching } = api.wildlife.find.useQuery(mapState, {
+  //   keepPreviousData: true,
+  // })
+
+  const { wildlife, isFetching } = useWildlife()
+  const setCurrentObservationId = useSetAtom(currentObservationIdAtom)
 
   // const { navigate } = useNavigation()
 
@@ -31,7 +43,7 @@ export const WildlifeMarkers = () => {
           <Loader2 />
         </div>
       )}
-      {wildlifes?.map((w) => {
+      {wildlife?.map((w) => {
         if (!w.lat || !w.lng) {
           return null
         }
@@ -47,7 +59,8 @@ export const WildlifeMarkers = () => {
               onClick={async (e) => {
                 e.stopPropagation()
                 e.preventDefault()
-                if (!w.lat || !w.lng) return
+                setCurrentObservationId(w.id)
+                // if (!w.lat || !w.lng) return
                 // navigate({
                 //   lat: w.lat,
                 //   lng: w.lng,

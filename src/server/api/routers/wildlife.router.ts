@@ -51,6 +51,7 @@ const findWildlife = async ({
       lat: o.geojson.coordinates[1],
       lng: o.geojson.coordinates[0],
       imgUrl: o.taxon.default_photo?.square_url,
+      imgUrlMedium: o.taxon.default_photo?.medium_url,
       observationUrl: o.uri,
       wikiUrl: o.taxon.wikipedia_url,
     }

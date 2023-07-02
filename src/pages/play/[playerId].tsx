@@ -1,3 +1,4 @@
+import { CurrentObservation } from "~/client/CurrentObservation"
 import { MainLayout } from "~/client/MainLayout"
 import { MapBase } from "~/client/MapBase"
 import { OtherPlayers } from "~/client/OtherPlayers"
@@ -15,6 +16,7 @@ export default function Page() {
         <OtherPlayers />
         <WalkerRoute />
         <WalkerMarker />
+        <CurrentObservation />
       </MapBase>
     </MainLayout>
   )
