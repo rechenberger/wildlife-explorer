@@ -30,6 +30,8 @@ export const findObservations = async ({
     return [
       {
         id: o.id,
+        taxonId: o.taxon.id,
+        taxonAncestorIds: o.taxon.ancestor_ids,
         name: o.taxon.preferred_common_name || o.taxon.name,
         lat,
         lng,
@@ -38,6 +40,8 @@ export const findObservations = async ({
         taxonImageUrlSmall: o.taxon.default_photo?.url,
         observationUrl: o.uri,
         wikiUrl: o.taxon.wikipedia_url,
+        taxonRank: o.taxon.rank,
+
         // imagesObservation: map(o.photos, (p) => p.url),
       },
     ]

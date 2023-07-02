@@ -1,9 +1,5 @@
-import { useLayoutEffect, useState, type FunctionComponent } from "react"
+import { useLayoutEffect, useState } from "react"
 import ReactJson, { type ThemeKeys } from "react-json-view"
-
-export type JsonViewerProps = {
-  value: any
-}
 
 const darkModeMediaQuery = window.matchMedia("(prefers-color-scheme: dark)")
 
@@ -23,16 +19,31 @@ const useIsDarkMode = () => {
   return isDarkMode
 }
 
-export const JsonViewer: FunctionComponent<JsonViewerProps> = ({ value }) => {
+export const JsonViewer = ({
+  value,
+  theme,
+  collapsed = 1,
+}: {
+  value: any
+  theme?: "dark" | "light"
+  collapsed?: boolean | number
+}) => {
   const isDarkMode = useIsDarkMode()
-  const theme: ThemeKeys = isDarkMode ? "ocean" : "rjv-default"
+  const themeKey: ThemeKeys =
+    theme === "dark"
+      ? "ocean"
+      : theme === "light"
+      ? "rjv-default"
+      : isDarkMode
+      ? "ocean"
+      : "rjv-default"
   return (
     <ReactJson
       key={theme}
       src={value}
-      theme={theme}
-      collapsed={true}
-      style={{ backgroundColor: "transparent" }}
+      theme={themeKey}
+      collapsed={collapsed}
+      // style={{ backgroundColor: "transparent" }}
     />
   )
 }

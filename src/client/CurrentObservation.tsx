@@ -1,5 +1,6 @@
 import { atom, useAtomValue, useSetAtom } from "jotai"
 import { Check, Clock, ExternalLink, X } from "lucide-react"
+import dynamic from "next/dynamic"
 import Image from "next/image"
 import Link from "next/link"
 import { toast } from "sonner"
@@ -10,6 +11,8 @@ import { useWildlife } from "./WildlifeMarkers"
 import { cn } from "./cn"
 import { navigatingToObservationIdAtom, useNavigation } from "./useNavigation"
 import { usePlayer } from "./usePlayer"
+
+const JsonViewer = dynamic(() => import("../client/JsonViewer"), { ssr: false })
 
 export const currentObservationIdAtom = atom<number | null>(null)
 
@@ -76,6 +79,11 @@ export const CurrentObservation = () => {
               unoptimized
               fill={true}
             />
+          </div>
+        )}
+        {process.env.NODE_ENV === "development" && (
+          <div className="overflow-hidden text-[10px]">
+            <JsonViewer value={w} theme="light" />
           </div>
         )}
         <div className="flex flex-row flex-wrap items-center gap-2">
