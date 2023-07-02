@@ -31,18 +31,23 @@ export const CurrentObservation = () => {
             />
           </div>
         )}
-        <button
-          className="rounded bg-black px-2 py-1"
-          onClick={() => {
-            if (!w.lat || !w.lng) return
-            navigate({
-              lat: w.lat,
-              lng: w.lng,
-            })
-          }}
-        >
-          Navigate here
-        </button>
+        <div className="flex flex-row gap-2">
+          <button
+            className="rounded bg-black px-2 py-1"
+            onClick={() => {
+              if (!w.lat || !w.lng) return
+              navigate({
+                lat: w.lat,
+                lng: w.lng,
+              })
+            }}
+          >
+            Navigate here
+          </button>
+          <button className="rounded bg-black px-2 py-1" onClick={() => {}}>
+            Catch
+          </button>
+        </div>
       </div>
     </>
   )
