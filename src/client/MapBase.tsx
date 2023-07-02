@@ -64,6 +64,7 @@ export const MapBase = ({
           })
         }}
         onClick={(e) => {
+          if (isOverview) return
           navigate(e.lngLat)
         }}
       >
