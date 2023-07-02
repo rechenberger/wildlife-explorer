@@ -43,7 +43,20 @@ export const CurrentObservation = () => {
             <X size={16} />
           </button>
         </div>
-        <div className="-mt-2">{location && <Away location={location} />}</div>
+        <div className="-mt-2">
+          {location && <Away location={location} />}
+          <div className="flex-1" />
+          {w.status && (
+            <div>
+              Respawn:{" "}
+              {w.status.respawnsAt.toLocaleTimeString(undefined, {
+                hour12: false,
+                // minute: "2-digit",
+                timeStyle: "short",
+              })}
+            </div>
+          )}
+        </div>
         {w.imgUrlMedium && (
           <div className="relative -mx-4 aspect-square">
             <Image
