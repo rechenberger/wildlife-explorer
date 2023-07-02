@@ -6,7 +6,12 @@ import { usePlayer } from "./usePlayer"
 
 export const ScanButton = () => {
   const { playerId } = usePlayer()
-  const { mutateAsync: scan, isLoading } = api.wildlife.scan.useMutation()
+  const trpc = api.useContext()
+  const { mutateAsync: scan, isLoading } = api.wildlife.scan.useMutation({
+    onSuccess: () => {
+      trpc.wildlife.invalidate()
+    },
+  })
   return (
     <>
       <button
