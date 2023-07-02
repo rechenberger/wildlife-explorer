@@ -29,12 +29,12 @@ export const findObservations = async ({
     if (!lat || !lng) return []
     return [
       {
+        // ids:
         id: o.id,
         taxonId: o.taxon.id,
-        taxonAncestorIds: o.taxon.ancestor_ids,
+
+        // UI:
         name: o.taxon.preferred_common_name || o.taxon.name,
-        taxonName: o.taxon.name,
-        taxonCommonName: o.taxon.preferred_common_name,
         lat,
         lng,
         taxonImageUrlSquare: o.taxon.default_photo?.square_url,
@@ -42,7 +42,20 @@ export const findObservations = async ({
         taxonImageUrlSmall: o.taxon.default_photo?.url,
         observationUrl: o.uri,
         wikiUrl: o.taxon.wikipedia_url,
+
+        // taxon:
+        taxonAncestorIds: o.taxon.ancestor_ids,
+        taxonSearchRank: o.taxon.universal_search_rank,
         taxonRank: o.taxon.rank,
+        taxonObservationsCount: o.taxon.observations_count,
+        taxonName: o.taxon.name,
+        taxonCommonName: o.taxon.preferred_common_name,
+
+        // observation:
+        observationPositionalAccuracy: o.positional_accuracy,
+        observationAt: o.observed_on,
+        observationCaptive: o.captive,
+        observationUserId: o.user.id,
 
         // imagesObservation: map(o.photos, (p) => p.url),
       },
