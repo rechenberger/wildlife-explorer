@@ -9,6 +9,7 @@ import { createTRPCNext } from "@trpc/next"
 import { type inferRouterInputs, type inferRouterOutputs } from "@trpc/server"
 import { createTRPCJotai } from "jotai-trpc"
 import superjson from "superjson"
+import { z } from "zod"
 import { type AppRouter } from "~/server/api/app.router"
 
 const getBaseUrl = () => {
@@ -32,9 +33,38 @@ const trpcConfig = {
    */
   links: [
     loggerLink({
-      enabled: (opts) =>
-        process.env.NODE_ENV === "development" ||
-        (opts.direction === "down" && opts.result instanceof Error),
+      enabled: (opts) => {
+        // Always log errors
+        if (opts.direction === "down" && opts.result instanceof Error) {
+          return true
+        }
+
+        // In Development...
+        if (process.env.NODE_ENV === "development") {
+          const betterOptions = z
+            .object({
+              id: z.number(),
+              direction: z.string(), // up | down ?
+              type: z.enum(["query", "mutation"]),
+              path: z.string(),
+              input: z.any(),
+              result: z.any(),
+            })
+            .safeParse(opts)
+
+          // Log when not parsed correctly
+          if (!betterOptions.success) {
+            console.error(betterOptions.error, opts)
+            return true
+          }
+
+          // Log only mutations
+          if (betterOptions.data.type === "mutation") {
+            return true
+          }
+        }
+        return false
+      },
     }),
     httpBatchLink({
       url: `${getBaseUrl()}/api/trpc`,
