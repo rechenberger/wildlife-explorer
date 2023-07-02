@@ -122,6 +122,7 @@ export const CurrentObservation = () => {
             disabled={catching}
             onClick={async () => {
               if (!playerId) return
+
               toast.promise(doCatch({ observationId: w.id, playerId }), {
                 loading: "Catching...",
                 success: (result) =>
