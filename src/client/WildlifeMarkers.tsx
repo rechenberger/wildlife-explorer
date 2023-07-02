@@ -1,18 +1,29 @@
-import { useAtomValue, useSetAtom, useStore } from "jotai"
+import { useSetAtom, useStore } from "jotai"
 import { Loader2 } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { Marker } from "react-map-gl"
 import { api } from "~/utils/api"
-import { mapStateAtom } from "./MapBase"
 import { playerLocationAtom } from "./WalkerMarker"
 import { calcNavigationAtom } from "./WalkerRoute"
+import { usePlayer } from "./usePlayer"
 
 export const WildlifeMarkers = () => {
-  const mapState = useAtomValue(mapStateAtom)
-  const { data: wildlifes, isFetching } = api.wildlife.find.useQuery(mapState, {
-    keepPreviousData: true,
-  })
+  // const mapState = useAtomValue(mapStateAtom)
+  // const { data: wildlifes, isFetching } = api.wildlife.find.useQuery(mapState, {
+  //   keepPreviousData: true,
+  // })
+  const { playerId } = usePlayer()
+  const { data: wildlifes, isFetching } = api.wildlife.nearMe.useQuery(
+    {
+      playerId: playerId!,
+    },
+    {
+      enabled: !!playerId,
+      keepPreviousData: true,
+      refetchInterval: 1000,
+    }
+  )
 
   const store = useStore()
   const calcNavigation = useSetAtom(calcNavigationAtom)

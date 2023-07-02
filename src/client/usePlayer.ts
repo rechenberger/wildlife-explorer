@@ -26,5 +26,6 @@ export const usePlayer = () => {
 
   return {
     player,
+    playerId: player?.id,
   }
 }
