@@ -3,9 +3,10 @@ import { MapBase } from "~/client/MapBase"
 import { WalkerMarker } from "~/client/WalkerMarker"
 import { WalkerRoute } from "~/client/WalkerRoute"
 import { WildlifeMarkers } from "~/client/WildlifeMarkers"
-import { api } from "~/utils/api"
+import { usePlayer } from "~/client/usePlayer"
 
 export default function Page() {
+  usePlayer()
   return (
     <MainLayout>
       <MapBase>
