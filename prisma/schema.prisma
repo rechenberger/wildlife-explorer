@@ -82,30 +82,18 @@ model Player {
     foundWildlife Wildlife[]
 }
 
-model ObservationStatus {
-    id        Int      @id
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-
-    respawnsAt DateTime
-    catches    Catch[]
-}
-
 model Catch {
     id        String   @id @default(cuid())
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
-    observationId     Int
-    observationStatus ObservationStatus @relation(fields: [observationId], references: [id], onDelete: Cascade)
-
     playerId String
     player   Player @relation(fields: [playerId], references: [id], onDelete: Cascade)
 
-    wildlifeId String?
-    wildlife   Wildlife? @relation(fields: [wildlifeId], references: [id], onDelete: Cascade)
+    wildlifeId String
+    wildlife   Wildlife @relation(fields: [wildlifeId], references: [id], onDelete: Cascade)
 
-    @@unique([observationId, playerId])
+    @@unique([wildlifeId, playerId])
 }
 
 model Wildlife {
@@ -125,4 +113,6 @@ model Wildlife {
 
     lat Float
     lng Float
+
+    @@index([lat, lng])
 }

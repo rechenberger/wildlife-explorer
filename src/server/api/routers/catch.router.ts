@@ -93,7 +93,6 @@ export const catchRouter = createTRPCRouter({
         data: {
           playerId: ctx.player.id,
           wildlifeId: wildlife.id,
-          observationId: wildlife.observationId,
         },
       })
 
