@@ -46,25 +46,24 @@ export const CurrentObservation = () => {
             <X size={16} />
           </button>
         </div>
-        <div className="-mt-2">
+        <div className="-mt-2 flex flex-row justify-between gap-2">
           {location && <Away location={location} />}
-          <div className="flex-1" />
-          {!!w.caughtAt && (
-            <div className="flex flex-row items-center text-sm font-bold text-green-600">
-              <Check size={16} className="mr-1 inline-block" />
-              Caught{" "}
-              {w.caughtAt?.toLocaleTimeString(undefined, {
+          {w.status && onCooldown && (
+            <div className="flex flex-row items-center text-sm font-bold text-gray-500">
+              <Clock size={16} className="mr-1 inline-block" />
+              Respawn{" "}
+              {w.status.respawnsAt.toLocaleTimeString(undefined, {
                 hour12: false,
                 // minute: "2-digit",
                 timeStyle: "short",
               })}
             </div>
           )}
-          {w.status && onCooldown && (
-            <div className="flex flex-row items-center text-sm font-bold text-gray-500">
-              <Clock size={16} className="mr-1 inline-block" />
-              Respawn{" "}
-              {w.status.respawnsAt.toLocaleTimeString(undefined, {
+          {!!w.caughtAt && (
+            <div className="flex flex-row items-center text-sm font-bold text-green-600">
+              <Check size={16} className="mr-1 inline-block" />
+              Caught{" "}
+              {w.caughtAt?.toLocaleTimeString(undefined, {
                 hour12: false,
                 // minute: "2-digit",
                 timeStyle: "short",
