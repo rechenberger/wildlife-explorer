@@ -14,7 +14,7 @@ export default function Page() {
   }, [player, router])
   return (
     <MainLayout>
-      <MapBase></MapBase>
+      <MapBase isOverview></MapBase>
     </MainLayout>
   )
 }

@@ -18,7 +18,13 @@ function calculateRadiusFromZoomLevel(zoomLevel: number): number {
   return radiusAtZoom0 / Math.pow(2, zoomLevel)
 }
 
-export const MapBase = ({ children }: { children?: ReactNode }) => {
+export const MapBase = ({
+  children,
+  isOverview,
+}: {
+  children?: ReactNode
+  isOverview?: boolean
+}) => {
   const setMapState = useSetAtom(mapStateAtom)
 
   const setMapStateDebounced = useMemo(() => {
@@ -39,13 +45,15 @@ export const MapBase = ({ children }: { children?: ReactNode }) => {
         initialViewState={{
           latitude: DEFAULT_LOCATION.lat,
           longitude: DEFAULT_LOCATION.lng,
-          pitch: 45,
-          zoom: 15,
+          pitch: isOverview ? 0 : 45,
+          zoom: isOverview ? 2 : 15,
         }}
         style={{ width: "100%", height: "100%" }}
+        projection={"globe" as any}
         // mapStyle="mapbox://styles/mapbox/streets-v9"
         // mapStyle="mapbox://styles/mapbox/dark-v10"
-        mapStyle="mapbox://styles/rechenberger/cljkelien006n01o429b9440e"
+        mapStyle="mapbox://styles/mapbox/outdoors-v12"
+        // mapStyle="mapbox://styles/rechenberger/cljkelien006n01o429b9440e"
         // mapStyle="mapbox://styles/rechenberger/cljklaom7007001r5hfwlcrfu"
         mapboxAccessToken={env.NEXT_PUBLIC_MAPBOX_TOKEN}
         onMove={(e) => {
