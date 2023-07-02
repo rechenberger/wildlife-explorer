@@ -7,7 +7,7 @@ import { Away } from "./Away"
 import { TimeAgo } from "./TimeAgo"
 import { useWildlife } from "./WildlifeMarkers"
 import { cn } from "./cn"
-import { useNavigation } from "./useNavigation"
+import { navigatingToObservationIdAtom, useNavigation } from "./useNavigation"
 import { usePlayer } from "./usePlayer"
 
 export const currentObservationIdAtom = atom<number | null>(null)
@@ -19,6 +19,7 @@ export const CurrentObservation = () => {
 
   const w = wildlife?.find((w) => w.id === currentObservationId)
 
+  const navigatingToObservationId = useAtomValue(navigatingToObservationIdAtom)
   const { navigate } = useNavigation()
 
   const { playerId } = usePlayer()
@@ -78,9 +79,13 @@ export const CurrentObservation = () => {
         <div className="flex flex-row gap-2">
           {location && (
             <button
-              className="rounded bg-black px-2 py-1 text-sm text-white"
+              className={cn(
+                "rounded bg-black px-2 py-1 text-sm text-white",
+                navigatingToObservationId === w.id &&
+                  "cursor-progress bg-blue-500 opacity-50"
+              )}
               onClick={() => {
-                navigate(location)
+                navigate({ ...location, observationId: w.id })
               }}
             >
               Navigate here

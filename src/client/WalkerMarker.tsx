@@ -6,6 +6,10 @@ import { Marker } from "react-map-gl"
 import { DEFAULT_LOCATION } from "~/config"
 import { api, type RouterInputs } from "~/utils/api"
 import { calcNavigationAtom } from "./WalkerRoute"
+import {
+  isNavigatingAtom,
+  navigatingToObservationIdAtom,
+} from "./useNavigation"
 import { usePlayer } from "./usePlayer"
 
 export const playerLocationAtom = atom({
@@ -54,6 +58,8 @@ export const WalkerMarker = () => {
     if (progress > 1) {
       // const playerLocation = store.get(playerLocationAtom)
       // markerRef.current.setLngLat(playerLocation)
+      store.set(isNavigatingAtom, false)
+      store.set(navigatingToObservationIdAtom, null)
       return
     }
     progress = Math.min(Math.max(progress, 0), 1)
