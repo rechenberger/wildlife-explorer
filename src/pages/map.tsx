@@ -45,7 +45,7 @@ export default function Page() {
     <>
       <main className="relative flex h-[100svh] w-full">
         {isFetching && (
-          <div className="absolute right-2 top-2 z-50 animate-spin opacity-60">
+          <div className="absolute right-2 top-2 z-50 animate-spin text-yellow-500">
             <Loader2 />
           </div>
         )}
