@@ -1,6 +1,7 @@
 import { atom, useAtomValue, useSetAtom } from "jotai"
-import { Check, Clock, X } from "lucide-react"
+import { Check, Clock, ExternalLink, X } from "lucide-react"
 import Image from "next/image"
+import Link from "next/link"
 import { toast } from "sonner"
 import { api } from "~/utils/api"
 import { Away } from "./Away"
@@ -77,7 +78,26 @@ export const CurrentObservation = () => {
             />
           </div>
         )}
-        <div className="flex flex-row gap-2">
+        <div className="flex flex-row flex-wrap gap-2">
+          {w.observationUrl && (
+            <Link
+              href={w.observationUrl}
+              className="flex flex-row items-center gap-1 rounded px-1 py-0.5 hover:bg-black/10"
+            >
+              <ExternalLink size={12} />
+              <div>iNaturalist</div>
+            </Link>
+          )}
+          {w.wikiUrl && (
+            <Link
+              href={w.wikiUrl}
+              className="flex flex-row items-center gap-1 rounded px-1 py-0.5 hover:bg-black/10"
+            >
+              <ExternalLink size={12} />
+              <div>Wikipedia</div>
+            </Link>
+          )}
+          <div className="flex-1" />
           {location && (
             <button
               className={cn(
