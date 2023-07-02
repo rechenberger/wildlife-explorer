@@ -44,7 +44,7 @@ export const CurrentObservation = () => {
 
   return (
     <>
-      <div className="fixed bottom-0 right-0 flex w-full max-w-md flex-col gap-4 rounded-t-xl bg-white p-4 text-black shadow md:bottom-8 md:right-8 md:rounded-xl">
+      <div className="fixed bottom-0 right-0 z-10 flex w-full max-w-md flex-col gap-4 rounded-t-xl bg-white p-4 text-black shadow md:bottom-8 md:right-8 md:rounded-xl">
         <div className="flex flex-row items-center gap-2">
           <div className="flex-1 truncate text-2xl">{w.metadata.name}</div>
           <button

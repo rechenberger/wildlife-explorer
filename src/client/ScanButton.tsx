@@ -17,7 +17,7 @@ export const ScanButton = () => {
       <button
         disabled={isLoading}
         className={cn(
-          "absolute bottom-8 left-8 rounded-xl bg-black p-2 text-white",
+          "absolute bottom-10 left-2 rounded-xl bg-black p-2 text-white",
           isLoading && "animate-pulse"
         )}
         onClick={() => {
