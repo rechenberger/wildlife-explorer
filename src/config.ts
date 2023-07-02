@@ -1,0 +1,1 @@
+export const GLOBAL_REALTIME_MULTIPLIER = 10

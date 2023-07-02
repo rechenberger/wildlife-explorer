@@ -4,6 +4,7 @@ import { createTRPCRouter, publicProcedure } from "~/server/api/trpc"
 import MapboxClient from "@mapbox/mapbox-sdk/services/directions"
 import { TRPCError } from "@trpc/server"
 import { first } from "lodash-es"
+import { GLOBAL_REALTIME_MULTIPLIER } from "~/config"
 import { env } from "~/env.mjs"
 import { calcTimingLegs } from "~/server/lib/calcTimingLegs"
 
@@ -33,9 +34,6 @@ export const navigationRouter = createTRPCRouter({
         .send()
 
       const directions = response.body
-      console.log(directions)
-
-      console.log(directions.routes[0]?.legs)
 
       const route = first(directions.routes)
       if (!route) {
@@ -45,9 +43,10 @@ export const navigationRouter = createTRPCRouter({
         })
       }
 
+      const totalDurationInSeconds = route.duration / GLOBAL_REALTIME_MULTIPLIER
       const { timingLegs, totalDistanceInMeter } = calcTimingLegs({
         geometry: route.geometry,
-        totalDurationInSeconds: route.duration,
+        totalDurationInSeconds,
       })
 
       return {
