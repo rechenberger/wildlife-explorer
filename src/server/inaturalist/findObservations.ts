@@ -37,9 +37,9 @@ export const findObservations = async ({
         name: o.taxon.preferred_common_name || o.taxon.name,
         lat,
         lng,
-        taxonImageUrlSquare: o.taxon.default_photo?.square_url,
-        taxonImageUrlMedium: o.taxon.default_photo?.medium_url,
-        taxonImageUrlSmall: o.taxon.default_photo?.url,
+        taxonImageUrlSquare: o.taxon.default_photo?.square_url ?? null,
+        taxonImageUrlMedium: o.taxon.default_photo?.medium_url ?? null,
+        taxonImageUrlSmall: o.taxon.default_photo?.url ?? null,
         observationUrl: o.uri,
         wikiUrl: o.taxon.wikipedia_url,
 
@@ -49,7 +49,7 @@ export const findObservations = async ({
         taxonRank: o.taxon.rank,
         taxonObservationsCount: o.taxon.observations_count,
         taxonName: o.taxon.name,
-        taxonCommonName: o.taxon.preferred_common_name,
+        taxonCommonName: o.taxon.preferred_common_name ?? null,
 
         // observation:
         observationPositionalAccuracy: o.positional_accuracy,
@@ -58,9 +58,34 @@ export const findObservations = async ({
         observationUserId: o.user.id,
 
         // imagesObservation: map(o.photos, (p) => p.url),
-      },
+      } satisfies ObservationMetadata,
     ]
   })
 
   return wildlifes
 }
+
+const ObservationMetadata = z.object({
+  id: z.number(),
+  taxonId: z.number(),
+  name: z.string(),
+  lat: z.number(),
+  lng: z.number(),
+  taxonImageUrlSquare: z.string().nullable(),
+  taxonImageUrlMedium: z.string().nullable(),
+  taxonImageUrlSmall: z.string().nullable(),
+  observationUrl: z.string(),
+  wikiUrl: z.string().nullable(),
+  taxonAncestorIds: z.array(z.number()),
+  taxonSearchRank: z.number(),
+  taxonRank: z.string(),
+  taxonObservationsCount: z.number(),
+  taxonName: z.string(),
+  taxonCommonName: z.string().nullable(),
+  observationPositionalAccuracy: z.number().nullable(),
+  observationAt: z.string().nullable(),
+  observationCaptive: z.boolean(),
+  observationUserId: z.number(),
+})
+
+export type ObservationMetadata = z.infer<typeof ObservationMetadata>
