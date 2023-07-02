@@ -1,10 +1,12 @@
-import { atom, useAtomValue, useSetAtom } from "jotai"
-import { findLast, last } from "lodash-es"
+import { atom, useAtomValue, useSetAtom, useStore } from "jotai"
+import { findLast, last, throttle } from "lodash-es"
 import { User2 } from "lucide-react"
-import { useCallback, useEffect, useRef } from "react"
+import { useCallback, useEffect, useMemo, useRef } from "react"
 import { Marker } from "react-map-gl"
 import { DEFAULT_LOCATION } from "~/config"
+import { api, type RouterInputs } from "~/utils/api"
 import { calcNavigationAtom } from "./WalkerRoute"
+import { usePlayer } from "./usePlayer"
 
 export const playerLocationAtom = atom({
   lat: DEFAULT_LOCATION.lat,
@@ -12,11 +14,23 @@ export const playerLocationAtom = atom({
 })
 
 export const WalkerMarker = () => {
+  const store = useStore()
   const result = useAtomValue(calcNavigationAtom)
   const setPlayerLocation = useSetAtom(playerLocationAtom)
 
   const markerRef = useRef<mapboxgl.Marker | null>(null)
   const frameRef = useRef<number | undefined>()
+
+  const { player } = usePlayer()
+  const { mutate: move } = api.player.move.useMutation()
+
+  const moveThrottled = useMemo(
+    () =>
+      throttle((input: RouterInputs["player"]["move"]) => {
+        move(input)
+      }, 1000),
+    [move]
+  )
 
   const animateMarker = useCallback(() => {
     if (!markerRef.current) return
@@ -26,13 +40,22 @@ export const WalkerMarker = () => {
     })
     nextStep = nextStep || last(result?.timingLegs)
 
-    if (!nextStep) return
+    if (!nextStep) {
+      // const playerLocation = store.get(playerLocationAtom)
+      // markerRef.current.setLngLat(playerLocation)
+      return
+    }
 
     // console.log(nextStep)
     const startingAtTimestamp = nextStep.startingAtTimestamp
     const durationInSeconds = nextStep.durationInSeconds
     const now = Date.now()
     let progress = (now - startingAtTimestamp) / (durationInSeconds * 1000)
+    if (progress > 1) {
+      // const playerLocation = store.get(playerLocationAtom)
+      // markerRef.current.setLngLat(playerLocation)
+      return
+    }
     progress = Math.min(Math.max(progress, 0), 1)
 
     const lat =
@@ -50,8 +73,16 @@ export const WalkerMarker = () => {
       lng,
     })
 
+    if (player) {
+      moveThrottled({
+        playerId: player?.id,
+        lat,
+        lng,
+      })
+    }
+
     frameRef.current = requestAnimationFrame(animateMarker)
-  }, [result?.timingLegs, setPlayerLocation])
+  }, [moveThrottled, player, result?.timingLegs, setPlayerLocation, store])
 
   useEffect(() => {
     animateMarker()
@@ -64,8 +95,8 @@ export const WalkerMarker = () => {
     <>
       <Marker
         ref={markerRef}
-        latitude={50.928435947011906}
-        longitude={6.930087265110956}
+        latitude={store.get(playerLocationAtom).lat}
+        longitude={store.get(playerLocationAtom).lng}
         anchor="center"
       >
         <div className="relative aspect-square rounded-full border-2 bg-blue-500 ring-2 ring-blue-400">
