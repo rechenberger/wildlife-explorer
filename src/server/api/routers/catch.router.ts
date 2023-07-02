@@ -8,7 +8,7 @@ import {
   RADIUS_IN_M_CATCH_WILDLIFE,
 } from "~/config"
 import { createTRPCRouter } from "~/server/api/trpc"
-import { findObservations } from "~/server/inaturalist/findObservations"
+import { findWildlife } from "~/server/lib/findWildlife"
 import { calcDistanceInMeter } from "~/server/lib/latLng"
 import { playerProcedure } from "../middleware/playerProcedure"
 
@@ -29,10 +29,12 @@ export const catchRouter = createTRPCRouter({
       })
     )
     .mutation(async ({ ctx, input }) => {
-      const observations = await findObservations({
+      const observations = await findWildlife({
         lat: ctx.player.lat,
         lng: ctx.player.lng,
         radiusInKm: RADIUS_IN_KM_SEE_WILDLIFE,
+        prisma: ctx.prisma,
+        playerId: ctx.player.id,
       })
       const observation = observations.find(
         (observation) => observation.id === input.observationId
@@ -49,6 +51,16 @@ export const catchRouter = createTRPCRouter({
         return {
           success: false,
           reason: "too far away",
+        }
+      }
+
+      if (
+        observation.status?.respawnsAt &&
+        observation.status.respawnsAt > new Date()
+      ) {
+        return {
+          success: false,
+          reason: "Wildlife is not ready to be caught",
         }
       }
 
