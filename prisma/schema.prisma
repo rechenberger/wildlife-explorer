@@ -100,4 +100,6 @@ model Catch {
 
     playerId String
     player   Player @relation(fields: [playerId], references: [id], onDelete: Cascade)
+
+    @@unique([observationId, playerId])
 }
