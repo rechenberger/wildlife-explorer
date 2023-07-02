@@ -1,0 +1,28 @@
+/* create wrapper */
+.brushWrap {
+  position: relative;
+  display: inline-block;
+  padding: 1rem 3rem;
+}
+
+/* clipping/animating object (pseudo element) */
+.brushWrap:before {
+  content: "";
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+  background: #c2410c;
+  z-index: -1;
+  clip-path: url(#clip); /* applying clip animation */
+}
+
+.brushWrap p {
+  font-size: 2rem;
+  text-transform: uppercase;
+  margin: 0;
+  color: white;
+  font-style: italic;
+  filter: drop-shadow(0px 0px 2px black);
+}
