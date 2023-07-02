@@ -79,9 +79,9 @@ export const WildlifeMarkers = () => {
               }}
             >
               {/* <Squirrel size={24} className="animate text-white" /> */}
-              {w.imgUrl && (
+              {w.taxonImageUrlSquare && (
                 <Image
-                  src={w.imgUrl}
+                  src={w.taxonImageUrlSquare}
                   className={cn(
                     "h-full w-full rounded-full",
                     !!w.caughtAt && "grayscale"

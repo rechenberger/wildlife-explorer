@@ -67,10 +67,10 @@ export const CurrentObservation = () => {
             </div>
           )}
         </div>
-        {w.imgUrlMedium && (
+        {w.taxonImageUrlMedium && (
           <div className="relative -mx-4 aspect-square">
             <Image
-              src={w.imgUrlMedium}
+              src={w.taxonImageUrlMedium}
               className="w-full object-cover object-center"
               alt={"Observation"}
               unoptimized
