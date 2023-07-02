@@ -8,9 +8,9 @@ export default function Page() {
     <>
       <main className="relative flex h-[100svh] w-full">
         <MapBase>
+          <WildlifeMarkers />
           <WalkerRoute />
           <WalkerMarker />
-          <WildlifeMarkers />
         </MapBase>
       </main>
     </>
