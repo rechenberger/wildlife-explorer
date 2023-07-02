@@ -3,11 +3,12 @@ import { findLast, last } from "lodash-es"
 import { User2 } from "lucide-react"
 import { useCallback, useEffect, useRef } from "react"
 import { Marker } from "react-map-gl"
+import { DEFAULT_LOCATION } from "~/config"
 import { calcNavigationAtom } from "./WalkerRoute"
 
 export const playerLocationAtom = atom({
-  lat: 50.928435947011906,
-  lng: 6.930087265110956,
+  lat: DEFAULT_LOCATION.lat,
+  lng: DEFAULT_LOCATION.lng,
 })
 
 export const WalkerMarker = () => {

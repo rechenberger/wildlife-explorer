@@ -2,11 +2,12 @@ import { atom, useSetAtom } from "jotai"
 import { debounce } from "lodash-es"
 import { useMemo, type ReactNode } from "react"
 import { Map } from "react-map-gl"
+import { DEFAULT_LOCATION } from "~/config"
 import { env } from "~/env.mjs"
 
 export const mapStateAtom = atom({
-  lat: 50.928435947011906,
-  lng: 6.930087265110956,
+  lat: DEFAULT_LOCATION.lat,
+  lng: DEFAULT_LOCATION.lng,
   radiusInKm: 0.5,
 })
 
@@ -33,8 +34,8 @@ export const MapBase = ({ children }: { children?: ReactNode }) => {
       <Map
         mapLib={import("mapbox-gl")}
         initialViewState={{
-          latitude: 50.928435947011906,
-          longitude: 6.930087265110956,
+          latitude: DEFAULT_LOCATION.lat,
+          longitude: DEFAULT_LOCATION.lng,
           pitch: 45,
           zoom: 15,
         }}
