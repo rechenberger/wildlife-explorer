@@ -6,6 +6,7 @@ import Link from "next/link"
 import { useMemo, useState } from "react"
 import { Map, Marker } from "react-map-gl"
 import { Walker, calcNavigationAtom } from "~/client/Walker"
+import { WalkerMarker } from "~/client/WalkerMarker"
 import { env } from "~/env.mjs"
 import { api } from "~/utils/api"
 
@@ -71,6 +72,7 @@ export default function Page() {
           }}
         >
           <Walker />
+          <WalkerMarker />
 
           <Marker
             latitude={50.928435947011906}
