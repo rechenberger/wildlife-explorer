@@ -4,6 +4,7 @@ import { useMemo, type ReactNode } from "react"
 import { Map } from "react-map-gl"
 import { DEFAULT_LOCATION } from "~/config"
 import { env } from "~/env.mjs"
+import { useNavigation } from "./useNavigation"
 
 export const mapStateAtom = atom({
   lat: DEFAULT_LOCATION.lat,
@@ -29,6 +30,8 @@ export const MapBase = ({ children }: { children?: ReactNode }) => {
     )
   }, [setMapState])
 
+  const { navigate } = useNavigation()
+
   return (
     <>
       <Map
@@ -51,6 +54,9 @@ export const MapBase = ({ children }: { children?: ReactNode }) => {
             lng: e.viewState.longitude,
             radiusInKm: calculateRadiusFromZoomLevel(e.viewState.zoom),
           })
+        }}
+        onClick={(e) => {
+          navigate(e.lngLat)
         }}
       >
         {children}

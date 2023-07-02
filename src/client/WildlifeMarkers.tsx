@@ -1,11 +1,8 @@
-import { useSetAtom, useStore } from "jotai"
 import { Loader2 } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { Marker } from "react-map-gl"
 import { api } from "~/utils/api"
-import { playerLocationAtom } from "./WalkerMarker"
-import { calcNavigationAtom } from "./WalkerRoute"
 import { usePlayer } from "./usePlayer"
 
 export const WildlifeMarkers = () => {
@@ -25,8 +22,7 @@ export const WildlifeMarkers = () => {
     }
   )
 
-  const store = useStore()
-  const calcNavigation = useSetAtom(calcNavigationAtom)
+  // const { navigate } = useNavigation()
 
   return (
     <>
@@ -49,17 +45,13 @@ export const WildlifeMarkers = () => {
               //   console.log(w)
               // }}
               onClick={async (e) => {
+                e.stopPropagation()
                 e.preventDefault()
                 if (!w.lat || !w.lng) return
-                await calcNavigation([
-                  {
-                    from: store.get(playerLocationAtom),
-                    to: {
-                      lat: w.lat,
-                      lng: w.lng,
-                    },
-                  },
-                ])
+                // navigate({
+                //   lat: w.lat,
+                //   lng: w.lng,
+                // })
               }}
             >
               {/* <Squirrel size={24} className="animate text-white" /> */}
