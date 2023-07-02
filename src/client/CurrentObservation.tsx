@@ -1,5 +1,6 @@
 import { atom, useAtomValue } from "jotai"
 import Image from "next/image"
+import { Away } from "./Away"
 import { useWildlife } from "./WildlifeMarkers"
 import { useNavigation } from "./useNavigation"
 
@@ -15,10 +16,13 @@ export const CurrentObservation = () => {
 
   if (!w) return null
 
+  const location = w.lat && w.lng ? { lat: w.lat, lng: w.lng } : null
+
   return (
     <>
       <div className="fixed bottom-8 right-8 flex w-full max-w-md flex-col gap-4 rounded-xl bg-white/80 p-4 text-black shadow">
         <div className="text-2xl">{w.name}</div>
+        <div className="-mt-2">{location && <Away location={location} />}</div>
         {w.imgUrlMedium && (
           <div className="-mx-4">
             <Image
@@ -32,18 +36,16 @@ export const CurrentObservation = () => {
           </div>
         )}
         <div className="flex flex-row gap-2">
-          <button
-            className="rounded bg-black px-2 py-1 text-white"
-            onClick={() => {
-              if (!w.lat || !w.lng) return
-              navigate({
-                lat: w.lat,
-                lng: w.lng,
-              })
-            }}
-          >
-            Navigate here
-          </button>
+          {location && (
+            <button
+              className="rounded bg-black px-2 py-1 text-white"
+              onClick={() => {
+                navigate(location)
+              }}
+            >
+              Navigate here
+            </button>
+          )}
           {/* <button
             className="rounded bg-black px-2 py-1 text-white"
             onClick={() => {}}

@@ -1,6 +1,6 @@
 import * as polyline from "@mapbox/polyline"
-import * as turf from "@turf/turf"
 import { map } from "lodash-es"
+import { calcDistanceInMeter } from "./latLng"
 
 // const geometry = "e~yuHwohi@Ff@kFpCYEgCpA}A^QzAAp@NfEHd@UJh@xF"
 
@@ -37,9 +37,7 @@ export const calcTimingLegs = ({
       lng: decodedGeometry[i + 1]![1],
     }
 
-    const fromTurf = turf.point([from.lat, from.lng])
-    const toTurf = turf.point([to.lat, to.lng])
-    const distanceInMeter = turf.distance(fromTurf, toTurf) * 1000 // convert to meters
+    const distanceInMeter = calcDistanceInMeter(from, to)
 
     totalDistanceInMeter += distanceInMeter
 
