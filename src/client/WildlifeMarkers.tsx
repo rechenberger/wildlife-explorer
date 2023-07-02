@@ -61,7 +61,7 @@ export const WildlifeMarkers = () => {
             anchor="center"
           >
             <Link
-              href={w.observationUrl ?? w.wikiUrl ?? "#"}
+              href={w.observationUrl ?? w.taxonWikiUrl ?? "#"}
               target="_blank"
               className={cn(
                 "group relative flex aspect-square h-12 items-center justify-center rounded-full bg-amber-400 p-1 shadow transition-transform hover:scale-[3]",

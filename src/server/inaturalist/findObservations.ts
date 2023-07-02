@@ -42,7 +42,7 @@ export const findObservations = async ({
         taxonImageUrlMedium: o.taxon.default_photo?.medium_url ?? null,
         taxonImageUrlSmall: o.taxon.default_photo?.url ?? null,
         observationUrl: o.uri,
-        wikiUrl: o.taxon.wikipedia_url,
+        taxonWikiUrl: o.taxon.wikipedia_url,
 
         // taxon:
         taxonAncestorIds: o.taxon.ancestor_ids,

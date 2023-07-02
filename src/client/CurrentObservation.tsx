@@ -98,9 +98,9 @@ export const CurrentObservation = () => {
               <div>iNaturalist</div>
             </Link>
           )}
-          {w.wikiUrl && (
+          {w.taxonWikiUrl && (
             <Link
-              href={w.wikiUrl}
+              href={w.taxonWikiUrl}
               target="_blank"
               className="flex flex-row items-center gap-1 rounded px-1 py-0.5 hover:bg-black/10"
             >
