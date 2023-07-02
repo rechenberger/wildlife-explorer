@@ -116,4 +116,6 @@ model Wildlife {
     lng Float
 
     @@index([lat, lng])
+    @@index([taxonId])
+    @@index([observationId])
 }
