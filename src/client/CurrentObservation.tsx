@@ -56,6 +56,11 @@ export const CurrentObservation = () => {
               })}
             </div>
           )}
+          {!!w.caughtAt && (
+            <div className="text-xs text-green-500">
+              Caught {w.caughtAt?.toLocaleTimeString()}
+            </div>
+          )}
         </div>
         {w.imgUrlMedium && (
           <div className="relative -mx-4 aspect-square">

@@ -24,7 +24,8 @@ export const findWildlife = async ({
   const x = map(observations, (observation) => {
     return {
       ...observation,
-      isCaught: catches.some((c) => c.observationId === observation.id),
+      caughtAt: catches.find((c) => c.observationId === observation.id)
+        ?.createdAt,
     }
   })
 
