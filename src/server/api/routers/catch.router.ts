@@ -13,6 +13,15 @@ import { calcDistanceInMeter } from "~/server/lib/latLng"
 import { playerProcedure } from "../middleware/playerProcedure"
 
 export const catchRouter = createTRPCRouter({
+  getMyCatches: playerProcedure.query(async ({ ctx }) => {
+    const catches = await ctx.prisma.catch.findMany({
+      where: {
+        playerId: ctx.player.id,
+      },
+    })
+    return catches
+  }),
+
   catch: playerProcedure
     .input(
       z.object({

@@ -20,7 +20,12 @@ export const CurrentObservation = () => {
   const { navigate } = useNavigation()
 
   const { playerId } = usePlayer()
-  const { mutateAsync: doCatch } = api.catch.catch.useMutation()
+  const trpc = api.useContext()
+  const { mutateAsync: doCatch } = api.catch.catch.useMutation({
+    onSettled: () => {
+      trpc.catch.invalidate()
+    },
+  })
 
   if (!w) return null
 
