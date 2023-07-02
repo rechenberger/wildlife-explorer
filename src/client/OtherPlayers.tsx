@@ -1,6 +1,7 @@
 import { map } from "lodash-es"
 import { User2 } from "lucide-react"
 import { Marker } from "react-map-gl"
+import { OTHER_PLAYER_REFETCH_INTERVAL_IN_MS } from "~/config"
 import { api } from "~/utils/api"
 import { usePlayer } from "./usePlayer"
 
@@ -12,7 +13,7 @@ export const OtherPlayers = () => {
     },
     {
       enabled: !!playerId,
-      refetchInterval: 1000,
+      refetchInterval: OTHER_PLAYER_REFETCH_INTERVAL_IN_MS,
     }
   )
 

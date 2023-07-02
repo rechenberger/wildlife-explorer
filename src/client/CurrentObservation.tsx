@@ -104,7 +104,7 @@ export const CurrentObservation = () => {
                 success: (result) =>
                   result.success
                     ? "You caught it!"
-                    : result.reason || "Failed to catch",
+                    : result.reason || "Failed to catch. Try again.",
                 error: "Failed to catch",
               })
             }}

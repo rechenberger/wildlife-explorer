@@ -3,6 +3,7 @@ import { Check, Clock, Loader2 } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { Marker } from "react-map-gl"
+import { WILDLIFE_REFETCH_INTERVAL_IN_MS } from "~/config"
 import { api } from "~/utils/api"
 import { currentObservationIdAtom } from "./CurrentObservation"
 import { cn } from "./cn"
@@ -17,7 +18,7 @@ export const useWildlife = () => {
     {
       enabled: !!playerId,
       keepPreviousData: true,
-      refetchInterval: 1000,
+      refetchInterval: WILDLIFE_REFETCH_INTERVAL_IN_MS,
     }
   )
   return {
