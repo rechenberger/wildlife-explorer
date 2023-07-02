@@ -23,7 +23,7 @@ export const MainTopNav = () => {
             <Image
               src={logo}
               alt="Wildlife Explorer Logo"
-              className="aspect-square h-20 w-20 rounded-full"
+              className="aspect-square h-8 w-8 rounded-full md:h-20 md:w-20"
             />
             <span className={carterOne.className}>Wildlife Explorer</span>
           </Link>
