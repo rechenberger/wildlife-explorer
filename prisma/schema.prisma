@@ -88,8 +88,6 @@ model ObservationStatus {
 
     respawnsAt DateTime
     catched    Catched[]
-
-    @@map("Observation")
 }
 
 model Catched {
@@ -98,7 +96,7 @@ model Catched {
     updatedAt DateTime @updatedAt
 
     observationId     Int
-    observationStatus ObservationStatus? @relation(fields: [observationId], references: [id])
+    observationStatus ObservationStatus? @relation(fields: [observationId], references: [id], onDelete: NoAction)
 
     playerId String
     player   Player @relation(fields: [playerId], references: [id], onDelete: Cascade)

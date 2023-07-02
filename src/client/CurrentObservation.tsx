@@ -1,9 +1,12 @@
 import { atom, useAtomValue, useSetAtom } from "jotai"
 import { X } from "lucide-react"
 import Image from "next/image"
+import { toast } from "sonner"
+import { api } from "~/utils/api"
 import { Away } from "./Away"
 import { useWildlife } from "./WildlifeMarkers"
 import { useNavigation } from "./useNavigation"
+import { usePlayer } from "./usePlayer"
 
 export const currentObservationIdAtom = atom<number | null>(null)
 
@@ -15,6 +18,9 @@ export const CurrentObservation = () => {
   const w = wildlife?.find((w) => w.id === currentObservationId)
 
   const { navigate } = useNavigation()
+
+  const { playerId } = usePlayer()
+  const { mutateAsync: doCatch } = api.catch.catch.useMutation()
 
   if (!w) return null
 
@@ -55,12 +61,20 @@ export const CurrentObservation = () => {
               Navigate here
             </button>
           )}
-          {/* <button
+          <button
             className="rounded bg-black px-2 py-1 text-white"
-            onClick={() => {}}
+            onClick={async () => {
+              if (!playerId) return
+              const result = await doCatch({ observationId: w.id, playerId })
+              if (result.success) {
+                toast.success("You caught it!")
+              } else {
+                toast.error(result.reason || "Failed to catch")
+              }
+            }}
           >
             Catch
-          </button> */}
+          </button>
         </div>
       </div>
     </>
