@@ -1,4 +1,4 @@
-import { exampleRouter } from "~/server/api/routers/example"
+import { exampleRouter } from "~/server/api/routers/example.router"
 import { createTRPCRouter } from "~/server/api/trpc"
 import { navigationRouter } from "./routers/navigation.router"
 import { wildlifeRouter } from "./routers/wildlife.router"
