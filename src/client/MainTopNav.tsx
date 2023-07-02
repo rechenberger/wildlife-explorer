@@ -1,5 +1,7 @@
 import { Carter_One } from "next/font/google"
+import Image from "next/image"
 import Link from "next/link"
+import logo from "../../public/favicon.png"
 import { BrushStrokeBackground } from "./BrushStrokeBackground"
 import { LoginButton } from "./LoginButton"
 
@@ -16,8 +18,13 @@ export const MainTopNav = () => {
         <BrushStrokeBackground>
           <Link
             href="/"
-            className="text-base text-amber-400 [text-shadow:_1px_1px_4px_rgb(0_0_0_/_80%)] md:text-6xl"
+            className="flex flex-row items-center gap-2 text-base text-amber-400 [text-shadow:_1px_1px_4px_rgb(0_0_0_/_80%)] md:text-6xl"
           >
+            <Image
+              src={logo}
+              alt="Wildlife Explorer Logo"
+              className="aspect-square h-20 w-20 rounded-full"
+            />
             <span className={carterOne.className}>Wildlife Explorer</span>
           </Link>
         </BrushStrokeBackground>
