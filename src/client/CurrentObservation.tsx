@@ -47,7 +47,7 @@ export const CurrentObservation = () => {
             <X size={16} />
           </button>
         </div>
-        <div className="-mt-2 flex flex-row justify-between gap-2">
+        <div className="-mt-2 flex flex-row flex-wrap justify-between gap-2">
           {location && <Away location={location} />}
           {w.status && onCooldown && (
             <div className="flex flex-row items-center gap-1 text-sm font-bold text-gray-500">
