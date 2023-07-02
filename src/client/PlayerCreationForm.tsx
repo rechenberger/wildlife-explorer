@@ -7,7 +7,7 @@ export const PlayerCreationForm = () => {
   const router = useRouter()
   const { mutate } = api.player.createMe.useMutation({
     onSuccess: (player) => {
-      router.push(`/play/${player.id}`)
+      router.push(`/play/${player.id}#${player.lat},${player.lng}`)
     },
   })
 

@@ -49,7 +49,7 @@ export const PlayerSelection = () => {
             orderBy(players, (p) => p.updatedAt, "desc"),
             (player) => (
               <Link
-                href={`/play/${player.id}`}
+                href={`/play/${player.id}#${player.lat},${player.lng}`}
                 className="flex flex-row items-center gap-2 border-b p-4 text-left hover:bg-black/10"
               >
                 <User size={24} />
