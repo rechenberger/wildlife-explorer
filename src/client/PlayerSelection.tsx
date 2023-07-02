@@ -27,7 +27,7 @@ export const PlayerSelection = () => {
   })
   return (
     <>
-      <div className="fixed flex w-full max-w-sm flex-col rounded-xl bg-white text-black shadow">
+      <div className="fixed flex w-full max-w-xs flex-col rounded-xl bg-white text-black shadow md:max-w-sm">
         <div
           className={cn(
             "flex flex-row items-center gap-2 p-4",
