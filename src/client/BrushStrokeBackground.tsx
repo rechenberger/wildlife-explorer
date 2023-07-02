@@ -10,7 +10,9 @@ export const BrushStrokeBackground = ({
 }) => {
   return (
     <>
-      <div className={brushStyles.brushWrap}>{children}</div>
+      <div className={brushStyles.brushWrap}>
+        <div className={brushStyles.brushWrapContent}>{children}</div>
+      </div>
 
       <svg height="0" width="0" xmlns="http://www.w3.org/2000/svg">
         <defs>
