@@ -10,7 +10,7 @@ import { calcNavigationAtom } from "./WalkerRoute"
 
 export const WildlifeMarkers = () => {
   const mapState = useAtomValue(mapStateAtom)
-  const { data, isFetching } = api.wildlife.find.useQuery(mapState, {
+  const { data: wildlifes, isFetching } = api.wildlife.find.useQuery(mapState, {
     keepPreviousData: true,
   })
 
@@ -24,50 +24,37 @@ export const WildlifeMarkers = () => {
           <Loader2 />
         </div>
       )}
-      {data?.results.map((observation) => {
-        if (
-          !observation.geojson.coordinates[0] ||
-          !observation.geojson.coordinates[1]
-        ) {
+      {wildlifes?.map((w) => {
+        if (!w.lat || !w.lng) {
           return null
         }
         return (
-          <Marker
-            key={observation.id}
-            latitude={observation.geojson.coordinates[1]}
-            longitude={observation.geojson.coordinates[0]}
-            anchor="center"
-          >
+          <Marker key={w.id} latitude={w.lat} longitude={w.lng} anchor="center">
             <Link
-              href={observation.uri ?? observation.taxon.wikipedia_url ?? "#"}
+              href={w.observationUrl ?? w.wikiUrl ?? "#"}
               target="_blank"
               className="group relative flex aspect-square h-12 items-center justify-center rounded-full bg-amber-400 p-1 shadow transition-transform hover:scale-[3]"
-              onMouseEnter={() => {
-                console.log(observation.taxon)
-              }}
+              // onMouseEnter={() => {
+              //   console.log(w)
+              // }}
               onClick={async (e) => {
                 e.preventDefault()
-                if (
-                  !observation.geojson.coordinates[0] ||
-                  !observation.geojson.coordinates[1]
-                ) {
-                  return
-                }
+                if (!w.lat || !w.lng) return
                 await calcNavigation([
                   {
                     from: store.get(playerLocationAtom),
                     to: {
-                      lat: observation.geojson.coordinates[1],
-                      lng: observation.geojson.coordinates[0],
+                      lat: w.lat,
+                      lng: w.lng,
                     },
                   },
                 ])
               }}
             >
               {/* <Squirrel size={24} className="animate text-white" /> */}
-              {observation.taxon.default_photo && (
+              {w.imgUrl && (
                 <Image
-                  src={observation.taxon.default_photo.square_url}
+                  src={w.imgUrl}
                   className="h-full w-full rounded-full"
                   alt={"Observation"}
                   unoptimized
@@ -76,8 +63,7 @@ export const WildlifeMarkers = () => {
                 />
               )}
               <div className="absolute -bottom-4 line-clamp-1 hidden whitespace-nowrap rounded-full bg-amber-400 p-1 text-[4px] font-bold leading-none text-white shadow group-hover:flex">
-                {observation.taxon.preferred_common_name ||
-                  observation.taxon.name}
+                {w.name}
               </div>
             </Link>
           </Marker>
