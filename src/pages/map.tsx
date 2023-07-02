@@ -1,51 +1,13 @@
-import * as turf from "@turf/turf"
+import { useSetAtom } from "jotai"
 import { debounce } from "lodash-es"
-import { Footprints, Loader2, User2 } from "lucide-react"
+import { Loader2, User2 } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { useMemo, useState } from "react"
-import { Layer, Map, Marker, Source } from "react-map-gl"
+import { Map, Marker } from "react-map-gl"
+import { Walker, calcNavigationAtom } from "~/client/Walker"
 import { env } from "~/env.mjs"
 import { api } from "~/utils/api"
-
-import * as polyline from "@mapbox/polyline"
-
-const geometry = "e~yuHwohi@Ff@kFpCYEgCpA}A^QzAAp@NfEHd@UJh@xF"
-const decodedGeometry = polyline.decode(geometry)
-
-console.log("decodedGeometry", decodedGeometry)
-
-const totalDuration = 328
-// Calculate the total distance of the path in meters
-let totalDistance = 0
-for (let i = 0; i < decodedGeometry.length - 1; i++) {
-  const from = turf.point(decodedGeometry[i]!)
-  const to = turf.point(decodedGeometry[i + 1]!)
-  const distance = turf.distance(from, to) * 1000 // convert to meters
-  // console.log("distance", distance)
-  totalDistance += distance
-}
-
-// Calculate the duration for each segment
-const durations = []
-for (let i = 0; i < decodedGeometry.length - 1; i++) {
-  const from = turf.point(decodedGeometry[i]!)
-  const to = turf.point(decodedGeometry[i + 1]!)
-  const distance = turf.distance(from, to) * 1000 // convert to meters
-  const duration = (distance / totalDistance) * totalDuration // distribute the total duration
-  durations.push(duration)
-}
-
-console.log("durations", durations)
-
-const geojson = {
-  type: "Feature",
-  properties: {},
-  geometry: {
-    type: "LineString",
-    coordinates: decodedGeometry.map((point) => [point[1], point[0]]), // flip lat and lon
-  },
-}
 
 function calculateRadiusFromZoomLevel(zoomLevel: number): number {
   const earthCircumferenceKm = 40075.017
@@ -64,8 +26,8 @@ export default function Page() {
     keepPreviousData: true,
   })
 
-  const { mutateAsync: calcNavigation } =
-    api.navigation.calcNavigation.useMutation()
+  // const { mutateAsync: calcNavigation } =
+  //   api.navigation.calcNavigation.useMutation()
 
   const setCenterDebounced = useMemo(() => {
     return debounce(
@@ -75,6 +37,8 @@ export default function Page() {
       100
     )
   }, [])
+
+  const calcNavigation = useSetAtom(calcNavigationAtom)
 
   return (
     <>
@@ -106,36 +70,8 @@ export default function Page() {
             })
           }}
         >
-          <Source id="route" type="geojson" data={geojson}>
-            <Layer
-              id="route"
-              type="line"
-              source="route"
-              layout={{
-                "line-join": "round",
-                "line-cap": "round",
-              }}
-              paint={{
-                "line-color": "#60a5fa",
-                "line-width": 8,
-              }}
-            />
-          </Source>
-          {decodedGeometry.map((point, index) => {
-            return (
-              <Marker
-                key={index}
-                latitude={point[0]}
-                longitude={point[1]}
-                anchor="center"
-              >
-                <div className="relative aspect-square rounded-full border border-white bg-blue-500 p-0.5">
-                  <Footprints size={8} className="animate text-white" />
-                  {/* <div className="absolute inset-0 animate-ping rounded-full ring-2 ring-blue-400" /> */}
-                </div>
-              </Marker>
-            )
-          })}
+          <Walker />
+
           <Marker
             latitude={50.928435947011906}
             longitude={6.930087265110956}
@@ -178,13 +114,15 @@ export default function Page() {
                     ) {
                       return
                     }
-                    const result = await calcNavigation({
-                      from: center,
-                      to: {
-                        lat: observation.geojson.coordinates[1],
-                        lng: observation.geojson.coordinates[0],
+                    const result = await calcNavigation([
+                      {
+                        from: center,
+                        to: {
+                          lat: observation.geojson.coordinates[1],
+                          lng: observation.geojson.coordinates[0],
+                        },
                       },
-                    })
+                    ])
                     console.log(result)
                   }}
                 >
