@@ -63,6 +63,12 @@ export const WalkerMarker = () => {
     const lng =
       nextStep.from.lng + (nextStep.to.lng - nextStep.from.lng) * progress
 
+    // TODO: find out when and why this happens
+    if (isNaN(lat) || isNaN(lng)) {
+      console.error("lat or lng is NaN", { lat, lng })
+      return
+    }
+
     markerRef.current.setLngLat({
       lat,
       lng,
