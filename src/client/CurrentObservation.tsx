@@ -129,6 +129,7 @@ export const CurrentObservation = () => {
                     ? "You caught it! 🎉"
                     : result.reason || "Failed to catch. Try again.",
                 error: "Failed to catch. Try again.",
+                icon: <></>,
               })
             }}
           >

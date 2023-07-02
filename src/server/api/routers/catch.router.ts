@@ -60,7 +60,7 @@ export const catchRouter = createTRPCRouter({
       ) {
         return {
           success: false,
-          reason: "Wildlife is not ready to be caught",
+          reason: "Wildlife respawns soon™️",
         }
       }
 
