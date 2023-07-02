@@ -22,7 +22,7 @@ export const CurrentObservation = () => {
 
   return (
     <>
-      <div className="fixed bottom-8 right-0 flex w-full max-w-md flex-col gap-4 rounded-xl bg-white p-4 text-black shadow md:right-8">
+      <div className="fixed bottom-0 right-0 flex w-full max-w-md flex-col gap-4 rounded-t-xl bg-white p-4 text-black shadow md:bottom-8 md:right-8 md:rounded-xl">
         <div className="flex flex-row items-center gap-2">
           <div className="flex-1 truncate text-2xl">{w.name}</div>
           <button
@@ -34,14 +34,13 @@ export const CurrentObservation = () => {
         </div>
         <div className="-mt-2">{location && <Away location={location} />}</div>
         {w.imgUrlMedium && (
-          <div className="-mx-4">
+          <div className="relative -mx-4 aspect-square">
             <Image
               src={w.imgUrlMedium}
-              className="w-full"
+              className="w-full object-cover object-center"
               alt={"Observation"}
               unoptimized
-              width={1}
-              height={1}
+              fill={true}
             />
           </div>
         )}
