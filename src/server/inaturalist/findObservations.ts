@@ -11,7 +11,9 @@ export const findObservations = async ({
   lng: number
   radiusInKm: number
 }) => {
-  const url = `https://api.inaturalist.org/v1/observations?taxon_id=1&lat=${lat}&lng=${lng}&radius=${radiusInKm}&order=desc&order_by=created_at&per_page=200&locale=de`
+  // const locale = 'de'
+  const locale = "en"
+  const url = `https://api.inaturalist.org/v1/observations?taxon_id=1&lat=${lat}&lng=${lng}&radius=${radiusInKm}&order=desc&order_by=created_at&per_page=200&locale=${locale}`
   console.log(url)
   const response = await fetch(url)
   const data = await response.json()
