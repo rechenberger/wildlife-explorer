@@ -1,5 +1,5 @@
 import { atom, useAtomValue, useSetAtom } from "jotai"
-import { X } from "lucide-react"
+import { Check, Clock, X } from "lucide-react"
 import Image from "next/image"
 import { toast } from "sonner"
 import { api } from "~/utils/api"
@@ -32,6 +32,7 @@ export const CurrentObservation = () => {
   if (!w) return null
 
   const location = w.lat && w.lng ? { lat: w.lat, lng: w.lng } : null
+  const onCooldown = w.status?.respawnsAt && w.status.respawnsAt > new Date()
 
   return (
     <>
@@ -48,20 +49,22 @@ export const CurrentObservation = () => {
         <div className="-mt-2">
           {location && <Away location={location} />}
           <div className="flex-1" />
-          {w.status && (
-            <div className="text-sm font-bold text-gray-500">
-              Respawn{" "}
-              {w.status.respawnsAt.toLocaleTimeString(undefined, {
+          {!!w.caughtAt && (
+            <div className="flex flex-row items-center text-sm font-bold text-green-600">
+              <Check size={16} className="mr-1 inline-block" />
+              Caught{" "}
+              {w.caughtAt?.toLocaleTimeString(undefined, {
                 hour12: false,
                 // minute: "2-digit",
                 timeStyle: "short",
               })}
             </div>
           )}
-          {!!w.caughtAt && (
-            <div className="text-sm font-bold text-green-500">
-              Caught{" "}
-              {w.caughtAt?.toLocaleTimeString(undefined, {
+          {w.status && onCooldown && (
+            <div className="flex flex-row items-center text-sm font-bold text-gray-500">
+              <Clock size={16} className="mr-1 inline-block" />
+              Respawn{" "}
+              {w.status.respawnsAt.toLocaleTimeString(undefined, {
                 hour12: false,
                 // minute: "2-digit",
                 timeStyle: "short",
