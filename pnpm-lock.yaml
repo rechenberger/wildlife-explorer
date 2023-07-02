@@ -38,6 +38,15 @@ dependencies:
   '@turf/turf':
     specifier: ^6.5.0
     version: 6.5.0
+  date-fns:
+    specifier: ^2.30.0
+    version: 2.30.0
+  jotai:
+    specifier: ^2.2.1
+    version: 2.2.1(react@18.2.0)
+  jotai-trpc:
+    specifier: ^0.5.1
+    version: 0.5.1(@trpc/client@10.26.0)(@trpc/server@10.26.0)(jotai@2.2.1)
   lodash-es:
     specifier: ^4.17.21
     version: 4.17.21
@@ -2398,6 +2407,13 @@ packages:
     resolution: {integrity: sha512-sdQSFB7+llfUcQHUQO3+B8ERRj0Oa4w9POWMI/puGtuf7gFywGmkaLCElnudfTiKZV+NvHqL0ifzdrI8Ro7ESA==}
     dev: true
 
+  /date-fns@2.30.0:
+    resolution: {integrity: sha512-fnULvOpxnC5/Vg3NCiWelDsLiUc9bRwAPs/+LfTLNvetFCtCTN+yQz15C/fs4AwX1R9K5GLtLfn8QW+dWisaAw==}
+    engines: {node: '>=0.11'}
+    dependencies:
+      '@babel/runtime': 7.22.5
+    dev: false
+
   /debug@3.2.7:
     resolution: {integrity: sha512-CFjzYYAi4ThfiQvizrFQevTTXHtnCqWfe7x1AhgEscTz6ZbLbfoLRLPugTQyBth6f8ZERVUSyWHFD/7Wu4t1XQ==}
     peerDependencies:
@@ -3673,6 +3689,30 @@ packages:
 
   /jose@4.14.4:
     resolution: {integrity: sha512-j8GhLiKmUAh+dsFXlX1aJCbt5KMibuKb+d7j1JaOJG6s2UjX1PQlW+OKB/sD4a/5ZYF4RcmYmLSndOoU3Lt/3g==}
+    dev: false
+
+  /jotai-trpc@0.5.1(@trpc/client@10.26.0)(@trpc/server@10.26.0)(jotai@2.2.1):
+    resolution: {integrity: sha512-aRr7HYatqOaeFqYCPJvX1LHGAV3SW+0YhN/YCJcAalmj8enh91n6Dcg9RVfgY4R7NI9CPesZKMcpzd8QlnAvKQ==}
+    peerDependencies:
+      '@trpc/client': '>=10.0.0'
+      '@trpc/server': '>=10.0.0'
+      jotai: '>=1.11.0'
+    dependencies:
+      '@trpc/client': 10.26.0(@trpc/server@10.26.0)
+      '@trpc/server': 10.26.0
+      jotai: 2.2.1(react@18.2.0)
+    dev: false
+
+  /jotai@2.2.1(react@18.2.0):
+    resolution: {integrity: sha512-Gz4tpbRQy9OiFgBwF9F7TieDn0UTE3C0IFSDuxHjOIvgn2tACH30UKz6p/wIlfoZROXSTCIxEvYEa7Y25WM+8g==}
+    engines: {node: '>=12.20.0'}
+    peerDependencies:
+      react: '>=17.0.0'
+    peerDependenciesMeta:
+      react:
+        optional: true
+    dependencies:
+      react: 18.2.0
     dev: false
 
   /js-sdsl@4.4.1:
