@@ -2,7 +2,10 @@ import { z } from "zod"
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc"
 
 import MapboxClient from "@mapbox/mapbox-sdk/services/directions"
+import { TRPCError } from "@trpc/server"
+import { first } from "lodash-es"
 import { env } from "~/env.mjs"
+import { calcTimingLegs } from "~/server/lib/calcTimingLegs"
 
 const baseClient = MapboxClient({ accessToken: env.NEXT_PUBLIC_MAPBOX_TOKEN })
 
@@ -33,6 +36,24 @@ export const navigationRouter = createTRPCRouter({
       console.log(directions)
 
       console.log(directions.routes[0]?.legs)
-      return directions
+
+      const route = first(directions.routes)
+      if (!route) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "No route found",
+        })
+      }
+
+      const { timingLegs, totalDistanceInMeter } = calcTimingLegs({
+        geometry: route.geometry,
+        totalDurationInSeconds: route.duration,
+      })
+
+      return {
+        timingLegs,
+        totalDistanceInMeter,
+        totalDurationInSeconds: route.duration,
+      }
     }),
 })
