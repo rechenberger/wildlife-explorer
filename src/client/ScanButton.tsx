@@ -1,25 +1,48 @@
+import { differenceInSeconds } from "date-fns"
 import { Radar } from "lucide-react"
+import { useEffect, useState } from "react"
 import { toast } from "sonner"
 import { api } from "~/utils/api"
 import { cn } from "./cn"
 import { usePlayer } from "./usePlayer"
 
 export const ScanButton = () => {
-  const { playerId } = usePlayer()
+  const { playerId, player } = usePlayer()
   const trpc = api.useContext()
   const { mutateAsync: scan, isLoading } = api.wildlife.scan.useMutation({
     onSuccess: () => {
       trpc.wildlife.invalidate()
     },
+    onSettled: () => {
+      trpc.player.invalidate()
+    },
   })
+
+  const [cooldown, setCooldown] = useState(0)
+  useEffect(() => {
+    const scanCooldownAt = player?.scanCooldownAt
+    if (!scanCooldownAt) {
+      setCooldown(0)
+      return
+    }
+    const interval = setInterval(() => {
+      let cooldown = differenceInSeconds(scanCooldownAt, Date.now())
+      cooldown = Math.max(0, cooldown)
+      cooldown = Math.ceil(cooldown)
+      setCooldown(cooldown)
+    }, 1000)
+    return () => clearInterval(interval)
+  }, [player?.scanCooldownAt])
+
   return (
     <>
       <div className="flex flex-col items-center gap-1">
         <button
           disabled={isLoading}
           className={cn(
-            "rounded-xl bg-black p-2 text-white",
-            isLoading && "animate-pulse"
+            "relative rounded-xl bg-black p-2 text-white",
+            isLoading && "animate-pulse",
+            !!cooldown && "opacity-100"
           )}
           onClick={() => {
             if (!playerId) return
@@ -37,8 +60,13 @@ export const ScanButton = () => {
           }}
         >
           <Radar size={32} />
+          {!!cooldown && (
+            <div className="absolute inset-0 flex items-center justify-center rounded-xl bg-black/50 font-bold">
+              {cooldown}s
+            </div>
+          )}
         </button>
-        <div>Scan</div>
+        <div className="font-bold">Scan</div>
       </div>
     </>
   )
