@@ -14,29 +14,32 @@ export const ScanButton = () => {
   })
   return (
     <>
-      <button
-        disabled={isLoading}
-        className={cn(
-          "rounded-xl bg-black p-2 text-white",
-          isLoading && "animate-pulse"
-        )}
-        onClick={() => {
-          if (!playerId) return
-          toast.promise(
-            scan({
-              playerId,
-            }),
-            {
-              loading: "Scanning...",
-              success: (result) =>
-                `Scan complete! ${result.countFound} new Observations.`,
-              error: "Scan failed.",
-            }
-          )
-        }}
-      >
-        <Radar size={32} />
-      </button>
+      <div className="flex flex-col items-center gap-1">
+        <button
+          disabled={isLoading}
+          className={cn(
+            "rounded-xl bg-black p-2 text-white",
+            isLoading && "animate-pulse"
+          )}
+          onClick={() => {
+            if (!playerId) return
+            toast.promise(
+              scan({
+                playerId,
+              }),
+              {
+                loading: "Scanning...",
+                success: (result) =>
+                  `Scan complete! ${result.countFound} new Observations.`,
+                error: "Scan failed.",
+              }
+            )
+          }}
+        >
+          <Radar size={32} />
+        </button>
+        <div>Scan</div>
+      </div>
     </>
   )
 }
