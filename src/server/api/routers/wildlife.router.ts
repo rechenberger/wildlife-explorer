@@ -1,7 +1,8 @@
-import { subSeconds } from "date-fns"
+import { TRPCError } from "@trpc/server"
+import { addSeconds, subSeconds } from "date-fns"
 import { filter, first, map } from "lodash-es"
 import { z } from "zod"
-import { RADIUS_IN_KM_SEE_WILDLIFE } from "~/config"
+import { RADIUS_IN_KM_SEE_WILDLIFE, SCAN_COOLDOWN_IN_SECONDS } from "~/config"
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc"
 import { findObservations } from "~/server/inaturalist/findObservations"
 import { calculateBoundingBox } from "~/server/lib/latLng"
@@ -59,6 +60,21 @@ export const wildlifeRouter = createTRPCRouter({
   }),
 
   scan: playerProcedure.mutation(async ({ ctx }) => {
+    if (ctx.player.scanCooldownAt && ctx.player.scanCooldownAt > new Date()) {
+      throw new TRPCError({
+        code: "BAD_REQUEST",
+        message: "Scan is on cooldown",
+      })
+    }
+    await ctx.prisma.player.update({
+      where: {
+        id: ctx.player.id,
+      },
+      data: {
+        scanCooldownAt: addSeconds(new Date(), SCAN_COOLDOWN_IN_SECONDS),
+      },
+    })
+
     const observations = await findObservations({
       lat: ctx.player.lat,
       lng: ctx.player.lng,

@@ -11,3 +11,4 @@ export const WILDLIFE_REFETCH_INTERVAL_IN_MS = 3_000
 export const OTHER_PLAYER_REFETCH_INTERVAL_IN_MS = 1_000
 export const SHOW_OBSERVATION_JSON =
   false && process.env.NODE_ENV === "development"
+export const SCAN_COOLDOWN_IN_SECONDS = 20
