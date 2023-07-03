@@ -1,4 +1,4 @@
-import { Wildlife } from "@prisma/client"
+import { type Wildlife } from "@prisma/client"
 import { TRPCError } from "@trpc/server"
 import { addSeconds, subSeconds } from "date-fns"
 import { chunk, filter, first, map } from "lodash-es"

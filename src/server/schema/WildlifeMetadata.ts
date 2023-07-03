@@ -1,7 +1,6 @@
 import { z } from "zod"
 
 export const WildlifeMetadata = z.object({
-  name: z.string(),
   lat: z.number(),
   lng: z.number(),
 

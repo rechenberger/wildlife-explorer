@@ -37,7 +37,6 @@ export const findObservations = async ({
         taxonId: o.taxon.id,
 
         // UI:
-        name: o.taxon.preferred_common_name || o.taxon.name,
         lat,
         lng,
         taxonImageUrlSquare: o.taxon.default_photo?.square_url ?? null,

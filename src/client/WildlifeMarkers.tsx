@@ -7,7 +7,7 @@ import { WILDLIFE_REFETCH_INTERVAL_IN_MS } from "~/config"
 import { api } from "~/utils/api"
 import { currentObservationIdAtom } from "./CurrentObservation"
 import { cn } from "./cn"
-import { useLocale } from "./useLocale"
+import { useGetWildlifeName } from "./useGetWildlifeName"
 import { navigatingToObservationIdAtom } from "./useNavigation"
 import { usePlayer } from "./usePlayer"
 
@@ -35,13 +35,11 @@ export const WildlifeMarkers = () => {
   //   keepPreviousData: true,
   // })
 
-  const playerLocale = useLocale()
-
   const { wildlife, isFetching } = useWildlife()
   const setCurrentObservationId = useSetAtom(currentObservationIdAtom)
   const navigatingtoObservationId = useAtomValue(navigatingToObservationIdAtom)
 
-  // const { navigate } = useNavigation()
+  const getName = useGetWildlifeName()
 
   return (
     <>
@@ -118,7 +116,7 @@ export const WildlifeMarkers = () => {
                 </>
               ) : null}
               <div className="absolute -bottom-4 line-clamp-1 hidden whitespace-nowrap rounded-full bg-amber-400 p-1 text-[4px] font-bold leading-none text-white shadow md:group-hover:flex">
-                {w.metadata.taxonLocaleNames?.[playerLocale] || w.metadata.name}
+                {getName(w)}
               </div>
             </Link>
           </Marker>
