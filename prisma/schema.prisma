@@ -82,6 +82,8 @@ model Player {
     catches       Catch[]
     foundWildlife Wildlife[]
 
+    scanCooldownAt DateTime?
+
     @@index([lat, lng])
     @@index([userId])
 }
