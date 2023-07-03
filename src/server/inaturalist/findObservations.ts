@@ -52,7 +52,7 @@ export const findObservations = async ({
         taxonRank: o.taxon.rank,
         taxonObservationsCount: o.taxon.observations_count,
         taxonName: o.taxon.name,
-        taxonCommonName: o.taxon.preferred_common_name ?? null,
+        taxonCommonName: o.taxon.english_common_name ?? null,
         taxonLocaleNames: {
           en: o.taxon.english_common_name ?? null,
           de: o.taxon.preferred_common_name ?? null,
