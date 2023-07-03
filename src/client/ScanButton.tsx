@@ -1,13 +1,18 @@
 import { differenceInSeconds } from "date-fns"
+import { atom, useSetAtom } from "jotai"
 import { Radar } from "lucide-react"
 import { useEffect, useState } from "react"
 import { toast } from "sonner"
+import { type LatLng } from "~/server/lib/latLng"
 import { api } from "~/utils/api"
 import { cn } from "./cn"
 import { usePlayer } from "./usePlayer"
 
+export const scanningLocationAtom = atom<LatLng | null>(null)
+
 export const ScanButton = () => {
   const { playerId, player } = usePlayer()
+  const setScanningLocation = useSetAtom(scanningLocationAtom)
   const trpc = api.useContext()
   const { mutateAsync: scan, isLoading } = api.wildlife.scan.useMutation({
     onSuccess: () => {
@@ -44,19 +49,20 @@ export const ScanButton = () => {
             isLoading && "animate-pulse",
             !!cooldown && "opacity-100"
           )}
-          onClick={() => {
-            if (!playerId) return
-            toast.promise(
-              scan({
-                playerId,
-              }),
-              {
-                loading: "Scanning...",
-                success: (result) =>
-                  `Scan complete! ${result.countFound} new Observations.`,
-                error: "Scan failed.",
-              }
-            )
+          onClick={async () => {
+            if (!playerId || !player) return
+            setScanningLocation(player)
+            const promise = scan({
+              playerId,
+            })
+            toast.promise(promise, {
+              loading: "Scanning...",
+              success: (result) =>
+                `Scan complete! ${result.countFound} new Observations.`,
+              error: "Scan failed.",
+            })
+            await promise
+            setScanningLocation(null)
           }}
         >
           <Radar size={32} />
