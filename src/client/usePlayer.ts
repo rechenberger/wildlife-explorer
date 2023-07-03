@@ -17,11 +17,11 @@ export const usePlayer = () => {
     },
     {
       enabled: isLoggedIn,
-      onError: (error) => {
-        if (error && error.data?.code === "NOT_FOUND") {
-          router.push("/player/create")
-        }
-      },
+      // onError: (error) => {
+      //   if (error && error.data?.code === "NOT_FOUND") {
+      //     router.push("/player/create")
+      //   }
+      // },
       onSuccess: (data) => {
         setPlayerLocation({
           lat: data.lat,
