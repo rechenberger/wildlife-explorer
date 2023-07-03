@@ -55,14 +55,17 @@ export const ScanButton = () => {
             const promise = scan({
               playerId,
             })
-            toast.promise(promise, {
-              loading: "Scanning...",
-              success: (result) =>
-                `Scan complete! ${result.countFound} new Observations.`,
-              error: "Scan failed.",
-            })
-            await promise
-            setScanningLocation(null)
+            try {
+              toast.promise(promise, {
+                loading: "Scanning...",
+                success: (result) =>
+                  `Scan complete! ${result.countFound} new Observations.`,
+                error: "Scan failed.",
+              })
+              await promise
+            } finally {
+              setScanningLocation(null)
+            }
           }}
         >
           <Radar size={32} />
