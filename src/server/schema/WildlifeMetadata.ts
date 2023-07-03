@@ -16,6 +16,7 @@ export const WildlifeMetadata = z.object({
   taxonObservationsCount: z.number(),
   taxonName: z.string(),
   taxonCommonName: z.string().nullable(),
+  taxonLocaleNames: z.record(z.string().nullish()).nullish(),
 
   observationId: z.number(),
   observationUrl: z.string(),
