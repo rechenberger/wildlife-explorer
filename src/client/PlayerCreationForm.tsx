@@ -10,15 +10,20 @@ import { cn } from "./cn"
 
 export const PlayerCreationForm = () => {
   const router = useRouter()
-  const { mutate } = api.player.createMe.useMutation({
-    onSuccess: (player) => {
-      router.push(`/play/${player.id}#${player.lat},${player.lng}`)
-    },
-  })
+  const { mutate, isLoading: mutationIsLoading } =
+    api.player.createMe.useMutation({
+      onSuccess: (player) => {
+        router.push(`/play/${player.id}#${player.lat},${player.lng}`)
+      },
+      onError: (error) => {
+        toast.error(error.message)
+      },
+    })
 
   const [startAtMyLocation, setStartAtMyLocation] = useState(false)
   const [myLocation, setMyLocation] = useState<LatLng | null>(null)
   const myLocationLoading = startAtMyLocation && !myLocation
+  const disabled = myLocationLoading || mutationIsLoading
 
   useEffect(() => {
     if (startAtMyLocation) {
@@ -101,6 +106,7 @@ export const PlayerCreationForm = () => {
           type="text"
           name="name"
           className="rounded border bg-transparent px-2 py-1"
+          required
         />
       </label>
       <label className="flex flex-row items-center gap-2">
@@ -109,16 +115,16 @@ export const PlayerCreationForm = () => {
           name="startAtMyLocation"
           checked={startAtMyLocation}
           onChange={(e) => setStartAtMyLocation(e.target.checked)}
-          disabled={myLocationLoading}
+          disabled={disabled}
         />
         <div>Start at My Location</div>
         {myLocationLoading && <Loader2 size={16} className="animate-spin" />}
       </label>
       <button
-        disabled={myLocationLoading}
+        disabled={disabled}
         className={cn(
           "tex-sm rounded bg-black px-2 py-1 text-white",
-          myLocationLoading && "opacity-50"
+          disabled && "opacity-50"
         )}
       >
         Create Character
