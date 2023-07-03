@@ -1,3 +1,4 @@
+import { ArrowLeftRight } from "lucide-react"
 import { allLocaleDefinitions, useLocale, useSetLocale } from "./useLocale"
 
 export const LocaleSelectMini = () => {
@@ -21,7 +22,11 @@ export const LocaleSelectMini = () => {
   if (!otherLocaleDefinition) return null
 
   return (
-    <button onClick={() => toggle()} className="text-sm">
+    <button
+      onClick={() => toggle()}
+      className="flex flex-row items-center gap-1 rounded border px-2 py-1 text-sm"
+    >
+      <ArrowLeftRight size={16} />
       {currentLocaleDefinition?.abbreviationLabel}
     </button>
   )

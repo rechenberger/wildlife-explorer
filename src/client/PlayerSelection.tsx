@@ -47,14 +47,8 @@ export const PlayerSelection = () => {
               <ArrowLeft size={16} />
             </button>
           )}
-          <div className="flex-1">
-            <div className="flex flex-col">
-              {title}
-              <div className="text-xs">
-                preferred language: <LocaleSelectMini />
-              </div>
-            </div>
-          </div>
+          <div className="flex-1">{title}</div>
+          {isLoggedIn && <LocaleSelectMini />}
           <LoginButton />
         </div>
         {creating && <PlayerCreationForm />}
