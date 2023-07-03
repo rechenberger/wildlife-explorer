@@ -73,7 +73,7 @@ model Player {
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
-    name String
+    name String @unique
     lat  Float
     lng  Float
 
@@ -81,6 +81,9 @@ model Player {
     user          User       @relation(fields: [userId], references: [id], onDelete: Cascade)
     catches       Catch[]
     foundWildlife Wildlife[]
+
+    @@index([lat, lng])
+    @@index([userId])
 }
 
 model Catch {
