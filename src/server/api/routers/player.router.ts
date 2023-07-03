@@ -3,15 +3,20 @@ import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc"
 import { TRPCError } from "@trpc/server"
 import { filter } from "lodash-es"
 import { z } from "zod"
+import { PlayerMetadata } from "~/server/schema/PlayerMetadata"
 import { playerProcedure } from "../middleware/playerProcedure"
 
 export const playerRouter = createTRPCRouter({
   getMyPlayers: protectedProcedure.query(async ({ ctx }) => {
-    const players = await ctx.prisma.player.findMany({
+    const playersRaw = await ctx.prisma.player.findMany({
       where: {
         userId: ctx.session.user.id,
       },
     })
+    const players = playersRaw.map((player) => ({
+      ...player,
+      metadata: PlayerMetadata.parse(player.metadata ?? {}),
+    }))
     return players
   }),
 
@@ -22,16 +27,20 @@ export const playerRouter = createTRPCRouter({
       })
     )
     .query(async ({ ctx, input }) => {
-      const player = await ctx.prisma.player.findFirst({
+      const playerRaw = await ctx.prisma.player.findFirst({
         where: {
           userId: ctx.session.user.id,
           id: input.playerId,
         },
       })
-      if (!player) {
+      if (!playerRaw) {
         throw new TRPCError({
           code: "NOT_FOUND",
         })
+      }
+      const player = {
+        ...playerRaw,
+        metadata: PlayerMetadata.parse(playerRaw.metadata ?? {}),
       }
       return player
     }),
@@ -44,6 +53,7 @@ export const playerRouter = createTRPCRouter({
         data: {
           ...input,
           userId: ctx.session.user.id,
+          metadata: PlayerMetadata.parse({}),
         },
       })
       return player
@@ -64,7 +74,11 @@ export const playerRouter = createTRPCRouter({
     }),
 
   others: playerProcedure.query(async ({ ctx }) => {
-    const players = await ctx.prisma.player.findMany({})
+    const playerRaw = await ctx.prisma.player.findMany({})
+    const players = playerRaw.map((player) => ({
+      ...player,
+      metadata: PlayerMetadata.parse(player.metadata ?? {}),
+    }))
     return filter(players, (player) => player.id !== ctx.player.id)
   }),
 })
