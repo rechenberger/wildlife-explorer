@@ -4,6 +4,7 @@ import { useSession } from "next-auth/react"
 import Link from "next/link"
 import { useState } from "react"
 import { api } from "~/utils/api"
+import { LocaleSelectMini } from "./LocaleSelectMini"
 import { LoginButton } from "./LoginButton"
 import { PlayerCreationForm } from "./PlayerCreationForm"
 import { TimeAgo } from "./TimeAgo"
@@ -47,6 +48,7 @@ export const PlayerSelection = () => {
             </button>
           )}
           <div className="flex-1">{title}</div>
+          {isLoggedIn && <LocaleSelectMini />}
           <LoginButton />
         </div>
         {creating && <PlayerCreationForm />}

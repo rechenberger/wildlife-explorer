@@ -10,6 +10,7 @@ import { Away } from "./Away"
 import { TimeAgo } from "./TimeAgo"
 import { useWildlife } from "./WildlifeMarkers"
 import { cn } from "./cn"
+import { useGetWildlifeName } from "./useGetWildlifeName"
 import { navigatingToObservationIdAtom, useNavigation } from "./useNavigation"
 import { usePlayer } from "./usePlayer"
 
@@ -37,6 +38,8 @@ export const CurrentObservation = () => {
       },
     })
 
+  const getName = useGetWildlifeName()
+
   if (!w) return null
 
   const location = w.lat && w.lng ? { lat: w.lat, lng: w.lng } : null
@@ -53,7 +56,7 @@ export const CurrentObservation = () => {
       />
       <div className="fixed bottom-0 right-0 z-50 flex w-full max-w-md flex-col gap-4 rounded-t-xl bg-white p-4 text-black shadow md:bottom-8 md:right-8 md:rounded-xl">
         <div className="flex flex-row items-center gap-2">
-          <div className="flex-1 truncate text-2xl">{w.metadata.name}</div>
+          <div className="flex-1 truncate text-2xl">{getName(w)}</div>
           <button
             className="shrink-0"
             onClick={() => setCurrentObservationId(null)}

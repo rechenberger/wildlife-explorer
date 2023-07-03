@@ -11,8 +11,8 @@ export const findObservations = async ({
   lng: number
   radiusInKm: number
 }) => {
-  // const locale = 'de'
-  const locale = "en"
+  const locale = "de"
+  // const locale = "en"
   const url = `https://api.inaturalist.org/v1/observations?taxon_id=1&lat=${lat}&lng=${lng}&radius=${radiusInKm}&order=desc&order_by=created_at&per_page=200&locale=${locale}`
   console.log(url)
   const response = await fetch(url)
@@ -37,7 +37,6 @@ export const findObservations = async ({
         taxonId: o.taxon.id,
 
         // UI:
-        name: o.taxon.preferred_common_name || o.taxon.name,
         lat,
         lng,
         taxonImageUrlSquare: o.taxon.default_photo?.square_url ?? null,
@@ -52,7 +51,11 @@ export const findObservations = async ({
         taxonRank: o.taxon.rank,
         taxonObservationsCount: o.taxon.observations_count,
         taxonName: o.taxon.name,
-        taxonCommonName: o.taxon.preferred_common_name ?? null,
+        taxonCommonName: o.taxon.english_common_name ?? null,
+        taxonLocaleNames: {
+          en: o.taxon.english_common_name ?? null,
+          de: o.taxon.preferred_common_name ?? null,
+        },
 
         // observation:
         observationPositionalAccuracy: o.positional_accuracy,

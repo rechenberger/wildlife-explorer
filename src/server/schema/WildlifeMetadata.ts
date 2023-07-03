@@ -1,7 +1,6 @@
 import { z } from "zod"
 
 export const WildlifeMetadata = z.object({
-  name: z.string(),
   lat: z.number(),
   lng: z.number(),
 
@@ -16,6 +15,12 @@ export const WildlifeMetadata = z.object({
   taxonObservationsCount: z.number(),
   taxonName: z.string(),
   taxonCommonName: z.string().nullable(),
+  taxonLocaleNames: z
+    .object({
+      en: z.string().nullable(),
+      de: z.string().nullable(),
+    })
+    .optional(),
 
   observationId: z.number(),
   observationUrl: z.string(),
