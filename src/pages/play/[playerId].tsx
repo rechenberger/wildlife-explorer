@@ -1,9 +1,9 @@
 import { CurrentObservation } from "~/client/CurrentObservation"
 import { Eta } from "~/client/Eta"
+import { MainActionButtons } from "~/client/MainActionButtons"
 import { MainLayout } from "~/client/MainLayout"
 import { MapBase } from "~/client/MapBase"
 import { OtherPlayers } from "~/client/OtherPlayers"
-import { ScanButton } from "~/client/ScanButton"
 import { WalkerMarker } from "~/client/WalkerMarker"
 import { WalkerRoute } from "~/client/WalkerRoute"
 import { WildlifeMarkers } from "~/client/WildlifeMarkers"
@@ -20,7 +20,7 @@ export default function Page() {
         <WalkerRoute />
         <WalkerMarker />
         <CurrentObservation />
-        <ScanButton />
+        <MainActionButtons />
       </MapBase>
     </MainLayout>
   )
