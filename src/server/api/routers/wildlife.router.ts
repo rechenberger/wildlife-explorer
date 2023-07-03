@@ -1,8 +1,13 @@
+import { Wildlife } from "@prisma/client"
 import { TRPCError } from "@trpc/server"
 import { addSeconds, subSeconds } from "date-fns"
-import { filter, first, map } from "lodash-es"
+import { chunk, filter, first, map } from "lodash-es"
 import { z } from "zod"
-import { RADIUS_IN_KM_SEE_WILDLIFE, SCAN_COOLDOWN_IN_SECONDS } from "~/config"
+import {
+  DEFAULT_DB_CHUNK_SIZE,
+  RADIUS_IN_KM_SEE_WILDLIFE,
+  SCAN_COOLDOWN_IN_SECONDS,
+} from "~/config"
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc"
 import { findObservations } from "~/server/inaturalist/findObservations"
 import { calculateBoundingBox } from "~/server/lib/latLng"
@@ -82,28 +87,33 @@ export const wildlifeRouter = createTRPCRouter({
     })
 
     const now = new Date()
-    const wildlifes = await Promise.all(
-      map(observations, async (o) => {
-        const data = {
-          observationId: o.observationId,
-          lat: o.lat,
-          lng: o.lng,
-          metadata: o,
-          taxonId: o.taxonId,
-        }
-        return await ctx.prisma.wildlife.upsert({
-          where: {
+    const chunks = chunk(observations, DEFAULT_DB_CHUNK_SIZE)
+    const wildlifes: Wildlife[] = []
+    for (const chunk of chunks) {
+      const chunkResult = await Promise.all(
+        map(chunk, async (o) => {
+          const data = {
             observationId: o.observationId,
-          },
-          create: {
-            ...data,
-            respawnsAt: new Date(),
-            foundById: ctx.player.id,
-          },
-          update: data,
+            lat: o.lat,
+            lng: o.lng,
+            metadata: o,
+            taxonId: o.taxonId,
+          }
+          return await ctx.prisma.wildlife.upsert({
+            where: {
+              observationId: o.observationId,
+            },
+            create: {
+              ...data,
+              respawnsAt: new Date(),
+              foundById: ctx.player.id,
+            },
+            update: data,
+          })
         })
-      })
-    )
+      )
+      wildlifes.push(...chunkResult)
+    }
 
     const countAll = wildlifes.length
     const countFound = filter(
