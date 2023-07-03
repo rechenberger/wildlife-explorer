@@ -66,7 +66,9 @@ export const ScanButton = () => {
             </div>
           )}
         </button>
-        <div className="font-bold">Scan</div>
+        <div className="font-bold [text-shadow:_0px_0px_2px_rgb(0_0_0_/_80%)]">
+          Scan
+        </div>
       </div>
     </>
   )
