@@ -24,7 +24,6 @@ export const TeleportToCurrentPositionButton = () => {
   })
   const [isLoading, setIsLoading] = useState(false)
   const getMyLocation = useGetMyLocation()
-  // const router = useRouter()
 
   return (
     <>
@@ -40,7 +39,7 @@ export const TeleportToCurrentPositionButton = () => {
             setIsLoading(true)
             try {
               const location = await getMyLocation({
-                maximumAge: 10 * 1000,
+                maximumAge: 10 * 1000 * 60,
                 timeout: 10 * 1000,
               })
               if (!location) return
@@ -50,14 +49,10 @@ export const TeleportToCurrentPositionButton = () => {
                 playerId,
               })
               setPlayerLocation(location)
-              // await router.replace(
-              //   `/player/${playerId}#${location.lat},${location.lng}`,
-              //   undefined,
-              //   {
-              //     shallow: false,
-              //   }
-              // )
-              window.location.href = `/player/${playerId}#${location.lat},${location.lng}`
+
+              // Force Reload at new location
+              // TODO: make this more elegant
+              window.location.hash = `#${location.lat},${location.lng}`
               window.location.reload()
             } finally {
               setIsLoading(false)
