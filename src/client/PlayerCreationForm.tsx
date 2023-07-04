@@ -7,6 +7,7 @@ import { DEFAULT_LOCATION } from "~/config"
 import { type LatLng } from "~/server/lib/latLng"
 import { api } from "~/utils/api"
 import { cn } from "./cn"
+import { useGetMyLocation } from "./ useGetMyLocation"
 
 export const PlayerCreationForm = () => {
   const router = useRouter()
@@ -20,6 +21,8 @@ export const PlayerCreationForm = () => {
       },
     })
 
+  const getMyLocation = useGetMyLocation()
+
   const [startAtMyLocation, setStartAtMyLocation] = useState(false)
   const [myLocation, setMyLocation] = useState<LatLng | null>(null)
   const myLocationLoading = startAtMyLocation && !myLocation
@@ -27,57 +30,21 @@ export const PlayerCreationForm = () => {
 
   useEffect(() => {
     if (startAtMyLocation) {
-      if (!navigator.geolocation) {
-        toast.error("Geolocation is not supported by this browser.")
-        setStartAtMyLocation(false)
-        setMyLocation(null)
-        return
-      }
-      const promise = new Promise<void>((resolve, reject) => {
-        // setTimeout(() => {
-        //   reject(new Error("Timed out"))
-        // }, 10000)
-        navigator.geolocation.getCurrentPosition(
-          (position) => {
-            const { latitude, longitude } = position.coords
-            setMyLocation({ lat: latitude, lng: longitude })
-            resolve()
-          },
-          (error) => {
-            setStartAtMyLocation(false)
-            setMyLocation(null)
-            switch (error.code) {
-              case error.PERMISSION_DENIED:
-                reject({ message: "User denied the request for Geolocation." })
-                break
-              case error.POSITION_UNAVAILABLE:
-                reject({ message: "Location information is unavailable." })
-                break
-              case error.TIMEOUT:
-                reject({
-                  message: "The request to get user location timed out.",
-                })
-                break
-              default:
-                reject(error)
-            }
-            reject(error)
-          },
-          {
-            maximumAge: 10 * 60 * 1000, // Accept a cached position that is up to 10 minutes old
-            timeout: 10_000,
-          }
-        )
+      getMyLocation({
+        maximumAge: 10 * 60 * 1000,
+        timeout: 1000 * 10,
       })
-      toast.promise(promise, {
-        loading: "Getting your location...",
-        success: "Got your location!",
-        error: (error) => error.message,
-      })
+        .then((myLocation) => {
+          setMyLocation(myLocation)
+        })
+        .catch(() => {
+          setMyLocation(null)
+          setStartAtMyLocation(false)
+        })
     } else {
       setMyLocation(null)
     }
-  }, [startAtMyLocation])
+  }, [getMyLocation, startAtMyLocation])
 
   return (
     <form
