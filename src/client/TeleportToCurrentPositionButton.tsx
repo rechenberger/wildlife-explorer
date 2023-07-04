@@ -39,7 +39,7 @@ export const TeleportToCurrentPositionButton = () => {
             setIsLoading(true)
             try {
               const location = await getMyLocation({
-                maximumAge: 10 * 1000 * 60,
+                maximumAge: 10 * 1000,
                 timeout: 10 * 1000,
               })
               if (!location) return
