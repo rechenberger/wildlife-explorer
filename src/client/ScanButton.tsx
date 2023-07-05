@@ -1,10 +1,11 @@
 import { differenceInSeconds } from "date-fns"
-import { atom, useSetAtom } from "jotai"
+import { atom, useSetAtom, useStore } from "jotai"
 import { Radar } from "lucide-react"
 import { useEffect, useState } from "react"
 import { toast } from "sonner"
 import { type LatLng } from "~/server/schema/LatLng"
 import { api } from "~/utils/api"
+import { playerLocationAtom } from "./WalkerMarker"
 import { cn } from "./cn"
 import { usePlayer } from "./usePlayer"
 
@@ -14,6 +15,7 @@ export const ScanButton = () => {
   const { playerId, player } = usePlayer()
   const setScanningLocation = useSetAtom(scanningLocationAtom)
   const trpc = api.useContext()
+  const store = useStore()
   const { mutateAsync: scan, isLoading } = api.wildlife.scan.useMutation({
     onSuccess: () => {
       trpc.wildlife.invalidate()
@@ -51,7 +53,7 @@ export const ScanButton = () => {
           )}
           onClick={async () => {
             if (!playerId || !player) return
-            setScanningLocation(player)
+            setScanningLocation(store.get(playerLocationAtom))
             const promise = scan({
               playerId,
             })
