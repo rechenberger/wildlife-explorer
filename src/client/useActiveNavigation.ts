@@ -24,7 +24,7 @@ export const useActiveNavigation = () => {
     return () => {
       clearInterval(timer)
     }
-  })
+  }, [player])
 
   return { isNavigating, eta }
 }
