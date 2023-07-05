@@ -1,5 +1,5 @@
 import * as polyline from "@mapbox/polyline"
-import { findLast, last, map } from "lodash-es"
+import { findLast, first, map } from "lodash-es"
 import { type PlayerMetadata } from "../schema/PlayerMetadata"
 import { calcDistanceInMeter } from "./latLng"
 
@@ -84,7 +84,7 @@ export const calcCurrentLocation = ({
   let nextStep = findLast(timingLegs, (leg) => {
     return leg.startingAtTimestamp < Date.now()
   })
-  nextStep = nextStep || last(timingLegs)
+  nextStep = nextStep || first(timingLegs)
 
   if (!nextStep) {
     return
