@@ -7,6 +7,7 @@ import { type LatLng } from "~/server/schema/LatLng"
 import { api } from "~/utils/api"
 import { playerLocationAtom } from "./WalkerMarker"
 import { cn } from "./cn"
+import { useMapRef } from "./useMapRef"
 import { usePlayer } from "./usePlayer"
 
 export const scanningLocationAtom = atom<LatLng | null>(null)
@@ -41,6 +42,8 @@ export const ScanButton = () => {
     return () => clearInterval(interval)
   }, [player?.scanCooldownAt])
 
+  const mapRef = useMapRef()
+
   return (
     <>
       <div className="flex flex-col items-center gap-1">
@@ -54,6 +57,7 @@ export const ScanButton = () => {
           onClick={async () => {
             if (!playerId || !player) return
             setScanningLocation(store.get(playerLocationAtom))
+            mapRef.current?.setCenter(store.get(playerLocationAtom))
             const promise = scan({
               playerId,
             })

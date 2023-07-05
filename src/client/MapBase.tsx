@@ -1,10 +1,11 @@
 import { atom, useSetAtom } from "jotai"
 import { debounce } from "lodash-es"
-import { useMemo, type ReactNode } from "react"
-import { Map } from "react-map-gl"
+import { useMemo, useRef, type ReactNode } from "react"
+import { Map, MapRef } from "react-map-gl"
 import { DEFAULT_LOCATION } from "~/config"
 import { env } from "~/env.mjs"
 import { useNavigation } from "./useNavigation"
+import { MapRefProvider } from "./useMapRef"
 
 export const mapStateAtom = atom({
   lat: DEFAULT_LOCATION.lat,
@@ -49,9 +50,16 @@ export const MapBase = ({
 
   const latLng = latLngFromHash() || DEFAULT_LOCATION
 
+  const ref = useRef<MapRef | null>(null)
+
+  // useEffect(() => {
+  //   ref.current?.setCenter()
+  // })
+
   return (
     <>
       <Map
+        ref={ref}
         mapLib={import("mapbox-gl")}
         initialViewState={{
           latitude: latLng.lat,
@@ -79,7 +87,7 @@ export const MapBase = ({
           navigate(e.lngLat)
         }}
       >
-        {children}
+        <MapRefProvider value={ref}>{children}</MapRefProvider>
       </Map>
     </>
   )
