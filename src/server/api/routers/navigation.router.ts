@@ -4,20 +4,23 @@ import { first } from "lodash-es"
 import { z } from "zod"
 import { GLOBAL_REALTIME_MULTIPLIER } from "~/config"
 import { env } from "~/env.mjs"
-import { createTRPCRouter, publicProcedure } from "~/server/api/trpc"
+import { createTRPCRouter } from "~/server/api/trpc"
 import { calcTimingLegs } from "~/server/lib/calcTimingLegs"
+import { PlayerMetadata } from "~/server/schema/PlayerMetadata"
+import { PlayerNavigation } from "~/server/schema/PlayerNavigation"
+import { playerProcedure } from "../middleware/playerProcedure"
 
 const baseClient = MapboxClient({ accessToken: env.NEXT_PUBLIC_MAPBOX_TOKEN })
 
 export const navigationRouter = createTRPCRouter({
-  calcNavigation: publicProcedure
+  calcNavigation: playerProcedure
     .input(
       z.object({
         from: z.object({ lat: z.number(), lng: z.number() }),
         to: z.object({ lat: z.number(), lng: z.number() }),
       })
     )
-    .mutation(async ({ input }) => {
+    .mutation(async ({ input, ctx }) => {
       const response = await baseClient
         .getDirections({
           profile: "walking", // Use 'walking' profile for pedestrian routes.
@@ -41,13 +44,33 @@ export const navigationRouter = createTRPCRouter({
           message: "No route found",
         })
       }
-      const startingAtTimestamp = Date.now()
 
+      const startingAtTimestamp = Date.now()
       const totalDurationInSeconds = route.duration / GLOBAL_REALTIME_MULTIPLIER
-      const { timingLegs, totalDistanceInMeter } = calcTimingLegs({
+      const finishingAtTimestamp =
+        startingAtTimestamp + totalDurationInSeconds * 1000
+
+      const navigation = {
+        start: input.from,
+        finish: input.to,
+        startingAtTimestamp,
+        finishingAtTimestamp,
         geometry: route.geometry,
         totalDurationInSeconds,
-        startingAtTimestamp,
+        totalDistanceInMeter: 0,
+      } satisfies PlayerNavigation
+
+      const { timingLegs, totalDistanceInMeter } = calcTimingLegs(navigation)
+      navigation.totalDistanceInMeter = totalDistanceInMeter
+
+      await ctx.prisma.player.update({
+        where: { id: ctx.player.id },
+        data: {
+          metadata: {
+            ...PlayerMetadata.parse(ctx.player.metadata),
+            navigation,
+          } satisfies PlayerMetadata,
+        },
       })
 
       return {

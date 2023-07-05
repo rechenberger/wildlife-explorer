@@ -1,11 +1,12 @@
-import { atom, useAtomValue, useSetAtom, useStore } from "jotai"
-import { findLast, last, throttle } from "lodash-es"
+import { atom, useSetAtom, useStore } from "jotai"
 import { User2 } from "lucide-react"
 import { useCallback, useEffect, useMemo, useRef } from "react"
 import { Marker } from "react-map-gl"
 import { DEFAULT_LOCATION } from "~/config"
-import { api, type RouterInputs } from "~/utils/api"
-import { calcNavigationAtom } from "./WalkerRoute"
+import {
+  calcCurrentLocation,
+  calcTimingLegs,
+} from "~/server/lib/calcTimingLegs"
 import {
   isNavigatingAtom,
   navigatingToObservationIdAtom,
@@ -20,83 +21,41 @@ export const playerLocationAtom = atom({
 
 export const WalkerMarker = () => {
   const store = useStore()
-  const result = useAtomValue(calcNavigationAtom)
   const setPlayerLocation = useSetAtom(playerLocationAtom)
 
   const markerRef = useRef<mapboxgl.Marker | null>(null)
   const frameRef = useRef<number | undefined>()
 
   const { player } = usePlayer()
-  const { mutate: move } = api.player.move.useMutation()
-
-  const moveThrottled = useMemo(
+  const result = useMemo(
     () =>
-      throttle((input: RouterInputs["player"]["move"]) => {
-        move(input)
-      }, 1000),
-    [move]
+      player?.metadata?.navigation
+        ? calcTimingLegs(player?.metadata?.navigation)
+        : null,
+    [player?.metadata?.navigation]
   )
 
   const animateMarker = useCallback(() => {
     if (!markerRef.current) return
 
-    let nextStep = findLast(result?.timingLegs, (leg) => {
-      return leg.startingAtTimestamp < Date.now()
-    })
-    nextStep = nextStep || last(result?.timingLegs)
+    const currentLocation = result?.timingLegs
+      ? calcCurrentLocation({
+          timingLegs: result?.timingLegs,
+        })
+      : null
 
-    if (!nextStep) {
-      // const playerLocation = store.get(playerLocationAtom)
-      // markerRef.current.setLngLat(playerLocation)
-      return
-    }
-
-    // console.log(nextStep)
-    const startingAtTimestamp = nextStep.startingAtTimestamp
-    const durationInSeconds = nextStep.durationInSeconds
-    const now = Date.now()
-    let progress = (now - startingAtTimestamp) / (durationInSeconds * 1000)
-    if (progress > 1) {
-      // const playerLocation = store.get(playerLocationAtom)
-      // markerRef.current.setLngLat(playerLocation)
+    if (!currentLocation) {
       store.set(isNavigatingAtom, false)
       store.set(navigationEtaAtom, null)
       store.set(navigatingToObservationIdAtom, null)
       return
     }
-    progress = Math.min(Math.max(progress, 0), 1)
 
-    const lat =
-      nextStep.from.lat + (nextStep.to.lat - nextStep.from.lat) * progress
-    const lng =
-      nextStep.from.lng + (nextStep.to.lng - nextStep.from.lng) * progress
-
-    // TODO: find out when and why this happens
-    if (isNaN(lat) || isNaN(lng)) {
-      console.error("lat or lng is NaN", { lat, lng })
-      return
-    }
-
-    markerRef.current.setLngLat({
-      lat,
-      lng,
-    })
-
-    setPlayerLocation({
-      lat,
-      lng,
-    })
-
-    if (player) {
-      moveThrottled({
-        playerId: player?.id,
-        lat,
-        lng,
-      })
-    }
+    markerRef.current.setLngLat(currentLocation)
+    setPlayerLocation(currentLocation)
 
     frameRef.current = requestAnimationFrame(animateMarker)
-  }, [moveThrottled, player, result?.timingLegs, setPlayerLocation, store])
+  }, [result?.timingLegs, setPlayerLocation, store])
 
   useEffect(() => {
     animateMarker()

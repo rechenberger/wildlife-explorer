@@ -1,8 +1,9 @@
-import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc"
-
+import { type Player } from "@prisma/client"
 import { TRPCError } from "@trpc/server"
 import { filter } from "lodash-es"
 import { z } from "zod"
+import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc"
+import { calcPlayerCurrentLocation } from "~/server/lib/calcTimingLegs"
 import { PlayerMetadata } from "~/server/schema/PlayerMetadata"
 import { playerProcedure } from "../middleware/playerProcedure"
 
@@ -13,10 +14,7 @@ export const playerRouter = createTRPCRouter({
         userId: ctx.session.user.id,
       },
     })
-    const players = playersRaw.map((player) => ({
-      ...player,
-      metadata: PlayerMetadata.parse(player.metadata ?? {}),
-    }))
+    const players = playersRaw.map(parsePlayer)
     return players
   }),
 
@@ -38,11 +36,7 @@ export const playerRouter = createTRPCRouter({
           code: "NOT_FOUND",
         })
       }
-      const player = {
-        ...playerRaw,
-        metadata: PlayerMetadata.parse(playerRaw.metadata ?? {}),
-      }
-      return player
+      return parsePlayer(playerRaw)
     }),
   createMe: protectedProcedure
     .input(
@@ -53,7 +47,7 @@ export const playerRouter = createTRPCRouter({
         data: {
           ...input,
           userId: ctx.session.user.id,
-          metadata: PlayerMetadata.parse({}),
+          metadata: {} satisfies PlayerMetadata,
         },
       })
       return player
@@ -75,10 +69,22 @@ export const playerRouter = createTRPCRouter({
 
   others: playerProcedure.query(async ({ ctx }) => {
     const playerRaw = await ctx.prisma.player.findMany({})
-    const players = playerRaw.map((player) => ({
-      ...player,
-      metadata: PlayerMetadata.parse(player.metadata ?? {}),
-    }))
+    const players = playerRaw.map(parsePlayer)
     return filter(players, (player) => player.id !== ctx.player.id)
   }),
 })
+
+const parsePlayer = (playerRaw: Player) => {
+  let player = {
+    ...playerRaw,
+    metadata: PlayerMetadata.parse(playerRaw.metadata ?? {}),
+  }
+  const currentLocation = calcPlayerCurrentLocation({ player })
+  if (currentLocation) {
+    player = {
+      ...player,
+      ...currentLocation,
+    }
+  }
+  return player
+}

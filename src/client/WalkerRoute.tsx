@@ -1,33 +1,35 @@
-import { atom, useAtomValue } from "jotai"
+import { useAtomValue } from "jotai"
 import { filter, last } from "lodash-es"
 import { Footprints } from "lucide-react"
 import { useMemo } from "react"
 import { Layer, Marker, Source } from "react-map-gl"
-import { apiJotai } from "~/utils/api"
+import { calcTimingLegs } from "~/server/lib/calcTimingLegs"
 import { playerLocationAtom } from "./WalkerMarker"
-
-export const calcNavigationAtom =
-  apiJotai.navigation.calcNavigation.atomWithMutation()
+import { usePlayer } from "./usePlayer"
 
 const SHOW_FOOTSTEPS = false
 
-const pointsAtom = atom((get) => {
-  const result = get(calcNavigationAtom)
-  const playerLocation = get(playerLocationAtom)
-  if (!result) return []
-  let points = filter(
-    result.timingLegs,
-    (leg) => leg.startingAtTimestamp > Date.now()
-  ).map((leg) => leg.from)
-  const lastPoint = last(result.timingLegs)?.to
-  if (!lastPoint) return []
-  points = [playerLocation, ...points, lastPoint]
-  return points
-})
-
 export const WalkerRoute = () => {
-  const result = useAtomValue(calcNavigationAtom)
-  const points = useAtomValue(pointsAtom)
+  const { player } = usePlayer()
+  const result = useMemo(
+    () =>
+      player?.metadata?.navigation
+        ? calcTimingLegs(player?.metadata?.navigation)
+        : null,
+    [player?.metadata?.navigation]
+  )
+  const playerLocation = useAtomValue(playerLocationAtom)
+  const points = useMemo(() => {
+    if (!result) return []
+    let points = filter(
+      result.timingLegs,
+      (leg) => leg.startingAtTimestamp > Date.now()
+    ).map((leg) => leg.from)
+    const lastPoint = last(result.timingLegs)?.to
+    if (!lastPoint) return []
+    points = [playerLocation, ...points, lastPoint]
+    return points
+  }, [playerLocation, result])
 
   const geoJson = useMemo(
     () =>
