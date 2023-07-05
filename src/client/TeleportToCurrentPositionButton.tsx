@@ -1,7 +1,7 @@
 import { atom, useSetAtom } from "jotai"
 import { LocateFixed } from "lucide-react"
 import { useState } from "react"
-import { type LatLng } from "~/server/lib/latLng"
+import { type LatLng } from "~/server/schema/LatLng"
 import { api } from "~/utils/api"
 import { playerLocationAtom } from "./WalkerMarker"
 import { cn } from "./cn"

@@ -1,6 +1,6 @@
 import { useCallback } from "react"
 import { toast } from "sonner"
-import { type LatLng } from "~/server/lib/latLng"
+import { type LatLng } from "~/server/schema/LatLng"
 
 export const useGetMyLocation = () => {
   const getMyLocation = useCallback(
