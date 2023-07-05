@@ -53,7 +53,7 @@ export const playerRouter = createTRPCRouter({
         data: {
           ...input,
           userId: ctx.session.user.id,
-          metadata: PlayerMetadata.parse({}),
+          metadata: {} satisfies PlayerMetadata,
         },
       })
       return player
