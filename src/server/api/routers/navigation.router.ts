@@ -7,6 +7,7 @@ import { env } from "~/env.mjs"
 import { createTRPCRouter } from "~/server/api/trpc"
 import { calcTimingLegs } from "~/server/lib/calcTimingLegs"
 import { PlayerMetadata } from "~/server/schema/PlayerMetadata"
+import { PlayerNavigation } from "~/server/schema/PlayerNavigation"
 import { playerProcedure } from "../middleware/playerProcedure"
 
 const baseClient = MapboxClient({ accessToken: env.NEXT_PUBLIC_MAPBOX_TOKEN })
@@ -49,28 +50,26 @@ export const navigationRouter = createTRPCRouter({
       const finishingAtTimestamp =
         startingAtTimestamp + totalDurationInSeconds * 1000
 
+      const navigation = {
+        start: input.from,
+        finish: input.to,
+        startingAtTimestamp,
+        finishingAtTimestamp,
+        totalDurationInSeconds,
+        geometry: route.geometry,
+      } satisfies PlayerNavigation
+
       await ctx.prisma.player.update({
         where: { id: ctx.player.id },
         data: {
           metadata: {
             ...PlayerMetadata.parse(ctx.player.metadata),
-            navigation: {
-              start: input.from,
-              finish: input.to,
-              startingAtTimestamp,
-              finishingAtTimestamp,
-              totalDurationInSeconds,
-              geometry: route.geometry,
-            },
+            navigation,
           } satisfies PlayerMetadata,
         },
       })
 
-      const { timingLegs, totalDistanceInMeter } = calcTimingLegs({
-        geometry: route.geometry,
-        totalDurationInSeconds,
-        startingAtTimestamp,
-      })
+      const { timingLegs, totalDistanceInMeter } = calcTimingLegs(navigation)
 
       return {
         timingLegs,
