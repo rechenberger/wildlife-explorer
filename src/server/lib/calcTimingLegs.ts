@@ -96,7 +96,7 @@ export const calcCurrentLocation = ({
   const now = Date.now()
   let progress = (now - startingAtTimestamp) / (durationInSeconds * 1000)
   if (progress > 1) {
-    return null
+    return nextStep.to
   }
   progress = Math.min(Math.max(progress, 0), 1)
 
