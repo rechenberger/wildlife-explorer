@@ -7,8 +7,8 @@ import { WILDLIFE_REFETCH_INTERVAL_IN_MS } from "~/config"
 import { api } from "~/utils/api"
 import { currentObservationIdAtom } from "./CurrentObservation"
 import { cn } from "./cn"
+import { useActiveNavigation } from "./useActiveNavigation"
 import { useGetWildlifeName } from "./useGetWildlifeName"
-import { useIsNavigating } from "./useIsNavigating"
 import { navigatingToObservationIdAtom } from "./useNavigation"
 import { usePlayer } from "./usePlayer"
 
@@ -41,7 +41,7 @@ export const WildlifeMarkers = () => {
   const navigatingtoObservationId = useAtomValue(navigatingToObservationIdAtom)
 
   const getName = useGetWildlifeName()
-  const isNavigating = useIsNavigating()
+  const { isNavigating } = useActiveNavigation()
 
   return (
     <>

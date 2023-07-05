@@ -7,11 +7,6 @@ import {
   calcCurrentLocation,
   calcTimingLegs,
 } from "~/server/lib/calcTimingLegs"
-import {
-  isNavigatingAtom,
-  navigatingToObservationIdAtom,
-  navigationEtaAtom,
-} from "./useNavigation"
 import { usePlayer } from "./usePlayer"
 
 export const playerLocationAtom = atom({
@@ -45,9 +40,6 @@ export const WalkerMarker = () => {
       : null
 
     if (!currentLocation) {
-      store.set(isNavigatingAtom, false)
-      store.set(navigationEtaAtom, null)
-      store.set(navigatingToObservationIdAtom, null)
       return
     }
 
@@ -55,7 +47,7 @@ export const WalkerMarker = () => {
     setPlayerLocation(currentLocation)
 
     frameRef.current = requestAnimationFrame(animateMarker)
-  }, [result?.timingLegs, setPlayerLocation, store])
+  }, [result?.timingLegs, setPlayerLocation])
 
   useEffect(() => {
     animateMarker()
