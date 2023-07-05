@@ -1,22 +1,30 @@
 import * as turf from "@turf/turf"
 import { useAtomValue } from "jotai"
 import { Layer, Source } from "react-map-gl"
+import {
+  RADIUS_IN_KM_SEE_WILDLIFE_BIG,
+  RADIUS_IN_KM_SEE_WILDLIFE_SMALL,
+} from "~/config"
 import { scanningLocationAtom } from "./ScanButton"
 
 export const ScanCircle = () => {
   const location = useAtomValue(scanningLocationAtom)
   if (!location) return null
   const centerCoordinates = [location.lng, location.lat] // Example coordinates
-  const radius = 0.5 // Radius in km
+  const circles = [
+    RADIUS_IN_KM_SEE_WILDLIFE_SMALL,
+    RADIUS_IN_KM_SEE_WILDLIFE_BIG,
+  ]
 
-  // Generate a circle polygon using Turf.js
-  const circle = turf.circle(centerCoordinates, radius, {
-    steps: 100,
-    units: "kilometers",
-  })
-
-  return (
-    <Source type="geojson" data={circle}>
+  return circles.map((radius) => (
+    <Source
+      key={radius}
+      type="geojson"
+      data={turf.circle(centerCoordinates, radius, {
+        steps: 100,
+        units: "kilometers",
+      })}
+    >
       <Layer
         type="fill"
         paint={{
@@ -25,7 +33,7 @@ export const ScanCircle = () => {
         }}
       />
     </Source>
-  )
+  ))
 }
 
 export default Map

@@ -1,11 +1,12 @@
 import { type Wildlife } from "@prisma/client"
 import { TRPCError } from "@trpc/server"
 import { addSeconds, subSeconds } from "date-fns"
-import { chunk, filter, first, map } from "lodash-es"
+import { chunk, filter, first, flatMap, map, uniqBy } from "lodash-es"
 import { z } from "zod"
 import {
   DEFAULT_DB_CHUNK_SIZE,
-  RADIUS_IN_KM_SEE_WILDLIFE,
+  RADIUS_IN_KM_SEE_WILDLIFE_BIG,
+  RADIUS_IN_KM_SEE_WILDLIFE_SMALL,
   SCAN_COOLDOWN_IN_SECONDS,
 } from "~/config"
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc"
@@ -26,7 +27,7 @@ export const wildlifeRouter = createTRPCRouter({
   nearMe: playerProcedure.query(async ({ ctx }) => {
     const bbox = calculateBoundingBox({
       center: ctx.player,
-      radiusInKm: RADIUS_IN_KM_SEE_WILDLIFE,
+      radiusInKm: RADIUS_IN_KM_SEE_WILDLIFE_SMALL,
     })
 
     const wildlifeRaw = await ctx.prisma.wildlife.findMany({
@@ -80,11 +81,23 @@ export const wildlifeRouter = createTRPCRouter({
       },
     })
 
-    const observations = await findObservations({
-      lat: ctx.player.lat,
-      lng: ctx.player.lng,
-      radiusInKm: RADIUS_IN_KM_SEE_WILDLIFE,
-    })
+    const observationsMultiRadius = await Promise.all([
+      findObservations({
+        lat: ctx.player.lat,
+        lng: ctx.player.lng,
+        radiusInKm: RADIUS_IN_KM_SEE_WILDLIFE_SMALL,
+      }),
+      findObservations({
+        lat: ctx.player.lat,
+        lng: ctx.player.lng,
+        radiusInKm: RADIUS_IN_KM_SEE_WILDLIFE_BIG,
+      }),
+    ])
+
+    const observations = uniqBy(
+      flatMap(observationsMultiRadius, (o) => o),
+      (o) => o.observationId
+    )
 
     const now = new Date()
     const chunks = chunk(observations, DEFAULT_DB_CHUNK_SIZE)
