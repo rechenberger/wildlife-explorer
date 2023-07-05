@@ -3,6 +3,7 @@ import { Eta } from "~/client/Eta"
 import { MainActionButtons } from "~/client/MainActionButtons"
 import { MainLayout } from "~/client/MainLayout"
 import { MapBase } from "~/client/MapBase"
+import { MapControls } from "~/client/MapControls"
 import { OtherPlayers } from "~/client/OtherPlayers"
 import { ScanCircle } from "~/client/ScanCircle"
 import { WalkerMarker } from "~/client/WalkerMarker"
@@ -23,6 +24,7 @@ export default function Page() {
         <WalkerMarker />
         <CurrentObservation />
         <MainActionButtons />
+        <MapControls />
       </MapBase>
     </MainLayout>
   )
