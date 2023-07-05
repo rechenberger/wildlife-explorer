@@ -27,5 +27,5 @@ export const useIsNavigating = () => {
     }
   })
 
-  return { isNavigating }
+  return isNavigating
 }
