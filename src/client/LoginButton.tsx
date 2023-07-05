@@ -9,12 +9,14 @@ export const LoginButton = () => {
       <>
         <button
           className="flex flex-row items-center gap-2 rounded bg-black px-2 py-1 text-sm text-white"
-          onClick={() => signIn("discord")}
+          // onClick={() => signIn("discord")}
+          onClick={() => signIn()}
         >
           <div className="rotate-90">
             <ArrowUp size={14} className="animate-bounce" />
           </div>
-          <div>Login with Discord</div>
+          {/* <div>Login with Discord</div> */}
+          <div>Login</div>
         </button>
       </>
     )
