@@ -28,7 +28,7 @@ export const navigationRouter = createTRPCRouter({
       const finish = input.to
       const response = await baseClient
         .getDirections({
-          profile: "driving", // Use 'walking' profile for pedestrian routes.
+          profile: "walking", // Use 'walking' profile for pedestrian routes.
           waypoints: [
             {
               coordinates: [start.lng, start.lat],
