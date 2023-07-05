@@ -1,5 +1,6 @@
 import { atom, useSetAtom } from "jotai"
 import { useCallback } from "react"
+import { toast } from "sonner"
 import { api } from "~/utils/api"
 import { usePlayer } from "./usePlayer"
 
@@ -24,13 +25,18 @@ export const useNavigation = () => {
     }) => {
       if (!playerId) return
       setObservationId(observationId || null)
-      await calcNavigation({
-        to: {
-          lat,
-          lng,
-        },
-        playerId,
-      })
+      try {
+        await calcNavigation({
+          to: {
+            lat,
+            lng,
+          },
+          playerId,
+        })
+      } catch (error: any) {
+        const msg = error?.message || "Navigation failed"
+        toast.error(msg)
+      }
       trpc.player.getMe.invalidate()
     },
     [calcNavigation, playerId, setObservationId, trpc.player.getMe]
