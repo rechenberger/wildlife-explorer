@@ -1,11 +1,10 @@
-import { atom, useAtomValue, useSetAtom, useStore } from "jotai"
-import { findLast, last, throttle } from "lodash-es"
+import { atom, useSetAtom, useStore } from "jotai"
+import { findLast, last } from "lodash-es"
 import { User2 } from "lucide-react"
-import { useCallback, useEffect, useMemo, useRef } from "react"
+import { useCallback, useEffect, useRef } from "react"
 import { Marker } from "react-map-gl"
 import { DEFAULT_LOCATION } from "~/config"
-import { api, type RouterInputs } from "~/utils/api"
-import { calcNavigationAtom } from "./WalkerRoute"
+import { calcTimingLegs } from "~/server/lib/calcTimingLegs"
 import {
   isNavigatingAtom,
   navigatingToObservationIdAtom,
@@ -20,22 +19,15 @@ export const playerLocationAtom = atom({
 
 export const WalkerMarker = () => {
   const store = useStore()
-  const result = useAtomValue(calcNavigationAtom)
   const setPlayerLocation = useSetAtom(playerLocationAtom)
 
   const markerRef = useRef<mapboxgl.Marker | null>(null)
   const frameRef = useRef<number | undefined>()
 
   const { player } = usePlayer()
-  const { mutate: move } = api.player.move.useMutation()
-
-  const moveThrottled = useMemo(
-    () =>
-      throttle((input: RouterInputs["player"]["move"]) => {
-        move(input)
-      }, 1000),
-    [move]
-  )
+  const result = player?.metadata?.navigation
+    ? calcTimingLegs(player?.metadata?.navigation)
+    : null
 
   const animateMarker = useCallback(() => {
     if (!markerRef.current) return
@@ -87,16 +79,8 @@ export const WalkerMarker = () => {
       lng,
     })
 
-    if (player) {
-      moveThrottled({
-        playerId: player?.id,
-        lat,
-        lng,
-      })
-    }
-
     frameRef.current = requestAnimationFrame(animateMarker)
-  }, [moveThrottled, player, result?.timingLegs, setPlayerLocation, store])
+  }, [result?.timingLegs, setPlayerLocation, store])
 
   useEffect(() => {
     animateMarker()

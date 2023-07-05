@@ -1,5 +1,6 @@
 import { atom, useSetAtom, useStore } from "jotai"
 import { useCallback } from "react"
+import { api } from "~/utils/api"
 import { playerLocationAtom } from "./WalkerMarker"
 import { calcNavigationAtom } from "./WalkerRoute"
 import { usePlayer } from "./usePlayer"
@@ -16,6 +17,7 @@ export const useNavigation = () => {
   const setIsNavigating = useSetAtom(isNavigatingAtom)
   const setNavigationEta = useSetAtom(navigationEtaAtom)
   const { playerId } = usePlayer()
+  const trpc = api.useContext()
 
   const navigate = useCallback(
     async ({
@@ -39,6 +41,7 @@ export const useNavigation = () => {
           playerId,
         },
       ])
+      trpc.player.getMe.invalidate()
 
       setIsNavigating(true)
       setNavigationEta(navigation.eta)
@@ -50,6 +53,7 @@ export const useNavigation = () => {
       setNavigationEta,
       setObservationId,
       store,
+      trpc.player.getMe,
     ]
   )
 
