@@ -1,5 +1,6 @@
 import * as polyline from "@mapbox/polyline"
 import { findLast, last, map } from "lodash-es"
+import { type PlayerMetadata } from "../schema/PlayerMetadata"
 import { calcDistanceInMeter } from "./latLng"
 
 // const geometry = "e~yuHwohi@Ff@kFpCYEgCpA}A^QzAAp@NfEHd@UJh@xF"
@@ -111,4 +112,20 @@ export const calcCurrentLocation = ({
   }
 
   return { lat, lng }
+}
+
+export const calcPlayerCurrentLocation = ({
+  player,
+}: {
+  player: {
+    metadata: PlayerMetadata
+  }
+}) => {
+  const navigation = player.metadata?.navigation
+  if (!navigation) {
+    return null
+  }
+  const { timingLegs } = calcTimingLegs(navigation)
+  const currentLocation = calcCurrentLocation({ timingLegs })
+  return currentLocation
 }
