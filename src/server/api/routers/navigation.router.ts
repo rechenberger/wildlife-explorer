@@ -4,7 +4,8 @@ import { first } from "lodash-es"
 import { z } from "zod"
 import {
   GLOBAL_REALTIME_MULTIPLIER,
-  MAX_METER_BEFORE_TAKING_THE_CAR,
+  MAX_METER_BY_BICYCLE,
+  MAX_METER_BY_FOOT,
 } from "~/config"
 import { env } from "~/env.mjs"
 import { createTRPCRouter } from "~/server/api/trpc"
@@ -31,14 +32,16 @@ export const navigationRouter = createTRPCRouter({
       }
       const finish = input.to
       const beeLineDistance = calcDistanceInMeter(start, finish)
-      const profile =
-        beeLineDistance > MAX_METER_BEFORE_TAKING_THE_CAR
-          ? "driving"
-          : "walking"
+      const travelingBy =
+        beeLineDistance <= MAX_METER_BY_FOOT
+          ? "walking"
+          : beeLineDistance <= MAX_METER_BY_BICYCLE
+          ? "cycling"
+          : "driving"
 
       const response = await baseClient
         .getDirections({
-          profile,
+          profile: travelingBy,
           waypoints: [
             {
               coordinates: [start.lng, start.lat],
@@ -73,6 +76,7 @@ export const navigationRouter = createTRPCRouter({
         geometry: route.geometry,
         totalDurationInSeconds,
         totalDistanceInMeter: 0,
+        travelingBy,
       } satisfies PlayerNavigation
 
       const { timingLegs, totalDistanceInMeter } = calcTimingLegs(navigation)

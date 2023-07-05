@@ -9,5 +9,6 @@ export const PlayerNavigation = z.object({
   geometry: z.string(),
   totalDurationInSeconds: z.number(),
   totalDistanceInMeter: z.number(),
+  travelingBy: z.enum(["walking", "driving", "cycling"]).optional(),
 })
 export type PlayerNavigation = z.infer<typeof PlayerNavigation>
