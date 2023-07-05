@@ -13,3 +13,4 @@ export const SHOW_OBSERVATION_JSON =
   false && process.env.NODE_ENV === "development"
 export const SCAN_COOLDOWN_IN_SECONDS = 20
 export const DEFAULT_DB_CHUNK_SIZE = 20
+export const MAX_METER_BEFORE_TAKING_THE_CAR = 5_000

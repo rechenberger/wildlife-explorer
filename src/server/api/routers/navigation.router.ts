@@ -2,10 +2,14 @@ import MapboxClient from "@mapbox/mapbox-sdk/services/directions"
 import { TRPCError } from "@trpc/server"
 import { first } from "lodash-es"
 import { z } from "zod"
-import { GLOBAL_REALTIME_MULTIPLIER } from "~/config"
+import {
+  GLOBAL_REALTIME_MULTIPLIER,
+  MAX_METER_BEFORE_TAKING_THE_CAR,
+} from "~/config"
 import { env } from "~/env.mjs"
 import { createTRPCRouter } from "~/server/api/trpc"
 import { calcTimingLegs } from "~/server/lib/calcTimingLegs"
+import { calcDistanceInMeter } from "~/server/lib/latLng"
 import { LatLng } from "~/server/schema/LatLng"
 import { PlayerMetadata } from "~/server/schema/PlayerMetadata"
 import { type PlayerNavigation } from "~/server/schema/PlayerNavigation"
@@ -26,9 +30,15 @@ export const navigationRouter = createTRPCRouter({
         lng: ctx.player.lng,
       }
       const finish = input.to
+      const beeLineDistance = calcDistanceInMeter(start, finish)
+      const profile =
+        beeLineDistance > MAX_METER_BEFORE_TAKING_THE_CAR
+          ? "driving"
+          : "walking"
+
       const response = await baseClient
         .getDirections({
-          profile: "walking", // Use 'walking' profile for pedestrian routes.
+          profile,
           waypoints: [
             {
               coordinates: [start.lng, start.lat],
