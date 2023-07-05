@@ -6,7 +6,8 @@ export const PlayerNavigation = z.object({
   finish: LatLng,
   startingAtTimestamp: z.number(),
   finishingAtTimestamp: z.number(),
-  totalDurationInSeconds: z.number(),
   geometry: z.string(),
+  totalDurationInSeconds: z.number(),
+  totalDistanceInMeter: z.number(),
 })
 export type PlayerNavigation = z.infer<typeof PlayerNavigation>

@@ -55,9 +55,13 @@ export const navigationRouter = createTRPCRouter({
         finish: input.to,
         startingAtTimestamp,
         finishingAtTimestamp,
-        totalDurationInSeconds,
         geometry: route.geometry,
+        totalDurationInSeconds,
+        totalDistanceInMeter: 0,
       } satisfies PlayerNavigation
+
+      const { timingLegs, totalDistanceInMeter } = calcTimingLegs(navigation)
+      navigation.totalDistanceInMeter = totalDistanceInMeter
 
       await ctx.prisma.player.update({
         where: { id: ctx.player.id },
@@ -68,8 +72,6 @@ export const navigationRouter = createTRPCRouter({
           } satisfies PlayerMetadata,
         },
       })
-
-      const { timingLegs, totalDistanceInMeter } = calcTimingLegs(navigation)
 
       return {
         timingLegs,
