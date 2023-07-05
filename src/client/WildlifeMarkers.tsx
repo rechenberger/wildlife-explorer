@@ -8,6 +8,7 @@ import { api } from "~/utils/api"
 import { currentObservationIdAtom } from "./CurrentObservation"
 import { cn } from "./cn"
 import { useGetWildlifeName } from "./useGetWildlifeName"
+import { useIsNavigating } from "./useIsNavigating"
 import { navigatingToObservationIdAtom } from "./useNavigation"
 import { usePlayer } from "./usePlayer"
 
@@ -40,6 +41,7 @@ export const WildlifeMarkers = () => {
   const navigatingtoObservationId = useAtomValue(navigatingToObservationIdAtom)
 
   const getName = useGetWildlifeName()
+  const isNavigating = useIsNavigating()
 
   return (
     <>
@@ -70,7 +72,9 @@ export const WildlifeMarkers = () => {
                 "group relative flex aspect-square h-12 items-center justify-center rounded-full bg-amber-400 p-1 shadow transition-transform md:hover:scale-[3]",
                 !!w.caughtAt && "bg-green-500 opacity-50",
                 onCooldown && "bg-gray-400 opacity-50",
-                navigatingtoObservationId === w.observationId && "bg-blue-500"
+                isNavigating &&
+                  navigatingtoObservationId === w.observationId &&
+                  "bg-blue-500"
               )}
               // onMouseEnter={() => {
               //   console.log(w)
