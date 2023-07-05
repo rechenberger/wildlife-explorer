@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { usePlayer } from "./usePlayer"
 
 export const useActiveNavigation = () => {
@@ -11,14 +11,15 @@ export const useActiveNavigation = () => {
     if (!player) return
 
     const timer = setInterval(() => {
-      const navigation = player.metadata?.navigation
-      if (!navigation || navigation.finishingAtTimestamp < Date.now()) {
+      const timestamp = player.metadata?.navigation?.finishingAtTimestamp
+      if (!timestamp || timestamp < Date.now()) {
         setIsNavigating(false)
         setEta(null)
         return
       }
+      // console.log("timestamp", new Date(timestamp))
       setIsNavigating(true)
-      setEta(new Date(navigation.finishingAtTimestamp))
+      setEta(new Date(timestamp))
     }, 100)
 
     return () => {
@@ -26,5 +27,10 @@ export const useActiveNavigation = () => {
     }
   }, [player])
 
-  return { isNavigating, eta }
+  const etaIso = useMemo(() => {
+    if (!eta) return null
+    return eta.toISOString()
+  }, [eta])
+
+  return { isNavigating, etaIso }
 }
