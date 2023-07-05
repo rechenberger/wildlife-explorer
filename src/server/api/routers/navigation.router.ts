@@ -30,6 +30,15 @@ export const navigationRouter = createTRPCRouter({
         lat: ctx.player.lat,
         lng: ctx.player.lng,
       }
+
+      // Save start location (in case of a crash)
+      await ctx.prisma.player.update({
+        where: { id: ctx.player.id },
+        data: {
+          ...start,
+        },
+      })
+
       const finish = input.to
       const beeLineDistance = calcDistanceInMeter(start, finish)
       const travelingBy =
