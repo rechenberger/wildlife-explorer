@@ -1,7 +1,7 @@
 import { atom, useSetAtom, useStore } from "jotai"
 import { findLast, last } from "lodash-es"
 import { User2 } from "lucide-react"
-import { useCallback, useEffect, useRef } from "react"
+import { useCallback, useEffect, useMemo, useRef } from "react"
 import { Marker } from "react-map-gl"
 import { DEFAULT_LOCATION } from "~/config"
 import { calcTimingLegs } from "~/server/lib/calcTimingLegs"
@@ -25,9 +25,13 @@ export const WalkerMarker = () => {
   const frameRef = useRef<number | undefined>()
 
   const { player } = usePlayer()
-  const result = player?.metadata?.navigation
-    ? calcTimingLegs(player?.metadata?.navigation)
-    : null
+  const result = useMemo(
+    () =>
+      player?.metadata?.navigation
+        ? calcTimingLegs(player?.metadata?.navigation)
+        : null,
+    [player?.metadata?.navigation]
+  )
 
   const animateMarker = useCallback(() => {
     if (!markerRef.current) return
