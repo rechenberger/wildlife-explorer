@@ -1,10 +1,9 @@
-import { type Player } from "@prisma/client"
 import { TRPCError } from "@trpc/server"
 import { filter } from "lodash-es"
 import { z } from "zod"
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc"
-import { calcPlayerCurrentLocation } from "~/server/lib/calcTimingLegs"
-import { PlayerMetadata } from "~/server/schema/PlayerMetadata"
+import { type PlayerMetadata } from "~/server/schema/PlayerMetadata"
+import { parsePlayer } from "~/server/schema/parsePlayer"
 import { playerProcedure } from "../middleware/playerProcedure"
 
 export const playerRouter = createTRPCRouter({
@@ -73,18 +72,3 @@ export const playerRouter = createTRPCRouter({
     return filter(players, (player) => player.id !== ctx.player.id)
   }),
 })
-
-const parsePlayer = (playerRaw: Player) => {
-  let player = {
-    ...playerRaw,
-    metadata: PlayerMetadata.parse(playerRaw.metadata ?? {}),
-  }
-  const currentLocation = calcPlayerCurrentLocation({ player })
-  if (currentLocation) {
-    player = {
-      ...player,
-      ...currentLocation,
-    }
-  }
-  return player
-}

@@ -6,8 +6,9 @@ import { GLOBAL_REALTIME_MULTIPLIER } from "~/config"
 import { env } from "~/env.mjs"
 import { createTRPCRouter } from "~/server/api/trpc"
 import { calcTimingLegs } from "~/server/lib/calcTimingLegs"
+import { LatLng } from "~/server/schema/LatLng"
 import { PlayerMetadata } from "~/server/schema/PlayerMetadata"
-import { PlayerNavigation } from "~/server/schema/PlayerNavigation"
+import { type PlayerNavigation } from "~/server/schema/PlayerNavigation"
 import { playerProcedure } from "../middleware/playerProcedure"
 
 const baseClient = MapboxClient({ accessToken: env.NEXT_PUBLIC_MAPBOX_TOKEN })
@@ -16,20 +17,24 @@ export const navigationRouter = createTRPCRouter({
   calcNavigation: playerProcedure
     .input(
       z.object({
-        from: z.object({ lat: z.number(), lng: z.number() }),
-        to: z.object({ lat: z.number(), lng: z.number() }),
+        to: LatLng,
       })
     )
     .mutation(async ({ input, ctx }) => {
+      const start = {
+        lat: ctx.player.lat,
+        lng: ctx.player.lng,
+      }
+      const finish = input.to
       const response = await baseClient
         .getDirections({
           profile: "walking", // Use 'walking' profile for pedestrian routes.
           waypoints: [
             {
-              coordinates: [input.from.lng, input.from.lat],
+              coordinates: [start.lng, start.lat],
             },
             {
-              coordinates: [input.to.lng, input.to.lat],
+              coordinates: [finish.lng, finish.lat],
             },
           ],
         })
@@ -51,8 +56,8 @@ export const navigationRouter = createTRPCRouter({
         startingAtTimestamp + totalDurationInSeconds * 1000
 
       const navigation = {
-        start: input.from,
-        finish: input.to,
+        start,
+        finish,
         startingAtTimestamp,
         finishingAtTimestamp,
         geometry: route.geometry,

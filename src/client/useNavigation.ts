@@ -1,7 +1,6 @@
-import { atom, useSetAtom, useStore } from "jotai"
+import { atom, useSetAtom } from "jotai"
 import { useCallback } from "react"
 import { api } from "~/utils/api"
-import { playerLocationAtom } from "./WalkerMarker"
 import { usePlayer } from "./usePlayer"
 
 export const navigatingToObservationIdAtom = atom<number | null>(null)
@@ -10,7 +9,6 @@ export const navigationEtaAtom = atom<Date | null>(null)
 export const navigationDistanceInMeterAtom = atom(0)
 
 export const useNavigation = () => {
-  const store = useStore()
   const { mutateAsync: calcNavigation } =
     api.navigation.calcNavigation.useMutation()
   const setObservationId = useSetAtom(navigatingToObservationIdAtom)
@@ -32,7 +30,6 @@ export const useNavigation = () => {
       if (!playerId) return
       setObservationId(observationId || null)
       const navigation = await calcNavigation({
-        from: store.get(playerLocationAtom),
         to: {
           lat,
           lng,
@@ -50,7 +47,6 @@ export const useNavigation = () => {
       setIsNavigating,
       setNavigationEta,
       setObservationId,
-      store,
       trpc.player.getMe,
     ]
   )
