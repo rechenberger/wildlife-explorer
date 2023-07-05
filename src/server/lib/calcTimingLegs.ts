@@ -1,5 +1,5 @@
 import * as polyline from "@mapbox/polyline"
-import { map } from "lodash-es"
+import { findLast, last, map } from "lodash-es"
 import { calcDistanceInMeter } from "./latLng"
 
 // const geometry = "e~yuHwohi@Ff@kFpCYEgCpA}A^QzAAp@NfEHd@UJh@xF"
@@ -71,4 +71,44 @@ export const calcTimingLegs = ({
     timingLegs,
     totalDistanceInMeter,
   }
+}
+
+type TimingLeg = ReturnType<typeof calcTimingLegs>["timingLegs"][0]
+
+export const calcCurrentLocation = ({
+  timingLegs,
+}: {
+  timingLegs: TimingLeg[]
+}) => {
+  let nextStep = findLast(timingLegs, (leg) => {
+    return leg.startingAtTimestamp < Date.now()
+  })
+  nextStep = nextStep || last(timingLegs)
+
+  if (!nextStep) {
+    return
+  }
+
+  // console.log(nextStep)
+  const startingAtTimestamp = nextStep.startingAtTimestamp
+  const durationInSeconds = nextStep.durationInSeconds
+  const now = Date.now()
+  let progress = (now - startingAtTimestamp) / (durationInSeconds * 1000)
+  if (progress > 1) {
+    return null
+  }
+  progress = Math.min(Math.max(progress, 0), 1)
+
+  const lat =
+    nextStep.from.lat + (nextStep.to.lat - nextStep.from.lat) * progress
+  const lng =
+    nextStep.from.lng + (nextStep.to.lng - nextStep.from.lng) * progress
+
+  // TODO: find out when and why this happens
+  if (isNaN(lat) || isNaN(lng)) {
+    console.error("lat or lng is NaN", { lat, lng })
+    return null
+  }
+
+  return { lat, lng }
 }
