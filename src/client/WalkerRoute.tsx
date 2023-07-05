@@ -4,12 +4,8 @@ import { Footprints } from "lucide-react"
 import { useMemo } from "react"
 import { Layer, Marker, Source } from "react-map-gl"
 import { calcTimingLegs } from "~/server/lib/calcTimingLegs"
-import { apiJotai } from "~/utils/api"
 import { playerLocationAtom } from "./WalkerMarker"
 import { usePlayer } from "./usePlayer"
-
-export const calcNavigationAtom =
-  apiJotai.navigation.calcNavigation.atomWithMutation()
 
 const SHOW_FOOTSTEPS = false
 
