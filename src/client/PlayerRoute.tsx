@@ -37,9 +37,12 @@ export const PlayerRoute = ({
     ).map((leg) => leg.from)
     const lastPoint = last(result.timingLegs)?.to
     if (!lastPoint) return []
-    points = [playerLocation, ...points, lastPoint]
+    if (isMe) {
+      points = [playerLocation, ...points]
+    }
+    points = [...points, lastPoint]
     return points
-  }, [playerLocation, result])
+  }, [isMe, playerLocation, result])
 
   const geoJson = useMemo(
     () =>

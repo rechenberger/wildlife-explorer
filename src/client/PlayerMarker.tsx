@@ -72,11 +72,11 @@ export const PlayerMarker = ({
     <>
       <Marker
         ref={markerRef}
-        latitude={store.get(playerLocationAtom).lat}
-        longitude={store.get(playerLocationAtom).lng}
+        latitude={player.lat}
+        longitude={player.lng}
         anchor="center"
         style={{
-          zIndex: 30,
+          zIndex: isMe ? 30 : 25,
         }}
       >
         <div className="flex flex-col items-center">
