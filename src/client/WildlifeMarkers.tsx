@@ -9,7 +9,7 @@ import { currentObservationIdAtom } from "./CurrentObservation"
 import { cn } from "./cn"
 import { useActiveNavigation } from "./useActiveNavigation"
 import { useGetWildlifeName } from "./useGetWildlifeName"
-import { navigatingToObservationIdAtom } from "./useNavigation"
+import { navigatingToObservationIdAtom, useNavigation } from "./useNavigation"
 import { usePlayer } from "./usePlayer"
 
 export const useWildlife = () => {
@@ -42,6 +42,7 @@ export const WildlifeMarkers = () => {
 
   const getName = useGetWildlifeName()
   const { isNavigating } = useActiveNavigation()
+  const { navigate } = useNavigation()
 
   return (
     <>
@@ -88,6 +89,15 @@ export const WildlifeMarkers = () => {
                 //   lat: w.lat,
                 //   lng: w.lng,
                 // })
+              }}
+              onDoubleClick={(e) => {
+                e.stopPropagation()
+                e.preventDefault()
+                navigate({
+                  lat: w.lat,
+                  lng: w.lng,
+                  observationId: w.observationId,
+                })
               }}
             >
               {/* <Squirrel size={24} className="animate text-white" /> */}
