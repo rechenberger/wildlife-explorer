@@ -4,6 +4,7 @@ import { calcDistanceInMeter } from "~/server/lib/latLng"
 import { type LatLng } from "~/server/schema/LatLng"
 import { playerLocationAtom } from "./PlayerMarker"
 import { cn } from "./cn"
+import { formatMeters } from "./formatMeters"
 
 export const Away = ({ location }: { location: LatLng }) => {
   const playerLocation = useAtomValue(playerLocationAtom)
@@ -19,7 +20,7 @@ export const Away = ({ location }: { location: LatLng }) => {
           isClose && "text-green-600"
         )}
       >
-        {distanceInMeter}m away
+        {formatMeters(distanceInMeter)} away
       </div>
     </>
   )

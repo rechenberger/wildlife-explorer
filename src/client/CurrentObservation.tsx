@@ -13,6 +13,7 @@ import { Away } from "./Away"
 import { TimeAgo } from "./TimeAgo"
 import { useWildlife } from "./WildlifeMarkers"
 import { cn } from "./cn"
+import { formatMeters } from "./formatMeters"
 import { useGetWildlifeName } from "./useGetWildlifeName"
 import { navigatingToObservationIdAtom, useNavigation } from "./useNavigation"
 import { usePlayer } from "./usePlayer"
@@ -98,7 +99,9 @@ export const CurrentObservation = () => {
               <div className="flex flex-row items-center gap-1 text-sm font-bold text-amber-500">
                 <LocateOff size={16} className="inline-block" />
                 {/* <span>Caught</span> */}
-                <span>{w.metadata.observationPositionalAccuracy}m</span>
+                <span>
+                  {formatMeters(w.metadata.observationPositionalAccuracy)}
+                </span>
               </div>
             )}
         </div>
