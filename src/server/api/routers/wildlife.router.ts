@@ -27,7 +27,7 @@ export const wildlifeRouter = createTRPCRouter({
   nearMe: playerProcedure.query(async ({ ctx }) => {
     const bbox = calculateBoundingBox({
       center: ctx.player,
-      radiusInKm: RADIUS_IN_KM_SEE_WILDLIFE_SMALL,
+      radiusInKm: RADIUS_IN_KM_SEE_WILDLIFE_BIG,
     })
 
     const wildlifeRaw = await ctx.prisma.wildlife.findMany({
