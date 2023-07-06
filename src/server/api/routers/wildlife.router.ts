@@ -5,8 +5,9 @@ import { chunk, filter, first, flatMap, map, uniqBy } from "lodash-es"
 import { z } from "zod"
 import {
   DEFAULT_DB_CHUNK_SIZE,
-  RADIUS_IN_KM_SEE_WILDLIFE_BIG,
-  RADIUS_IN_KM_SEE_WILDLIFE_SMALL,
+  RADIUS_IN_KM_SCAN_WILDLIFE_BIG,
+  RADIUS_IN_KM_SCAN_WILDLIFE_SMALL,
+  RADIUS_IN_KM_SEE_WILDLIFE,
   SCAN_COOLDOWN_IN_SECONDS,
 } from "~/config"
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc"
@@ -27,7 +28,7 @@ export const wildlifeRouter = createTRPCRouter({
   nearMe: playerProcedure.query(async ({ ctx }) => {
     const bbox = calculateBoundingBox({
       center: ctx.player,
-      radiusInKm: RADIUS_IN_KM_SEE_WILDLIFE_BIG,
+      radiusInKm: RADIUS_IN_KM_SEE_WILDLIFE,
     })
 
     const wildlifeRaw = await ctx.prisma.wildlife.findMany({
@@ -85,12 +86,12 @@ export const wildlifeRouter = createTRPCRouter({
       findObservations({
         lat: ctx.player.lat,
         lng: ctx.player.lng,
-        radiusInKm: RADIUS_IN_KM_SEE_WILDLIFE_SMALL,
+        radiusInKm: RADIUS_IN_KM_SCAN_WILDLIFE_SMALL,
       }),
       findObservations({
         lat: ctx.player.lat,
         lng: ctx.player.lng,
-        radiusInKm: RADIUS_IN_KM_SEE_WILDLIFE_BIG,
+        radiusInKm: RADIUS_IN_KM_SCAN_WILDLIFE_BIG,
       }),
     ])
 

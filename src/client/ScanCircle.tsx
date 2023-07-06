@@ -2,8 +2,8 @@ import * as turf from "@turf/turf"
 import { useAtomValue } from "jotai"
 import { Layer, Source } from "react-map-gl"
 import {
-  RADIUS_IN_KM_SEE_WILDLIFE_BIG,
-  RADIUS_IN_KM_SEE_WILDLIFE_SMALL,
+  RADIUS_IN_KM_SCAN_WILDLIFE_BIG,
+  RADIUS_IN_KM_SCAN_WILDLIFE_SMALL,
 } from "~/config"
 import { scanningLocationAtom } from "./ScanButton"
 
@@ -12,8 +12,8 @@ export const ScanCircle = () => {
   if (!location) return null
   const centerCoordinates = [location.lng, location.lat] // Example coordinates
   const circles = [
-    RADIUS_IN_KM_SEE_WILDLIFE_SMALL,
-    RADIUS_IN_KM_SEE_WILDLIFE_BIG,
+    RADIUS_IN_KM_SCAN_WILDLIFE_SMALL,
+    RADIUS_IN_KM_SCAN_WILDLIFE_BIG,
   ]
 
   return (
