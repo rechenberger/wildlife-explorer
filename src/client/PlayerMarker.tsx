@@ -8,6 +8,7 @@ import {
   calcTimingLegs,
 } from "~/server/lib/calcTimingLegs"
 import { type RouterOutputs } from "~/utils/api"
+import { otherPlayersLocationAtom } from "./OtherPlayers"
 import { cn } from "./cn"
 
 export const playerLocationAtom = atom({
@@ -28,7 +29,6 @@ export const PlayerMarker = ({
 }) => {
   const store = useStore()
   const setPlayerLocation = useSetAtom(playerLocationAtom)
-
   const markerRef = useRef<mapboxgl.Marker | null>(null)
   const frameRef = useRef<number | undefined>()
 
@@ -56,6 +56,11 @@ export const PlayerMarker = ({
     markerRef.current.setLngLat(currentLocation)
     if (isMe) {
       setPlayerLocation(currentLocation)
+    } else {
+      store.set(otherPlayersLocationAtom, (dict) => ({
+        ...dict,
+        [player.id]: currentLocation,
+      }))
     }
 
     frameRef.current = requestAnimationFrame(animateMarker)

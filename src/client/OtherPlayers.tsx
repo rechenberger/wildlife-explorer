@@ -1,10 +1,14 @@
+import { atom } from "jotai"
 import { map } from "lodash-es"
 import { Fragment } from "react"
 import { OTHER_PLAYER_REFETCH_INTERVAL_IN_MS } from "~/config"
+import { type LatLng } from "~/server/schema/LatLng"
 import { api } from "~/utils/api"
 import { PlayerMarker } from "./PlayerMarker"
-import { usePlayer } from "./usePlayer"
 import { PlayerRoute } from "./PlayerRoute"
+import { usePlayer } from "./usePlayer"
+
+export const otherPlayersLocationAtom = atom<Record<string, LatLng>>({})
 
 export const OtherPlayers = () => {
   const { playerId } = usePlayer()

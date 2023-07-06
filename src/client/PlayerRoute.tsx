@@ -5,6 +5,7 @@ import { useMemo } from "react"
 import { Layer, Marker, Source } from "react-map-gl"
 import { calcTimingLegs } from "~/server/lib/calcTimingLegs"
 import { type RouterOutputs } from "~/utils/api"
+import { otherPlayersLocationAtom } from "./OtherPlayers"
 import { playerLocationAtom } from "./PlayerMarker"
 import { cn } from "./cn"
 
@@ -29,6 +30,7 @@ export const PlayerRoute = ({
     [player?.metadata?.navigation]
   )
   const playerLocation = useAtomValue(playerLocationAtom)
+  const otherPlayerLocation = useAtomValue(otherPlayersLocationAtom)
   const points = useMemo(() => {
     if (!result) return []
     let points = filter(
@@ -39,10 +41,15 @@ export const PlayerRoute = ({
     if (!lastPoint) return []
     if (isMe) {
       points = [playerLocation, ...points]
+    } else {
+      const location = otherPlayerLocation[player.id]
+      if (location) {
+        points = [location, ...points]
+      }
     }
     points = [...points, lastPoint]
     return points
-  }, [isMe, playerLocation, result])
+  }, [isMe, otherPlayerLocation, player.id, playerLocation, result])
 
   const geoJson = useMemo(
     () =>
