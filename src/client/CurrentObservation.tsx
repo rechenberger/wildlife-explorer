@@ -1,10 +1,13 @@
 import { atom, useAtomValue, useSetAtom } from "jotai"
-import { Check, Clock, ExternalLink, Frown, X } from "lucide-react"
+import { Check, Clock, ExternalLink, Frown, LocateOff, X } from "lucide-react"
 import dynamic from "next/dynamic"
 import Image from "next/image"
 import Link from "next/link"
 import { toast } from "sonner"
-import { SHOW_OBSERVATION_JSON } from "~/config"
+import {
+  MIN_METER_ACCURACY_SHOW_INACCURATE,
+  SHOW_OBSERVATION_JSON,
+} from "~/config"
 import { api } from "~/utils/api"
 import { Away } from "./Away"
 import { TimeAgo } from "./TimeAgo"
@@ -89,6 +92,15 @@ export const CurrentObservation = () => {
               <TimeAgo date={w.caughtAt} addSuffix />
             </div>
           )}
+          {!!w.metadata.observationPositionalAccuracy &&
+            w.metadata.observationPositionalAccuracy >
+              MIN_METER_ACCURACY_SHOW_INACCURATE && (
+              <div className="flex flex-row items-center gap-1 text-sm font-bold text-amber-500">
+                <LocateOff size={16} className="inline-block" />
+                {/* <span>Caught</span> */}
+                <span>{w.metadata.observationPositionalAccuracy}m</span>
+              </div>
+            )}
         </div>
         {w.metadata.observationImageUrlMedium ? (
           <div className="relative -mx-4 aspect-square">
