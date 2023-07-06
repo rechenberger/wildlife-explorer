@@ -20,8 +20,8 @@ export default function Page() {
         <Eta />
         <WildlifeMarkers />
         <OtherPlayers />
-        {player && <PlayerRoute player={player} />}
-        {player && <PlayerMarker player={player} />}
+        {player && <PlayerRoute player={player} isMe />}
+        {player && <PlayerMarker player={player} isMe />}
         <CurrentObservation />
         <MainActionButtons />
         <MapControls />

@@ -6,6 +6,7 @@ import { Layer, Marker, Source } from "react-map-gl"
 import { calcTimingLegs } from "~/server/lib/calcTimingLegs"
 import { type RouterOutputs } from "~/utils/api"
 import { playerLocationAtom } from "./PlayerMarker"
+import { cn } from "./cn"
 
 const SHOW_FOOTSTEPS = false
 
@@ -13,7 +14,13 @@ type Player =
   | RouterOutputs["player"]["getMe"]
   | RouterOutputs["player"]["others"][number]
 
-export const PlayerRoute = ({ player }: { player: Player }) => {
+export const PlayerRoute = ({
+  player,
+  isMe,
+}: {
+  player: Player
+  isMe?: boolean
+}) => {
   const result = useMemo(
     () =>
       player?.metadata?.navigation
@@ -63,7 +70,8 @@ export const PlayerRoute = ({ player }: { player: Player }) => {
             "line-cap": "round",
           }}
           paint={{
-            "line-color": "#60a5fa",
+            "line-color": isMe ? "#60a5fa" : "#a855f7",
+            "line-opacity": isMe ? 1 : 0.5,
             "line-width": 8,
           }}
         />
@@ -77,7 +85,12 @@ export const PlayerRoute = ({ player }: { player: Player }) => {
               longitude={point.lng}
               anchor="center"
             >
-              <div className="relative aspect-square rounded-full border border-white bg-blue-500 p-0.5">
+              <div
+                className={cn(
+                  "relative aspect-square rounded-full border border-white p-0.5",
+                  isMe ? "bg-blue-500" : "bg-purple-500 opacity-50"
+                )}
+              >
                 <Footprints size={8} className="animate text-white" />
                 {/* <div className="absolute inset-0 animate-ping rounded-full ring-2 ring-blue-400" /> */}
               </div>
