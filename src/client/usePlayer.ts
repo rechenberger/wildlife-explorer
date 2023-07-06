@@ -2,7 +2,7 @@ import { useSetAtom } from "jotai"
 import { useSession } from "next-auth/react"
 import { useRouter } from "next/router"
 import { api } from "~/utils/api"
-import { playerLocationAtom } from "./WalkerMarker"
+import { playerLocationAtom } from "./PlayerMarker"
 
 export const usePlayer = () => {
   const session = useSession()

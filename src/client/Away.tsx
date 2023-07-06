@@ -2,7 +2,7 @@ import { useAtomValue } from "jotai"
 import { RADIUS_IN_M_CATCH_WILDLIFE } from "~/config"
 import { calcDistanceInMeter } from "~/server/lib/latLng"
 import { type LatLng } from "~/server/schema/LatLng"
-import { playerLocationAtom } from "./WalkerMarker"
+import { playerLocationAtom } from "./PlayerMarker"
 import { cn } from "./cn"
 
 export const Away = ({ location }: { location: LatLng }) => {

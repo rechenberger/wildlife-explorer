@@ -1,6 +1,6 @@
 import { useStore } from "jotai"
 import { useEffect } from "react"
-import { playerLocationAtom } from "./WalkerMarker"
+import { playerLocationAtom } from "./PlayerMarker"
 import { useMapRef } from "./useMapRef"
 
 export const MapControls = () => {

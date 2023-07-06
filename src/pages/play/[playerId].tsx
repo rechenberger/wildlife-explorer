@@ -5,14 +5,14 @@ import { MainLayout } from "~/client/MainLayout"
 import { MapBase } from "~/client/MapBase"
 import { MapControls } from "~/client/MapControls"
 import { OtherPlayers } from "~/client/OtherPlayers"
+import { PlayerMarker } from "~/client/PlayerMarker"
+import { PlayerRoute } from "~/client/PlayerRoute"
 import { ScanCircle } from "~/client/ScanCircle"
-import { WalkerMarker } from "~/client/WalkerMarker"
-import { WalkerRoute } from "~/client/WalkerRoute"
 import { WildlifeMarkers } from "~/client/WildlifeMarkers"
 import { usePlayer } from "~/client/usePlayer"
 
 export default function Page() {
-  usePlayer()
+  const { player } = usePlayer()
   return (
     <MainLayout>
       <MapBase>
@@ -20,8 +20,8 @@ export default function Page() {
         <Eta />
         <WildlifeMarkers />
         <OtherPlayers />
-        <WalkerRoute />
-        <WalkerMarker />
+        {player && <PlayerRoute player={player} />}
+        {player && <PlayerMarker player={player} />}
         <CurrentObservation />
         <MainActionButtons />
         <MapControls />

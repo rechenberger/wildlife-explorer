@@ -7,21 +7,24 @@ import {
   calcCurrentLocation,
   calcTimingLegs,
 } from "~/server/lib/calcTimingLegs"
-import { usePlayer } from "./usePlayer"
+import { type RouterOutputs } from "~/utils/api"
 
 export const playerLocationAtom = atom({
   lat: DEFAULT_LOCATION.lat,
   lng: DEFAULT_LOCATION.lng,
 })
 
-export const WalkerMarker = () => {
+type Player =
+  | RouterOutputs["player"]["getMe"]
+  | RouterOutputs["player"]["others"][number]
+
+export const PlayerMarker = ({ player }: { player: Player }) => {
   const store = useStore()
   const setPlayerLocation = useSetAtom(playerLocationAtom)
 
   const markerRef = useRef<mapboxgl.Marker | null>(null)
   const frameRef = useRef<number | undefined>()
 
-  const { player } = usePlayer()
   const result = useMemo(
     () =>
       player?.metadata?.navigation

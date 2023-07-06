@@ -4,13 +4,16 @@ import { Footprints } from "lucide-react"
 import { useMemo } from "react"
 import { Layer, Marker, Source } from "react-map-gl"
 import { calcTimingLegs } from "~/server/lib/calcTimingLegs"
-import { playerLocationAtom } from "./WalkerMarker"
-import { usePlayer } from "./usePlayer"
+import { type RouterOutputs } from "~/utils/api"
+import { playerLocationAtom } from "./PlayerMarker"
 
 const SHOW_FOOTSTEPS = false
 
-export const WalkerRoute = () => {
-  const { player } = usePlayer()
+type Player =
+  | RouterOutputs["player"]["getMe"]
+  | RouterOutputs["player"]["others"][number]
+
+export const PlayerRoute = ({ player }: { player: Player }) => {
   const result = useMemo(
     () =>
       player?.metadata?.navigation
