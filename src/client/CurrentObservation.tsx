@@ -1,5 +1,5 @@
 import { atom, useAtomValue, useSetAtom } from "jotai"
-import { Check, Clock, ExternalLink, X } from "lucide-react"
+import { Check, Clock, ExternalLink, Frown, X } from "lucide-react"
 import dynamic from "next/dynamic"
 import Image from "next/image"
 import Link from "next/link"
@@ -69,17 +69,23 @@ export const CurrentObservation = () => {
         </div>
         <div className="-mt-2 flex flex-row flex-wrap justify-between gap-2">
           {location && <Away location={location} />}
+          {w.metadata.observationCaptive && (
+            <div className="flex flex-row items-center gap-1 text-sm font-bold text-red-500">
+              <Frown size={16} className="inline-block" />
+              <span>Captive</span>
+            </div>
+          )}
           {onCooldown && (
             <div className="flex flex-row items-center gap-1 text-sm font-bold text-gray-500">
               <Clock size={16} className="inline-block" />
-              <span>Respawn</span>
+              {/* <span>Respawn</span> */}
               <TimeAgo date={w.respawnsAt} addSuffix />
             </div>
           )}
           {!!w.caughtAt && (
             <div className="flex flex-row items-center gap-1 text-sm font-bold text-green-600">
               <Check size={16} className="inline-block" />
-              <span>Caught</span>
+              {/* <span>Caught</span> */}
               <TimeAgo date={w.caughtAt} addSuffix />
             </div>
           )}
