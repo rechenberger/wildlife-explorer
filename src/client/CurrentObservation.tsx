@@ -90,17 +90,27 @@ export const CurrentObservation = () => {
             </div>
           )}
         </div>
-        {w.metadata.taxonImageUrlMedium && (
+        {w.metadata.observationImageUrlMedium ? (
           <div className="relative -mx-4 aspect-square">
             <Image
-              src={w.metadata.taxonImageUrlMedium}
+              src={w.metadata.observationImageUrlMedium}
               className="w-full object-cover object-center"
               alt={"Observation"}
               unoptimized
               fill={true}
             />
           </div>
-        )}
+        ) : w.metadata.taxonImageUrlMedium ? (
+          <div className="relative -mx-4 aspect-square">
+            <Image
+              src={w.metadata.taxonImageUrlMedium}
+              className="w-full object-cover object-center"
+              alt={getName(w)}
+              unoptimized
+              fill={true}
+            />
+          </div>
+        ) : null}
         {SHOW_OBSERVATION_JSON && (
           <div className="overflow-hidden text-[10px]">
             <JsonViewer value={w} theme="light" />

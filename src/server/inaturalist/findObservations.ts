@@ -62,6 +62,11 @@ export const findObservations = async ({
         observationAt: o.observed_on,
         observationCaptive: o.captive,
         observationUserId: o.user.id,
+        observationImageUrlSquare: o.photos[0]?.url,
+        observationImageUrlMedium: o.photos[0]?.url.replace(
+          "/square.",
+          "/medium."
+        ),
 
         // imagesObservation: map(o.photos, (p) => p.url),
       } satisfies WildlifeMetadata,

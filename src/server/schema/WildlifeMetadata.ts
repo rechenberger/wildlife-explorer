@@ -28,6 +28,8 @@ export const WildlifeMetadata = z.object({
   observationAt: z.string().nullable(),
   observationCaptive: z.boolean(),
   observationUserId: z.number(),
+  observationImageUrlSquare: z.string().optional(),
+  observationImageUrlMedium: z.string().optional(),
 })
 
 export type WildlifeMetadata = z.infer<typeof WildlifeMetadata>
