@@ -4,6 +4,7 @@ import { OTHER_PLAYER_REFETCH_INTERVAL_IN_MS } from "~/config"
 import { api } from "~/utils/api"
 import { PlayerMarker } from "./PlayerMarker"
 import { usePlayer } from "./usePlayer"
+import { PlayerRoute } from "./PlayerRoute"
 
 export const OtherPlayers = () => {
   const { playerId } = usePlayer()
@@ -23,7 +24,7 @@ export const OtherPlayers = () => {
         return (
           <Fragment key={player.id}>
             <PlayerMarker player={player} />
-            {/* <PlayerRoute player={player} /> */}
+            <PlayerRoute player={player} />
           </Fragment>
         )
       })}

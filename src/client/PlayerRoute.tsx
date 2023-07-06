@@ -61,13 +61,15 @@ export const PlayerRoute = ({
 
   if (!result) return null
 
+  const id = `route-${player.id}`
+
   return (
     <>
-      <Source id="route" type="geojson" data={geoJson}>
+      <Source id={id} type="geojson" data={geoJson}>
         <Layer
-          id="route"
+          id={id}
           type="line"
-          source="route"
+          source={id}
           layout={{
             "line-join": "round",
             "line-cap": "round",
