@@ -101,7 +101,7 @@ model Catch {
     wildlifeId String
     wildlife   Wildlife @relation(fields: [wildlifeId], references: [id], onDelete: Cascade)
 
-    seed String?
+    seed String
 
     @@unique([wildlifeId, playerId])
 }
