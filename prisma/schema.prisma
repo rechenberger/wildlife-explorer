@@ -106,6 +106,7 @@ model Catch {
     battleOrderPosition Int?
 
     @@unique([wildlifeId, playerId])
+    @@index([playerId, battleOrderPosition])
 }
 
 model Wildlife {

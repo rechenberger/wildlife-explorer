@@ -6,9 +6,11 @@ import { BattleParticipationMetadata } from "~/server/schema/BattleParticipation
 export const getBattleForSimulation = async ({
   prisma,
   battleId,
+  playerPartyLimit = 6,
 }: {
   prisma: PrismaClient
   battleId: string
+  playerPartyLimit?: number
 }) => {
   const battleRaw = await prisma.battle.findUniqueOrThrow({
     where: {
@@ -17,7 +19,19 @@ export const getBattleForSimulation = async ({
     include: {
       battleParticipants: {
         include: {
-          player: true,
+          player: {
+            include: {
+              catches: {
+                include: {
+                  wildlife: true,
+                },
+                take: playerPartyLimit,
+                orderBy: {
+                  battleOrderPosition: "asc",
+                },
+              },
+            },
+          },
           wildlife: true,
         },
       },
