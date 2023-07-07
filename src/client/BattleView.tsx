@@ -1,5 +1,5 @@
 import { find, map } from "lodash-es"
-import { Undo2 } from "lucide-react"
+import { Flame, Undo2 } from "lucide-react"
 import Image from "next/image"
 import { Fragment } from "react"
 import { toast } from "sonner"
@@ -132,8 +132,8 @@ export const BattleView = () => {
                               className={cn(
                                 "rounded-full border border-dashed border-black/10 bg-black/5 px-4 py-1 text-black/60",
                                 isMainSide
-                                  ? "-mb-1 ml-4 self-start rounded-bl-none"
-                                  : "-mt-0 mr-4 self-end rounded-tr-none"
+                                  ? "ml-4 self-start rounded-bl-none"
+                                  : "mr-4 self-end rounded-tr-none"
                               )}
                             >
                               {isLoading ? (
@@ -176,12 +176,13 @@ export const BattleView = () => {
                             <div
                               className={cn(
                                 "flex items-center gap-2",
-                                isMainSide ? "flex-row" : "flex-row-reverse"
+                                isMainSide ? "flex-row" : "flex-row-reverse",
+                                isMainSide ? "items-start" : "items-end"
                               )}
                             >
                               <div
                                 className={cn(
-                                  "flex items-center gap-4 rounded-full bg-black/10 md:w-44",
+                                  "flex w-44 items-center gap-4 rounded-full bg-black/10",
                                   isMainSide ? "flex-row" : "flex-row-reverse"
                                   // 'ring',
                                   // hpFull
@@ -237,9 +238,9 @@ export const BattleView = () => {
                                 </div>
                                 <div className="w-2" />
                               </div>
-                              <div className="flex-1" />
+                              {/* <div className="hidden flex-1 md:flex" /> */}
                               {isMySide && isActive && (
-                                <div className="grid grid-cols-2 gap-1">
+                                <div className="grid flex-1 grid-cols-1 gap-1">
                                   {map(
                                     fillWithNulls(moves, MAX_MOVES_PER_FIGHTER),
                                     (move, moveIdx) => {
@@ -249,8 +250,10 @@ export const BattleView = () => {
                                         <button
                                           key={moveIdx}
                                           className={cn(
-                                            "truncate rounded bg-black/10 px-2 py-1 text-xs hover:bg-black/20",
-                                            disabled && "opacity-20"
+                                            "truncate rounded-md bg-black/10 text-xs hover:bg-black/20",
+                                            disabled && "opacity-20",
+                                            "flex items-center text-left",
+                                            "bg-red-400/50"
                                           )}
                                           disabled={disabled}
                                           onClick={() => {
@@ -263,7 +266,24 @@ export const BattleView = () => {
                                             })
                                           }}
                                         >
-                                          {move?.name || "-"}
+                                          <div className="flex h-full items-center justify-center rounded-r-md bg-red-400 px-1">
+                                            <Flame className="h-4 w-4" />
+                                          </div>
+                                          <div className="flex flex-1 gap-3 overflow-hidden py-1 pl-1 pr-2">
+                                            <div className="flex-1 truncate">
+                                              {move?.name || "-"}
+                                            </div>
+                                            <div className="hidden shrink-0 opacity-60 sm:flex">
+                                              {move?.definition.accuracy}
+                                            </div>
+                                            <div className="hidden shrink-0 opacity-60 sm:flex">
+                                              {move?.definition.basePower}
+                                            </div>
+                                            <div className="shrink-0 opacity-60">
+                                              {move?.status?.pp}/
+                                              {move?.status?.maxpp}
+                                            </div>
+                                          </div>
                                         </button>
                                       )
                                     }
