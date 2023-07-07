@@ -103,9 +103,21 @@ export const BattleView = () => {
                       )}
                     >
                       {map(side.fighters, (fighter) => {
-                        const { hp, hpMax, isActive, moves, status, lastMove } =
-                          fighter.fighterStatus
-                        if (!isActive && !BIG_INACTIVE_FIGHTER) return null
+                        const {
+                          hp,
+                          hpMax,
+                          isActive,
+                          moves,
+                          status,
+                          lastMove,
+                          faintedThisTurn,
+                        } = fighter.fighterStatus
+                        if (
+                          !isActive &&
+                          !BIG_INACTIVE_FIGHTER &&
+                          !faintedThisTurn
+                        )
+                          return null
                         const hpFull = hp >= hpMax
                         const fainted = hp <= 0
                         return (
@@ -135,6 +147,8 @@ export const BattleView = () => {
                                   </span>{" "}
                                   damage
                                 </>
+                              ) : faintedThisTurn ? (
+                                "fainted"
                               ) : (
                                 "enters the battle"
                               )}
@@ -165,7 +179,7 @@ export const BattleView = () => {
                                       : fainted
                                       ? "ring-red-500"
                                       : "ring-amber-400",
-                                    !isActive && "grayscale"
+                                    !isActive && !faintedThisTurn && "grayscale"
                                   )}
                                 >
                                   {fighter.wildlife.metadata
@@ -204,7 +218,7 @@ export const BattleView = () => {
                                 <div className="w-2" />
                               </div>
                               <div className="flex-1" />
-                              {isMySide && (
+                              {isMySide && isActive && (
                                 <div className="grid grid-cols-2 gap-1">
                                   {map(
                                     fillWithNulls(moves, MAX_MOVES_PER_FIGHTER),

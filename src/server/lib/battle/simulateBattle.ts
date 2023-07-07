@@ -133,6 +133,7 @@ export const simulateBattle = async ({
               hpMax: p.maxhp,
               status: p.status,
               isActive: p.isActive,
+              faintedThisTurn: side.faintedThisTurn === p,
               moves: p.moves.map((move) => {
                 const data = p.getMoveData(move)
                 const definition = Dex.moves.getByID(toID(data?.id))
