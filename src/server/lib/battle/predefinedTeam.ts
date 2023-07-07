@@ -1,7 +1,7 @@
 export const pikachu = {
   name: "Pikachu",
   species: "Pikachu",
-  moves: ["thunderbolt"],
+  moves: ["thunderbolt", "tackle", "surf", "thunder"],
   ability: "Static",
   item: "Light Ball",
   nature: "Timid",
