@@ -181,7 +181,7 @@ export const BattleView = () => {
                                         <button
                                           key={moveIdx}
                                           className={cn(
-                                            "truncate rounded bg-black/10 px-2 py-1 text-xs",
+                                            "truncate rounded bg-black/10 px-2 py-1 text-xs hover:bg-black/20",
                                             move ? "text-black" : "opacity-20"
                                           )}
                                           disabled={!move}
