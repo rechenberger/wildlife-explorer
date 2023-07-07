@@ -81,6 +81,7 @@ export const simulateBattle = async ({
   const betterOutput = () => {
     return {
       winner: battle.winner,
+      inputLog: battle.inputLog,
       sides: battle.sides.map((side, sideIdx) => {
         const team = teams[sideIdx]!
         const fighters = side.pokemon.map((p, fighterIdx) => {
@@ -105,7 +106,8 @@ export const simulateBattle = async ({
   // console.log(betterOutput())
   battle.choose("p1", "move 1")
   battle.choose("p2", "move 2")
-  console.log(betterOutput())
+  // console.log(betterOutput())
+  console.log(battle.inputLog)
 
   // const winner = battle.winner
 
