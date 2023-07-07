@@ -1,5 +1,5 @@
 import { find, map } from "lodash-es"
-import { Flame, Undo2 } from "lucide-react"
+import { Undo2 } from "lucide-react"
 import Image from "next/image"
 import { Fragment } from "react"
 import { toast } from "sonner"
@@ -10,6 +10,7 @@ import {
 } from "~/config"
 import { api } from "~/utils/api"
 import { cn } from "./cn"
+import { getTypeIcon } from "./typeIcons"
 import { useGetWildlifeName } from "./useGetWildlifeName"
 import { usePlayer } from "./usePlayer"
 
@@ -246,6 +247,9 @@ export const BattleView = () => {
                                     (move, moveIdx) => {
                                       // console.log(move)
                                       const disabled = !move || isLoading
+                                      const typeIcon = move?.definition.type
+                                        ? getTypeIcon(move?.definition.type)
+                                        : null
                                       return (
                                         <button
                                           key={moveIdx}
@@ -253,7 +257,7 @@ export const BattleView = () => {
                                             "truncate rounded-md bg-black/10 text-xs hover:bg-black/20",
                                             disabled && "opacity-20",
                                             "flex items-center text-left",
-                                            "bg-red-400/50"
+                                            typeIcon?.bgHalf
                                           )}
                                           disabled={disabled}
                                           onClick={() => {
@@ -266,9 +270,17 @@ export const BattleView = () => {
                                             })
                                           }}
                                         >
-                                          <div className="flex h-full items-center justify-center rounded-r-md bg-red-400 px-1">
-                                            <Flame className="h-4 w-4" />
-                                          </div>
+                                          {typeIcon && (
+                                            <div
+                                              className={cn(
+                                                "flex h-full items-center justify-center rounded-r-md px-1",
+                                                typeIcon.bgFull
+                                              )}
+                                              title={typeIcon.name}
+                                            >
+                                              <typeIcon.icon className="h-4 w-4" />
+                                            </div>
+                                          )}
                                           <div className="flex flex-1 gap-3 overflow-hidden py-1 pl-1 pr-2">
                                             <div className="flex-1 truncate">
                                               {move?.name || "-"}
