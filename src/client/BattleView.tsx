@@ -29,28 +29,32 @@ export const BattleView = () => {
 
   const activeBattle = find(battles, (b) => b.status === "IN_PROGRESS")
 
-  const { data: battleStatus } = api.battle.getBattleStatus.useQuery(
-    {
-      battleId: activeBattle?.id!,
-      playerId: playerId!,
-    },
-    {
-      enabled: !!activeBattle && !!playerId,
-    }
-  )
+  const { data: battleStatus, isLoading: battleLoading } =
+    api.battle.getBattleStatus.useQuery(
+      {
+        battleId: activeBattle?.id!,
+        playerId: playerId!,
+      },
+      {
+        enabled: !!activeBattle && !!playerId,
+      }
+    )
 
   const trpc = api.useContext()
-  const { mutate: makeChoice } = api.battle.makeChoice.useMutation({
-    onSuccess: () => {
-      trpc.battle.invalidate()
-    },
-    onError: (err) => toast.error(err.message),
-  })
+  const { mutate: makeChoice, isLoading: choiceLoading } =
+    api.battle.makeChoice.useMutation({
+      onSuccess: () => {
+        trpc.battle.invalidate()
+      },
+      onError: (err) => toast.error(err.message),
+    })
   const { mutate: reset } = api.battle.reset.useMutation({
     onSuccess: () => {
       trpc.battle.invalidate()
     },
   })
+
+  const isLoading = battleLoading || choiceLoading
 
   const getName = useGetWildlifeName()
 
@@ -132,25 +136,41 @@ export const BattleView = () => {
                                   : "-mt-0 mr-4 self-end rounded-tr-none"
                               )}
                             >
-                              <span className="italic text-black">
-                                {getName(fighter.wildlife)}
-                              </span>{" "}
-                              {lastMove ? (
+                              {isLoading ? (
                                 <>
-                                  uses{" "}
-                                  <span className="italic text-black">
-                                    {lastMove.name}
-                                  </span>
-                                  , dealing{" "}
-                                  <span className="italic text-black">
-                                    {lastMove.totalDamage || "no"}
-                                  </span>{" "}
-                                  damage
+                                  <div className="flex h-5 animate-pulse justify-center gap-0.5 text-lg font-extrabold">
+                                    <div className="animate-bounce">•</div>
+                                    <div className="animate-bounce delay-75">
+                                      •
+                                    </div>
+                                    <div className="animate-bounce delay-150">
+                                      •
+                                    </div>
+                                  </div>
                                 </>
-                              ) : faintedThisTurn ? (
-                                "fainted"
                               ) : (
-                                "enters the battle"
+                                <>
+                                  <span className="italic text-black">
+                                    {getName(fighter.wildlife)}
+                                  </span>{" "}
+                                  {lastMove ? (
+                                    <>
+                                      uses{" "}
+                                      <span className="italic text-black">
+                                        {lastMove.name}
+                                      </span>
+                                      , dealing{" "}
+                                      <span className="italic text-black">
+                                        {lastMove.totalDamage || "no"}
+                                      </span>{" "}
+                                      damage
+                                    </>
+                                  ) : faintedThisTurn ? (
+                                    "fainted"
+                                  ) : (
+                                    "enters the battle"
+                                  )}
+                                </>
                               )}
                             </div>
                             <div
