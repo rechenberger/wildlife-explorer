@@ -79,7 +79,7 @@ export const BattleView = () => {
           </div>
           {/* <pre>{JSON.stringify(activeBattle, null, 2)}</pre> */}
           {/* <pre>{JSON.stringify(battleStatus, null, 2)}</pre> */}
-          <div className="flex flex-col-reverse">
+          <div className="flex flex-col-reverse gap-2">
             {map(battleStatus?.sides, (side, sideIdx) => {
               const isMySide = side.player?.id === playerId
               const isMainSide = sideIdx === 0
