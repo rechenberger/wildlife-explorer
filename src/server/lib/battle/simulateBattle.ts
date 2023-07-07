@@ -95,11 +95,15 @@ export const simulateBattle = async ({
 
   // CHOICE
   if (choice) {
-    const success = battle.choose(choice.player as SideID, choice.choice)
+    const sideId = choice.player as SideID
+    const success = battle.choose(sideId, choice.choice)
     if (!success) {
       throw new Error(`Invalid choice: "${choice.choice}"`)
     }
-    battle.makeChoices()
+    if (battle[sideId]!.isChoiceDone()) {
+      // TODO: AI
+      battle.makeChoices()
+    }
   }
 
   // BATTLE STATUS

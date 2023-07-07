@@ -129,7 +129,7 @@ export const BattleView = () => {
                                 <span className="italic">{lastMove.name}</span>,
                                 dealing{" "}
                                 <span className="italic">
-                                  {lastMove.totalDamage}
+                                  {lastMove.totalDamage || "no"}
                                 </span>{" "}
                                 damage
                               </div>
