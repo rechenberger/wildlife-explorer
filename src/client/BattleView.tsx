@@ -222,7 +222,7 @@ export const BattleView = () => {
                                             })
                                           }}
                                         >
-                                          {move || "-"}
+                                          {move?.move || "-"}
                                         </button>
                                       )
                                     }

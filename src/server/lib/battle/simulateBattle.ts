@@ -124,6 +124,7 @@ export const simulateBattle = async ({
           //   )
           //   fighter = team.team[idx]
           // }
+
           return {
             ...fighter!,
             fighterStatus: {
@@ -132,7 +133,7 @@ export const simulateBattle = async ({
               hpMax: p.maxhp,
               status: p.status,
               isActive: p.isActive,
-              moves: p.moves as string[],
+              moves: p.moves.map((move) => p.getMoveData(move)),
               lastMove: p.lastMove,
               lastDamage: p.lastDamage,
             },
