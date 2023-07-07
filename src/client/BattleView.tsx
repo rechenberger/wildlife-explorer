@@ -21,6 +21,7 @@ export const BattleView = () => {
       {activeBattle ? (
         <>
           <h3 className="truncate text-2xl">Active Battle</h3>
+          <pre>{JSON.stringify(activeBattle, null, 2)}</pre>
         </>
       ) : (
         <>

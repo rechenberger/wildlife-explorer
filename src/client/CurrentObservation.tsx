@@ -204,7 +204,7 @@ export const CurrentObservation = () => {
 
               toast.promise(attackWildlife({ wildlifeId: w.id, playerId }), {
                 loading: "Catching...",
-                success: "You caught it! 🎉",
+                success: "The Battle is on! 🔥",
                 error: (err) => err.message || "Failed to catch. Try again.",
                 // icon: <></>,
               })
