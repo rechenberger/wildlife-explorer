@@ -39,80 +39,92 @@ export const BattleView = () => {
           <h3 className="truncate text-2xl">Active Battle</h3>
           {/* <pre>{JSON.stringify(activeBattle, null, 2)}</pre> */}
           {/* <pre>{JSON.stringify(battleStatus, null, 2)}</pre> */}
-          {map(battleStatus?.sides, (side, sideIdx) => {
-            const isMySide = side.player?.id === playerId
-            return (
-              <Fragment key={sideIdx}>
-                {sideIdx > 0 && (
-                  <div className="flex flex-row items-center gap-2">
-                    <hr className="flex-1" />
-                    <div className="opacity-50">vs</div>
-                    <hr className="flex-1" />
-                  </div>
-                )}
-                <div className="flex flex-col gap-4">
-                  <div className="text-xl">{isMySide ? "You" : side.name}</div>
-                  <div className="flex flex-col gap-6">
-                    {map(side.fighters, (fighter, fighterIdx) => {
-                      const { hp, hpMax } = fighter.fighterStatus
-                      const hpFull = hp >= hpMax
-                      const dead = hp <= 0
-                      return (
-                        <Fragment key={fighterIdx}>
-                          <div
-                            className={cn(
-                              "flex flex-row items-center gap-4 rounded-full bg-black/10"
-                              // 'ring',
-                              // hpFull
-                              //   ? "ring-green-500"
-                              //   : dead
-                              //   ? "ring-red-500"
-                              //   : "ring-amber-400"
-                            )}
-                          >
+          <div className="flex flex-col-reverse">
+            {map(battleStatus?.sides, (side, sideIdx) => {
+              const isMySide = side.player?.id === playerId
+              const isMainSide = sideIdx === 0
+              return (
+                <Fragment key={sideIdx}>
+                  {sideIdx > 0 && (
+                    <div className="flex flex-row items-center gap-2">
+                      <hr className="flex-1" />
+                      <div className="opacity-50">vs</div>
+                      <hr className="flex-1" />
+                    </div>
+                  )}
+                  <div
+                    className={cn(
+                      "flex flex-col gap-4",
+                      isMainSide ? "items-start" : "items-end "
+                    )}
+                  >
+                    <div className="text-xl">
+                      {isMySide ? "You" : side.name}
+                    </div>
+                    <div className="flex flex-col gap-6">
+                      {map(side.fighters, (fighter, fighterIdx) => {
+                        const { hp, hpMax } = fighter.fighterStatus
+                        const hpFull = hp >= hpMax
+                        const dead = hp <= 0
+                        return (
+                          <Fragment key={fighterIdx}>
                             <div
                               className={cn(
-                                "relative -m-1 aspect-square h-12 w-12 overflow-hidden rounded-full ring",
-                                hpFull
-                                  ? "ring-green-500"
-                                  : dead
-                                  ? "ring-red-500"
-                                  : "ring-amber-400"
+                                "flex items-center gap-4 rounded-full bg-black/10",
+                                isMainSide ? "flex-row" : "flex-row-reverse"
+                                // 'ring',
+                                // hpFull
+                                //   ? "ring-green-500"
+                                //   : dead
+                                //   ? "ring-red-500"
+                                //   : "ring-amber-400"
                               )}
                             >
-                              {fighter.wildlife.metadata
-                                .taxonImageUrlSquare && (
-                                <Image
-                                  src={
-                                    fighter.wildlife.metadata
-                                      .taxonImageUrlSquare
-                                  }
-                                  className="w-full object-cover object-center"
-                                  alt={"Observation"}
-                                  unoptimized
-                                  fill={true}
-                                />
-                              )}
-                            </div>
-                            <div className="py-1">
-                              <div className="font-bold">
-                                {fighter.wildlife
-                                  ? getName(fighter.wildlife)
-                                  : fighter.fighter.name}
+                              <div
+                                className={cn(
+                                  "relative -m-1 aspect-square h-12 w-12 overflow-hidden rounded-full ring",
+                                  hpFull
+                                    ? "ring-green-500"
+                                    : dead
+                                    ? "ring-red-500"
+                                    : "ring-amber-400"
+                                )}
+                              >
+                                {fighter.wildlife.metadata
+                                  .taxonImageUrlSquare && (
+                                  <Image
+                                    src={
+                                      fighter.wildlife.metadata
+                                        .taxonImageUrlSquare
+                                    }
+                                    className="w-full object-cover object-center"
+                                    alt={"Observation"}
+                                    unoptimized
+                                    fill={true}
+                                  />
+                                )}
                               </div>
-                              <div>
-                                {hp}/{hpMax} HP
+                              <div className={cn("py-1")}>
+                                <div className="font-bold">
+                                  {fighter.wildlife
+                                    ? getName(fighter.wildlife)
+                                    : fighter.fighter.name}
+                                </div>
+                                <div>
+                                  {hp}/{hpMax} HP
+                                </div>
                               </div>
+                              <div className="w-2" />
                             </div>
-                          </div>
-                        </Fragment>
-                      )
-                    })}
+                          </Fragment>
+                        )
+                      })}
+                    </div>
                   </div>
-                </div>
-              </Fragment>
-            )
-          })}
+                </Fragment>
+              )
+            })}
+          </div>
         </>
       ) : (
         <>
