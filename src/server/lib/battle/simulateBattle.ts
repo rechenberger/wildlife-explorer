@@ -1,4 +1,4 @@
-import { Battle, toID, type PokemonSet, type SideID } from "@pkmn/sim"
+import { Battle, Dex, toID, type PokemonSet, type SideID } from "@pkmn/sim"
 import { type PrismaClient } from "@prisma/client"
 import { map } from "lodash-es"
 import { MAX_FIGHTERS_PER_TEAM } from "~/config"
@@ -133,7 +133,15 @@ export const simulateBattle = async ({
               hpMax: p.maxhp,
               status: p.status,
               isActive: p.isActive,
-              moves: p.moves.map((move) => p.getMoveData(move)),
+              moves: p.moves.map((move) => {
+                const data = p.getMoveData(move)
+                const definition = Dex.moves.getByID(toID(data?.id))
+                return {
+                  name: data?.move || move,
+                  status: data,
+                  definition,
+                }
+              }),
               lastMove: p.lastMove,
               lastDamage: p.lastDamage,
             },

@@ -204,6 +204,7 @@ export const BattleView = () => {
                                   {map(
                                     fillWithNulls(moves, MAX_MOVES_PER_FIGHTER),
                                     (move, moveIdx) => {
+                                      // console.log(move)
                                       return (
                                         <button
                                           key={moveIdx}
@@ -222,7 +223,7 @@ export const BattleView = () => {
                                             })
                                           }}
                                         >
-                                          {move?.move || "-"}
+                                          {move?.name || "-"}
                                         </button>
                                       )
                                     }
