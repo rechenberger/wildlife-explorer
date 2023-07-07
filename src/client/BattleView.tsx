@@ -63,7 +63,7 @@ export const BattleView = () => {
                   >
                     <div className="flex flex-col gap-6 self-stretch">
                       {map(side.fighters, (fighter, fighterIdx) => {
-                        const { hp, hpMax, isActive, moves } =
+                        const { hp, hpMax, isActive, moves, status } =
                           fighter.fighterStatus
                         if (!isActive) return null
                         const hpFull = hp >= hpMax
@@ -120,8 +120,15 @@ export const BattleView = () => {
                                       ? getName(fighter.wildlife)
                                       : fighter.fighter.name}
                                   </div>
-                                  <div className="truncate">
-                                    {hp}/{hpMax} HP
+                                  <div className="flex flex-row gap-1 text-xs">
+                                    <div className="truncate">
+                                      {hp}/{hpMax} HP
+                                    </div>
+                                    {!!status && (
+                                      <div className="rounded-sm bg-red-300 px-1">
+                                        {status.toUpperCase()}
+                                      </div>
+                                    )}
                                   </div>
                                 </div>
                                 <div className="w-2" />
