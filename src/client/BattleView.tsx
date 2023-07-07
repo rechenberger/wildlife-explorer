@@ -226,15 +226,25 @@ export const BattleView = () => {
                           const dead = hp <= 0
                           return (
                             <Fragment key={fighterIdx}>
-                              <div
+                              <button
                                 className={cn(
                                   "relative aspect-square h-4 w-4 overflow-hidden rounded-full border-2",
                                   hpFull
                                     ? "border-green-500"
                                     : dead
                                     ? "border-red-500"
-                                    : "border-amber-400"
+                                    : "border-amber-400",
+                                  isMySide ? "cursor-pointer" : "cursor-default"
                                 )}
+                                onClick={() => {
+                                  if (!playerId) return
+                                  if (!isMySide) return
+                                  makeChoice({
+                                    battleId: activeBattle.id,
+                                    playerId: playerId,
+                                    choice: `switch ${fighterIdx + 1}`,
+                                  })
+                                }}
                               >
                                 {fighter.wildlife.metadata
                                   .taxonImageUrlSquare && (
@@ -249,7 +259,7 @@ export const BattleView = () => {
                                     fill={true}
                                   />
                                 )}
-                              </div>
+                              </button>
                             </Fragment>
                           )
                         }
