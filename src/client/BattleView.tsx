@@ -54,16 +54,16 @@ export const BattleView = () => {
                   )}
                   <div
                     className={cn(
-                      "flex flex-col gap-4",
-                      isMainSide ? "items-start" : "items-end "
+                      "flex gap-2",
+                      isMainSide
+                        ? "flex-col items-start"
+                        : "flex-col-reverse items-end"
                     )}
                   >
-                    <div className="text-xl">
-                      {isMySide ? "You" : side.name}
-                    </div>
                     <div className="flex flex-col gap-6">
                       {map(side.fighters, (fighter, fighterIdx) => {
-                        const { hp, hpMax } = fighter.fighterStatus
+                        const { hp, hpMax, isActive } = fighter.fighterStatus
+                        if (!isActive) return null
                         const hpFull = hp >= hpMax
                         const dead = hp <= 0
                         return (
@@ -120,6 +120,44 @@ export const BattleView = () => {
                         )
                       })}
                     </div>
+                    <div className="flex flex-row gap-1">
+                      {map(side.fighters, (fighter, fighterIdx) => {
+                        const { hp, hpMax } = fighter.fighterStatus
+                        const hpFull = hp >= hpMax
+                        const dead = hp <= 0
+                        return (
+                          <Fragment key={fighterIdx}>
+                            <div
+                              className={cn(
+                                "relative aspect-square h-4 w-4 overflow-hidden rounded-full border-2",
+                                hpFull
+                                  ? "border-green-500"
+                                  : dead
+                                  ? "border-red-500"
+                                  : "border-amber-400"
+                              )}
+                            >
+                              {fighter.wildlife.metadata
+                                .taxonImageUrlSquare && (
+                                <Image
+                                  src={
+                                    fighter.wildlife.metadata
+                                      .taxonImageUrlSquare
+                                  }
+                                  className="w-full object-cover object-center"
+                                  alt={"Observation"}
+                                  unoptimized
+                                  fill={true}
+                                />
+                              )}
+                            </div>
+                          </Fragment>
+                        )
+                      })}
+                    </div>
+                    {/* <div className="text-xl">
+                      {isMySide ? "You" : side.name}
+                    </div> */}
                   </div>
                 </Fragment>
               )

@@ -90,6 +90,7 @@ export const simulateBattle = async ({
               hp: p.hp,
               hpMax: p.maxhp,
               status: p.status,
+              isActive: p.isActive,
             },
           }
         })
