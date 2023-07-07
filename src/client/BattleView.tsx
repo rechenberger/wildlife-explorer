@@ -6,6 +6,7 @@ import { api } from "~/utils/api"
 import { cn } from "./cn"
 import { useGetWildlifeName } from "./useGetWildlifeName"
 import { usePlayer } from "./usePlayer"
+import { Undo2 } from "lucide-react"
 
 export const BattleView = () => {
   const { playerId } = usePlayer()
@@ -31,7 +32,17 @@ export const BattleView = () => {
     }
   )
 
-  const { mutate: makeChoice } = api.battle.makeChoice.useMutation()
+  const trpc = api.useContext()
+  const { mutate: makeChoice } = api.battle.makeChoice.useMutation({
+    onSuccess: () => {
+      trpc.battle.invalidate()
+    },
+  })
+  const { mutate: reset } = api.battle.reset.useMutation({
+    onSuccess: () => {
+      trpc.battle.invalidate()
+    },
+  })
 
   const getName = useGetWildlifeName()
 
@@ -39,7 +50,19 @@ export const BattleView = () => {
     <div className="fixed bottom-0 left-0 z-50 flex w-full max-w-md flex-col gap-4 rounded-t-xl bg-white p-4 text-black shadow md:bottom-8 md:left-8 md:rounded-xl">
       {activeBattle ? (
         <>
-          <h3 className="truncate text-2xl">Active Battle</h3>
+          <div className="flex flex-row gap-2">
+            <h3 className="flex-1 truncate text-2xl">Active Battle</h3>
+            <button
+              className="shrink-0"
+              onClick={() => {
+                reset({
+                  battleId: activeBattle.id,
+                })
+              }}
+            >
+              <Undo2 size={16} />
+            </button>
+          </div>
           {/* <pre>{JSON.stringify(activeBattle, null, 2)}</pre> */}
           {/* <pre>{JSON.stringify(battleStatus, null, 2)}</pre> */}
           <div className="flex flex-col-reverse">

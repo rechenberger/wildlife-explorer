@@ -5,6 +5,7 @@ import { createTRPCRouter } from "~/server/api/trpc"
 import { simulateBattle } from "~/server/lib/battle/simulateBattle"
 import { BattleMetadata } from "~/server/schema/BattleMetadata"
 import { BattleParticipationMetadata } from "~/server/schema/BattleParticipationMetadata"
+import { devProcedure } from "../middleware/devProcedure"
 import { playerProcedure } from "../middleware/playerProcedure"
 import { wildlifeProcedure } from "../middleware/wildlifeProcedure"
 
@@ -103,6 +104,20 @@ export const battleRouter = createTRPCRouter({
         battleId: input.battleId,
       })
       return battleStatus
+    }),
+
+  reset: devProcedure
+    .input(z.object({ battleId: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      await ctx.prisma.battle.update({
+        where: {
+          id: input.battleId,
+        },
+        data: {
+          status: "IN_PROGRESS",
+          metadata: {},
+        },
+      })
     }),
 
   makeChoice: playerProcedure
