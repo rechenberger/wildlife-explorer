@@ -15,6 +15,7 @@ import { useGetWildlifeName } from "./useGetWildlifeName"
 import { usePlayer } from "./usePlayer"
 
 const BIG_INACTIVE_FIGHTER = false
+const SHOW_ENEMY_MOVES = true
 
 export const BattleView = () => {
   const { playerId } = usePlayer()
@@ -240,7 +241,7 @@ export const BattleView = () => {
                                 <div className="w-2" />
                               </div>
                               {/* <div className="hidden flex-1 md:flex" /> */}
-                              {isMySide && isActive && (
+                              {(isMySide || SHOW_ENEMY_MOVES) && isActive && (
                                 <div className="grid flex-1 grid-cols-1 gap-1">
                                   {map(
                                     fillWithNulls(moves, MAX_MOVES_PER_FIGHTER),
@@ -254,10 +255,12 @@ export const BattleView = () => {
                                         <button
                                           key={moveIdx}
                                           className={cn(
-                                            "truncate rounded-md bg-black/10 text-xs hover:bg-black/20",
+                                            "truncate rounded-md bg-black/10 text-xs",
                                             disabled && "opacity-20",
                                             "flex items-center text-left",
-                                            typeIcon?.bgHalf
+                                            typeIcon?.bgHalf,
+                                            "ring-inset hover:ring",
+                                            typeIcon?.ringFull
                                           )}
                                           disabled={disabled}
                                           onClick={() => {
