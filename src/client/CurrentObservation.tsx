@@ -176,18 +176,15 @@ export const CurrentObservation = () => {
             onClick={async () => {
               if (!playerId) return
 
-              toast.promise(
-                doCatch({ observationId: w.observationId, playerId }),
-                {
-                  loading: "Catching...",
-                  success: (result) =>
-                    result.success
-                      ? "You caught it! 🎉"
-                      : result.reason || "Failed to catch. Try again.",
-                  error: "Failed to catch. Try again.",
-                  icon: <></>,
-                }
-              )
+              toast.promise(doCatch({ wildlifeId: w.id, playerId }), {
+                loading: "Catching...",
+                success: (result) =>
+                  result.success
+                    ? "You caught it! 🎉"
+                    : result.reason || "Failed to catch. Try again.",
+                error: (err) => err.message || "Failed to catch. Try again.",
+                // icon: <></>,
+              })
             }}
           >
             Catch
