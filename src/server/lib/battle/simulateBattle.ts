@@ -1,6 +1,6 @@
 import { Battle, Dex, toID, type PokemonSet, type SideID } from "@pkmn/sim"
 import { type PrismaClient } from "@prisma/client"
-import { map } from "lodash-es"
+import { findIndex, map } from "lodash-es"
 import { MAX_FIGHTERS_PER_TEAM } from "~/config"
 import { createSeed } from "~/utils/seed"
 import { getBattleForSimulation } from "./getBattleForSimulation"
@@ -14,16 +14,19 @@ export const simulateBattle = async ({
   prisma: PrismaClient
   battleId: string
   choice?: {
-    player: string
+    playerId: string
     choice: string
   }
 }) => {
+  console.time("getBattleForSimulation")
   const battleDb = await getBattleForSimulation({
     prisma,
     battleId,
     playerPartyLimit: MAX_FIGHTERS_PER_TEAM,
   })
+  console.timeEnd("getBattleForSimulation")
 
+  console.time("simulateBattle")
   // INIT BATTLE
   const battleJson = battleDb.metadata.battleJson
   let battle: Battle
@@ -95,7 +98,16 @@ export const simulateBattle = async ({
 
   // CHOICE
   if (choice) {
-    const sideId = choice.player as SideID
+    const participantIdx = findIndex(
+      battleDb.battleParticipants,
+      (p) => p.playerId === choice.playerId
+    )
+    if (participantIdx === -1) {
+      // SECURITY
+      throw new Error(`Player not found: ${choice.playerId}`)
+    }
+    const sideId = `p${participantIdx + 1}` as SideID
+
     const success = battle.choose(sideId, choice.choice)
     if (!success) {
       throw new Error(`Invalid choice: "${choice.choice}"`)
@@ -153,11 +165,14 @@ export const simulateBattle = async ({
     }
   }
 
-  console.log(battle.log)
+  // console.log(battle.log)
   // console.log(JSON.stringify(battle.toJSON(), null, 2))
 
-  return {
+  const result = {
     battleStatus: battleStatus(),
     battleJson: battle.toJSON(),
+    battleDb,
   }
+  console.timeEnd("simulateBattle")
+  return result
 }

@@ -1,5 +1,5 @@
 import { TRPCError } from "@trpc/server"
-import { findIndex, map } from "lodash-es"
+import { map } from "lodash-es"
 import { z } from "zod"
 import { createTRPCRouter } from "~/server/api/trpc"
 import { simulateBattle } from "~/server/lib/battle/simulateBattle"
@@ -129,51 +129,29 @@ export const battleRouter = createTRPCRouter({
       })
     )
     .mutation(async ({ ctx, input }) => {
-      const battleRaw = await ctx.prisma.battle.findFirstOrThrow({
-        where: {
-          id: input.battleId,
-          battleParticipants: {
-            some: {
-              playerId: ctx.player.id, // SECURITY
-            },
-          },
-        },
-        include: {
-          battleParticipants: true,
-        },
-      })
-      const battle = {
-        ...battleRaw,
-        metadata: BattleMetadata.parse(battleRaw.metadata),
-      }
-
-      const participantIdx = findIndex(
-        battle.battleParticipants,
-        (p) => p.playerId === ctx.player.id
-      )
-      const participantId = `p${participantIdx + 1}`
-
       // let inputLog = battle.metadata.inputLog ?? []
       // inputLog = [...inputLog, `>${participantId} ${input.choice}`]
 
-      const { battleJson } = await simulateBattle({
+      const { battleJson, battleDb } = await simulateBattle({
         prisma: ctx.prisma,
         battleId: input.battleId,
         choice: {
-          player: participantId,
+          playerId: ctx.player.id,
           choice: input.choice,
         },
       })
+      console.time("update")
       await ctx.prisma.battle.update({
         where: {
           id: input.battleId,
         },
         data: {
           metadata: {
-            ...battle.metadata,
+            ...battleDb.metadata,
             battleJson,
           } satisfies BattleMetadata,
         },
       })
+      console.timeEnd("update")
     }),
 })
