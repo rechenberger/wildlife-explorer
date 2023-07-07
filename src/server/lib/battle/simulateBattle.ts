@@ -9,9 +9,14 @@ import { getWildlifeFighter } from "./getWildlifeFighter"
 export const simulateBattle = async ({
   prisma,
   battleId,
+  choice,
 }: {
   prisma: PrismaClient
   battleId: string
+  choice?: {
+    player: string
+    choice: string
+  }
 }) => {
   const battleDb = await getBattleForSimulation({
     prisma,
@@ -19,10 +24,20 @@ export const simulateBattle = async ({
     playerPartyLimit: MAX_FIGHTERS_PER_TEAM,
   })
 
-  const battle = new Battle({
-    formatid: toID("gen7randombattle"),
-    seed: [13103, 5088, 17178, 48392], // TODO:
-  })
+  // inputLog = inputLog ?? battleDb.metadata.inputLog ?? []
+
+  const battleJson = battleDb.metadata.battleJson
+
+  let battle: Battle
+
+  if (battleJson) {
+    battle = Battle.fromJSON(battleJson)
+  } else {
+    battle = new Battle({
+      formatid: toID("gen7randombattle"),
+      seed: [13103, 5088, 17178, 48392], // TODO:
+    })
+  }
 
   const teams = map(battleDb.battleParticipants, (battleParticipant, idx) => {
     if (idx > 4) throw new Error("Too many participants!")
@@ -65,10 +80,12 @@ export const simulateBattle = async ({
       ]
     }
 
-    battle.setPlayer(sideId, {
-      name,
-      team: team.map((t) => t.fighter),
-    })
+    if (!battleJson) {
+      battle.setPlayer(sideId, {
+        name,
+        team: team.map((t) => t.fighter),
+      })
+    }
 
     return {
       sideId,
@@ -82,6 +99,7 @@ export const simulateBattle = async ({
     return {
       winner: battle.winner,
       inputLog: battle.inputLog,
+      // battleDb: battleDb,
       sides: battle.sides.map((side, sideIdx) => {
         const team = teams[sideIdx]!
         const fighters = side.pokemon.map((p, fighterIdx) => {
@@ -103,18 +121,42 @@ export const simulateBattle = async ({
     }
   }
 
+  // console.log("inputLog", inputLog)
+  // battle.makeChoices()
+  // battle.makeChoices()
+
+  // inputLog.forEach((i) => {
+  //   // battle.send()
+  //   // battle.inputLog.push(i)
+  //   // battle.messageLog
+  // })
+  // battle.makeChoices(...inputLog)
+
+  if (choice) {
+    const success = battle.choose(choice.player as SideID, choice.choice)
+    // TODO: Handle success === false
+    battle.makeChoices()
+  }
+
+  // battle.choose("p2", "move 2")
+
+  // battle.add
+
   // console.log(betterOutput())
-  battle.choose("p1", "move 1")
-  battle.choose("p2", "move 2")
+  // battle.choose("p1", "move 1")
+  // battle.choose("p2", "move 2")
   // console.log(betterOutput())
-  console.log(battle.inputLog)
+  // console.log(battle.inputLog)
 
   // const winner = battle.winner
 
-  // console.log(battle.log)
+  console.log(battle.log)
 
   // console.log(battle.log)
   // console.log(JSON.stringify(battle.toJSON(), null, 2))
 
-  return betterOutput()
+  return {
+    battleStatus: betterOutput(),
+    battleJson: battle.toJSON(),
+  }
 }

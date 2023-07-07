@@ -31,6 +31,8 @@ export const BattleView = () => {
     }
   )
 
+  const { mutate: makeChoice } = api.battle.makeChoice.useMutation()
+
   const getName = useGetWildlifeName()
 
   return (
@@ -138,15 +140,24 @@ export const BattleView = () => {
                                 <div className="grid grid-cols-2 gap-1">
                                   {map(
                                     fillWithNulls(moves, MAX_MOVES_PER_FIGHTER),
-                                    (move, idx) => {
+                                    (move, moveIdx) => {
                                       return (
                                         <button
-                                          key={idx}
+                                          key={moveIdx}
                                           className={cn(
                                             "truncate rounded bg-black/10 px-2 py-1 text-xs",
                                             move ? "text-black" : "opacity-20"
                                           )}
                                           disabled={!move}
+                                          onClick={() => {
+                                            if (!move) return
+                                            if (!playerId) return
+                                            makeChoice({
+                                              battleId: activeBattle.id,
+                                              playerId: playerId,
+                                              choice: `move ${moveIdx + 1}`,
+                                            })
+                                          }}
                                         >
                                           {move || "-"}
                                         </button>

@@ -1,5 +1,5 @@
 import { TRPCError } from "@trpc/server"
-import { map } from "lodash-es"
+import { findIndex, map } from "lodash-es"
 import { z } from "zod"
 import { createTRPCRouter } from "~/server/api/trpc"
 import { simulateBattle } from "~/server/lib/battle/simulateBattle"
@@ -98,9 +98,67 @@ export const battleRouter = createTRPCRouter({
       })
     )
     .query(async ({ ctx, input }) => {
-      return simulateBattle({
+      const { battleStatus } = await simulateBattle({
         prisma: ctx.prisma,
         battleId: input.battleId,
+      })
+      return battleStatus
+    }),
+
+  makeChoice: playerProcedure
+    .input(
+      z.object({
+        battleId: z.string(),
+        // moveNo: z.number().min(1).max(MAX_MOVES_PER_FIGHTER),
+        choice: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const battleRaw = await ctx.prisma.battle.findFirstOrThrow({
+        where: {
+          id: input.battleId,
+          battleParticipants: {
+            some: {
+              playerId: ctx.player.id, // SECURITY
+            },
+          },
+        },
+        include: {
+          battleParticipants: true,
+        },
+      })
+      const battle = {
+        ...battleRaw,
+        metadata: BattleMetadata.parse(battleRaw.metadata),
+      }
+
+      const participantIdx = findIndex(
+        battle.battleParticipants,
+        (p) => p.playerId === ctx.player.id
+      )
+      const participantId = `p${participantIdx + 1}`
+
+      // let inputLog = battle.metadata.inputLog ?? []
+      // inputLog = [...inputLog, `>${participantId} ${input.choice}`]
+
+      const { battleJson } = await simulateBattle({
+        prisma: ctx.prisma,
+        battleId: input.battleId,
+        choice: {
+          player: participantId,
+          choice: input.choice,
+        },
+      })
+      await ctx.prisma.battle.update({
+        where: {
+          id: input.battleId,
+        },
+        data: {
+          metadata: {
+            ...battle.metadata,
+            battleJson,
+          } satisfies BattleMetadata,
+        },
       })
     }),
 })
