@@ -1,8 +1,9 @@
-import { Battle, PokemonSet, SideID, toID } from "@pkmn/sim"
+import { Battle, toID, type PokemonSet, type SideID } from "@pkmn/sim"
 import { type PrismaClient } from "@prisma/client"
 import { forEach } from "lodash-es"
+import { createSeed } from "~/utils/seed"
 import { getBattleForSimulation } from "./getBattleForSimulation"
-import { charizard, pikachu } from "./predefinedTeam"
+import { getWildlifeFighter } from "./getWildlifeFighter"
 
 export const simulateBattle = async ({
   prisma,
@@ -33,19 +34,21 @@ export const simulateBattle = async ({
 
     if (!!battleParticipant.player?.catches) {
       team = battleParticipant.player?.catches.map((c) => {
-        return {
-          ...pikachu,
-          name: c.wildlife?.metadata.taxonCommonName ?? "Unknown Wildlife",
-        }
+        return getWildlifeFighter({
+          wildlife: c.wildlife,
+          isCaught: true,
+          seed: c.seed,
+          locale: "de",
+        })
       })
     } else if (!!battleParticipant.wildlife) {
       team = [
-        {
-          ...charizard,
-          name:
-            battleParticipant.wildlife.metadata.taxonCommonName ||
-            "Unknown Wildlife",
-        },
+        getWildlifeFighter({
+          wildlife: battleParticipant.wildlife,
+          isCaught: true,
+          seed: createSeed(battleParticipant.wildlife),
+          locale: "de",
+        }),
       ]
     }
 
