@@ -27,8 +27,8 @@ export const simulateBattle = async ({
     const sideId = `p${idx + 1}` as SideID
     const name =
       battleParticipant.player?.name ??
-      battleParticipant.wildlife?.metadata.taxonCommonName ??
-      "Unknown Player"
+      // battleParticipant.wildlife?.metadata.taxonCommonName ??
+      "Wildlife"
 
     let team: {
       fighter: PokemonSet
@@ -72,6 +72,7 @@ export const simulateBattle = async ({
       sideId,
       name,
       team,
+      player: battleParticipant.player,
     }
   })
 
@@ -92,7 +93,7 @@ export const simulateBattle = async ({
             },
           }
         })
-        return { name: team.name, fighters }
+        return { name: team.name, fighters, player: team.player }
       }),
     }
   }
