@@ -1,5 +1,6 @@
-import { Battle, toID } from "@pkmn/sim"
+import { Battle, PokemonSet, SideID, toID } from "@pkmn/sim"
 import { type PrismaClient } from "@prisma/client"
+import { forEach } from "lodash-es"
 import { getBattleForSimulation } from "./getBattleForSimulation"
 import { charizard, pikachu } from "./predefinedTeam"
 
@@ -20,14 +21,38 @@ export const simulateBattle = async ({
     seed: [13103, 5088, 17178, 48392], // TODO:
   })
 
-  battle.setPlayer("p1", {
-    name: "Alice",
-    team: [pikachu],
-  })
+  forEach(battleDb.battleParticipants, (battleParticipant, idx) => {
+    if (idx > 4) throw new Error("Too many participants!")
+    const sideId = `p${idx + 1}` as SideID
+    const name =
+      battleParticipant.player?.name ??
+      battleParticipant.wildlife?.metadata.taxonCommonName ??
+      "Unknown Player"
 
-  battle.setPlayer("p2", {
-    name: "Bob",
-    team: [charizard],
+    let team: PokemonSet[] = []
+
+    if (!!battleParticipant.player?.catches) {
+      team = battleParticipant.player?.catches.map((c) => {
+        return {
+          ...pikachu,
+          name: c.wildlife?.metadata.taxonCommonName ?? "Unknown Wildlife",
+        }
+      })
+    } else if (!!battleParticipant.wildlife) {
+      team = [
+        {
+          ...charizard,
+          name:
+            battleParticipant.wildlife.metadata.taxonCommonName ||
+            "Unknown Wildlife",
+        },
+      ]
+    }
+
+    battle.setPlayer(sideId, {
+      name,
+      team,
+    })
   })
 
   const betterOutput = () => {
