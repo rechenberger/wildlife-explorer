@@ -1,6 +1,6 @@
 import { Battle, toID, type PokemonSet, type SideID } from "@pkmn/sim"
 import { type PrismaClient } from "@prisma/client"
-import { forEach } from "lodash-es"
+import { map } from "lodash-es"
 import { createSeed } from "~/utils/seed"
 import { getBattleForSimulation } from "./getBattleForSimulation"
 import { getWildlifeFighter } from "./getWildlifeFighter"
@@ -22,7 +22,7 @@ export const simulateBattle = async ({
     seed: [13103, 5088, 17178, 48392], // TODO:
   })
 
-  forEach(battleDb.battleParticipants, (battleParticipant, idx) => {
+  const teams = map(battleDb.battleParticipants, (battleParticipant, idx) => {
     if (idx > 4) throw new Error("Too many participants!")
     const sideId = `p${idx + 1}` as SideID
     const name =
@@ -30,46 +30,67 @@ export const simulateBattle = async ({
       battleParticipant.wildlife?.metadata.taxonCommonName ??
       "Unknown Player"
 
-    let team: PokemonSet[] = []
+    let team: {
+      fighter: PokemonSet
+      wildlife: typeof battleParticipant.wildlife
+      catch?: NonNullable<typeof battleParticipant.player>["catches"][number]
+    }[] = []
 
     if (!!battleParticipant.player?.catches) {
       team = battleParticipant.player?.catches.map((c) => {
-        return getWildlifeFighter({
+        return {
+          fighter: getWildlifeFighter({
+            wildlife: c.wildlife,
+            isCaught: true,
+            seed: c.seed,
+            locale: "de",
+          }),
           wildlife: c.wildlife,
-          isCaught: true,
-          seed: c.seed,
-          locale: "de",
-        })
+          catch: c,
+        }
       })
     } else if (!!battleParticipant.wildlife) {
       team = [
-        getWildlifeFighter({
+        {
+          fighter: getWildlifeFighter({
+            wildlife: battleParticipant.wildlife,
+            isCaught: false,
+            seed: createSeed(battleParticipant.wildlife),
+            locale: "de",
+          }),
           wildlife: battleParticipant.wildlife,
-          isCaught: false,
-          seed: createSeed(battleParticipant.wildlife),
-          locale: "de",
-        }),
+        },
       ]
     }
 
     battle.setPlayer(sideId, {
       name,
-      team,
+      team: team.map((t) => t.fighter),
     })
+
+    return {
+      sideId,
+      name,
+      team,
+    }
   })
 
   const betterOutput = () => {
     return {
-      sides: battle.sides.map((side) => {
-        const pokemon = side.pokemon.map((p) => ({
-          name: p.name,
-          hp: p.hp,
-          maxhp: p.maxhp,
-          status: p.status,
-        }))
-        return pokemon
-      }),
       winner: battle.winner,
+      sides: battle.sides.map((side) => {
+        const fighter = side.pokemon.map((p) => {
+          return {
+            fighterStatus: {
+              name: p.name,
+              hp: p.hp,
+              maxhp: p.maxhp,
+              status: p.status,
+            },
+          }
+        })
+        return { fighter }
+      }),
     }
   }
 
