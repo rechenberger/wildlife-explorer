@@ -2,6 +2,7 @@ import { find, map } from "lodash-es"
 import { Undo2 } from "lucide-react"
 import Image from "next/image"
 import { Fragment } from "react"
+import { toast } from "sonner"
 import {
   DEV_MODE,
   MAX_FIGHTERS_PER_TEAM,
@@ -41,6 +42,7 @@ export const BattleView = () => {
     onSuccess: () => {
       trpc.battle.invalidate()
     },
+    onError: (err) => toast.error(err.message),
   })
   const { mutate: reset } = api.battle.reset.useMutation({
     onSuccess: () => {

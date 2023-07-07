@@ -134,7 +134,9 @@ export const simulateBattle = async ({
 
   if (choice) {
     const success = battle.choose(choice.player as SideID, choice.choice)
-    // TODO: Handle success === false
+    if (!success) {
+      throw new Error(`Invalid choice: "${choice.choice}"`)
+    }
     battle.makeChoices()
   }
 
