@@ -1,5 +1,8 @@
 import { TRPCError } from "@trpc/server"
+import { map } from "lodash-es"
 import { createTRPCRouter } from "~/server/api/trpc"
+import { BattleMetadata } from "~/server/schema/BattleMetadata"
+import { BattleParticipationMetadata } from "~/server/schema/BattleParticipationMetadata"
 import { playerProcedure } from "../middleware/playerProcedure"
 import { wildlifeProcedure } from "../middleware/wildlifeProcedure"
 
@@ -58,7 +61,7 @@ export const battleRouter = createTRPCRouter({
   }),
 
   getMyBattles: playerProcedure.query(async ({ ctx }) => {
-    const battles = await ctx.prisma.battle.findMany({
+    const battlesRaw = await ctx.prisma.battle.findMany({
       where: {
         battleParticipants: {
           some: {
@@ -70,6 +73,19 @@ export const battleRouter = createTRPCRouter({
         battleParticipants: true,
       },
     })
+    const battles = map(battlesRaw, (battle) => ({
+      ...battle,
+      metadata: BattleMetadata.parse(battle.metadata),
+      battleParticipants: map(
+        battle.battleParticipants,
+        (battleParticipant) => ({
+          ...battleParticipant,
+          metadata: BattleParticipationMetadata.parse(
+            battleParticipant.metadata
+          ),
+        })
+      ),
+    }))
     return battles
   }),
 })
