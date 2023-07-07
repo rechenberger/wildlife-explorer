@@ -1,5 +1,6 @@
 import { exampleRouter } from "~/server/api/routers/example.router"
 import { createTRPCRouter } from "~/server/api/trpc"
+import { battleRouter } from "./routers/battle.router"
 import { catchRouter } from "./routers/catch.router"
 import { migrationRouter } from "./routers/migration.router"
 import { navigationRouter } from "./routers/navigation.router"
@@ -17,6 +18,7 @@ export const appRouter = createTRPCRouter({
   navigation: navigationRouter,
   player: playerRouter,
   catch: catchRouter,
+  battle: battleRouter,
   migration: migrationRouter,
 })
 
