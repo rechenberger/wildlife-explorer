@@ -20,3 +20,4 @@ export const MAX_METER_BY_BICYCLE = 10_000
 export const MIN_METER_ACCURACY_SHOW_INACCURATE = 200
 export const MAX_FIGHTERS_PER_TEAM = 6
 export const MAX_MOVES_PER_FIGHTER = 4
+export const DEV_MODE = process.env.NODE_ENV === "development"

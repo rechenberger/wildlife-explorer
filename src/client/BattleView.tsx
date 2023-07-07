@@ -1,12 +1,16 @@
 import { find, map } from "lodash-es"
+import { Undo2 } from "lucide-react"
 import Image from "next/image"
 import { Fragment } from "react"
-import { MAX_FIGHTERS_PER_TEAM, MAX_MOVES_PER_FIGHTER } from "~/config"
+import {
+  DEV_MODE,
+  MAX_FIGHTERS_PER_TEAM,
+  MAX_MOVES_PER_FIGHTER,
+} from "~/config"
 import { api } from "~/utils/api"
 import { cn } from "./cn"
 import { useGetWildlifeName } from "./useGetWildlifeName"
 import { usePlayer } from "./usePlayer"
-import { Undo2 } from "lucide-react"
 
 export const BattleView = () => {
   const { playerId } = usePlayer()
@@ -52,16 +56,18 @@ export const BattleView = () => {
         <>
           <div className="flex flex-row gap-2">
             <h3 className="flex-1 truncate text-2xl">Active Battle</h3>
-            <button
-              className="shrink-0"
-              onClick={() => {
-                reset({
-                  battleId: activeBattle.id,
-                })
-              }}
-            >
-              <Undo2 size={16} />
-            </button>
+            {DEV_MODE && (
+              <button
+                className="shrink-0"
+                onClick={() => {
+                  reset({
+                    battleId: activeBattle.id,
+                  })
+                }}
+              >
+                <Undo2 size={16} />
+              </button>
+            )}
           </div>
           {/* <pre>{JSON.stringify(activeBattle, null, 2)}</pre> */}
           {/* <pre>{JSON.stringify(battleStatus, null, 2)}</pre> */}
