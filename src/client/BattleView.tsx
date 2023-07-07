@@ -2,6 +2,7 @@ import { find, map } from "lodash-es"
 import Image from "next/image"
 import { Fragment } from "react"
 import { api } from "~/utils/api"
+import { cn } from "./cn"
 import { useGetWildlifeName } from "./useGetWildlifeName"
 import { usePlayer } from "./usePlayer"
 
@@ -42,12 +43,24 @@ export const BattleView = () => {
             return (
               <Fragment key={sideIdx}>
                 <div>{side.name}</div>
-                <>
+                <div className="flex flex-col gap-6">
                   {map(side.fighters, (fighter, fighterIdx) => {
+                    const { hp, hpMax } = fighter.fighterStatus
+                    const hpFull = hp >= hpMax
+                    const dead = hp <= 0
                     return (
                       <Fragment key={fighterIdx}>
-                        <div className="flex flex-row gap-2">
-                          <div className="relative aspect-square h-12 w-12 overflow-hidden rounded-full ring ring-amber-400">
+                        <div className="flex flex-row items-center gap-4 rounded-full bg-black/20">
+                          <div
+                            className={cn(
+                              "relative -m-1 aspect-square h-12 w-12 overflow-hidden rounded-full ring",
+                              hpFull
+                                ? "ring-green-400"
+                                : dead
+                                ? "ring-red-400"
+                                : "ring-amber-400"
+                            )}
+                          >
                             {fighter.wildlife.metadata.taxonImageUrlSquare && (
                               <Image
                                 src={
@@ -60,18 +73,21 @@ export const BattleView = () => {
                               />
                             )}
                           </div>
-                          <div>
-                            <div>
+                          <div className="py-1">
+                            <div className="font-bold">
                               {fighter.wildlife
                                 ? getName(fighter.wildlife)
                                 : fighter.fighter.name}
+                            </div>
+                            <div>
+                              {hp}/{hpMax} HP
                             </div>
                           </div>
                         </div>
                       </Fragment>
                     )
                   })}
-                </>
+                </div>
               </Fragment>
             )
           })}
