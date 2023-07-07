@@ -1,3 +1,4 @@
+import { BattleView } from "~/client/BattleView"
 import { CurrentObservation } from "~/client/CurrentObservation"
 import { Eta } from "~/client/Eta"
 import { MainActionButtons } from "~/client/MainActionButtons"
@@ -23,6 +24,7 @@ export default function Page() {
         {player && <PlayerRoute player={player} isMe />}
         {player && <PlayerMarker player={player} isMe />}
         <CurrentObservation />
+        <BattleView />
         <MainActionButtons />
         <MapControls />
       </MapBase>
