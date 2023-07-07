@@ -29,7 +29,7 @@ export const BattleView = () => {
 
   const activeBattle = find(battles, (b) => b.status === "IN_PROGRESS")
 
-  const { data: battleStatus, isLoading: battleLoading } =
+  const { data: battleStatus, isFetching: battleLoading } =
     api.battle.getBattleStatus.useQuery(
       {
         battleId: activeBattle?.id!,
@@ -244,14 +244,15 @@ export const BattleView = () => {
                                     fillWithNulls(moves, MAX_MOVES_PER_FIGHTER),
                                     (move, moveIdx) => {
                                       // console.log(move)
+                                      const disabled = !move || isLoading
                                       return (
                                         <button
                                           key={moveIdx}
                                           className={cn(
                                             "truncate rounded bg-black/10 px-2 py-1 text-xs hover:bg-black/20",
-                                            move ? "text-black" : "opacity-20"
+                                            disabled && "opacity-20"
                                           )}
-                                          disabled={!move}
+                                          disabled={disabled}
                                           onClick={() => {
                                             if (!move) return
                                             if (!playerId) return
