@@ -106,9 +106,8 @@ export const BattleView = () => {
                         const { hp, hpMax, isActive, moves, status, lastMove } =
                           fighter.fighterStatus
                         if (!isActive && !BIG_INACTIVE_FIGHTER) return null
-                        console.log(lastMove)
                         const hpFull = hp >= hpMax
-                        const dead = hp <= 0
+                        const fainted = hp <= 0
                         return (
                           <Fragment
                             key={fighter.catch?.id ?? fighter.wildlife.id}
@@ -157,7 +156,7 @@ export const BattleView = () => {
                                     "relative -m-1 aspect-square h-12 w-12 shrink-0 overflow-hidden rounded-full ring",
                                     hpFull
                                       ? "ring-green-500"
-                                      : dead
+                                      : fainted
                                       ? "ring-red-500"
                                       : "ring-amber-400",
                                     !isActive && "grayscale"
