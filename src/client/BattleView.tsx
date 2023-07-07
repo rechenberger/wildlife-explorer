@@ -96,17 +96,44 @@ export const BattleView = () => {
                         : "flex-col-reverse items-end"
                     )}
                   >
-                    <div className="flex flex-col gap-2 self-stretch">
+                    <div
+                      className={cn(
+                        "flex flex-col gap-2 self-stretch",
+                        isMainSide ? "flex-col" : "flex-col-reverse"
+                      )}
+                    >
                       {map(side.fighters, (fighter) => {
-                        const { hp, hpMax, isActive, moves, status } =
+                        const { hp, hpMax, isActive, moves, status, lastMove } =
                           fighter.fighterStatus
                         if (!isActive && !BIG_INACTIVE_FIGHTER) return null
+                        console.log(lastMove)
                         const hpFull = hp >= hpMax
                         const dead = hp <= 0
                         return (
                           <Fragment
                             key={fighter.catch?.id ?? fighter.wildlife.id}
                           >
+                            {!!lastMove && (
+                              <div
+                                className={cn(
+                                  "rounded-full bg-black/10 px-4 py-1",
+                                  isMainSide
+                                    ? "-mb-1 ml-2 self-start rounded-bl-none"
+                                    : "-mt-0 mr-2 self-end rounded-tr-none"
+                                )}
+                              >
+                                <span className="italic">
+                                  {getName(fighter.wildlife)}
+                                </span>{" "}
+                                uses{" "}
+                                <span className="italic">{lastMove.name}</span>,
+                                dealing{" "}
+                                <span className="italic">
+                                  {lastMove.totalDamage}
+                                </span>{" "}
+                                damage
+                              </div>
+                            )}
                             <div
                               className={cn(
                                 "flex items-center gap-2",

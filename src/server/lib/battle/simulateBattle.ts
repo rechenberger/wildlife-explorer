@@ -129,6 +129,8 @@ export const simulateBattle = async ({
               status: p.status,
               isActive: p.isActive,
               moves: p.moves as string[],
+              lastMove: p.lastMove,
+              lastDamage: p.lastDamage,
             },
           }
         })
