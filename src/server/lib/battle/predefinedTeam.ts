@@ -22,7 +22,7 @@ export const pikachu = {
     spd: 31,
     spe: 31,
   },
-  level: 84,
+  level: 10,
 }
 
 export const charizard = {
@@ -58,5 +58,5 @@ export const charizard = {
     spd: 31,
     spe: 31,
   },
-  level: 84,
+  level: 10,
 }
