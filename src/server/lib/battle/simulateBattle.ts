@@ -69,6 +69,7 @@ export const simulateBattle = async ({
         }))
         return pokemon
       }),
+      winner: battle.winner,
     }
   }
 
