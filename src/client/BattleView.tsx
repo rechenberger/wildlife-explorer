@@ -112,29 +112,33 @@ export const BattleView = () => {
                           <Fragment
                             key={fighter.catch?.id ?? fighter.wildlife.id}
                           >
-                            {!!lastMove && (
-                              <div
-                                className={cn(
-                                  "rounded-full border border-dashed border-black/10 bg-black/5 px-4 py-1 text-black/60",
-                                  isMainSide
-                                    ? "-mb-1 ml-4 self-start rounded-bl-none"
-                                    : "-mt-0 mr-4 self-end rounded-tr-none"
-                                )}
-                              >
-                                <span className="italic text-black">
-                                  {getName(fighter.wildlife)}
-                                </span>{" "}
-                                uses{" "}
-                                <span className="italic text-black">
-                                  {lastMove.name}
-                                </span>
-                                , dealing{" "}
-                                <span className="italic text-black">
-                                  {lastMove.totalDamage || "no"}
-                                </span>{" "}
-                                damage
-                              </div>
-                            )}
+                            <div
+                              className={cn(
+                                "rounded-full border border-dashed border-black/10 bg-black/5 px-4 py-1 text-black/60",
+                                isMainSide
+                                  ? "-mb-1 ml-4 self-start rounded-bl-none"
+                                  : "-mt-0 mr-4 self-end rounded-tr-none"
+                              )}
+                            >
+                              <span className="italic text-black">
+                                {getName(fighter.wildlife)}
+                              </span>{" "}
+                              {lastMove ? (
+                                <>
+                                  uses{" "}
+                                  <span className="italic text-black">
+                                    {lastMove.name}
+                                  </span>
+                                  , dealing{" "}
+                                  <span className="italic text-black">
+                                    {lastMove.totalDamage || "no"}
+                                  </span>{" "}
+                                  damage
+                                </>
+                              ) : (
+                                "enters the battle"
+                              )}
+                            </div>
                             <div
                               className={cn(
                                 "flex items-center gap-2",
