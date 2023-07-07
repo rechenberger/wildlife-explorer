@@ -77,7 +77,7 @@ export const BattleView = () => {
                             >
                               <div
                                 className={cn(
-                                  "flex w-44 items-center gap-4 rounded-full bg-black/10",
+                                  "flex items-center gap-4 rounded-full bg-black/10 md:w-44",
                                   isMainSide ? "flex-row" : "flex-row-reverse"
                                   // 'ring',
                                   // hpFull
@@ -132,7 +132,7 @@ export const BattleView = () => {
                                     <button
                                       key={idx}
                                       className={cn(
-                                        "rounded bg-black/10 px-2 py-1 text-xs",
+                                        "truncate rounded bg-black/10 px-2 py-1 text-xs",
                                         move ? "text-black" : "opacity-20"
                                       )}
                                       disabled={!move}
