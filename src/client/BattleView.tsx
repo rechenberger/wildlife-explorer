@@ -71,7 +71,7 @@ export const BattleView = () => {
                           <Fragment key={fighterIdx}>
                             <div
                               className={cn(
-                                "flex items-center",
+                                "flex items-center gap-2",
                                 isMainSide ? "flex-row" : "flex-row-reverse"
                               )}
                             >
