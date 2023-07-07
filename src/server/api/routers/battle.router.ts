@@ -1,6 +1,8 @@
 import { TRPCError } from "@trpc/server"
 import { map } from "lodash-es"
+import { z } from "zod"
 import { createTRPCRouter } from "~/server/api/trpc"
+import { simulateBattle } from "~/server/lib/battle/simulateBattle"
 import { BattleMetadata } from "~/server/schema/BattleMetadata"
 import { BattleParticipationMetadata } from "~/server/schema/BattleParticipationMetadata"
 import { playerProcedure } from "../middleware/playerProcedure"
@@ -88,4 +90,17 @@ export const battleRouter = createTRPCRouter({
     }))
     return battles
   }),
+
+  getBattleStatus: playerProcedure
+    .input(
+      z.object({
+        battleId: z.string(),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      return simulateBattle({
+        prisma: ctx.prisma,
+        battleId: input.battleId,
+      })
+    }),
 })

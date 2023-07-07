@@ -14,6 +14,9 @@ dependencies:
   '@next-auth/prisma-adapter':
     specifier: ^1.0.5
     version: 1.0.5(@prisma/client@4.14.0)(next-auth@4.22.1)
+  '@pkmn/sim':
+    specifier: ^0.7.45
+    version: 0.7.45
   '@prisma/client':
     specifier: ^4.14.0
     version: 4.14.0(prisma@4.14.0)
@@ -511,6 +514,27 @@ packages:
       picocolors: 1.0.0
       tslib: 2.6.0
     dev: true
+
+  /@pkmn/sets@5.0.4:
+    resolution: {integrity: sha512-0Dg61L5fqK0tSy99g8R9Gk2BJqSMrTUZcj6cGlwgfMUR0FaRB8CQ8J6o9erjLzpJmatx9pJR1kWzG1ZLNYPrIQ==}
+    dependencies:
+      '@pkmn/types': 3.0.0
+    dev: false
+
+  /@pkmn/sim@0.7.45:
+    resolution: {integrity: sha512-PV1nkoVU4JzT13/ouz8q23FI9XKQCrc1nX4MMQyeTmVtyDunLzA4e1TsrdkDsmLjRijH9VTTMxi+FpfJ/4aMYw==}
+    dependencies:
+      '@pkmn/sets': 5.0.4
+      '@pkmn/streams': 1.1.0
+    dev: false
+
+  /@pkmn/streams@1.1.0:
+    resolution: {integrity: sha512-Pp9k7gt4xd76DqTU+LQEUyzuaauM4bV1MlehVtX1NS7o9zMFtjw50MfaEQ62dIMZyzxNjsJGoLGBeY1iSYLsRA==}
+    dev: false
+
+  /@pkmn/types@3.0.0:
+    resolution: {integrity: sha512-Vq3vlIaKi8EGFUx5AFcEch74i8wfFWPWb5OaNsJCgP31VADJVruKmLoSzs26xUW0vkiJENICH+YGFmJYwatJ8w==}
+    dev: false
 
   /@prisma/client@4.14.0(prisma@4.14.0):
     resolution: {integrity: sha512-MK/XaA2sFdfaOa7I9MjNKz6dxeIEdeZlnpNRoF2w3JuRLlFJLkpp6cD3yaqw2nUUhbrn3Iqe3ZpVV+VuGGil7Q==}
