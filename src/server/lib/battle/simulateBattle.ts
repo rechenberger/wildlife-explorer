@@ -1,5 +1,6 @@
 import { Battle, toID } from "@pkmn/sim"
-import { PrismaClient } from "@prisma/client"
+import { type PrismaClient } from "@prisma/client"
+import { getBattleForSimulation } from "./getBattleForSimulation"
 import { charizard, pikachu } from "./predefinedTeam"
 
 export const simulateBattle = async ({
@@ -9,6 +10,11 @@ export const simulateBattle = async ({
   prisma: PrismaClient
   battleId: string
 }) => {
+  const battleDb = await getBattleForSimulation({
+    prisma,
+    battleId,
+  })
+
   const battle = new Battle({
     formatid: toID("gen7randombattle"),
     seed: [13103, 5088, 17178, 48392], // TODO:
