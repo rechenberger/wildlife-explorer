@@ -1,5 +1,6 @@
 import { TRPCError } from "@trpc/server"
 import { createTRPCRouter } from "~/server/api/trpc"
+import { playerProcedure } from "../middleware/playerProcedure"
 import { wildlifeProcedure } from "../middleware/wildlifeProcedure"
 
 export const battleRouter = createTRPCRouter({
@@ -54,5 +55,21 @@ export const battleRouter = createTRPCRouter({
         },
       },
     })
+  }),
+
+  getMyBattles: playerProcedure.query(async ({ ctx }) => {
+    const battles = await ctx.prisma.battle.findMany({
+      where: {
+        battleParticipants: {
+          some: {
+            playerId: ctx.player.id,
+          },
+        },
+      },
+      include: {
+        battleParticipants: true,
+      },
+    })
+    return battles
   }),
 })
