@@ -70,7 +70,7 @@ export const BattleView = () => {
                           <Fragment key={fighterIdx}>
                             <div
                               className={cn(
-                                "flex items-center gap-4 rounded-full bg-black/10",
+                                "flex w-44 items-center gap-4 rounded-full bg-black/10",
                                 isMainSide ? "flex-row" : "flex-row-reverse"
                                 // 'ring',
                                 // hpFull
@@ -82,7 +82,7 @@ export const BattleView = () => {
                             >
                               <div
                                 className={cn(
-                                  "relative -m-1 aspect-square h-12 w-12 overflow-hidden rounded-full ring",
+                                  "relative -m-1 aspect-square h-12 w-12 shrink-0 overflow-hidden rounded-full ring",
                                   hpFull
                                     ? "ring-green-500"
                                     : dead
@@ -104,13 +104,15 @@ export const BattleView = () => {
                                   />
                                 )}
                               </div>
-                              <div className={cn("py-1")}>
-                                <div className="font-bold">
+                              <div
+                                className={cn("flex-1 overflow-hidden py-1")}
+                              >
+                                <div className="truncate font-bold">
                                   {fighter.wildlife
                                     ? getName(fighter.wildlife)
                                     : fighter.fighter.name}
                                 </div>
-                                <div>
+                                <div className="truncate">
                                   {hp}/{hpMax} HP
                                 </div>
                               </div>
