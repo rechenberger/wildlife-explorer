@@ -103,6 +103,8 @@ model Catch {
 
     seed String
 
+    battleOrderPosition Int?
+
     @@unique([wildlifeId, playerId])
 }
 
