@@ -110,10 +110,18 @@ export const simulateBattle = async ({
       // battleDb: battleDb,
       sides: battle.sides.map((side, sideIdx) => {
         const team = teams[sideIdx]!
-        const fighters = side.pokemon.map((p, fighterIdx) => {
-          const fighter = team.team[fighterIdx]!
+        const fighters = side.pokemon.map((p) => {
+          let fighter = team.team.find((f) => f.fighter.name === p.name)!
+          // if (!fighter) {
+          //   console.log(
+          //     "FIGHTER NOT FOUND",
+          //     p.name,
+          //     map(team.team, "fighter.name")
+          //   )
+          //   fighter = team.team[idx]
+          // }
           return {
-            ...fighter,
+            ...fighter!,
             fighterStatus: {
               name: p.name,
               hp: p.hp,

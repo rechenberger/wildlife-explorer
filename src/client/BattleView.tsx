@@ -95,14 +95,16 @@ export const BattleView = () => {
                     )}
                   >
                     <div className="flex flex-col gap-6 self-stretch">
-                      {map(side.fighters, (fighter, fighterIdx) => {
+                      {map(side.fighters, (fighter) => {
                         const { hp, hpMax, isActive, moves, status } =
                           fighter.fighterStatus
-                        if (!isActive) return null
+                        // if (!isActive) return null
                         const hpFull = hp >= hpMax
                         const dead = hp <= 0
                         return (
-                          <Fragment key={fighterIdx}>
+                          <Fragment
+                            key={fighter.catch?.id ?? fighter.wildlife.id}
+                          >
                             <div
                               className={cn(
                                 "flex items-center gap-2",
@@ -128,7 +130,8 @@ export const BattleView = () => {
                                       ? "ring-green-500"
                                       : dead
                                       ? "ring-red-500"
-                                      : "ring-amber-400"
+                                      : "ring-amber-400",
+                                    !isActive && "grayscale"
                                   )}
                                 >
                                   {fighter.wildlife.metadata
