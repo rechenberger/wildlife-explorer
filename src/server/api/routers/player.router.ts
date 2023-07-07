@@ -62,6 +62,10 @@ export const playerRouter = createTRPCRouter({
         data: {
           lat: input.lat,
           lng: input.lng,
+          metadata: {
+            ...ctx.player.metadata,
+            navigation: null,
+          } satisfies PlayerMetadata,
         },
       })
     }),
