@@ -78,10 +78,11 @@ model Player {
     lng      Float
     metadata Json?
 
-    userId        String
-    user          User       @relation(fields: [userId], references: [id], onDelete: Cascade)
-    catches       Catch[]
-    foundWildlife Wildlife[]
+    userId               String
+    user                 User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
+    catches              Catch[]
+    foundWildlife        Wildlife[]
+    battleParticipations BattleParticipation[]
 
     scanCooldownAt DateTime?
 
@@ -99,6 +100,8 @@ model Catch {
 
     wildlifeId String
     wildlife   Wildlife @relation(fields: [wildlifeId], references: [id], onDelete: Cascade)
+
+    seed String
 
     @@unique([wildlifeId, playerId])
 }
@@ -124,4 +127,36 @@ model Wildlife {
     @@index([lat, lng])
     @@index([taxonId])
     @@index([observationId])
+}
+
+model Battle {
+    id        String   @id @default(cuid())
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    metadata Json
+    status   BattleStatus
+
+    battleParticipants BattleParticipation[]
+}
+
+enum BattleStatus {
+    // PENDING
+    IN_PROGRESS
+    FINISHED
+}
+
+model BattleParticipation {
+    id        String   @id @default(cuid())
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    metadata Json
+    isWinner Boolean?
+
+    playerId String
+    player   Player @relation(fields: [playerId], references: [id], onDelete: Cascade)
+
+    battleId String
+    battle   Battle @relation(fields: [battleId], references: [id], onDelete: Cascade)
 }

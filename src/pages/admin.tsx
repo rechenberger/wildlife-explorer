@@ -38,10 +38,12 @@ const MigrationButton = ({
 
 export default function Page() {
   const taxons = api.migration.taxons.useMutation()
+  const seed = api.migration.seed.useMutation()
   return (
     <MainLayout>
       <div className="w-full max-w-md"></div>
       <MigrationButton {...taxons} label="Taxons" />
+      <MigrationButton {...seed} label="Seed" />
     </MainLayout>
   )
 }

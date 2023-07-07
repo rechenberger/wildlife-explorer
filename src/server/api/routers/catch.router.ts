@@ -8,6 +8,7 @@ import {
 } from "~/config"
 import { createTRPCRouter } from "~/server/api/trpc"
 import { calcDistanceInMeter } from "~/server/lib/latLng"
+import { createSeed } from "~/utils/seed"
 import { playerProcedure } from "../middleware/playerProcedure"
 
 export const catchRouter = createTRPCRouter({
@@ -93,6 +94,7 @@ export const catchRouter = createTRPCRouter({
         data: {
           playerId: ctx.player.id,
           wildlifeId: wildlife.id,
+          seed: createSeed(wildlife),
         },
       })
 
