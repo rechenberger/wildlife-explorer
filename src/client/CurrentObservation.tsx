@@ -41,6 +41,13 @@ export const CurrentObservation = () => {
         trpc.wildlife.invalidate()
       },
     })
+  const { mutateAsync: attackWildlife, isLoading: attacking } =
+    api.battle.attackWildlife.useMutation({
+      onSettled: () => {
+        trpc.catch.invalidate()
+        trpc.wildlife.invalidate()
+      },
+    })
 
   const getName = useGetWildlifeName()
 
@@ -178,16 +185,32 @@ export const CurrentObservation = () => {
 
               toast.promise(doCatch({ wildlifeId: w.id, playerId }), {
                 loading: "Catching...",
-                success: (result) =>
-                  result.success
-                    ? "You caught it! 🎉"
-                    : result.reason || "Failed to catch. Try again.",
+                success: "You caught it! 🎉",
                 error: (err) => err.message || "Failed to catch. Try again.",
                 // icon: <></>,
               })
             }}
           >
             Catch
+          </button>
+          <button
+            className={cn(
+              "rounded bg-black px-2 py-1 text-sm text-white",
+              attacking && "cursor-progress opacity-50"
+            )}
+            disabled={catching}
+            onClick={async () => {
+              if (!playerId) return
+
+              toast.promise(attackWildlife({ wildlifeId: w.id, playerId }), {
+                loading: "Catching...",
+                success: "You caught it! 🎉",
+                error: (err) => err.message || "Failed to catch. Try again.",
+                // icon: <></>,
+              })
+            }}
+          >
+            Battle
           </button>
         </div>
       </div>
