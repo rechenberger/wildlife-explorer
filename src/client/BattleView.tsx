@@ -60,9 +60,10 @@ export const BattleView = () => {
                         : "flex-col-reverse items-end"
                     )}
                   >
-                    <div className="flex flex-col gap-6">
+                    <div className="flex flex-col gap-6 self-stretch">
                       {map(side.fighters, (fighter, fighterIdx) => {
-                        const { hp, hpMax, isActive } = fighter.fighterStatus
+                        const { hp, hpMax, isActive, moves } =
+                          fighter.fighterStatus
                         if (!isActive) return null
                         const hpFull = hp >= hpMax
                         const dead = hp <= 0
@@ -70,53 +71,77 @@ export const BattleView = () => {
                           <Fragment key={fighterIdx}>
                             <div
                               className={cn(
-                                "flex w-44 items-center gap-4 rounded-full bg-black/10",
+                                "flex items-center",
                                 isMainSide ? "flex-row" : "flex-row-reverse"
-                                // 'ring',
-                                // hpFull
-                                //   ? "ring-green-500"
-                                //   : dead
-                                //   ? "ring-red-500"
-                                //   : "ring-amber-400"
                               )}
                             >
                               <div
                                 className={cn(
-                                  "relative -m-1 aspect-square h-12 w-12 shrink-0 overflow-hidden rounded-full ring",
-                                  hpFull
-                                    ? "ring-green-500"
-                                    : dead
-                                    ? "ring-red-500"
-                                    : "ring-amber-400"
+                                  "flex w-44 items-center gap-4 rounded-full bg-black/10",
+                                  isMainSide ? "flex-row" : "flex-row-reverse"
+                                  // 'ring',
+                                  // hpFull
+                                  //   ? "ring-green-500"
+                                  //   : dead
+                                  //   ? "ring-red-500"
+                                  //   : "ring-amber-400"
                                 )}
                               >
-                                {fighter.wildlife.metadata
-                                  .taxonImageUrlSquare && (
-                                  <Image
-                                    src={
-                                      fighter.wildlife.metadata
-                                        .taxonImageUrlSquare
-                                    }
-                                    className="w-full object-cover object-center"
-                                    alt={"Observation"}
-                                    unoptimized
-                                    fill={true}
-                                  />
-                                )}
-                              </div>
-                              <div
-                                className={cn("flex-1 overflow-hidden py-1")}
-                              >
-                                <div className="truncate font-bold">
-                                  {fighter.wildlife
-                                    ? getName(fighter.wildlife)
-                                    : fighter.fighter.name}
+                                <div
+                                  className={cn(
+                                    "relative -m-1 aspect-square h-12 w-12 shrink-0 overflow-hidden rounded-full ring",
+                                    hpFull
+                                      ? "ring-green-500"
+                                      : dead
+                                      ? "ring-red-500"
+                                      : "ring-amber-400"
+                                  )}
+                                >
+                                  {fighter.wildlife.metadata
+                                    .taxonImageUrlSquare && (
+                                    <Image
+                                      src={
+                                        fighter.wildlife.metadata
+                                          .taxonImageUrlSquare
+                                      }
+                                      className="w-full object-cover object-center"
+                                      alt={"Observation"}
+                                      unoptimized
+                                      fill={true}
+                                    />
+                                  )}
                                 </div>
-                                <div className="truncate">
-                                  {hp}/{hpMax} HP
+                                <div
+                                  className={cn("flex-1 overflow-hidden py-1")}
+                                >
+                                  <div className="truncate font-bold">
+                                    {fighter.wildlife
+                                      ? getName(fighter.wildlife)
+                                      : fighter.fighter.name}
+                                  </div>
+                                  <div className="truncate">
+                                    {hp}/{hpMax} HP
+                                  </div>
                                 </div>
+                                <div className="w-2" />
                               </div>
-                              <div className="w-2" />
+                              <div className="flex-1" />
+                              <div className="grid grid-cols-2 gap-1">
+                                {map(fillWithNulls(moves, 4), (move, idx) => {
+                                  return (
+                                    <button
+                                      key={idx}
+                                      className={cn(
+                                        "rounded bg-black/10 px-2 py-1 text-xs",
+                                        move ? "text-black" : "opacity-20"
+                                      )}
+                                      disabled={!move}
+                                    >
+                                      {move || "-"}
+                                    </button>
+                                  )
+                                })}
+                              </div>
                             </div>
                           </Fragment>
                         )
@@ -174,4 +199,12 @@ export const BattleView = () => {
       )}
     </div>
   )
+}
+
+function fillWithNulls<T>(arr: T[], length: number) {
+  const result: (T | null)[] = [...arr]
+  while (result.length < length) {
+    result.push(null)
+  }
+  return result
 }
