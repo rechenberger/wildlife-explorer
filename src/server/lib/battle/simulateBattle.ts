@@ -1,6 +1,7 @@
 import { Battle, toID, type PokemonSet, type SideID } from "@pkmn/sim"
 import { type PrismaClient } from "@prisma/client"
 import { map } from "lodash-es"
+import { MAX_FIGHTERS_PER_TEAM } from "~/config"
 import { createSeed } from "~/utils/seed"
 import { getBattleForSimulation } from "./getBattleForSimulation"
 import { getWildlifeFighter } from "./getWildlifeFighter"
@@ -15,6 +16,7 @@ export const simulateBattle = async ({
   const battleDb = await getBattleForSimulation({
     prisma,
     battleId,
+    playerPartyLimit: MAX_FIGHTERS_PER_TEAM,
   })
 
   const battle = new Battle({

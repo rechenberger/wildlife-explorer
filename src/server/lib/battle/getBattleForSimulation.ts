@@ -8,11 +8,11 @@ import { WildlifeMetadata } from "~/server/schema/WildlifeMetadata"
 export const getBattleForSimulation = async ({
   prisma,
   battleId,
-  playerPartyLimit = 6,
+  playerPartyLimit,
 }: {
   prisma: PrismaClient
   battleId: string
-  playerPartyLimit?: number
+  playerPartyLimit: number
 }) => {
   const battleRaw = await prisma.battle.findUniqueOrThrow({
     where: {

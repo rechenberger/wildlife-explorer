@@ -1,6 +1,7 @@
 import { find, map } from "lodash-es"
 import Image from "next/image"
 import { Fragment } from "react"
+import { MAX_FIGHTERS_PER_TEAM, MAX_MOVES_PER_FIGHTER } from "~/config"
 import { api } from "~/utils/api"
 import { cn } from "./cn"
 import { useGetWildlifeName } from "./useGetWildlifeName"
@@ -128,20 +129,23 @@ export const BattleView = () => {
                               <div className="flex-1" />
                               {isMySide && (
                                 <div className="grid grid-cols-2 gap-1">
-                                  {map(fillWithNulls(moves, 4), (move, idx) => {
-                                    return (
-                                      <button
-                                        key={idx}
-                                        className={cn(
-                                          "truncate rounded bg-black/10 px-2 py-1 text-xs",
-                                          move ? "text-black" : "opacity-20"
-                                        )}
-                                        disabled={!move}
-                                      >
-                                        {move || "-"}
-                                      </button>
-                                    )
-                                  })}
+                                  {map(
+                                    fillWithNulls(moves, MAX_MOVES_PER_FIGHTER),
+                                    (move, idx) => {
+                                      return (
+                                        <button
+                                          key={idx}
+                                          className={cn(
+                                            "truncate rounded bg-black/10 px-2 py-1 text-xs",
+                                            move ? "text-black" : "opacity-20"
+                                          )}
+                                          disabled={!move}
+                                        >
+                                          {move || "-"}
+                                        </button>
+                                      )
+                                    }
+                                  )}
                                 </div>
                               )}
                             </div>
@@ -156,7 +160,7 @@ export const BattleView = () => {
                       )}
                     >
                       {map(
-                        fillWithNulls(side.fighters, 6),
+                        fillWithNulls(side.fighters, MAX_FIGHTERS_PER_TEAM),
                         (fighter, fighterIdx) => {
                           if (!fighter) {
                             return (
