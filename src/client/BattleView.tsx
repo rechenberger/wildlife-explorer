@@ -115,19 +115,21 @@ export const BattleView = () => {
                             {!!lastMove && (
                               <div
                                 className={cn(
-                                  "rounded-full bg-black/10 px-4 py-1",
+                                  "rounded-full border border-dashed border-black/10 bg-black/5 px-4 py-1 text-black/60",
                                   isMainSide
-                                    ? "-mb-1 ml-2 self-start rounded-bl-none"
-                                    : "-mt-0 mr-2 self-end rounded-tr-none"
+                                    ? "-mb-1 ml-4 self-start rounded-bl-none"
+                                    : "-mt-0 mr-4 self-end rounded-tr-none"
                                 )}
                               >
-                                <span className="italic">
+                                <span className="italic text-black">
                                   {getName(fighter.wildlife)}
                                 </span>{" "}
                                 uses{" "}
-                                <span className="italic">{lastMove.name}</span>,
-                                dealing{" "}
-                                <span className="italic">
+                                <span className="italic text-black">
+                                  {lastMove.name}
+                                </span>
+                                , dealing{" "}
+                                <span className="italic text-black">
                                   {lastMove.totalDamage || "no"}
                                 </span>{" "}
                                 damage
