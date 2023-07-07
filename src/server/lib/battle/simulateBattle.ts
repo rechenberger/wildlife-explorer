@@ -45,7 +45,7 @@ export const simulateBattle = async ({
       team = [
         getWildlifeFighter({
           wildlife: battleParticipant.wildlife,
-          isCaught: true,
+          isCaught: false,
           seed: createSeed(battleParticipant.wildlife),
           locale: "de",
         }),
