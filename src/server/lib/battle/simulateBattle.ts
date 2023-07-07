@@ -32,7 +32,7 @@ export const simulateBattle = async ({
 
     let team: {
       fighter: PokemonSet
-      wildlife: typeof battleParticipant.wildlife
+      wildlife: NonNullable<typeof battleParticipant.wildlife>
       catch?: NonNullable<typeof battleParticipant.player>["catches"][number]
     }[] = []
 
@@ -78,9 +78,12 @@ export const simulateBattle = async ({
   const betterOutput = () => {
     return {
       winner: battle.winner,
-      sides: battle.sides.map((side) => {
-        const fighter = side.pokemon.map((p) => {
+      sides: battle.sides.map((side, sideIdx) => {
+        const team = teams[sideIdx]!
+        const fighters = side.pokemon.map((p, fighterIdx) => {
+          const fighter = team.team[fighterIdx]!
           return {
+            ...fighter,
             fighterStatus: {
               name: p.name,
               hp: p.hp,
@@ -89,7 +92,7 @@ export const simulateBattle = async ({
             },
           }
         })
-        return { fighter }
+        return { name: team.name, fighters }
       }),
     }
   }
