@@ -13,6 +13,8 @@ import { cn } from "./cn"
 import { useGetWildlifeName } from "./useGetWildlifeName"
 import { usePlayer } from "./usePlayer"
 
+const BIG_INACTIVE_FIGHTER = false
+
 export const BattleView = () => {
   const { playerId } = usePlayer()
 
@@ -94,11 +96,11 @@ export const BattleView = () => {
                         : "flex-col-reverse items-end"
                     )}
                   >
-                    <div className="flex flex-col gap-6 self-stretch">
+                    <div className="flex flex-col gap-2 self-stretch">
                       {map(side.fighters, (fighter) => {
                         const { hp, hpMax, isActive, moves, status } =
                           fighter.fighterStatus
-                        // if (!isActive) return null
+                        if (!isActive && !BIG_INACTIVE_FIGHTER) return null
                         const hpFull = hp >= hpMax
                         const dead = hp <= 0
                         return (
