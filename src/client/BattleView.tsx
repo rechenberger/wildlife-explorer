@@ -50,14 +50,24 @@ export const BattleView = () => {
                     const dead = hp <= 0
                     return (
                       <Fragment key={fighterIdx}>
-                        <div className="flex flex-row items-center gap-4 rounded-full bg-black/20">
+                        <div
+                          className={cn(
+                            "flex flex-row items-center gap-4 rounded-full bg-black/10"
+                            // 'ring',
+                            // hpFull
+                            //   ? "ring-green-500"
+                            //   : dead
+                            //   ? "ring-red-500"
+                            //   : "ring-amber-400"
+                          )}
+                        >
                           <div
                             className={cn(
                               "relative -m-1 aspect-square h-12 w-12 overflow-hidden rounded-full ring",
                               hpFull
-                                ? "ring-green-400"
+                                ? "ring-green-500"
                                 : dead
-                                ? "ring-red-400"
+                                ? "ring-red-500"
                                 : "ring-amber-400"
                             )}
                           >
