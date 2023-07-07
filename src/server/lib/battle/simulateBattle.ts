@@ -24,12 +24,9 @@ export const simulateBattle = async ({
     playerPartyLimit: MAX_FIGHTERS_PER_TEAM,
   })
 
-  // inputLog = inputLog ?? battleDb.metadata.inputLog ?? []
-
+  // INIT BATTLE
   const battleJson = battleDb.metadata.battleJson
-
   let battle: Battle
-
   if (battleJson) {
     battle = Battle.fromJSON(battleJson)
   } else {
@@ -39,6 +36,7 @@ export const simulateBattle = async ({
     })
   }
 
+  // BUILD TEAMS
   const teams = map(battleDb.battleParticipants, (battleParticipant, idx) => {
     if (idx > 4) throw new Error("Too many participants!")
     const sideId = `p${idx + 1}` as SideID
@@ -95,7 +93,17 @@ export const simulateBattle = async ({
     }
   })
 
-  const betterOutput = () => {
+  // CHOICE
+  if (choice) {
+    const success = battle.choose(choice.player as SideID, choice.choice)
+    if (!success) {
+      throw new Error(`Invalid choice: "${choice.choice}"`)
+    }
+    battle.makeChoices()
+  }
+
+  // BATTLE STATUS
+  const battleStatus = () => {
     return {
       winner: battle.winner,
       inputLog: battle.inputLog,
@@ -121,44 +129,11 @@ export const simulateBattle = async ({
     }
   }
 
-  // console.log("inputLog", inputLog)
-  // battle.makeChoices()
-  // battle.makeChoices()
-
-  // inputLog.forEach((i) => {
-  //   // battle.send()
-  //   // battle.inputLog.push(i)
-  //   // battle.messageLog
-  // })
-  // battle.makeChoices(...inputLog)
-
-  if (choice) {
-    const success = battle.choose(choice.player as SideID, choice.choice)
-    if (!success) {
-      throw new Error(`Invalid choice: "${choice.choice}"`)
-    }
-    battle.makeChoices()
-  }
-
-  // battle.choose("p2", "move 2")
-
-  // battle.add
-
-  // console.log(betterOutput())
-  // battle.choose("p1", "move 1")
-  // battle.choose("p2", "move 2")
-  // console.log(betterOutput())
-  // console.log(battle.inputLog)
-
-  // const winner = battle.winner
-
   console.log(battle.log)
-
-  // console.log(battle.log)
   // console.log(JSON.stringify(battle.toJSON(), null, 2))
 
   return {
-    battleStatus: betterOutput(),
+    battleStatus: battleStatus(),
     battleJson: battle.toJSON(),
   }
 }
