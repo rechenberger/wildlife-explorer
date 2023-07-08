@@ -179,3 +179,5 @@ export const itemIcon = {
   bgHalf: "bg-black/20",
   ringFull: "hover:ring ring-black",
 }
+
+export type TypeIcon = (typeof typeIcons)[0]

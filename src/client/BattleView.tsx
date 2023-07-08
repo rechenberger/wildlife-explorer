@@ -12,7 +12,7 @@ import { api } from "~/utils/api"
 import { replaceByWildlife } from "~/utils/replaceByWildlife"
 import { MyCatches } from "./MyCatches"
 import { cn } from "./cn"
-import { abilityIcon, getTypeIcon } from "./typeIcons"
+import { TypeIcon, abilityIcon, getTypeIcon, itemIcon } from "./typeIcons"
 import { useGetWildlifeName } from "./useGetWildlifeName"
 import { usePlayer } from "./usePlayer"
 
@@ -289,24 +289,12 @@ export const BattleView = () => {
                                         (type) => {
                                           const icon = getTypeIcon(type)
                                           return (
-                                            <div
+                                            <TypeBadge
                                               key={type}
                                               title={type}
-                                              className={cn(
-                                                "flex gap-1 rounded pr-1",
-                                                icon.bgHalf
-                                              )}
-                                            >
-                                              <div
-                                                className={cn(
-                                                  "rounded p-0.5",
-                                                  icon.bgFull
-                                                )}
-                                              >
-                                                <icon.icon className="h-4 w-4" />
-                                              </div>
-                                              <div>{type}</div>
-                                            </div>
+                                              icon={icon}
+                                              content={type}
+                                            />
                                           )
                                         }
                                       )}
@@ -314,31 +302,23 @@ export const BattleView = () => {
                                   )}
 
                                   {SHOW_ABILITY && (
-                                    <div
+                                    <TypeBadge
                                       title={replaceByWildlife(
                                         fighter.fighterStatus.ability.desc
                                       )}
-                                      className={cn(
-                                        "flex gap-1 rounded pr-1",
-                                        abilityIcon.bgHalf
-                                      )}
-                                    >
-                                      <div
-                                        className={cn(
-                                          "rounded p-0.5",
-                                          abilityIcon.bgFull
-                                        )}
-                                      >
-                                        <abilityIcon.icon className="h-4 w-4" />
-                                      </div>
-                                      <div>
-                                        {fighter.fighterStatus.ability.name}
-                                      </div>
-                                    </div>
+                                      icon={abilityIcon}
+                                      content={
+                                        fighter.fighterStatus.ability.name
+                                      }
+                                    />
                                   )}
 
                                   {fighter.fighter.item && (
-                                    <div>Item: {fighter.fighter.item}</div>
+                                    <TypeBadge
+                                      title={fighter.fighter.item}
+                                      icon={itemIcon}
+                                      content={fighter.fighter.item}
+                                    />
                                   )}
                                 </div>
                               </div>
@@ -542,4 +522,28 @@ function fillWithNulls<T>(arr: T[], length: number) {
     result.push(null)
   }
   return result
+}
+
+const TypeBadge = ({
+  title,
+  icon,
+  content,
+}: {
+  title?: string
+  icon: TypeIcon
+  content: string
+}) => {
+  return (
+    <>
+      <div
+        title={title || content}
+        className={cn("flex gap-1 rounded pr-1", icon.bgHalf)}
+      >
+        <div className={cn("rounded p-0.5", icon.bgFull)}>
+          <icon.icon className="h-4 w-4" />
+        </div>
+        <div>{content}</div>
+      </div>
+    </>
+  )
 }
