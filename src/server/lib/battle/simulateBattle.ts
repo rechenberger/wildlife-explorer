@@ -196,6 +196,7 @@ export const simulateBattle = async ({
               lastMove: p.lastMove,
               lastDamage: p.lastDamage,
               ability: Dex.abilities.get(p.ability),
+              types: p.types,
             },
           }
         })

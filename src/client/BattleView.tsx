@@ -252,7 +252,35 @@ export const BattleView = () => {
                                       </div>
                                     )}
                                   </div>
-                                  {/* <div>
+                                  <div className="flex flex-row gap-1">
+                                    {map(
+                                      fighter.fighterStatus.types,
+                                      (type) => {
+                                        const icon = getTypeIcon(type)
+                                        return (
+                                          <div
+                                            key={type}
+                                            title={type}
+                                            className={cn(
+                                              "flex gap-1 rounded pr-1",
+                                              icon.bgHalf
+                                            )}
+                                          >
+                                            <div
+                                              className={cn(
+                                                "rounded p-0.5",
+                                                icon.bgFull
+                                              )}
+                                            >
+                                              <icon.icon className="h-4 w-4" />
+                                            </div>
+                                            <div>{type}</div>
+                                          </div>
+                                        )
+                                      }
+                                    )}
+                                  </div>
+                                  <div>
                                     <div
                                       title={replaceByWildlife(
                                         fighter.fighterStatus.ability.desc
@@ -263,7 +291,7 @@ export const BattleView = () => {
                                     {fighter.fighter.item && (
                                       <div>Item: {fighter.fighter.item}</div>
                                     )}
-                                  </div> */}
+                                  </div>
 
                                   <div className="flex flex-row gap-1 text-xs">
                                     <div className="truncate">
