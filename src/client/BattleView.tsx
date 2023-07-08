@@ -15,7 +15,7 @@ import { getTypeIcon } from "./typeIcons"
 import { useGetWildlifeName } from "./useGetWildlifeName"
 import { usePlayer } from "./usePlayer"
 
-const BIG_INACTIVE_FIGHTER = false
+const BIG_INACTIVE_FIGHTER = true
 const SHOW_ENEMY_MOVES = false
 const SHOW_FIGHTER_NAME = DEV_MODE
 

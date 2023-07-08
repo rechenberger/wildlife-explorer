@@ -79,15 +79,15 @@ export const simulateBattle = async ({
           }),
           wildlife: battleParticipant.wildlife,
         },
-        {
-          fighter: getWildlifeFighter({
-            wildlife: { ...battleParticipant.wildlife, id: "fake-2" },
-            isCaught: false,
-            seed: createSeed(battleParticipant.wildlife),
-            locale: "de",
-          }),
-          wildlife: { ...battleParticipant.wildlife, id: "fake-2" },
-        },
+        // {
+        //   fighter: getWildlifeFighter({
+        //     wildlife: { ...battleParticipant.wildlife, id: "fake-2" },
+        //     isCaught: false,
+        //     seed: createSeed(battleParticipant.wildlife),
+        //     locale: "de",
+        //   }),
+        //   wildlife: { ...battleParticipant.wildlife, id: "fake-2" },
+        // },
       ]
     }
 
