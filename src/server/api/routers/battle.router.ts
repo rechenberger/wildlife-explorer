@@ -154,4 +154,23 @@ export const battleRouter = createTRPCRouter({
       })
       console.timeEnd("update")
     }),
+
+  run: playerProcedure
+    .input(
+      z.object({
+        battleId: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      // TODO: chance?
+      // TODO: SECURITY: check if player is in battle
+      await ctx.prisma.battle.update({
+        where: {
+          id: input.battleId,
+        },
+        data: {
+          status: "CANCELLED",
+        },
+      })
+    }),
 })

@@ -56,6 +56,11 @@ export const BattleView = () => {
       trpc.battle.invalidate()
     },
   })
+  const { mutate: run } = api.battle.run.useMutation({
+    onSuccess: () => {
+      trpc.battle.invalidate()
+    },
+  })
 
   const isLoading = battleLoading || choiceLoading
 
@@ -331,7 +336,7 @@ export const BattleView = () => {
                     </div>
                     <div
                       className={cn(
-                        "flex items-center gap-1",
+                        "flex w-full items-center gap-1",
                         isMainSide ? "flex-row" : "flex-row-reverse"
                       )}
                     >
@@ -393,6 +398,35 @@ export const BattleView = () => {
                             </Fragment>
                           )
                         }
+                      )}
+                      {isMySide && (
+                        <div
+                          className={cn(
+                            "flex flex-1 gap-2",
+                            isMainSide ? "flex-row-reverse" : "flex-row"
+                          )}
+                        >
+                          <button
+                            className="w-12 rounded bg-black/10 py-1 text-xs hover:bg-black/20 sm:w-28"
+                            onClick={() => {
+                              if (!playerId) return
+                              run({
+                                battleId: activeBattle.id,
+                                playerId,
+                              })
+                            }}
+                          >
+                            Run
+                          </button>
+                          <button
+                            className="w-12 rounded bg-black/10 py-1 text-xs hover:bg-black/20 sm:w-28"
+                            onClick={() => {
+                              toast.error("Not implemented yet")
+                            }}
+                          >
+                            Catch
+                          </button>
+                        </div>
                       )}
                     </div>
                     {/* <div className="text-xl">
