@@ -12,12 +12,10 @@ export const getWildlifeFighter = async ({
   wildlife,
   isCaught,
   seed,
-  locale,
 }: {
   wildlife: Wildlife & { metadata: WildlifeMetadata }
   isCaught: boolean
   seed: string
-  locale: "de" | "en"
 }) => {
   const base = isCaught ? pikachu : charizard
   const mapping = taxonMappingByAncestors(wildlife.metadata.taxonAncestorIds)
