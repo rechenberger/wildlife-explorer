@@ -116,13 +116,9 @@ export const BattleView = () => {
                           moves,
                           status,
                           lastMove,
-                          faintedThisTurn,
+                          justFainted,
                         } = fighter.fighterStatus
-                        if (
-                          !isActive &&
-                          !BIG_INACTIVE_FIGHTER &&
-                          !faintedThisTurn
-                        )
+                        if (!isActive && !BIG_INACTIVE_FIGHTER && !justFainted)
                           return null
                         const hpFull = hp >= hpMax
                         const fainted = hp <= 0
@@ -167,7 +163,7 @@ export const BattleView = () => {
                                       </span>{" "}
                                       damage
                                     </>
-                                  ) : faintedThisTurn ? (
+                                  ) : justFainted ? (
                                     "fainted"
                                   ) : (
                                     "enters the battle"
@@ -202,7 +198,7 @@ export const BattleView = () => {
                                       : fainted
                                       ? "ring-red-500"
                                       : "ring-amber-400",
-                                    !isActive && !faintedThisTurn && "grayscale"
+                                    !isActive && !justFainted && "grayscale"
                                   )}
                                 >
                                   {fighter.wildlife.metadata
