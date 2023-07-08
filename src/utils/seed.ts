@@ -42,3 +42,48 @@ export const rngItem = <T>({
   const idx = rngInt({ seed, max: items.length - 1 })
   return items[idx]!
 }
+
+export const rngItems = <T>({
+  seed,
+  items,
+  count,
+}: {
+  seed: RngSeed
+  items: T[]
+  count: number
+}): T[] => {
+  const itemsCopy = [...items]
+  const results: T[] = []
+  for (let i = 0; i < count; i++) {
+    const idx = rngInt({ seed, max: itemsCopy.length - 1 })
+    const item = itemsCopy.splice(idx, 1)[0]!
+    results.push(item)
+  }
+  return results
+}
+
+export const rngItemsWithWeights = <T>({
+  seed,
+  items,
+  count,
+}: {
+  seed: RngSeed
+  items: { item: T; weight: number }[]
+  count: number
+}): T[] => {
+  const itemsCopy = [...items]
+  const results: T[] = []
+  for (let i = 0; i < count; i++) {
+    const totalWeight = itemsCopy.reduce((acc, item) => acc + item.weight, 0)
+    const rnd = rng({ seed })
+    let weight = 0
+    for (const item of itemsCopy) {
+      weight += item.weight
+      if (rnd <= weight / totalWeight) {
+        results.push(item.item)
+        break
+      }
+    }
+  }
+  return results
+}
