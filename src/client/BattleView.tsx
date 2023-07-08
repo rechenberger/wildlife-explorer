@@ -12,7 +12,7 @@ import { api } from "~/utils/api"
 import { replaceByWildlife } from "~/utils/replaceByWildlife"
 import { MyCatches } from "./MyCatches"
 import { cn } from "./cn"
-import { getTypeIcon } from "./typeIcons"
+import { abilityIcon, getTypeIcon } from "./typeIcons"
 import { useGetWildlifeName } from "./useGetWildlifeName"
 import { usePlayer } from "./usePlayer"
 
@@ -191,13 +191,13 @@ export const BattleView = () => {
                             >
                               <div
                                 className={cn(
-                                  "flex flex-col gap-2",
+                                  "flex w-44 flex-col gap-2",
                                   isMainSide ? "flex-col" : "flex-col-reverse"
                                 )}
                               >
                                 <div
                                   className={cn(
-                                    "flex w-44 items-center gap-4 rounded-full bg-black/10",
+                                    "flex items-center gap-4 rounded-full bg-black/10",
                                     isMainSide ? "flex-row" : "flex-row-reverse"
                                     // 'ring',
                                     // hpFull
@@ -276,9 +276,14 @@ export const BattleView = () => {
                                   </div>
                                   <div className="w-2" />
                                 </div>
-                                <div>
+                                <div
+                                  className={cn(
+                                    "flex flex-wrap gap-1",
+                                    isMainSide ? "flex-row" : "flex-row-reverse"
+                                  )}
+                                >
                                   {SHOW_FIGHTER_TYPES && (
-                                    <div className="flex flex-row gap-1">
+                                    <>
                                       {map(
                                         fighter.fighterStatus.types,
                                         (type) => {
@@ -305,21 +310,35 @@ export const BattleView = () => {
                                           )
                                         }
                                       )}
-                                    </div>
+                                    </>
                                   )}
+
                                   {SHOW_ABILITY && (
-                                    <div>
+                                    <div
+                                      title={replaceByWildlife(
+                                        fighter.fighterStatus.ability.desc
+                                      )}
+                                      className={cn(
+                                        "flex gap-1 rounded pr-1",
+                                        abilityIcon.bgHalf
+                                      )}
+                                    >
                                       <div
-                                        title={replaceByWildlife(
-                                          fighter.fighterStatus.ability.desc
+                                        className={cn(
+                                          "rounded p-0.5",
+                                          abilityIcon.bgFull
                                         )}
                                       >
+                                        <abilityIcon.icon className="h-4 w-4" />
+                                      </div>
+                                      <div>
                                         {fighter.fighterStatus.ability.name}
                                       </div>
-                                      {fighter.fighter.item && (
-                                        <div>Item: {fighter.fighter.item}</div>
-                                      )}
                                     </div>
+                                  )}
+
+                                  {fighter.fighter.item && (
+                                    <div>Item: {fighter.fighter.item}</div>
                                   )}
                                 </div>
                               </div>

@@ -1,4 +1,6 @@
 import {
+  Apple,
+  Atom,
   Biohazard,
   Bird,
   Brain,
@@ -149,7 +151,7 @@ export const typeIcons = [
   },
 ]
 
-const fallbackTypeIcon = {
+export const fallbackTypeIcon = {
   name: "???",
   icon: HelpCircle,
   bgFull: "bg-black text-white",
@@ -160,4 +162,20 @@ const fallbackTypeIcon = {
 export const getTypeIcon = (type: string) => {
   const typeIcon = typeIcons.find((typeIcon) => typeIcon.name === type)
   return typeIcon || { ...fallbackTypeIcon, name: type }
+}
+
+export const abilityIcon = {
+  name: "Ability",
+  icon: Atom,
+  bgFull: "bg-black/40 text-white",
+  bgHalf: "bg-black/20",
+  ringFull: "hover:ring ring-black",
+}
+
+export const itemIcon = {
+  name: "Item",
+  icon: Apple,
+  bgFull: "bg-black/40 text-white",
+  bgHalf: "bg-black/20",
+  ringFull: "hover:ring ring-black",
 }
