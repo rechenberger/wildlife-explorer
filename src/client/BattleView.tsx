@@ -20,6 +20,8 @@ const BIG_INACTIVE_FIGHTER = true
 const SHOW_ENEMY_MOVES = true
 const SHOW_INACTIVE_MOVES = true
 const SHOW_FIGHTER_NAME = DEV_MODE
+const SHOW_FIGHTER_TYPES = false
+const SHOW_ABILITY = false
 
 export const BattleView = () => {
   const { playerId } = usePlayer()
@@ -252,46 +254,50 @@ export const BattleView = () => {
                                       </div>
                                     )}
                                   </div>
-                                  <div className="flex flex-row gap-1">
-                                    {map(
-                                      fighter.fighterStatus.types,
-                                      (type) => {
-                                        const icon = getTypeIcon(type)
-                                        return (
-                                          <div
-                                            key={type}
-                                            title={type}
-                                            className={cn(
-                                              "flex gap-1 rounded pr-1",
-                                              icon.bgHalf
-                                            )}
-                                          >
+                                  {SHOW_FIGHTER_TYPES && (
+                                    <div className="flex flex-row gap-1">
+                                      {map(
+                                        fighter.fighterStatus.types,
+                                        (type) => {
+                                          const icon = getTypeIcon(type)
+                                          return (
                                             <div
+                                              key={type}
+                                              title={type}
                                               className={cn(
-                                                "rounded p-0.5",
-                                                icon.bgFull
+                                                "flex gap-1 rounded pr-1",
+                                                icon.bgHalf
                                               )}
                                             >
-                                              <icon.icon className="h-4 w-4" />
+                                              <div
+                                                className={cn(
+                                                  "rounded p-0.5",
+                                                  icon.bgFull
+                                                )}
+                                              >
+                                                <icon.icon className="h-4 w-4" />
+                                              </div>
+                                              <div>{type}</div>
                                             </div>
-                                            <div>{type}</div>
-                                          </div>
-                                        )
-                                      }
-                                    )}
-                                  </div>
-                                  <div>
-                                    <div
-                                      title={replaceByWildlife(
-                                        fighter.fighterStatus.ability.desc
+                                          )
+                                        }
                                       )}
-                                    >
-                                      {fighter.fighterStatus.ability.name}
                                     </div>
-                                    {fighter.fighter.item && (
-                                      <div>Item: {fighter.fighter.item}</div>
-                                    )}
-                                  </div>
+                                  )}
+                                  {SHOW_ABILITY && (
+                                    <div>
+                                      <div
+                                        title={replaceByWildlife(
+                                          fighter.fighterStatus.ability.desc
+                                        )}
+                                      >
+                                        {fighter.fighterStatus.ability.name}
+                                      </div>
+                                      {fighter.fighter.item && (
+                                        <div>Item: {fighter.fighter.item}</div>
+                                      )}
+                                    </div>
+                                  )}
 
                                   <div className="flex flex-row gap-1 text-xs">
                                     <div className="truncate">
