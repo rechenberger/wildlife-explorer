@@ -9,5 +9,6 @@ export const taxonMappingByAncestors = (ancestorIds: number[]) => {
     )
     if (mapping) return mapping
   }
+  console.warn(`No mapping found for ${ancestorIds}`)
   return { taxonId: 0, name: "Unknown", pokemon: "Togepi", count: 0 }
 }
