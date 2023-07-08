@@ -5,17 +5,28 @@ import {
   DEFAULT_RESPAWN_TIME_IN_MINUTES,
 } from "~/config"
 import { createTRPCRouter } from "~/server/api/trpc"
+import { WildlifeMetadata } from "~/server/schema/WildlifeMetadata"
 import { createSeed } from "~/utils/seed"
 import { playerProcedure } from "../middleware/playerProcedure"
 import { wildlifeProcedure } from "../middleware/wildlifeProcedure"
 
 export const catchRouter = createTRPCRouter({
   getMyCatches: playerProcedure.query(async ({ ctx }) => {
-    const catches = await ctx.prisma.catch.findMany({
+    const catchesRaw = await ctx.prisma.catch.findMany({
       where: {
         playerId: ctx.player.id,
       },
+      include: {
+        wildlife: true,
+      },
     })
+    const catches = catchesRaw.map((c) => ({
+      ...c,
+      wildlife: {
+        ...c.wildlife,
+        metadata: WildlifeMetadata.parse(c.wildlife.metadata),
+      },
+    }))
     return catches
   }),
 

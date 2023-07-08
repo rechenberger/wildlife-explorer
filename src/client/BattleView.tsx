@@ -9,6 +9,7 @@ import {
   MAX_MOVES_PER_FIGHTER,
 } from "~/config"
 import { api } from "~/utils/api"
+import { MyCatches } from "./MyCatches"
 import { cn } from "./cn"
 import { getTypeIcon } from "./typeIcons"
 import { useGetWildlifeName } from "./useGetWildlifeName"
@@ -442,6 +443,7 @@ export const BattleView = () => {
         <>
           <h3 className="truncate text-2xl">All Battles</h3>
           <div>{battles?.length || 0} Battles</div>
+          <MyCatches />
         </>
       )}
     </div>
