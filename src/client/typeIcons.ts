@@ -1,6 +1,5 @@
 import {
   Apple,
-  Atom,
   Biohazard,
   Bird,
   Brain,
@@ -16,6 +15,8 @@ import {
   Leaf,
   Moon,
   Mountain,
+  Puzzle,
+  Scale,
   Snowflake,
   Sparkles,
   Swords,
@@ -166,7 +167,15 @@ export const getTypeIcon = (type: string) => {
 
 export const abilityIcon = {
   name: "Ability",
-  icon: Atom,
+  icon: Puzzle,
+  bgFull: "bg-black/40 text-white",
+  bgHalf: "bg-black/20",
+  ringFull: "hover:ring ring-black",
+}
+
+export const natureIcon = {
+  name: "Nature",
+  icon: Scale,
   bgFull: "bg-black/40 text-white",
   bgHalf: "bg-black/20",
   ringFull: "hover:ring ring-black",

@@ -12,7 +12,13 @@ import { api } from "~/utils/api"
 import { replaceByWildlife } from "~/utils/replaceByWildlife"
 import { MyCatches } from "./MyCatches"
 import { cn } from "./cn"
-import { TypeIcon, abilityIcon, getTypeIcon, itemIcon } from "./typeIcons"
+import {
+  TypeIcon,
+  abilityIcon,
+  getTypeIcon,
+  itemIcon,
+  natureIcon,
+} from "./typeIcons"
 import { useGetWildlifeName } from "./useGetWildlifeName"
 import { usePlayer } from "./usePlayer"
 
@@ -22,6 +28,7 @@ const SHOW_INACTIVE_MOVES = true
 const SHOW_FIGHTER_NAME = DEV_MODE
 const SHOW_FIGHTER_TYPES = true
 const SHOW_ABILITY = true
+const SHOW_NATURE = true
 
 export const BattleView = () => {
   const { playerId } = usePlayer()
@@ -310,6 +317,13 @@ export const BattleView = () => {
                                       content={
                                         fighter.fighterStatus.ability.name
                                       }
+                                    />
+                                  )}
+                                  {SHOW_NATURE && (
+                                    <TypeBadge
+                                      title={"Nature"}
+                                      icon={natureIcon}
+                                      content={fighter.fighter.nature}
                                     />
                                   )}
 
