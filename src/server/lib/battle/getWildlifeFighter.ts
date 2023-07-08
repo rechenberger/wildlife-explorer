@@ -1,3 +1,4 @@
+import { Dex } from "@pkmn/dex"
 import { type Wildlife } from "@prisma/client"
 import { type WildlifeMetadata } from "~/server/schema/WildlifeMetadata"
 import { charizard, pikachu } from "./predefinedTeam"
@@ -18,6 +19,9 @@ export const getWildlifeFighter = ({
 }) => {
   const base = isCaught ? pikachu : charizard
   const mapping = taxonMappingByAncestors(wildlife.metadata.taxonAncestorIds)
+  const speciesName = mapping.pokemon
+  const species = Dex.species.get(speciesName)
+  console.log("species", species)
   return {
     ...base,
     // name:
@@ -25,6 +29,6 @@ export const getWildlifeFighter = ({
     //   wildlife.metadata.taxonCommonName ||
     //   wildlife.metadata.taxonName,
     name: wildlife.id.substring(0, MAX_NAME_LENGTH),
-    species: mapping.pokemon,
+    species: speciesName,
   }
 }

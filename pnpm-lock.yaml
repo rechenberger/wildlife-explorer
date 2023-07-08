@@ -14,6 +14,15 @@ dependencies:
   '@next-auth/prisma-adapter':
     specifier: ^1.0.5
     version: 1.0.5(@prisma/client@4.14.0)(next-auth@4.22.1)
+  '@pkmn/data':
+    specifier: ^0.7.45
+    version: 0.7.45
+  '@pkmn/dex':
+    specifier: ^0.7.45
+    version: 0.7.45
+  '@pkmn/randoms':
+    specifier: ^0.7.45
+    version: 0.7.45
   '@pkmn/sim':
     specifier: ^0.7.45
     version: 0.7.45
@@ -514,6 +523,30 @@ packages:
       picocolors: 1.0.0
       tslib: 2.6.0
     dev: true
+
+  /@pkmn/data@0.7.45:
+    resolution: {integrity: sha512-0YLKmj7U4CiSAZK85f3ZehrGeSiQKqUESbbtkjc50tmOKUmKXyaxJhbLUi2NRukF3vz7cWB+Gz0OBIjN0xJdSw==}
+    dependencies:
+      '@pkmn/dex-types': 0.7.45
+    dev: false
+
+  /@pkmn/dex-types@0.7.45:
+    resolution: {integrity: sha512-HV9dGJ0K/TF596cHndjS0HIVqe4cXl2up8FTE/xosgF7HoFurV/02Da9vQUvDn4LIQSwzwW0oui+/xeZp2v/9w==}
+    dependencies:
+      '@pkmn/types': 3.0.0
+    dev: false
+
+  /@pkmn/dex@0.7.45:
+    resolution: {integrity: sha512-VDE39LmwoD/aaxOaNYpm+5mfkp6zzpSImiI2rOYg5S0uhFTEwYx2LEMAgmcazFhw1K2BxA7RzTlwfdnHeJg1jQ==}
+    dependencies:
+      '@pkmn/dex-types': 0.7.45
+    dev: false
+
+  /@pkmn/randoms@0.7.45:
+    resolution: {integrity: sha512-0ld2VDpLfBYuh6Vrvo7m0ENEo9EqPgm+pDbaIENm15ZvgbHpRoc+S+PpSEepKn4Wb4eiIWgBol/gDre/UtCzVA==}
+    dependencies:
+      '@pkmn/sim': 0.7.45
+    dev: false
 
   /@pkmn/sets@5.0.4:
     resolution: {integrity: sha512-0Dg61L5fqK0tSy99g8R9Gk2BJqSMrTUZcj6cGlwgfMUR0FaRB8CQ8J6o9erjLzpJmatx9pJR1kWzG1ZLNYPrIQ==}
