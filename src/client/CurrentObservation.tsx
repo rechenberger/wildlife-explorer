@@ -44,8 +44,7 @@ export const CurrentObservation = () => {
   const { mutateAsync: attackWildlife, isLoading: attacking } =
     api.battle.attackWildlife.useMutation({
       onSettled: () => {
-        trpc.catch.invalidate()
-        trpc.wildlife.invalidate()
+        trpc.battle.invalidate()
       },
     })
 
