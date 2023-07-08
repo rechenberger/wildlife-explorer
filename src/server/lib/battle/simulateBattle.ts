@@ -41,70 +41,74 @@ export const simulateBattle = async ({
   }
 
   // BUILD TEAMS
-  const teams = map(battleDb.battleParticipants, (battleParticipant, idx) => {
-    if (idx > 4) throw new Error("Too many participants!")
-    const sideId = `p${idx + 1}` as SideID
-    const name =
-      battleParticipant.player?.name ??
-      // battleParticipant.wildlife?.metadata.taxonCommonName ??
-      "Wildlife"
+  const teams = await Promise.all(
+    map(battleDb.battleParticipants, async (battleParticipant, idx) => {
+      if (idx > 4) throw new Error("Too many participants!")
+      const sideId = `p${idx + 1}` as SideID
+      const name =
+        battleParticipant.player?.name ??
+        // battleParticipant.wildlife?.metadata.taxonCommonName ??
+        "Wildlife"
 
-    let team: {
-      fighter: PokemonSet
-      wildlife: NonNullable<typeof battleParticipant.wildlife>
-      catch?: NonNullable<typeof battleParticipant.player>["catches"][number]
-    }[] = []
+      let team: {
+        fighter: PokemonSet
+        wildlife: NonNullable<typeof battleParticipant.wildlife>
+        catch?: NonNullable<typeof battleParticipant.player>["catches"][number]
+      }[] = []
 
-    if (!!battleParticipant.player?.catches) {
-      team = battleParticipant.player?.catches.map((c) => {
-        return {
-          fighter: getWildlifeFighter({
-            wildlife: c.wildlife,
-            isCaught: true,
-            seed: c.seed,
-            locale: "de",
-          }),
-          wildlife: c.wildlife,
-          catch: c,
-        }
-      })
-    } else if (!!battleParticipant.wildlife) {
-      team = [
-        {
-          fighter: getWildlifeFighter({
+      if (!!battleParticipant.player?.catches) {
+        team = await Promise.all(
+          battleParticipant.player?.catches.map(async (c) => {
+            return {
+              fighter: await getWildlifeFighter({
+                wildlife: c.wildlife,
+                isCaught: true,
+                seed: c.seed,
+                locale: "de",
+              }),
+              wildlife: c.wildlife,
+              catch: c,
+            }
+          })
+        )
+      } else if (!!battleParticipant.wildlife) {
+        team = [
+          {
+            fighter: await getWildlifeFighter({
+              wildlife: battleParticipant.wildlife,
+              isCaught: false,
+              seed: createSeed(battleParticipant.wildlife),
+              locale: "de",
+            }),
             wildlife: battleParticipant.wildlife,
-            isCaught: false,
-            seed: createSeed(battleParticipant.wildlife),
-            locale: "de",
-          }),
-          wildlife: battleParticipant.wildlife,
-        },
-        // {
-        //   fighter: getWildlifeFighter({
-        //     wildlife: { ...battleParticipant.wildlife, id: "fake-2" },
-        //     isCaught: false,
-        //     seed: createSeed(battleParticipant.wildlife),
-        //     locale: "de",
-        //   }),
-        //   wildlife: { ...battleParticipant.wildlife, id: "fake-2" },
-        // },
-      ]
-    }
+          },
+          // {
+          //   fighter: getWildlifeFighter({
+          //     wildlife: { ...battleParticipant.wildlife, id: "fake-2" },
+          //     isCaught: false,
+          //     seed: createSeed(battleParticipant.wildlife),
+          //     locale: "de",
+          //   }),
+          //   wildlife: { ...battleParticipant.wildlife, id: "fake-2" },
+          // },
+        ]
+      }
 
-    if (!battleJson) {
-      battle.setPlayer(sideId, {
+      if (!battleJson) {
+        battle.setPlayer(sideId, {
+          name,
+          team: team.map((t) => t.fighter),
+        })
+      }
+
+      return {
+        sideId,
         name,
-        team: team.map((t) => t.fighter),
-      })
-    }
-
-    return {
-      sideId,
-      name,
-      team,
-      player: battleParticipant.player,
-    }
-  })
+        team,
+        player: battleParticipant.player,
+      }
+    })
+  )
 
   // CHOICE
   if (choice) {

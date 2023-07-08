@@ -6,7 +6,7 @@ import { taxonMappingByAncestors } from "./taxonMappingByAncestors"
 
 const MAX_NAME_LENGTH = 20
 
-export const getWildlifeFighter = ({
+export const getWildlifeFighter = async ({
   wildlife,
   isCaught,
   seed,
@@ -21,7 +21,8 @@ export const getWildlifeFighter = ({
   const mapping = taxonMappingByAncestors(wildlife.metadata.taxonAncestorIds)
   const speciesName = mapping.pokemon
   const species = Dex.species.get(speciesName)
-  console.log("species", species)
+  const learnSet = await Dex.learnsets.get(speciesName)
+  console.log("species", species, learnSet)
   return {
     ...base,
     // name:
