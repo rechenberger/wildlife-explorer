@@ -62,6 +62,25 @@ export const rngItems = <T>({
   return results
 }
 
+export const rngItemWithWeight = <T>({
+  seed,
+  items,
+}: {
+  seed: RngSeed
+  items: { item: T; weight: number }[]
+}): T => {
+  const totalWeight = items.reduce((acc, item) => acc + item.weight, 0)
+  const rnd = rng({ seed })
+  let weight = 0
+  for (const item of items) {
+    weight += item.weight
+    if (rnd <= weight / totalWeight) {
+      return item.item
+    }
+  }
+  throw new Error("No item found")
+}
+
 export const rngItemsWithWeights = <T>({
   seed,
   items,
