@@ -42,10 +42,12 @@ export default function Page() {
   const taxonDev = api.taxon.dev.useMutation()
   return (
     <MainLayout>
-      <div className="w-full max-w-md"></div>
-      <MigrationButton {...taxons} label="Taxons" />
-      <MigrationButton {...seed} label="Seed" />
-      <MigrationButton {...taxonDev} label="taxonDev" />
+      <div className="max-h-[calc(100svh-500px)] w-full max-w-6xl overflow-scroll">
+        <div className="w-full max-w-md"></div>
+        <MigrationButton {...taxons} label="Taxons" />
+        <MigrationButton {...seed} label="Seed" />
+        <MigrationButton {...taxonDev} label="taxonDev" />
+      </div>
     </MainLayout>
   )
 }

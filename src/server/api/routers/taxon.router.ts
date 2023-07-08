@@ -16,12 +16,21 @@ export const taxonRouter = createTRPCRouter({
           id: z.number(),
           ancestor_ids: z.array(z.number()),
           observations_count: z.number(),
+          children: z.array(
+            z.object({
+              id: z.number(),
+              ancestor_ids: z.array(z.number()),
+              name: z.string(),
+              iconic_taxon_name: z.string().nullable(),
+              preferred_common_name: z.string().nullable(),
+            })
+          ),
         })
       ),
     })
 
     const parsed = schema.parse(data)
-    const result = first(parsed.results)
+    const result = first(parsed.results)?.children
     return result
   }),
 })
