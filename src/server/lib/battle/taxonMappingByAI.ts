@@ -1,6 +1,6 @@
 // FROM: https://teampilot.ai/team/tristan/chat/cljtv2rui000dmu08cl5ik9gb
 
-const findings = [
+export const taxonMappingByAI = [
   {
     ancestorId: 1,
     children: [
@@ -1377,5 +1377,3 @@ const findings = [
   //   children: null,
   // },
 ]
-
-export const taxonMapping = []
