@@ -29,7 +29,7 @@ const MigrationButton = ({
       </div>
       {!!data && (
         <div className="rounded border bg-white p-2">
-          <JsonViewer value={data} />
+          <JsonViewer value={data} collapsed={10} />
         </div>
       )}
     </>
