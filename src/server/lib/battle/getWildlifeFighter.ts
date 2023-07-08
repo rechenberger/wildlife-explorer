@@ -1,5 +1,7 @@
-import { Dex, type Learnset } from "@pkmn/dex"
+import { Dex, Species } from "@pkmn/dex"
 import { type Wildlife } from "@prisma/client"
+import { filter, orderBy, take } from "lodash-es"
+import { MAX_MOVES_PER_FIGHTER } from "~/config"
 import { type WildlifeMetadata } from "~/server/schema/WildlifeMetadata"
 import { charizard, pikachu } from "./predefinedTeam"
 import { taxonMappingByAncestors } from "./taxonMappingByAncestors"
@@ -21,49 +23,57 @@ export const getWildlifeFighter = async ({
   const mapping = taxonMappingByAncestors(wildlife.metadata.taxonAncestorIds)
   const speciesName = mapping.pokemon
   const species = Dex.species.get(speciesName)
-  const learnset = await Dex.learnsets.get(speciesName)
   const level = 20
-  const moves = getPokemonMoves(learnset, level, Math.max(species.gen, 3))
-  // console.log("species", species, learnset, moves)
-  console.log("species", {
-    speciesName,
-    gen: species.gen,
-    // learnset: learnset.learnset,
-    moves,
-  })
-  // console.log("species", speciesName, species)
+
+  const possibleMoves = await getMovesInLearnset(species)
+  const moves = take(
+    filter(
+      orderBy(possibleMoves, (m) => m.level, "desc"),
+      (m) => m.level <= level
+    ),
+    MAX_MOVES_PER_FIGHTER
+  ).map((m) => m.move)
+
+  // console.log("species", {
+  //   speciesName,
+  //   gen: species.gen,
+  //   // learnset: learnset.learnset,
+  //   moves,
+  // })
+
   return {
     ...base,
-    // name:
-    //   wildlife.metadata.taxonLocaleNames?.[locale] ||
-    //   wildlife.metadata.taxonCommonName ||
-    //   wildlife.metadata.taxonName,
     name: wildlife.id.substring(0, MAX_NAME_LENGTH),
     species: speciesName,
     moves,
   }
 }
 
-function getPokemonMoves(
-  learnset: Learnset,
-  level: number,
-  generation: number
-): string[] {
-  const moves: string[] = []
-  const gen = generation.toString()
-  const lvl = "L" + level.toString()
+async function getMovesInLearnset(species: Species) {
+  const moves: {
+    move: string
+    level: number
+    method: "level"
+  }[] = []
+  const learnset = await Dex.learnsets.get(species.name)
+  const gen = Math.max(species.gen, 3).toString()
 
   for (const move in learnset.learnset) {
     const learnMethods = learnset.learnset[move]!
 
     for (const method of learnMethods) {
       if (method.startsWith(gen) && method[1] === "L") {
-        if (method[1] === "L" && parseInt(method.substring(2)) <= level) {
-          moves.push(move)
+        const isLevelThingy = method[1] === "L"
+        const level = parseInt(method.substring(2))
+        if (isLevelThingy) {
+          moves.push({
+            move,
+            level,
+            method: "level",
+          })
         }
       }
     }
   }
-
   return moves
 }
