@@ -288,10 +288,10 @@ export const BattleView = () => {
                                             <div className="flex-1 truncate text-left">
                                               {move?.name || "-"}
                                             </div>
-                                            <div className="hidden w-5 shrink-0 opacity-60 sm:flex">
+                                            <div className="hidden w-5 shrink-0 opacity-60 sm:block">
                                               {move?.definition.accuracy}
                                             </div>
-                                            <div className="hidden w-5 shrink-0 opacity-60 sm:flex">
+                                            <div className="hidden w-5 shrink-0 opacity-60 sm:block">
                                               {move?.definition.basePower}
                                             </div>
                                             <div className="w-8 shrink-0 opacity-60">
