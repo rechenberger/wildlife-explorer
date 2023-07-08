@@ -5,6 +5,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { toast } from "sonner"
 import {
+  DEV_MODE,
   MIN_METER_ACCURACY_SHOW_INACCURATE,
   SHOW_OBSERVATION_JSON,
 } from "~/config"
@@ -192,25 +193,27 @@ export const CurrentObservation = () => {
           >
             Catch
           </button>
-          <button
-            className={cn(
-              "rounded bg-black px-2 py-1 text-sm text-white",
-              attacking && "cursor-progress opacity-50"
-            )}
-            disabled={catching}
-            onClick={async () => {
-              if (!playerId) return
+          {DEV_MODE && (
+            <button
+              className={cn(
+                "rounded bg-black px-2 py-1 text-sm text-white",
+                attacking && "cursor-progress opacity-50"
+              )}
+              disabled={catching}
+              onClick={async () => {
+                if (!playerId) return
 
-              toast.promise(attackWildlife({ wildlifeId: w.id, playerId }), {
-                loading: "Catching...",
-                success: "The Battle is on! 🔥",
-                error: (err) => err.message || "Failed to catch. Try again.",
-                // icon: <></>,
-              })
-            }}
-          >
-            Battle
-          </button>
+                toast.promise(attackWildlife({ wildlifeId: w.id, playerId }), {
+                  loading: "Catching...",
+                  success: "The Battle is on! 🔥",
+                  error: (err) => err.message || "Failed to catch. Try again.",
+                  // icon: <></>,
+                })
+              }}
+            >
+              Battle
+            </button>
+          )}
         </div>
       </div>
     </>
