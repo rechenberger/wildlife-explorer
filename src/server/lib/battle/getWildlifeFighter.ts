@@ -1,6 +1,7 @@
 import { type Wildlife } from "@prisma/client"
 import { type WildlifeMetadata } from "~/server/schema/WildlifeMetadata"
 import { charizard, pikachu } from "./predefinedTeam"
+import { taxonMappingByAncestors } from "./taxonMappingByAncestors"
 
 const MAX_NAME_LENGTH = 20
 
@@ -16,6 +17,7 @@ export const getWildlifeFighter = ({
   locale: "de" | "en"
 }) => {
   const base = isCaught ? pikachu : charizard
+  const mapping = taxonMappingByAncestors(wildlife.metadata.taxonAncestorIds)
   return {
     ...base,
     // name:
@@ -23,5 +25,6 @@ export const getWildlifeFighter = ({
     //   wildlife.metadata.taxonCommonName ||
     //   wildlife.metadata.taxonName,
     name: wildlife.id.substring(0, MAX_NAME_LENGTH),
+    species: mapping.pokemon,
   }
 }

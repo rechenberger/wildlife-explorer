@@ -14,8 +14,9 @@ import { getTypeIcon } from "./typeIcons"
 import { useGetWildlifeName } from "./useGetWildlifeName"
 import { usePlayer } from "./usePlayer"
 
-const BIG_INACTIVE_FIGHTER = false
+const BIG_INACTIVE_FIGHTER = true
 const SHOW_ENEMY_MOVES = false
+const SHOW_FIGHTER_NAME = true
 
 export const BattleView = () => {
   const { playerId } = usePlayer()
@@ -223,6 +224,10 @@ export const BattleView = () => {
                                       ? getName(fighter.wildlife)
                                       : fighter.fighter.name}
                                   </div>
+
+                                  {SHOW_FIGHTER_NAME && (
+                                    <div> ({fighter.fighter.species})</div>
+                                  )}
                                   <div className="flex flex-row gap-1 text-xs">
                                     <div className="truncate">
                                       {hp}/{hpMax} HP
