@@ -15,7 +15,7 @@ import { useGetWildlifeName } from "./useGetWildlifeName"
 import { usePlayer } from "./usePlayer"
 
 const BIG_INACTIVE_FIGHTER = false
-const SHOW_ENEMY_MOVES = true
+const SHOW_ENEMY_MOVES = false
 
 export const BattleView = () => {
   const { playerId } = usePlayer()
