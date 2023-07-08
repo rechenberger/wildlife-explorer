@@ -4,21 +4,19 @@ import { filter, orderBy, take } from "lodash-es"
 import { MAX_MOVES_PER_FIGHTER } from "~/config"
 import { type WildlifeMetadata } from "~/server/schema/WildlifeMetadata"
 import { rngInt, rngItem } from "~/utils/seed"
-import { charizard, pikachu } from "./predefinedTeam"
 import { taxonMappingByAncestors } from "./taxonMappingByAncestors"
 
 const MAX_NAME_LENGTH = 20
 
 export const getWildlifeFighter = async ({
   wildlife,
-  isCaught,
+  // isCaught,
   seed,
 }: {
   wildlife: Wildlife & { metadata: WildlifeMetadata }
   isCaught: boolean
   seed: string
 }) => {
-  const base = isCaught ? pikachu : charizard
   const mapping = taxonMappingByAncestors(wildlife.metadata.taxonAncestorIds)
   const speciesName = mapping.pokemon
   const species = Dex.species.get(speciesName)
@@ -96,6 +94,7 @@ export const getWildlifeFighter = async ({
     },
     gender,
     item: "",
+    ability: "Static",
   }
 }
 
