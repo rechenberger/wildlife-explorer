@@ -251,12 +251,17 @@ export const BattleView = () => {
                                       </div>
                                     )}
                                   </div>
-                                  <div
-                                    title={replaceByWildlife(
-                                      fighter.fighterStatus.ability.desc
+                                  <div>
+                                    <div
+                                      title={replaceByWildlife(
+                                        fighter.fighterStatus.ability.desc
+                                      )}
+                                    >
+                                      {fighter.fighterStatus.ability.name}
+                                    </div>
+                                    {fighter.fighter.item && (
+                                      <div>Item: {fighter.fighter.item}</div>
                                     )}
-                                  >
-                                    {fighter.fighterStatus.ability.name}
                                   </div>
 
                                   <div className="flex flex-row gap-1 text-xs">
