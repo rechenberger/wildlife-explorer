@@ -16,7 +16,8 @@ import { useGetWildlifeName } from "./useGetWildlifeName"
 import { usePlayer } from "./usePlayer"
 
 const BIG_INACTIVE_FIGHTER = true
-const SHOW_ENEMY_MOVES = false
+const SHOW_ENEMY_MOVES = true
+const SHOW_INACTIVE_MOVES = true
 const SHOW_FIGHTER_NAME = DEV_MODE
 
 export const BattleView = () => {
@@ -263,73 +264,77 @@ export const BattleView = () => {
                                 <div className="w-2" />
                               </div>
                               {/* <div className="hidden flex-1 md:flex" /> */}
-                              {(isMySide || SHOW_ENEMY_MOVES) && isActive && (
-                                <div className="grid flex-1 grid-cols-1 gap-1">
-                                  {map(
-                                    fillWithNulls(moves, MAX_MOVES_PER_FIGHTER),
-                                    (move, moveIdx) => {
-                                      // console.log(move)
-                                      const disabled = !move || isLoading
-                                      const typeIcon = move?.definition.type
-                                        ? getTypeIcon(move?.definition.type)
-                                        : null
-                                      return (
-                                        <button
-                                          key={moveIdx}
-                                          className={cn(
-                                            "truncate rounded-md bg-black/10 text-xs",
-                                            disabled && "opacity-20",
-                                            "flex items-center",
-                                            typeIcon?.bgHalf,
-                                            "ring-inset hover:ring",
-                                            typeIcon?.ringFull
-                                          )}
-                                          disabled={disabled}
-                                          onClick={() => {
-                                            if (!move) return
-                                            if (!playerId) return
-                                            makeChoice({
-                                              battleId: activeBattle.id,
-                                              playerId: playerId,
-                                              choice: `move ${moveIdx + 1}`,
-                                            })
-                                          }}
-                                        >
-                                          {typeIcon && (
-                                            <div
-                                              className={cn(
-                                                "flex h-full items-center justify-center rounded-r-md px-1",
-                                                typeIcon.bgFull
-                                              )}
-                                              title={typeIcon.name}
-                                            >
-                                              <typeIcon.icon className="h-4 w-4" />
-                                            </div>
-                                          )}
-                                          <div
-                                            className="flex flex-1 gap-3 overflow-hidden py-1 pl-1 pr-2 text-right"
-                                            title={move?.definition.desc}
+                              {(isMySide || SHOW_ENEMY_MOVES) &&
+                                (isActive || SHOW_INACTIVE_MOVES) && (
+                                  <div className="grid flex-1 grid-cols-1 gap-1">
+                                    {map(
+                                      fillWithNulls(
+                                        moves,
+                                        MAX_MOVES_PER_FIGHTER
+                                      ),
+                                      (move, moveIdx) => {
+                                        // console.log(move)
+                                        const disabled = !move || isLoading
+                                        const typeIcon = move?.definition.type
+                                          ? getTypeIcon(move?.definition.type)
+                                          : null
+                                        return (
+                                          <button
+                                            key={moveIdx}
+                                            className={cn(
+                                              "truncate rounded-md bg-black/10 text-xs",
+                                              disabled && "opacity-20",
+                                              "flex items-center",
+                                              typeIcon?.bgHalf,
+                                              "ring-inset hover:ring",
+                                              typeIcon?.ringFull
+                                            )}
+                                            disabled={disabled}
+                                            onClick={() => {
+                                              if (!move) return
+                                              if (!playerId) return
+                                              makeChoice({
+                                                battleId: activeBattle.id,
+                                                playerId: playerId,
+                                                choice: `move ${moveIdx + 1}`,
+                                              })
+                                            }}
                                           >
-                                            <div className="flex-1 truncate text-left">
-                                              {move?.name || "-"}
+                                            {typeIcon && (
+                                              <div
+                                                className={cn(
+                                                  "flex h-full items-center justify-center rounded-r-md px-1",
+                                                  typeIcon.bgFull
+                                                )}
+                                                title={typeIcon.name}
+                                              >
+                                                <typeIcon.icon className="h-4 w-4" />
+                                              </div>
+                                            )}
+                                            <div
+                                              className="flex flex-1 gap-3 overflow-hidden py-1 pl-1 pr-2 text-right"
+                                              title={move?.definition.desc}
+                                            >
+                                              <div className="flex-1 truncate text-left">
+                                                {move?.name || "-"}
+                                              </div>
+                                              <div className="hidden w-5 shrink-0 opacity-60 sm:block">
+                                                {move?.definition.accuracy}
+                                              </div>
+                                              <div className="hidden w-5 shrink-0 opacity-60 sm:block">
+                                                {move?.definition.basePower}
+                                              </div>
+                                              <div className="w-8 shrink-0 opacity-60">
+                                                {move?.status?.pp}/
+                                                {move?.status?.maxpp}
+                                              </div>
                                             </div>
-                                            <div className="hidden w-5 shrink-0 opacity-60 sm:block">
-                                              {move?.definition.accuracy}
-                                            </div>
-                                            <div className="hidden w-5 shrink-0 opacity-60 sm:block">
-                                              {move?.definition.basePower}
-                                            </div>
-                                            <div className="w-8 shrink-0 opacity-60">
-                                              {move?.status?.pp}/
-                                              {move?.status?.maxpp}
-                                            </div>
-                                          </div>
-                                        </button>
-                                      )
-                                    }
-                                  )}
-                                </div>
-                              )}
+                                          </button>
+                                        )
+                                      }
+                                    )}
+                                  </div>
+                                )}
                             </div>
                           </Fragment>
                         )
