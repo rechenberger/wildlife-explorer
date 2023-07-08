@@ -48,7 +48,7 @@ export const getWildlifeFighter = async ({
   const ability = rngItemWithWeights({
     seed: [seed, "ability"],
     items: map(species.abilities, (a, key) => ({
-      item: a,
+      item: a as string,
       weight: key === "H" ? 0.1 : 1,
     })),
   })

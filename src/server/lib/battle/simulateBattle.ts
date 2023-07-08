@@ -1,4 +1,5 @@
-import { Battle, Dex, toID, type PokemonSet, type SideID } from "@pkmn/sim"
+import { Dex } from "@pkmn/dex"
+import { Battle, toID, type PokemonSet, type SideID } from "@pkmn/sim"
 import { type PrismaClient } from "@prisma/client"
 import { findIndex, map } from "lodash-es"
 import { MAX_FIGHTERS_PER_TEAM } from "~/config"
@@ -175,6 +176,7 @@ export const simulateBattle = async ({
               }),
               lastMove: p.lastMove,
               lastDamage: p.lastDamage,
+              ability: Dex.abilities.get(p.ability),
             },
           }
         })

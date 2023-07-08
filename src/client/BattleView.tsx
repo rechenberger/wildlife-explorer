@@ -250,6 +250,11 @@ export const BattleView = () => {
                                       </div>
                                     )}
                                   </div>
+                                  <div
+                                    title={fighter.fighterStatus.ability.desc}
+                                  >
+                                    {fighter.fighterStatus.ability.name}
+                                  </div>
 
                                   <div className="flex flex-row gap-1 text-xs">
                                     <div className="truncate">
