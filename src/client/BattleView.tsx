@@ -13,11 +13,11 @@ import { replaceByWildlife } from "~/utils/replaceByWildlife"
 import { MyCatches } from "./MyCatches"
 import { cn } from "./cn"
 import {
-  TypeIcon,
   abilityIcon,
   getTypeIcon,
   itemIcon,
   natureIcon,
+  type TypeIcon,
 } from "./typeIcons"
 import { useGetWildlifeName } from "./useGetWildlifeName"
 import { usePlayer } from "./usePlayer"
@@ -27,8 +27,8 @@ const SHOW_ENEMY_MOVES = true
 const SHOW_INACTIVE_MOVES = true
 const SHOW_FIGHTER_NAME = DEV_MODE
 const SHOW_FIGHTER_TYPES = true
-const SHOW_ABILITY = true
-const SHOW_NATURE = true
+const SHOW_ABILITY = false
+const SHOW_NATURE = false
 
 export const BattleView = () => {
   const { playerId } = usePlayer()
