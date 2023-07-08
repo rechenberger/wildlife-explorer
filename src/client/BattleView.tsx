@@ -69,7 +69,7 @@ export const BattleView = () => {
   const getName = useGetWildlifeName()
 
   return (
-    <div className="fixed bottom-0 left-0 z-50 flex w-full max-w-md flex-col gap-4 rounded-t-xl bg-white p-4 text-black shadow md:bottom-8 md:left-8 md:rounded-xl">
+    <div className="fixed bottom-0 left-0 z-50 flex max-h-[calc(100svh-100px)] w-full max-w-md flex-col gap-4 overflow-y-auto rounded-t-xl bg-white p-4 text-black shadow md:bottom-8 md:left-8 md:rounded-xl">
       {activeBattle ? (
         <>
           <div className="flex flex-row gap-2">
