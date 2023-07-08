@@ -37,7 +37,7 @@ export const rngItem = <T>({
   items,
 }: {
   seed: RngSeed
-  items: T[]
+  items: readonly T[]
 }): T => {
   const idx = rngInt({ seed, max: items.length - 1 })
   return items[idx]!
