@@ -1,4 +1,15 @@
-import { Circle, Droplets, Flame, HelpCircle, Swords, Zap } from "lucide-react"
+import {
+  Bug,
+  Circle,
+  Droplets,
+  Flame,
+  Ghost,
+  HelpCircle,
+  Leaf,
+  Mountain,
+  Swords,
+  Zap,
+} from "lucide-react"
 
 export const typeIcons = [
   {
@@ -38,10 +49,31 @@ export const typeIcons = [
   },
   {
     name: "Rock",
-    icon: Flame,
+    icon: Mountain,
     bgFull: "bg-gray-700 text-white",
     bgHalf: "bg-gray-700/50",
     ringFull: "ring-gray-700",
+  },
+  {
+    name: "Grass",
+    icon: Leaf,
+    bgFull: "bg-green-400",
+    bgHalf: "bg-green-400/50",
+    ringFull: "ring-green-400",
+  },
+  {
+    name: "Bug",
+    icon: Bug,
+    bgFull: "bg-lime-400",
+    bgHalf: "bg-lime-400/50",
+    ringFull: "ring-lime-400",
+  },
+  {
+    name: "Ghost",
+    icon: Ghost,
+    bgFull: "bg-purple-400",
+    bgHalf: "bg-purple-400/50",
+    ringFull: "ring-purple-400",
   },
 ]
 

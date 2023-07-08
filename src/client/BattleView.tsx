@@ -284,7 +284,10 @@ export const BattleView = () => {
                                               <typeIcon.icon className="h-4 w-4" />
                                             </div>
                                           )}
-                                          <div className="flex flex-1 gap-3 overflow-hidden py-1 pl-1 pr-2 text-right">
+                                          <div
+                                            className="flex flex-1 gap-3 overflow-hidden py-1 pl-1 pr-2 text-right"
+                                            title={move?.definition.desc}
+                                          >
                                             <div className="flex-1 truncate text-left">
                                               {move?.name || "-"}
                                             </div>
