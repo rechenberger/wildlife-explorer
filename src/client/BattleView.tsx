@@ -1,4 +1,4 @@
-import { find, map } from "lodash-es"
+import { find, first, map } from "lodash-es"
 import { Undo2 } from "lucide-react"
 import Image from "next/image"
 import { Fragment } from "react"
@@ -393,6 +393,18 @@ export const BattleView = () => {
                                               <div className="flex-1 truncate text-left">
                                                 {move?.name || "-"}
                                               </div>
+                                              <div
+                                                className="hidden w-2 shrink-0 opacity-60 sm:block"
+                                                title={readableEffectiveness(
+                                                  (move as any) ?? {}
+                                                )}
+                                              >
+                                                {first(
+                                                  readableEffectiveness(
+                                                    (move as any) ?? {}
+                                                  )
+                                                )}
+                                              </div>
                                               <div className="hidden w-5 shrink-0 opacity-60 sm:block">
                                                 {move?.definition.accuracy}
                                               </div>
@@ -566,4 +578,18 @@ const TypeBadge = ({
       </div>
     </>
   )
+}
+
+const readableEffectiveness = ({
+  effectiveness,
+  immunity,
+}: {
+  effectiveness?: 0 | -1 | 1 | null
+  immunity?: boolean | null
+}) => {
+  if (!immunity) return "immune"
+  if (effectiveness === -1) return "not very effective"
+  if (effectiveness === 0) return "effective"
+  if (effectiveness === 1) return "supper effective"
+  return "???"
 }
