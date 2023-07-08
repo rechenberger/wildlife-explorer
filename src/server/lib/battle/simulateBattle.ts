@@ -1,7 +1,7 @@
 import { Dex } from "@pkmn/dex"
 import { Battle, toID, type PokemonSet, type SideID } from "@pkmn/sim"
 import { type PrismaClient } from "@prisma/client"
-import { findIndex, map } from "lodash-es"
+import { findIndex, first, map } from "lodash-es"
 import { MAX_FIGHTERS_PER_TEAM } from "~/config"
 import { createSeed } from "~/utils/seed"
 import { getBattleForSimulation } from "./getBattleForSimulation"
@@ -168,10 +168,29 @@ export const simulateBattle = async ({
               moves: p.moves.map((move) => {
                 const data = p.getMoveData(move)
                 const definition = Dex.moves.getByID(toID(data?.id))
+                const moveType = definition.type
+                const foe = first(p.foes())
+                const foeTypes = foe?.types
+                const immunity = foeTypes
+                  ? Dex.getImmunity(moveType, foeTypes)
+                  : null
+                const effectiveness = foeTypes
+                  ? Dex.getEffectiveness(moveType, foeTypes)
+                  : null
+
+                // console.log({
+                //   moveType,
+                //   foeTypes,
+                //   effectiveness,
+                //   immunity,
+                // })
+
                 return {
                   name: data?.move || move,
                   status: data,
                   definition,
+                  effectiveness,
+                  immunity,
                 }
               }),
               lastMove: p.lastMove,
@@ -187,6 +206,10 @@ export const simulateBattle = async ({
 
   // console.log(battle.log)
   // console.log(JSON.stringify(battle.toJSON(), null, 2))
+
+  // const type = Dex.types.get("Fire")
+  // const water = Dex.types.get("Water")
+  // console.log(Dex.types.all())
 
   const result = {
     battleStatus: battleStatus(),
