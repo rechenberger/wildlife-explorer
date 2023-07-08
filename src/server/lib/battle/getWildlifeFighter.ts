@@ -22,7 +22,7 @@ export const getWildlifeFighter = async ({
   const speciesName = mapping.pokemon
   const species = Dex.species.get(speciesName)
   const learnset = await Dex.learnsets.get(speciesName)
-  const level = 2
+  const level = 20
   const moves = getPokemonMoves(learnset, level, Math.max(species.gen, 3))
   // console.log("species", species, learnset, moves)
   console.log("species", {
