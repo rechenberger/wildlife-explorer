@@ -14,9 +14,9 @@ import { getTypeIcon } from "./typeIcons"
 import { useGetWildlifeName } from "./useGetWildlifeName"
 import { usePlayer } from "./usePlayer"
 
-const BIG_INACTIVE_FIGHTER = true
+const BIG_INACTIVE_FIGHTER = false
 const SHOW_ENEMY_MOVES = false
-const SHOW_FIGHTER_NAME = true
+const SHOW_FIGHTER_NAME = DEV_MODE
 
 export const BattleView = () => {
   const { playerId } = usePlayer()
@@ -219,15 +219,30 @@ export const BattleView = () => {
                                 <div
                                   className={cn("flex-1 overflow-hidden py-1")}
                                 >
-                                  <div className="truncate font-bold">
-                                    {fighter.wildlife
-                                      ? getName(fighter.wildlife)
-                                      : fighter.fighter.name}
+                                  <div className="flex items-baseline gap-1">
+                                    <div
+                                      className="truncate font-bold"
+                                      title={
+                                        fighter.wildlife
+                                          ? getName(fighter.wildlife)
+                                          : fighter.fighter.name
+                                      }
+                                    >
+                                      {fighter.wildlife
+                                        ? getName(fighter.wildlife)
+                                        : fighter.fighter.name}
+                                    </div>
+                                    {SHOW_FIGHTER_NAME && (
+                                      <div
+                                        title={fighter.fighter.species}
+                                        className="text-[10px] opacity-60"
+                                      >
+                                        {" "}
+                                        {fighter.fighter.species}
+                                      </div>
+                                    )}
                                   </div>
 
-                                  {SHOW_FIGHTER_NAME && (
-                                    <div> ({fighter.fighter.species})</div>
-                                  )}
                                   <div className="flex flex-row gap-1 text-xs">
                                     <div className="truncate">
                                       {hp}/{hpMax} HP
