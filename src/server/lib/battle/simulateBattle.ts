@@ -35,6 +35,7 @@ export const simulateBattle = async ({
   } else {
     battle = new Battle({
       formatid: toID("gen7randombattle"),
+      // formatid: toID("doubles"),
       seed: [13103, 5088, 17178, 48392], // TODO:
     })
   }
@@ -78,6 +79,15 @@ export const simulateBattle = async ({
           }),
           wildlife: battleParticipant.wildlife,
         },
+        {
+          fighter: getWildlifeFighter({
+            wildlife: { ...battleParticipant.wildlife, id: "fake-2" },
+            isCaught: false,
+            seed: createSeed(battleParticipant.wildlife),
+            locale: "de",
+          }),
+          wildlife: { ...battleParticipant.wildlife, id: "fake-2" },
+        },
       ]
     }
 
@@ -112,6 +122,11 @@ export const simulateBattle = async ({
     if (!success) {
       throw new Error(`Invalid choice: "${choice.choice}"`)
     }
+    if (battle[sideId]!.isChoiceDone()) {
+      // TODO: AI
+      battle.makeChoices()
+    }
+    // When player defeats wildlife, check if there are more wildlife to fight:
     if (battle[sideId]!.isChoiceDone()) {
       // TODO: AI
       battle.makeChoices()
