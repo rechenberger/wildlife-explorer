@@ -80,7 +80,7 @@ export const typeIcons = [
 const fallbackTypeIcon = {
   name: "???",
   icon: HelpCircle,
-  bgFull: "bg-black",
+  bgFull: "bg-black text-white",
   bgHalf: "bg-black/50",
   ringFull: "hover:ring ring-black",
 }
