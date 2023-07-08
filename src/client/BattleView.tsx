@@ -257,7 +257,7 @@ export const BattleView = () => {
                                           className={cn(
                                             "truncate rounded-md bg-black/10 text-xs",
                                             disabled && "opacity-20",
-                                            "flex items-center text-left",
+                                            "flex items-center",
                                             typeIcon?.bgHalf,
                                             "ring-inset hover:ring",
                                             typeIcon?.ringFull
@@ -284,17 +284,17 @@ export const BattleView = () => {
                                               <typeIcon.icon className="h-4 w-4" />
                                             </div>
                                           )}
-                                          <div className="flex flex-1 gap-3 overflow-hidden py-1 pl-1 pr-2">
-                                            <div className="flex-1 truncate">
+                                          <div className="flex flex-1 gap-3 overflow-hidden py-1 pl-1 pr-2 text-right">
+                                            <div className="flex-1 truncate text-left">
                                               {move?.name || "-"}
                                             </div>
-                                            <div className="hidden shrink-0 opacity-60 sm:flex">
+                                            <div className="hidden w-5 shrink-0 opacity-60 sm:flex">
                                               {move?.definition.accuracy}
                                             </div>
-                                            <div className="hidden shrink-0 opacity-60 sm:flex">
+                                            <div className="hidden w-5 shrink-0 opacity-60 sm:flex">
                                               {move?.definition.basePower}
                                             </div>
-                                            <div className="shrink-0 opacity-60">
+                                            <div className="w-8 shrink-0 opacity-60">
                                               {move?.status?.pp}/
                                               {move?.status?.maxpp}
                                             </div>
