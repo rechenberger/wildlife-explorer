@@ -1,5 +1,6 @@
 import { map } from "lodash-es"
 import Image from "next/image"
+import { MAX_FIGHTERS_PER_TEAM } from "~/config"
 import { api } from "~/utils/api"
 import { cn } from "./cn"
 import { useGetWildlifeName } from "./useGetWildlifeName"
@@ -28,7 +29,7 @@ export const MyCatches = () => {
   return (
     <>
       <div className="grid grid-cols-6 gap-2 gap-y-3">
-        {map(catches, (c) => (
+        {map(catches, (c, catchIdx) => (
           <div
             key={c.id}
             className="flex cursor-pointer flex-col gap-2 rounded px-1 pt-2 hover:bg-black/10"
@@ -44,7 +45,10 @@ export const MyCatches = () => {
               className={cn(
                 "self-center",
                 "relative aspect-square h-12 w-12 shrink-0 overflow-hidden rounded-full ring",
-                "ring-amber-400"
+                // "ring-amber-400",
+                catchIdx < MAX_FIGHTERS_PER_TEAM
+                  ? "ring-green-500"
+                  : "ring-gray-500"
               )}
             >
               {c.wildlife.metadata.taxonImageUrlSquare && (
