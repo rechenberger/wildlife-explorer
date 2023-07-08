@@ -62,7 +62,7 @@ export const rngItems = <T>({
   return results
 }
 
-export const rngItemWithWeight = <T>({
+export const rngItemWithWeights = <T>({
   seed,
   items,
 }: {

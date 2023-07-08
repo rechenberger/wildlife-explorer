@@ -1,9 +1,9 @@
 import { Dex, type Species } from "@pkmn/dex"
 import { type Wildlife } from "@prisma/client"
-import { filter, orderBy, take } from "lodash-es"
+import { filter, map, orderBy, take } from "lodash-es"
 import { MAX_MOVES_PER_FIGHTER } from "~/config"
 import { type WildlifeMetadata } from "~/server/schema/WildlifeMetadata"
-import { rngInt, rngItem } from "~/utils/seed"
+import { rngInt, rngItem, rngItemWithWeights } from "~/utils/seed"
 import { taxonMappingByAncestors } from "./taxonMappingByAncestors"
 
 const MAX_NAME_LENGTH = 20
@@ -44,6 +44,17 @@ export const getWildlifeFighter = async ({
     items: ["M", "F"],
     seed: [seed, "gender"],
   })
+
+  const ability = rngItemWithWeights({
+    seed: [seed, "ability"],
+    items: map(species.abilities, (a, key) => ({
+      item: a,
+      weight: key === "H" ? 0.1 : 1,
+    })),
+  })
+
+  // TODO: ???
+  const item = ""
 
   return {
     // ...base,
@@ -93,8 +104,8 @@ export const getWildlifeFighter = async ({
       spe: 0,
     },
     gender,
-    item: "",
-    ability: "Static",
+    item,
+    ability,
   }
 }
 
