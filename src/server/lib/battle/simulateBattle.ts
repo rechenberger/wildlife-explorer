@@ -3,7 +3,7 @@ import { Battle, toID, type PokemonSet, type SideID } from "@pkmn/sim"
 import { type PrismaClient } from "@prisma/client"
 import { findIndex, first, map } from "lodash-es"
 import { MAX_FIGHTERS_PER_TEAM } from "~/config"
-import { createSeed } from "~/utils/seed"
+import { createSeed, rngInt } from "~/utils/seed"
 import { getBattleForSimulation } from "./getBattleForSimulation"
 import { getWildlifeFighter } from "./getWildlifeFighter"
 
@@ -127,7 +127,24 @@ export const simulateBattle = async ({
     }
     if (battle[sideId]!.isChoiceDone()) {
       // TODO: AI
-      battle.makeChoices()
+
+      // CHOSE RANDOM MOVE:
+      let choseOther = false
+      const other = sideId === "p1" ? battle.p2 : battle.p1
+      const otherFighter = first(other.active)
+      const moves = otherFighter?.moves?.length
+      if (moves) {
+        const move = rngInt({
+          seed: [...battle.prngSeed, battle.turn, "move"],
+          min: 1,
+          max: moves,
+        })
+        const success = other.choose(`move ${move}`)
+        choseOther = success
+      }
+      if (!choseOther) {
+        battle.makeChoices()
+      }
     }
     // When player defeats wildlife, check if there are more wildlife to fight:
     if (battle[sideId]!.isChoiceDone()) {
