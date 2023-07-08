@@ -19,10 +19,11 @@ export const taxonRouter = createTRPCRouter({
           children: z.array(
             z.object({
               id: z.number(),
-              ancestor_ids: z.array(z.number()),
+              // ancestor_ids: z.array(z.number()),
               name: z.string(),
-              iconic_taxon_name: z.string().nullable(),
+              // iconic_taxon_name: z.string().nullable(),
               preferred_common_name: z.string().nullable(),
+              observations_count: z.number(),
             })
           ),
         })
