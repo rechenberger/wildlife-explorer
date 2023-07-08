@@ -3,6 +3,7 @@ import { type Wildlife } from "@prisma/client"
 import { filter, orderBy, take } from "lodash-es"
 import { MAX_MOVES_PER_FIGHTER } from "~/config"
 import { type WildlifeMetadata } from "~/server/schema/WildlifeMetadata"
+import { rngInt } from "~/utils/seed"
 import { charizard, pikachu } from "./predefinedTeam"
 import { taxonMappingByAncestors } from "./taxonMappingByAncestors"
 
@@ -21,7 +22,11 @@ export const getWildlifeFighter = async ({
   const mapping = taxonMappingByAncestors(wildlife.metadata.taxonAncestorIds)
   const speciesName = mapping.pokemon
   const species = Dex.species.get(speciesName)
-  const level = 20
+  const level = rngInt({
+    seed: [seed, "level"],
+    min: 1,
+    max: 20,
+  })
 
   const possibleMoves = await getMovesInLearnset(species)
   const moves = take(
@@ -44,6 +49,7 @@ export const getWildlifeFighter = async ({
     name: wildlife.id.substring(0, MAX_NAME_LENGTH),
     species: speciesName,
     moves,
+    level,
   }
 }
 

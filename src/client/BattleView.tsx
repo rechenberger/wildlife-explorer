@@ -242,10 +242,11 @@ export const BattleView = () => {
                                     {SHOW_FIGHTER_NAME && (
                                       <div
                                         title={fighter.fighter.species}
-                                        className="text-[10px] opacity-60"
+                                        className="whitespace-nowrap text-[10px] opacity-60"
                                       >
                                         {" "}
-                                        {fighter.fighter.species}
+                                        {fighter.fighter.species}{" "}
+                                        {fighter.fighter.level}
                                       </div>
                                     )}
                                   </div>
