@@ -537,11 +537,17 @@ const TypeBadge = ({
     <>
       <div
         title={title || content}
-        className={cn("flex gap-1 rounded pr-1", icon.bgHalf)}
+        className={cn(
+          "flex gap-1 rounded pr-1",
+          icon.bgHalf,
+          !icon.icon && "pl-1"
+        )}
       >
-        <div className={cn("rounded p-0.5", icon.bgFull)}>
-          <icon.icon className="h-4 w-4" />
-        </div>
+        {icon.icon && (
+          <div className={cn("rounded p-0.5", icon.bgFull)}>
+            <icon.icon className="h-4 w-4" />
+          </div>
+        )}
         <div>{content}</div>
       </div>
     </>

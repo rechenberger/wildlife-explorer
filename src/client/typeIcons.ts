@@ -180,4 +180,10 @@ export const itemIcon = {
   ringFull: "hover:ring ring-black",
 }
 
-export type TypeIcon = (typeof typeIcons)[0]
+export type TypeIcon = {
+  name: string
+  icon?: any
+  bgFull: string
+  bgHalf: string
+  ringFull: string
+}
