@@ -28,7 +28,7 @@ const MigrationButton = ({
         </button>
       </div>
       {!!data && (
-        <div className="rounded border p-2">
+        <div className="rounded border bg-white p-2">
           <JsonViewer value={data} />
         </div>
       )}
@@ -39,11 +39,13 @@ const MigrationButton = ({
 export default function Page() {
   const taxons = api.migration.taxons.useMutation()
   const seed = api.migration.seed.useMutation()
+  const taxonDev = api.taxon.dev.useMutation()
   return (
     <MainLayout>
       <div className="w-full max-w-md"></div>
       <MigrationButton {...taxons} label="Taxons" />
       <MigrationButton {...seed} label="Seed" />
+      <MigrationButton {...taxonDev} label="taxonDev" />
     </MainLayout>
   )
 }
