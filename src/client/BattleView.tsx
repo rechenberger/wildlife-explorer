@@ -247,11 +247,12 @@ export const BattleView = () => {
                                       >
                                         {" "}
                                         {fighter.fighter.species}{" "}
-                                        {fighter.fighter.level}
+                                        {fighter.fighter.level}{" "}
+                                        {fighter.fighter.gender}
                                       </div>
                                     )}
                                   </div>
-                                  <div>
+                                  {/* <div>
                                     <div
                                       title={replaceByWildlife(
                                         fighter.fighterStatus.ability.desc
@@ -262,7 +263,7 @@ export const BattleView = () => {
                                     {fighter.fighter.item && (
                                       <div>Item: {fighter.fighter.item}</div>
                                     )}
-                                  </div>
+                                  </div> */}
 
                                   <div className="flex flex-row gap-1 text-xs">
                                     <div className="truncate">
