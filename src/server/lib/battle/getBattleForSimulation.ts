@@ -29,7 +29,10 @@ export const getBattleForSimulation = async ({
                 },
                 take: playerPartyLimit,
                 orderBy: {
-                  battleOrderPosition: "asc",
+                  battleOrderPosition: {
+                    sort: "desc",
+                    nulls: "last",
+                  },
                 },
               },
             },

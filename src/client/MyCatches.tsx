@@ -16,13 +16,29 @@ export const MyCatches = () => {
     }
   )
   const getName = useGetWildlifeName()
+
+  const trpc = api.useContext()
+  const { mutate: setBattleOrderPosition } =
+    api.catch.setBattleOrderPosition.useMutation({
+      onSuccess: () => {
+        trpc.catch.getMyCatches.invalidate()
+      },
+    })
+
   return (
     <>
       <div className="grid grid-cols-6 gap-2 gap-y-3">
         {map(catches, (c) => (
           <div
             key={c.id}
-            className="flex flex-col gap-2 rounded bg-black/10 px-1 pt-2"
+            className="flex cursor-pointer flex-col gap-2 rounded px-1 pt-2 hover:bg-black/10"
+            onClick={() => {
+              if (!playerId) return
+              setBattleOrderPosition({
+                catchId: c.id,
+                playerId,
+              })
+            }}
           >
             <div
               className={cn(

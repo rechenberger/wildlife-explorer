@@ -1,5 +1,6 @@
 import { TRPCError } from "@trpc/server"
 import { addMinutes } from "date-fns"
+import { z } from "zod"
 import {
   DEFAULT_CATCH_SUCCESS_RATE,
   DEFAULT_RESPAWN_TIME_IN_MINUTES,
@@ -19,6 +20,12 @@ export const catchRouter = createTRPCRouter({
       include: {
         wildlife: true,
       },
+      orderBy: {
+        battleOrderPosition: {
+          sort: "desc",
+          nulls: "last",
+        },
+      },
     })
     const catches = catchesRaw.map((c) => ({
       ...c,
@@ -29,6 +36,36 @@ export const catchRouter = createTRPCRouter({
     }))
     return catches
   }),
+
+  setBattleOrderPosition: playerProcedure
+    .input(
+      z.object({
+        catchId: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const maxBattleOrderPositionData = await ctx.prisma.catch.aggregate({
+        where: {
+          playerId: ctx.player.id,
+        },
+        _max: {
+          battleOrderPosition: true,
+        },
+      })
+
+      const maxBattleOrderPosition =
+        maxBattleOrderPositionData._max.battleOrderPosition || 0
+
+      await ctx.prisma.catch.updateMany({
+        where: {
+          playerId: ctx.player.id,
+          id: input.catchId,
+        },
+        data: {
+          battleOrderPosition: maxBattleOrderPosition + 1,
+        },
+      })
+    }),
 
   catch: wildlifeProcedure.mutation(async ({ ctx }) => {
     const luck = Math.random()
