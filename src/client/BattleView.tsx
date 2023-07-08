@@ -9,6 +9,7 @@ import {
   MAX_MOVES_PER_FIGHTER,
 } from "~/config"
 import { api } from "~/utils/api"
+import { replaceByWildlife } from "~/utils/replaceByWildlife"
 import { MyCatches } from "./MyCatches"
 import { cn } from "./cn"
 import { getTypeIcon } from "./typeIcons"
@@ -251,7 +252,9 @@ export const BattleView = () => {
                                     )}
                                   </div>
                                   <div
-                                    title={fighter.fighterStatus.ability.desc}
+                                    title={replaceByWildlife(
+                                      fighter.fighterStatus.ability.desc
+                                    )}
                                   >
                                     {fighter.fighterStatus.ability.name}
                                   </div>
@@ -319,7 +322,9 @@ export const BattleView = () => {
                                             )}
                                             <div
                                               className="flex flex-1 gap-3 overflow-hidden py-1 pl-1 pr-2 text-right"
-                                              title={move?.definition.desc}
+                                              title={replaceByWildlife(
+                                                move?.definition.desc || ""
+                                              )}
                                             >
                                               <div className="flex-1 truncate text-left">
                                                 {move?.name || "-"}
