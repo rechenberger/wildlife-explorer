@@ -1,4 +1,4 @@
-import { Dex, Species } from "@pkmn/dex"
+import { Dex, type Species } from "@pkmn/dex"
 import { type Wildlife } from "@prisma/client"
 import { filter, orderBy, take } from "lodash-es"
 import { MAX_MOVES_PER_FIGHTER } from "~/config"
@@ -48,7 +48,7 @@ export const getWildlifeFighter = async ({
   })
 
   return {
-    ...base,
+    // ...base,
     name: wildlife.id.substring(0, MAX_NAME_LENGTH),
     species: speciesName,
     moves,
@@ -95,6 +95,7 @@ export const getWildlifeFighter = async ({
       spe: 0,
     },
     gender,
+    item: "",
   }
 }
 
