@@ -1,5 +1,6 @@
 import {
   Biohazard,
+  Bird,
   Brain,
   Bug,
   Cat,
@@ -7,6 +8,7 @@ import {
   Droplets,
   Dumbbell,
   Flame,
+  Gem,
   Ghost,
   HelpCircle,
   Leaf,
@@ -56,7 +58,7 @@ export const typeIcons = [
   },
   {
     name: "Rock",
-    icon: Mountain,
+    icon: Gem,
     bgFull: "bg-gray-700 text-white",
     bgHalf: "bg-gray-700/50",
     ringFull: "ring-gray-700",
@@ -130,6 +132,20 @@ export const typeIcons = [
     bgFull: "bg-pink-200",
     bgHalf: "bg-pink-200/50",
     ringFull: "ring-pink-200",
+  },
+  {
+    name: "Ground",
+    icon: Mountain,
+    bgFull: "bg-amber-500",
+    bgHalf: "bg-amber-500/50",
+    ringFull: "ring-amber-500",
+  },
+  {
+    name: "Flying",
+    icon: Bird,
+    bgFull: "bg-blue-200",
+    bgHalf: "bg-blue-200/50",
+    ringFull: "ring-blue-200",
   },
 ]
 
