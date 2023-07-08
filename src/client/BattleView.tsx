@@ -20,8 +20,8 @@ const BIG_INACTIVE_FIGHTER = true
 const SHOW_ENEMY_MOVES = true
 const SHOW_INACTIVE_MOVES = true
 const SHOW_FIGHTER_NAME = DEV_MODE
-const SHOW_FIGHTER_TYPES = false
-const SHOW_ABILITY = false
+const SHOW_FIGHTER_TYPES = true
+const SHOW_ABILITY = true
 
 export const BattleView = () => {
   const { playerId } = usePlayer()
@@ -191,69 +191,92 @@ export const BattleView = () => {
                             >
                               <div
                                 className={cn(
-                                  "flex w-44 items-center gap-4 rounded-full bg-black/10",
-                                  isMainSide ? "flex-row" : "flex-row-reverse"
-                                  // 'ring',
-                                  // hpFull
-                                  //   ? "ring-green-500"
-                                  //   : dead
-                                  //   ? "ring-red-500"
-                                  //   : "ring-amber-400"
+                                  "flex flex-col gap-2",
+                                  isMainSide ? "flex-col" : "flex-col-reverse"
                                 )}
                               >
                                 <div
                                   className={cn(
-                                    "relative -m-1 aspect-square h-12 w-12 shrink-0 overflow-hidden rounded-full ring",
-                                    hpFull
-                                      ? "ring-green-500"
-                                      : fainted
-                                      ? "ring-red-500"
-                                      : "ring-amber-400",
-                                    !isActive && !justFainted && "grayscale"
+                                    "flex w-44 items-center gap-4 rounded-full bg-black/10",
+                                    isMainSide ? "flex-row" : "flex-row-reverse"
+                                    // 'ring',
+                                    // hpFull
+                                    //   ? "ring-green-500"
+                                    //   : dead
+                                    //   ? "ring-red-500"
+                                    //   : "ring-amber-400"
                                   )}
                                 >
-                                  {fighter.wildlife.metadata
-                                    .taxonImageUrlSquare && (
-                                    <Image
-                                      src={
-                                        fighter.wildlife.metadata
-                                          .taxonImageUrlSquare
-                                      }
-                                      className="w-full object-cover object-center"
-                                      alt={"Observation"}
-                                      unoptimized
-                                      fill={true}
-                                    />
-                                  )}
-                                </div>
-                                <div
-                                  className={cn("flex-1 overflow-hidden py-1")}
-                                >
-                                  <div className="flex items-baseline gap-1">
-                                    <div
-                                      className="truncate font-bold"
-                                      title={
-                                        fighter.wildlife
-                                          ? getName(fighter.wildlife)
-                                          : fighter.fighter.name
-                                      }
-                                    >
-                                      {fighter.wildlife
-                                        ? getName(fighter.wildlife)
-                                        : fighter.fighter.name}
-                                    </div>
-                                    {SHOW_FIGHTER_NAME && (
-                                      <div
-                                        title={fighter.fighter.species}
-                                        className="whitespace-nowrap text-[10px] opacity-60"
-                                      >
-                                        {" "}
-                                        {fighter.fighter.species}{" "}
-                                        {fighter.fighter.level}{" "}
-                                        {fighter.fighter.gender}
-                                      </div>
+                                  <div
+                                    className={cn(
+                                      "relative -m-1 aspect-square h-12 w-12 shrink-0 overflow-hidden rounded-full ring",
+                                      hpFull
+                                        ? "ring-green-500"
+                                        : fainted
+                                        ? "ring-red-500"
+                                        : "ring-amber-400",
+                                      !isActive && !justFainted && "grayscale"
+                                    )}
+                                  >
+                                    {fighter.wildlife.metadata
+                                      .taxonImageUrlSquare && (
+                                      <Image
+                                        src={
+                                          fighter.wildlife.metadata
+                                            .taxonImageUrlSquare
+                                        }
+                                        className="w-full object-cover object-center"
+                                        alt={"Observation"}
+                                        unoptimized
+                                        fill={true}
+                                      />
                                     )}
                                   </div>
+                                  <div
+                                    className={cn(
+                                      "flex-1 overflow-hidden py-1"
+                                    )}
+                                  >
+                                    <div className="flex items-baseline gap-1">
+                                      <div
+                                        className="truncate font-bold"
+                                        title={
+                                          fighter.wildlife
+                                            ? getName(fighter.wildlife)
+                                            : fighter.fighter.name
+                                        }
+                                      >
+                                        {fighter.wildlife
+                                          ? getName(fighter.wildlife)
+                                          : fighter.fighter.name}
+                                      </div>
+                                      {SHOW_FIGHTER_NAME && (
+                                        <div
+                                          title={fighter.fighter.species}
+                                          className="whitespace-nowrap text-[10px] opacity-60"
+                                        >
+                                          {" "}
+                                          {fighter.fighter.species}{" "}
+                                          {fighter.fighter.level}{" "}
+                                          {fighter.fighter.gender}
+                                        </div>
+                                      )}
+                                    </div>
+
+                                    <div className="flex flex-row gap-1 text-xs">
+                                      <div className="truncate">
+                                        {hp}/{hpMax} HP
+                                      </div>
+                                      {!!status && (
+                                        <div className="rounded-sm bg-red-300 px-1">
+                                          {status.toUpperCase()}
+                                        </div>
+                                      )}
+                                    </div>
+                                  </div>
+                                  <div className="w-2" />
+                                </div>
+                                <div>
                                   {SHOW_FIGHTER_TYPES && (
                                     <div className="flex flex-row gap-1">
                                       {map(
@@ -298,19 +321,7 @@ export const BattleView = () => {
                                       )}
                                     </div>
                                   )}
-
-                                  <div className="flex flex-row gap-1 text-xs">
-                                    <div className="truncate">
-                                      {hp}/{hpMax} HP
-                                    </div>
-                                    {!!status && (
-                                      <div className="rounded-sm bg-red-300 px-1">
-                                        {status.toUpperCase()}
-                                      </div>
-                                    )}
-                                  </div>
                                 </div>
-                                <div className="w-2" />
                               </div>
                               {/* <div className="hidden flex-1 md:flex" /> */}
                               {(isMySide || SHOW_ENEMY_MOVES) &&
