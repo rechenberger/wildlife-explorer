@@ -56,13 +56,14 @@ export const wildlifeRouter = createTRPCRouter({
       },
     })
 
-    const wildlife = map(wildlifeRaw, (w) => {
+    let wildlife = map(wildlifeRaw, (w) => {
       return {
         ...w,
         metadata: WildlifeMetadata.parse(w.metadata),
         caughtAt: first(w.catches)?.createdAt,
       }
     })
+    wildlife = filter(wildlife, (w) => !w.metadata.observationIsDead)
     return wildlife
   }),
 

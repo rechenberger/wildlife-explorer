@@ -10,11 +10,12 @@ export const useGetWildlifeName = () => {
   const locale = useLocale()
   const getWildlifeName = useCallback(
     (w: WildlifeWithMetadata) => {
-      return (
+      const name =
         w.metadata.taxonLocaleNames?.[locale] ||
         w.metadata.taxonCommonName ||
         w.metadata.taxonName
-      )
+
+      return name
     },
     [locale]
   )

@@ -69,7 +69,7 @@ export const User = z.object({
   name: z.string().nullable(),
   observations_count: z.number(),
   orcid: z.any(),
-  preferences: z.object({}),
+  preferences: z.object({}).optional(),
   roles: z.array(z.any()),
   site_id: z.number().nullable(),
   spam: z.boolean(),
@@ -78,8 +78,19 @@ export const User = z.object({
   universal_search_rank: z.number(),
 })
 
+export const AnnotationSchema = z.object({
+  concatenated_attr_val: z.string(),
+  controlled_attribute_id: z.number(),
+  controlled_value_id: z.number(),
+  user_id: z.number(),
+  user: User,
+  uuid: z.string(),
+  vote_score: z.number(),
+  votes: z.array(z.any()),
+})
+
 export const Observation = z.object({
-  annotations: z.array(z.any()),
+  annotations: z.array(AnnotationSchema).optional(),
   cached_votes_total: z.number(),
   captive: z.boolean(),
   comments_count: z.number(),

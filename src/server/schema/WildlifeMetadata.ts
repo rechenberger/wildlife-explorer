@@ -30,6 +30,7 @@ export const WildlifeMetadata = z.object({
   observationUserId: z.number(),
   observationImageUrlSquare: z.string().optional(),
   observationImageUrlMedium: z.string().optional(),
+  observationIsDead: z.boolean().nullish(),
 })
 
 export type WildlifeMetadata = z.infer<typeof WildlifeMetadata>
