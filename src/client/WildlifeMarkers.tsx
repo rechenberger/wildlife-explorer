@@ -71,6 +71,7 @@ export const WildlifeMarkers = () => {
               target="_blank"
               className={cn(
                 "group relative flex aspect-square h-12 items-center justify-center rounded-full bg-amber-400 p-1 shadow transition-transform md:hover:scale-[3]",
+                !!w.metadata.observationCaptive && "bg-orange-700",
                 !!w.caughtAt && "bg-green-500 opacity-50",
                 onCooldown && "bg-gray-400 opacity-50",
                 isNavigating &&
