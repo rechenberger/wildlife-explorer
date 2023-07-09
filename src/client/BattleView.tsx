@@ -521,6 +521,7 @@ export const BattleView = ({
                           return (
                             <Fragment key={fighterIdx}>
                               <button
+                                title={getName(fighter.wildlife)}
                                 disabled={!isMySide}
                                 className={cn(
                                   "relative aspect-square h-4 w-4 overflow-hidden rounded-full border-2",
