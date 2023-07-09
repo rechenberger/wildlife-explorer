@@ -220,23 +220,23 @@ export const BattleView = ({
                                 <span className="italic text-black">
                                   {getName(fighter.wildlife)}
                                 </span>{" "}
-                                {/* {lastMove ? (
-                                <>
-                                  uses{" "}
-                                  <span className="italic text-black">
-                                    {lastMove.name}
-                                  </span>
-                                  , dealing{" "}
-                                  <span className="italic text-black">
-                                    {lastMove.totalDamage || "no"}
-                                  </span>{" "}
-                                  damage
-                                </>
-                              ) : justFainted ? (
-                                "fainted"
-                              ) : (
-                                "enters the battle"
-                              )} */}
+                                {lastMove ? (
+                                  <>
+                                    uses{" "}
+                                    <span className="italic text-black">
+                                      {lastMove.name}
+                                    </span>
+                                    , dealing{" "}
+                                    <span className="italic text-black">
+                                      {lastMove.totalDamage || "no"}
+                                    </span>{" "}
+                                    damage
+                                  </>
+                                ) : justFainted ? (
+                                  "fainted"
+                                ) : (
+                                  "enters the battle"
+                                )}
                               </>
                             )}
                           </div>
