@@ -363,7 +363,7 @@ export const BattleView = ({
                                         {typeIcon && (
                                           <div
                                             className={cn(
-                                              "flex h-full items-center justify-center rounded-r-md px-1",
+                                              "flex h-full items-center justify-center rounded-md p-1",
                                               typeIcon.bgFull
                                             )}
                                             title={typeIcon.name}
@@ -543,13 +543,13 @@ const TypeBadge = ({
       <div
         title={title || content}
         className={cn(
-          "flex gap-1 rounded pr-1",
+          "flex items-center gap-1 rounded-md pr-2 text-sm",
           icon.bgHalf,
           !icon.icon && "pl-1"
         )}
       >
         {icon.icon && (
-          <div className={cn("rounded p-0.5", icon.bgFull)}>
+          <div className={cn("rounded-md p-1", icon.bgFull)}>
             <icon.icon className="h-4 w-4" />
           </div>
         )}
