@@ -1,5 +1,6 @@
 import {
   Apple,
+  ArrowRight,
   Biohazard,
   Bird,
   Brain,
@@ -11,8 +12,10 @@ import {
   Flame,
   Gem,
   Ghost,
+  HeartHandshake,
   HelpCircle,
   Leaf,
+  Milestone,
   Moon,
   Mountain,
   Puzzle,
@@ -184,6 +187,30 @@ export const natureIcon = {
 export const itemIcon = {
   name: "Item",
   icon: Apple,
+  bgFull: "bg-black/40 text-white",
+  bgHalf: "bg-black/20",
+  ringFull: "hover:ring ring-black",
+}
+
+export const leaveIcon = {
+  name: "Leave",
+  icon: ArrowRight,
+  bgFull: "bg-black/40 text-white",
+  bgHalf: "bg-black/20",
+  ringFull: "hover:ring ring-black",
+}
+
+export const catchIcon = {
+  name: "Catch",
+  icon: HeartHandshake,
+  bgFull: "bg-black/40 text-white",
+  bgHalf: "bg-black/20",
+  ringFull: "hover:ring ring-black",
+}
+
+export const runIcon = {
+  name: "Run",
+  icon: Milestone,
   bgFull: "bg-black/40 text-white",
   bgHalf: "bg-black/20",
   ringFull: "hover:ring ring-black",

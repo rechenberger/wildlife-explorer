@@ -11,13 +11,17 @@ import {
 import { parseBattleLog } from "~/server/lib/battle/battleLogParser"
 import { api } from "~/utils/api"
 import { replaceByWildlife } from "~/utils/replaceByWildlife"
+import { TypeBadge } from "./TypeBadge"
 import { cn } from "./cn"
+import { Progress } from "./shadcn/ui/progress"
 import {
   abilityIcon,
+  catchIcon,
   getTypeIcon,
   itemIcon,
+  leaveIcon,
   natureIcon,
-  type TypeIcon,
+  runIcon,
 } from "./typeIcons"
 import { useGetWildlifeName } from "./useGetWildlifeName"
 import { usePlayer } from "./usePlayer"
@@ -285,11 +289,11 @@ export const BattleView = ({
                                 <div className="flex items-baseline gap-1">
                                   <div
                                     className="truncate text-xs font-bold"
-                                    title={
-                                      fighter.wildlife
-                                        ? getName(fighter.wildlife)
-                                        : fighter.fighter.name
-                                    }
+                                    title={`${getName(fighter.wildlife)} ${
+                                      DEV_MODE
+                                        ? `(${fighter.fighter.species} ${fighter.fighter.level} ${fighter.fighter.gender})`
+                                        : ""
+                                    }`}
                                   >
                                     {fighter.wildlife
                                       ? getName(fighter.wildlife)
@@ -300,17 +304,20 @@ export const BattleView = ({
                                       title={fighter.fighter.species}
                                       className="whitespace-nowrap text-[10px] opacity-60"
                                     >
-                                      {" "}
-                                      {fighter.fighter.species}{" "}
-                                      {fighter.fighter.level}{" "}
-                                      {fighter.fighter.gender}
+                                      {` ${fighter.fighter.species} ${fighter.fighter.level} ${fighter.fighter.gender}`}
                                     </div>
                                   )}
                                 </div>
+                                <Progress
+                                  value={(hp / hpMax) * 100}
+                                  className="h-1 bg-slate-400"
+                                />
 
                                 <div className="flex flex-row gap-1 text-xs">
-                                  <div className="truncate">
-                                    {hp}/{hpMax} HP
+                                  <div className="truncate opacity-60">
+                                    {isMySide
+                                      ? `${hp}/${hpMax}`
+                                      : `${Math.ceil((hp / hpMax) * 100)}%`}
                                   </div>
                                   {!!status && (
                                     <div className="rounded-sm bg-red-300 px-1">
@@ -411,7 +418,7 @@ export const BattleView = ({
                                         {typeIcon && (
                                           <div
                                             className={cn(
-                                              "flex h-full items-center justify-center rounded-md p-1",
+                                              "flex h-full items-center justify-center rounded-md p-1.5",
                                               typeIcon.bgFull
                                             )}
                                             title={typeIcon.name}
@@ -531,50 +538,51 @@ export const BattleView = ({
                       }
                     )}
                   {isMySide && (
-                    <>
-                      <div
-                        className={cn(
-                          "flex flex-1 gap-2",
-                          isMainSide ? "flex-row-reverse" : "flex-row"
-                        )}
-                      >
-                        {battleIsActive ? (
-                          <>
-                            <button
-                              className="w-12 rounded bg-black/10 py-1 text-xs hover:bg-black/20 sm:w-28"
-                              onClick={() => {
-                                if (!playerId) return
-                                run({
-                                  battleId,
-                                  playerId,
-                                })
-                              }}
-                            >
-                              Run
-                            </button>
-                            <button
-                              className="w-12 rounded bg-black/10 py-1 text-xs hover:bg-black/20 sm:w-28"
-                              onClick={() => {
-                                catchButton()
-                              }}
-                            >
-                              Catch
-                            </button>
-                          </>
-                        ) : (
-                          <>
-                            <button
-                              className="w-12 rounded bg-black/10 py-1 text-xs hover:bg-black/20 sm:w-28"
-                              onClick={() => {
-                                onClose()
-                              }}
-                            >
-                              Leave
-                            </button>
-                          </>
-                        )}
-                      </div>
-                    </>
+                    <div
+                      className={cn(
+                        "flex flex-1 gap-2",
+                        isMainSide ? "flex-row-reverse" : "flex-row"
+                      )}
+                    >
+                      {battleIsActive ? (
+                        <>
+                          <TypeBadge
+                            size="big"
+                            content="Run"
+                            icon={runIcon}
+                            onClick={() => {
+                              if (!playerId) return
+                              run({
+                                battleId,
+                                playerId,
+                              })
+                            }}
+                            className="w-[76px] sm:w-28"
+                          />
+                          <TypeBadge
+                            size="big"
+                            content="Catch"
+                            icon={catchIcon}
+                            onClick={() => {
+                              catchButton()
+                            }}
+                            className="w-[76px] sm:w-28"
+                          />
+                        </>
+                      ) : (
+                        <>
+                          <TypeBadge
+                            size="big"
+                            content="Leave"
+                            icon={leaveIcon}
+                            onClick={() => {
+                              onClose()
+                            }}
+                            className="w-[76px] sm:w-28"
+                          />
+                        </>
+                      )}
+                    </div>
                   )}
                 </div>
 
@@ -596,36 +604,6 @@ function fillWithNulls<T>(arr: T[], length: number) {
     result.push(null)
   }
   return result
-}
-
-const TypeBadge = ({
-  title,
-  icon,
-  content,
-}: {
-  title?: string
-  icon: TypeIcon
-  content: string
-}) => {
-  return (
-    <>
-      <div
-        title={title || content}
-        className={cn(
-          "flex items-center gap-1 rounded-md pr-2 text-xs",
-          icon.bgHalf,
-          !icon.icon && "pl-1"
-        )}
-      >
-        {icon.icon && (
-          <div className={cn("rounded-md p-1", icon.bgFull)}>
-            <icon.icon className="h-3 w-3" />
-          </div>
-        )}
-        <div>{content}</div>
-      </div>
-    </>
-  )
 }
 
 const readableEffectiveness = ({
