@@ -1,7 +1,7 @@
 import { find, flatMap, map } from "lodash-es"
 import { Undo2 } from "lucide-react"
 import Image from "next/image"
-import { Fragment, useEffect, useRef } from "react"
+import { Fragment, useLayoutEffect, useRef } from "react"
 import { toast } from "sonner"
 import {
   DEV_MODE,
@@ -15,7 +15,6 @@ import { replaceByWildlife } from "~/utils/replaceByWildlife"
 import { TypeBadge } from "./TypeBadge"
 import { cn } from "./cn"
 import { Progress } from "./shadcn/ui/progress"
-import { ScrollArea } from "./shadcn/ui/scroll-area"
 import {
   abilityIcon,
   catchIcon,
@@ -96,11 +95,9 @@ export const BattleView = ({
 
   const logRef = useRef<HTMLDivElement>(null)
 
-  useEffect(() => {
-    setTimeout(() => {
-      if (!logRef.current) return
-      logRef.current.scrollTop = logRef.current.scrollHeight
-    })
+  useLayoutEffect(() => {
+    if (!logRef.current) return
+    logRef.current.scrollTop = logRef.current.scrollHeight
   }, [battleLogAsHtml])
 
   if (!data) {
@@ -615,12 +612,12 @@ export const BattleView = ({
         </div>
         {SHOW_BATTLE_LOG && (
           <div className="flex-1 border-l p-2 hidden lg:flex flex-col h-[400px]">
-            <ScrollArea className="" ref={logRef}>
+            <div className="overflow-hidden" ref={logRef}>
               <div
                 className="prose overflow-auto prose-sm"
                 dangerouslySetInnerHTML={{ __html: battleLogAsHtml }}
               />
-            </ScrollArea>
+            </div>
           </div>
         )}
       </div>
