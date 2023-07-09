@@ -329,7 +329,7 @@ export const BattleView = ({
                                     className="h-1 bg-slate-400"
                                   />
 
-                                  <div className="flex flex-row gap-1 text-xs">
+                                  <div className="flex flex-row gap-1 text-xs justify-between">
                                     <div className="truncate opacity-60">
                                       {isMySide
                                         ? `${hp}/${hpMax}`
@@ -340,6 +340,9 @@ export const BattleView = ({
                                         {status.toUpperCase()}
                                       </div>
                                     )}
+                                    <div className="truncate opacity-60">
+                                      Lv. {fighter.fighter.level}
+                                    </div>
                                   </div>
                                 </div>
                                 <div className="w-2" />
