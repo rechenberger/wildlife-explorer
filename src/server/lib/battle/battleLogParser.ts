@@ -5,6 +5,7 @@ export const parseBattleLog = (
   line?: string | string[] | undefined,
   returnAsHtml: boolean = false
 ) => {
+  // TODO: this assumes that we are always viewing as p1
   const formatter = new LogFormatter("p1")
 
   const extractMessage = (buf: string) => {
