@@ -5,7 +5,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { toast } from "sonner"
 import {
-  DEV_MODE,
+  ENABLE_BATTLE_VIEW,
   MIN_METER_ACCURACY_SHOW_INACCURATE,
   SHOW_OBSERVATION_JSON,
 } from "~/config"
@@ -193,7 +193,7 @@ export const CurrentObservation = () => {
           >
             Catch
           </button>
-          {DEV_MODE && (
+          {ENABLE_BATTLE_VIEW && (
             <button
               className={cn(
                 "rounded bg-black px-2 py-1 text-sm text-white",
