@@ -278,11 +278,11 @@ export const BattleView = ({
                                 <div className="flex items-baseline gap-1">
                                   <div
                                     className="truncate text-xs font-bold"
-                                    title={
-                                      fighter.wildlife
-                                        ? getName(fighter.wildlife)
-                                        : fighter.fighter.name
-                                    }
+                                    title={`${getName(fighter.wildlife)} ${
+                                      DEV_MODE
+                                        ? `(${fighter.fighter.species} ${fighter.fighter.level} ${fighter.fighter.gender})`
+                                        : ""
+                                    }`}
                                   >
                                     {fighter.wildlife
                                       ? getName(fighter.wildlife)
@@ -293,10 +293,7 @@ export const BattleView = ({
                                       title={fighter.fighter.species}
                                       className="whitespace-nowrap text-[10px] opacity-60"
                                     >
-                                      {" "}
-                                      {fighter.fighter.species}{" "}
-                                      {fighter.fighter.level}{" "}
-                                      {fighter.fighter.gender}
+                                      {` ${fighter.fighter.species} ${fighter.fighter.level} ${fighter.fighter.gender}`}
                                     </div>
                                   )}
                                 </div>
