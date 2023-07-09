@@ -615,7 +615,7 @@ export const BattleView = ({
         </div>
         {SHOW_BATTLE_LOG && (
           <div className="flex-1 border-l p-2 hidden lg:flex flex-col h-[400px]">
-            <div className="overflow-hidden" ref={logRef}>
+            <div className="overflow-auto" ref={logRef}>
               <div
                 className="prose overflow-auto prose-sm"
                 dangerouslySetInnerHTML={{ __html: battleLogAsHtml }}
