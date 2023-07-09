@@ -24,4 +24,4 @@ export const DEV_MODE =
   process.env.NODE_ENV === "development" ||
   (typeof localStorage !== "undefined" && !!localStorage.getItem("DEV_MODE"))
 
-export const ENABLE_BATTLE_VIEW = DEV_MODE
+export const ENABLE_BATTLE_VIEW = false
