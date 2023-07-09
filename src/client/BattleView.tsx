@@ -288,7 +288,7 @@ export const BattleView = ({
                             </div>
                             <div
                               className={cn(
-                                "flex flex-wrap gap-1",
+                                "my-1 flex flex-wrap gap-1",
                                 isMainSide ? "flex-row" : "flex-row-reverse"
                               )}
                             >
