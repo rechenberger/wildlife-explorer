@@ -65,6 +65,16 @@ export const catchRouter = createTRPCRouter({
     }),
 
   catch: wildlifeProcedure.mutation(async ({ ctx }) => {
+    if (
+      ctx.wildlifeBattleId &&
+      ctx.wildlifeBattleId !== ctx.player.metadata?.activeBattleId
+    ) {
+      throw new TRPCError({
+        code: "BAD_REQUEST",
+        message: "Wildlife is in a battle with another player",
+      })
+    }
+
     const luck = Math.random()
     const isLucky = luck > DEFAULT_CATCH_SUCCESS_RATE
 

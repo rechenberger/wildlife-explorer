@@ -1,4 +1,5 @@
 import { TRPCError } from "@trpc/server"
+import { first } from "lodash-es"
 import { z } from "zod"
 import { RADIUS_IN_M_CATCH_WILDLIFE } from "~/config"
 import { calcDistanceInMeter } from "~/server/lib/latLng"
@@ -23,6 +24,9 @@ export const wildlifeProcedure = playerProcedure
               status: "IN_PROGRESS",
             },
           },
+          select: {
+            battleId: true,
+          },
         },
       },
     })
@@ -30,12 +34,6 @@ export const wildlifeProcedure = playerProcedure
       throw new TRPCError({
         code: "NOT_FOUND",
         message: "No observation found",
-      })
-    }
-    if (wildlife.battleParticipations.length > 0) {
-      throw new TRPCError({
-        code: "BAD_REQUEST",
-        message: "Wildlife is currently in battle",
       })
     }
     const distanceInMeter = calcDistanceInMeter(wildlife, ctx.player)
@@ -62,10 +60,13 @@ export const wildlifeProcedure = playerProcedure
       })
     }
 
+    const wildlifeBattleId = first(wildlife.battleParticipations)?.battleId
+
     return next({
       ctx: {
         ...ctx,
         wildlife,
+        wildlifeBattleId,
       },
     })
   })

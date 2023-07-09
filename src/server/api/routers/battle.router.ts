@@ -13,6 +13,13 @@ import { wildlifeProcedure } from "../middleware/wildlifeProcedure"
 
 export const battleRouter = createTRPCRouter({
   attackWildlife: wildlifeProcedure.mutation(async ({ ctx }) => {
+    if (ctx.wildlifeBattleId) {
+      throw new TRPCError({
+        code: "BAD_REQUEST",
+        message: "Wildlife is already in a battle",
+      })
+    }
+
     const playerInFight = await ctx.prisma.battleParticipation.findFirst({
       where: {
         playerId: ctx.player.id,
@@ -24,22 +31,7 @@ export const battleRouter = createTRPCRouter({
     if (playerInFight || ctx.player.metadata?.activeBattleId) {
       throw new TRPCError({
         code: "BAD_REQUEST",
-        message: "You are already in a fight",
-      })
-    }
-
-    const wildlifeInFight = await ctx.prisma.battleParticipation.findFirst({
-      where: {
-        wildlifeId: ctx.wildlife.id,
-        battle: {
-          status: "IN_PROGRESS",
-        },
-      },
-    })
-    if (wildlifeInFight) {
-      throw new TRPCError({
-        code: "BAD_REQUEST",
-        message: "Wildlife is already in a fight",
+        message: "You are already in a battle",
       })
     }
 
