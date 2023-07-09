@@ -17,6 +17,7 @@ import { TimeAgo } from "./TimeAgo"
 import { useWildlife } from "./WildlifeMarkers"
 import { cn } from "./cn"
 import { formatMeters } from "./formatMeters"
+import { useCatch } from "./useCatch"
 import { useGetWildlifeName } from "./useGetWildlifeName"
 import { navigatingToObservationIdAtom, useNavigation } from "./useNavigation"
 import { usePlayer } from "./usePlayer"
@@ -37,13 +38,7 @@ export const CurrentObservation = () => {
 
   const { playerId } = usePlayer()
   const trpc = api.useContext()
-  const { mutateAsync: doCatch, isLoading: catching } =
-    api.catch.catch.useMutation({
-      onSettled: () => {
-        trpc.catch.invalidate()
-        trpc.wildlife.invalidate()
-      },
-    })
+  const { doCatch, isLoading: catching } = useCatch()
   const { mutateAsync: attackWildlife, isLoading: attacking } =
     api.battle.attackWildlife.useMutation({
       onSuccess: (data) => {
@@ -193,12 +188,7 @@ export const CurrentObservation = () => {
             )}
             disabled={catching}
             onClick={async () => {
-              if (!playerId) return
-              toast.promise(doCatch({ wildlifeId: w.id, playerId }), {
-                loading: "Catching...",
-                success: "You caught it! 🎉",
-                error: (err) => err.message || "Failed to catch. Try again.",
-              })
+              doCatch({ wildlifeId: w.id })
             }}
           >
             Catch

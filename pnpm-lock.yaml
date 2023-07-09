@@ -158,6 +158,9 @@ dependencies:
   jotai-trpc:
     specifier: ^0.5.1
     version: 0.5.1(@trpc/client@10.34.0)(@trpc/server@10.34.0)(jotai@2.2.2)
+  js-confetti:
+    specifier: ^0.11.0
+    version: 0.11.0
   lodash-es:
     specifier: ^4.17.21
     version: 4.17.21
@@ -5355,6 +5358,10 @@ packages:
         optional: true
     dependencies:
       react: 18.2.0
+    dev: false
+
+  /js-confetti@0.11.0:
+    resolution: {integrity: sha512-Hc7I3VI4r4H0nq5q/oQK+JJwGoYRYVHK72fGk8E9Ay1dbh+aiZ9yl0yFp1K4oYeq7YFDQAndYChwqLPA3QWQuA==}
     dev: false
 
   /js-tokens@4.0.0:

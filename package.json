@@ -61,6 +61,7 @@
     "date-fns": "^2.30.0",
     "jotai": "^2.2.2",
     "jotai-trpc": "^0.5.1",
+    "js-confetti": "^0.11.0",
     "lodash-es": "^4.17.21",
     "lucide-react": "^0.257.0",
     "mapbox-gl": "^2.15.0",

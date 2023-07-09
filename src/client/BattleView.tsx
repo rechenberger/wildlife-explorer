@@ -24,6 +24,7 @@ import {
   natureIcon,
   runIcon,
 } from "./typeIcons"
+import { useCatch } from "./useCatch"
 import { useGetWildlifeName } from "./useGetWildlifeName"
 import { usePlayer } from "./usePlayer"
 
@@ -85,13 +86,7 @@ export const BattleView = ({
 
   const getName = useGetWildlifeName()
 
-  const { mutateAsync: doCatch } = api.catch.catch.useMutation({
-    onSettled: () => {
-      trpc.catch.invalidate()
-      trpc.wildlife.invalidate()
-      trpc.battle.invalidate()
-    },
-  })
+  const { doCatch } = useCatch()
 
   const logRef = useRef<HTMLDivElement>(null)
 
@@ -125,11 +120,7 @@ export const BattleView = ({
       toast.error("No wildlife to catch")
       return
     }
-    toast.promise(doCatch({ wildlifeId, playerId }), {
-      loading: "Catching...",
-      success: "You caught it! 🎉",
-      error: (err) => err.message || "Failed to catch. Try again.",
-    })
+    doCatch({ wildlifeId })
   }
 
   return (
