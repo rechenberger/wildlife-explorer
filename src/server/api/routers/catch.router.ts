@@ -98,10 +98,10 @@ export const catchRouter = createTRPCRouter({
     const hpPercent = status ? status.hp / status.hpMax : 1
 
     const goal =
-      CATCH_RATE_ALWAYS_WIN +
+      CATCH_RATE_ALWAYS_LOOSE +
       hpPercent * (1 - CATCH_RATE_ALWAYS_WIN - CATCH_RATE_ALWAYS_LOOSE)
     const luck = Math.random()
-    const isLucky = luck <= goal
+    const isLucky = luck > goal
 
     await respawnWildlife({
       prisma: ctx.prisma,
