@@ -10,7 +10,7 @@ import { usePlayer } from "./usePlayer"
 
 export const BattleOverview = () => {
   const { playerId } = usePlayer()
-  const { data: battles } = api.battle.getMyBattles.useQuery(
+  const { data: battles, isLoading } = api.battle.getMyBattles.useQuery(
     {
       playerId: playerId!,
     },
@@ -22,6 +22,19 @@ export const BattleOverview = () => {
   return (
     <>
       <div className="mb-4">Recent Battles</div>
+      {!battles?.length && (
+        <div className="flex items-center justify-center py-12 text-center text-sm opacity-60">
+          {isLoading ? (
+            <>Loading...</>
+          ) : (
+            <>
+              You haven&apos;t participated in any battles, yet.
+              <br />
+              Try batteling some wildlife!
+            </>
+          )}
+        </div>
+      )}
       <div className="flex flex-col gap-2">
         {battles?.map((battle) => {
           const myParticipation = battle.battleParticipants.find(
