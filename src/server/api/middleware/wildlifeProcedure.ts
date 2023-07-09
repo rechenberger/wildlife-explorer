@@ -17,12 +17,25 @@ export const wildlifeProcedure = playerProcedure
             playerId: ctx.player.id,
           },
         },
+        battleParticipations: {
+          where: {
+            battle: {
+              status: "IN_PROGRESS",
+            },
+          },
+        },
       },
     })
     if (!wildlife) {
       throw new TRPCError({
         code: "NOT_FOUND",
         message: "No observation found",
+      })
+    }
+    if (wildlife.battleParticipations.length > 0) {
+      throw new TRPCError({
+        code: "BAD_REQUEST",
+        message: "Wildlife is currently in battle",
       })
     }
     const distanceInMeter = calcDistanceInMeter(wildlife, ctx.player)
