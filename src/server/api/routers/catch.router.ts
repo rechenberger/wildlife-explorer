@@ -4,102 +4,100 @@ import { z } from "zod"
 import {
   DEFAULT_CATCH_SUCCESS_RATE,
   DEFAULT_RESPAWN_TIME_IN_MINUTES,
-  RADIUS_IN_M_CATCH_WILDLIFE,
 } from "~/config"
 import { createTRPCRouter } from "~/server/api/trpc"
-import { calcDistanceInMeter } from "~/server/lib/latLng"
+import { WildlifeMetadata } from "~/server/schema/WildlifeMetadata"
 import { createSeed } from "~/utils/seed"
 import { playerProcedure } from "../middleware/playerProcedure"
+import { wildlifeProcedure } from "../middleware/wildlifeProcedure"
 
 export const catchRouter = createTRPCRouter({
   getMyCatches: playerProcedure.query(async ({ ctx }) => {
-    const catches = await ctx.prisma.catch.findMany({
+    const catchesRaw = await ctx.prisma.catch.findMany({
       where: {
         playerId: ctx.player.id,
       },
+      include: {
+        wildlife: true,
+      },
+      orderBy: {
+        battleOrderPosition: {
+          sort: "desc",
+          nulls: "last",
+        },
+      },
     })
+    const catches = catchesRaw.map((c) => ({
+      ...c,
+      wildlife: {
+        ...c.wildlife,
+        metadata: WildlifeMetadata.parse(c.wildlife.metadata),
+      },
+    }))
     return catches
   }),
 
-  catch: playerProcedure
+  setBattleOrderPosition: playerProcedure
     .input(
       z.object({
-        observationId: z.number(),
+        catchId: z.string(),
       })
     )
     .mutation(async ({ ctx, input }) => {
-      const wildlife = await ctx.prisma.wildlife.findUnique({
+      const maxBattleOrderPositionData = await ctx.prisma.catch.aggregate({
         where: {
-          observationId: input.observationId,
-        },
-        include: {
-          catches: {
-            where: {
-              playerId: ctx.player.id,
-            },
-          },
-        },
-      })
-      if (!wildlife) {
-        throw new TRPCError({
-          code: "NOT_FOUND",
-          message: "No observation found",
-        })
-      }
-      const distanceInMeter = calcDistanceInMeter(wildlife, ctx.player)
-      const isClose = distanceInMeter < RADIUS_IN_M_CATCH_WILDLIFE
-      if (!isClose) {
-        return {
-          success: false,
-          reason: "Too far away 😫",
-        }
-      }
-
-      if (wildlife.respawnsAt > new Date()) {
-        return {
-          success: false,
-          reason: "Wildlife respawns soon™️",
-        }
-      }
-
-      const caught = wildlife.catches.length > 0
-      if (caught) {
-        return {
-          success: false,
-          reason: "Wildlife already caught 🤓",
-        }
-      }
-
-      const luck = Math.random()
-      const isLucky = luck > DEFAULT_CATCH_SUCCESS_RATE
-
-      const respawnsAt = addMinutes(new Date(), DEFAULT_RESPAWN_TIME_IN_MINUTES)
-      await ctx.prisma.wildlife.update({
-        where: {
-          id: wildlife.id,
-        },
-        data: {
-          respawnsAt,
-        },
-      })
-
-      if (!isLucky) {
-        return {
-          success: false,
-          reason: "Wildlife escaped 💨",
-        }
-      }
-
-      await ctx.prisma.catch.create({
-        data: {
           playerId: ctx.player.id,
-          wildlifeId: wildlife.id,
-          seed: createSeed(wildlife),
+        },
+        _max: {
+          battleOrderPosition: true,
         },
       })
 
-      return {
-        success: true,
-      }
+      const maxBattleOrderPosition =
+        maxBattleOrderPositionData._max.battleOrderPosition || 0
+
+      await ctx.prisma.catch.updateMany({
+        where: {
+          playerId: ctx.player.id,
+          id: input.catchId,
+        },
+        data: {
+          battleOrderPosition: maxBattleOrderPosition + 1,
+        },
+      })
     }),
+
+  catch: wildlifeProcedure.mutation(async ({ ctx }) => {
+    const luck = Math.random()
+    const isLucky = luck > DEFAULT_CATCH_SUCCESS_RATE
+
+    const respawnsAt = addMinutes(new Date(), DEFAULT_RESPAWN_TIME_IN_MINUTES)
+    await ctx.prisma.wildlife.update({
+      where: {
+        id: ctx.wildlife.id,
+      },
+      data: {
+        respawnsAt,
+      },
+    })
+
+    if (!isLucky) {
+      throw new TRPCError({
+        code: "BAD_REQUEST",
+        message: "Wildlife escaped 💨",
+      })
+    }
+
+    await ctx.prisma.catch.create({
+      data: {
+        playerId: ctx.player.id,
+        wildlifeId: ctx.wildlife.id,
+        seed: createSeed(ctx.wildlife),
+      },
+    })
+
+    return {
+      success: true,
+    }
+  }),
 })

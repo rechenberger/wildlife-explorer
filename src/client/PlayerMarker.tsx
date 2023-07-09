@@ -64,7 +64,7 @@ export const PlayerMarker = ({
     }
 
     frameRef.current = requestAnimationFrame(animateMarker)
-  }, [isMe, result?.timingLegs, setPlayerLocation])
+  }, [isMe, player.id, result?.timingLegs, setPlayerLocation, store])
 
   useEffect(() => {
     animateMarker()

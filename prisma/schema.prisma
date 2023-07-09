@@ -3,7 +3,7 @@
 
 generator client {
     provider        = "prisma-client-js"
-    previewFeatures = ["jsonProtocol"]
+    previewFeatures = ["jsonProtocol", "orderByNulls"]
 }
 
 datasource db {
@@ -103,7 +103,10 @@ model Catch {
 
     seed String
 
+    battleOrderPosition Int?
+
     @@unique([wildlifeId, playerId])
+    @@index([playerId, battleOrderPosition])
 }
 
 model Wildlife {
@@ -123,6 +126,8 @@ model Wildlife {
 
     lat Float
     lng Float
+
+    battleParticipations BattleParticipation[]
 
     @@index([lat, lng])
     @@index([taxonId])
@@ -144,6 +149,7 @@ enum BattleStatus {
     // PENDING
     IN_PROGRESS
     FINISHED
+    CANCELLED
 }
 
 model BattleParticipation {
@@ -154,9 +160,15 @@ model BattleParticipation {
     metadata Json
     isWinner Boolean?
 
-    playerId String
-    player   Player @relation(fields: [playerId], references: [id], onDelete: Cascade)
+    playerId String?
+    player   Player? @relation(fields: [playerId], references: [id], onDelete: Cascade)
+
+    wildlifeId String?
+    wildlife   Wildlife? @relation(fields: [wildlifeId], references: [id], onDelete: Cascade)
 
     battleId String
     battle   Battle @relation(fields: [battleId], references: [id], onDelete: Cascade)
+
+    @@index([playerId])
+    @@index([wildlifeId])
 }

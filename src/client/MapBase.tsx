@@ -1,11 +1,11 @@
 import { atom, useSetAtom } from "jotai"
 import { debounce } from "lodash-es"
 import { useMemo, useRef, type ReactNode } from "react"
-import { Map, MapRef } from "react-map-gl"
+import { Map, type MapRef } from "react-map-gl"
 import { DEFAULT_LOCATION } from "~/config"
 import { env } from "~/env.mjs"
-import { useNavigation } from "./useNavigation"
 import { MapRefProvider } from "./useMapRef"
+import { useNavigation } from "./useNavigation"
 
 export const mapStateAtom = atom({
   lat: DEFAULT_LOCATION.lat,

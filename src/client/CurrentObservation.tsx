@@ -5,6 +5,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { toast } from "sonner"
 import {
+  ENABLE_BATTLE_VIEW,
   MIN_METER_ACCURACY_SHOW_INACCURATE,
   SHOW_OBSERVATION_JSON,
 } from "~/config"
@@ -39,6 +40,12 @@ export const CurrentObservation = () => {
       onSettled: () => {
         trpc.catch.invalidate()
         trpc.wildlife.invalidate()
+      },
+    })
+  const { mutateAsync: attackWildlife, isLoading: attacking } =
+    api.battle.attackWildlife.useMutation({
+      onSettled: () => {
+        trpc.battle.invalidate()
       },
     })
 
@@ -176,22 +183,37 @@ export const CurrentObservation = () => {
             onClick={async () => {
               if (!playerId) return
 
-              toast.promise(
-                doCatch({ observationId: w.observationId, playerId }),
-                {
-                  loading: "Catching...",
-                  success: (result) =>
-                    result.success
-                      ? "You caught it! 🎉"
-                      : result.reason || "Failed to catch. Try again.",
-                  error: "Failed to catch. Try again.",
-                  icon: <></>,
-                }
-              )
+              toast.promise(doCatch({ wildlifeId: w.id, playerId }), {
+                loading: "Catching...",
+                success: "You caught it! 🎉",
+                error: (err) => err.message || "Failed to catch. Try again.",
+                // icon: <></>,
+              })
             }}
           >
             Catch
           </button>
+          {ENABLE_BATTLE_VIEW && (
+            <button
+              className={cn(
+                "rounded bg-black px-2 py-1 text-sm text-white",
+                attacking && "cursor-progress opacity-50"
+              )}
+              disabled={catching}
+              onClick={async () => {
+                if (!playerId) return
+
+                toast.promise(attackWildlife({ wildlifeId: w.id, playerId }), {
+                  loading: "Catching...",
+                  success: "The Battle is on! 🔥",
+                  error: (err) => err.message || "Failed to catch. Try again.",
+                  // icon: <></>,
+                })
+              }}
+            >
+              Battle
+            </button>
+          )}
         </div>
       </div>
     </>
