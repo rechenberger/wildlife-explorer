@@ -1,11 +1,10 @@
 import { TRPCError } from "@trpc/server"
-import { addMinutes } from "date-fns"
 import { z } from "zod"
-import {
-  DEFAULT_CATCH_SUCCESS_RATE,
-  DEFAULT_RESPAWN_TIME_IN_MINUTES,
-} from "~/config"
+import { CATCH_RATE_ALWAYS_LOOSE, CATCH_RATE_ALWAYS_WIN } from "~/config"
 import { createTRPCRouter } from "~/server/api/trpc"
+import { simulateBattle } from "~/server/lib/battle/simulateBattle"
+import { respawnWildlife } from "~/server/lib/respawnWildlife"
+import { PlayerMetadata } from "~/server/schema/PlayerMetadata"
 import { WildlifeMetadata } from "~/server/schema/WildlifeMetadata"
 import { createSeed } from "~/utils/seed"
 import { playerProcedure } from "../middleware/playerProcedure"
@@ -20,12 +19,17 @@ export const catchRouter = createTRPCRouter({
       include: {
         wildlife: true,
       },
-      orderBy: {
-        battleOrderPosition: {
-          sort: "desc",
-          nulls: "last",
+      orderBy: [
+        {
+          battleOrderPosition: {
+            sort: "desc",
+            nulls: "last",
+          },
         },
-      },
+        {
+          createdAt: "asc",
+        },
+      ],
     })
     const catches = catchesRaw.map((c) => ({
       ...c,
@@ -68,18 +72,66 @@ export const catchRouter = createTRPCRouter({
     }),
 
   catch: wildlifeProcedure.mutation(async ({ ctx }) => {
-    const luck = Math.random()
-    const isLucky = luck > DEFAULT_CATCH_SUCCESS_RATE
+    if (
+      ctx.wildlifeBattleId &&
+      ctx.wildlifeBattleId !== ctx.player.metadata?.activeBattleId
+    ) {
+      throw new TRPCError({
+        code: "BAD_REQUEST",
+        message: "Wildlife is in a battle with another player",
+      })
+    }
 
-    const respawnsAt = addMinutes(new Date(), DEFAULT_RESPAWN_TIME_IN_MINUTES)
-    await ctx.prisma.wildlife.update({
-      where: {
-        id: ctx.wildlife.id,
-      },
-      data: {
-        respawnsAt,
-      },
+    const battleId = ctx.wildlifeBattleId
+    const battle = battleId
+      ? await simulateBattle({
+          prisma: ctx.prisma,
+          battleId,
+        })
+      : null
+
+    const status = battle?.battleStatus.sides
+      .flatMap((s) => s.fighters)
+      ?.find(
+        (f) => !f.catch && f.wildlife.id === ctx.wildlife.id
+      )?.fighterStatus
+    const hpPercent = status ? status.hp / status.hpMax : 1
+
+    const goal =
+      CATCH_RATE_ALWAYS_LOOSE +
+      hpPercent * (1 - CATCH_RATE_ALWAYS_WIN - CATCH_RATE_ALWAYS_LOOSE)
+    const luck = Math.random()
+    const isLucky = luck > goal
+
+    // Currently, we respawn wildlife even if the player is not lucky
+    // Also the battle always ends after the catch
+
+    await respawnWildlife({
+      prisma: ctx.prisma,
+      wildlifeId: ctx.wildlife.id,
     })
+
+    if (battle) {
+      await ctx.prisma.battle.update({
+        where: {
+          id: battleId,
+        },
+        data: {
+          status: "CANCELLED",
+        },
+      })
+      await ctx.prisma.player.update({
+        where: {
+          id: ctx.player.id,
+        },
+        data: {
+          metadata: {
+            ...ctx.player.metadata,
+            activeBattleId: null,
+          } satisfies PlayerMetadata,
+        },
+      })
+    }
 
     if (!isLucky) {
       throw new TRPCError({
@@ -87,7 +139,6 @@ export const catchRouter = createTRPCRouter({
         message: "Wildlife escaped 💨",
       })
     }
-
     await ctx.prisma.catch.create({
       data: {
         playerId: ctx.player.id,

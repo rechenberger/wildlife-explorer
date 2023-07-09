@@ -1,16 +1,26 @@
 import { TRPCError } from "@trpc/server"
-import { map } from "lodash-es"
+import { find, map } from "lodash-es"
 import { z } from "zod"
 import { createTRPCRouter } from "~/server/api/trpc"
 import { simulateBattle } from "~/server/lib/battle/simulateBattle"
+import { respawnWildlife } from "~/server/lib/respawnWildlife"
 import { BattleMetadata } from "~/server/schema/BattleMetadata"
 import { BattleParticipationMetadata } from "~/server/schema/BattleParticipationMetadata"
+import { PlayerMetadata } from "~/server/schema/PlayerMetadata"
+import { WildlifeMetadata } from "~/server/schema/WildlifeMetadata"
 import { devProcedure } from "../middleware/devProcedure"
 import { playerProcedure } from "../middleware/playerProcedure"
 import { wildlifeProcedure } from "../middleware/wildlifeProcedure"
 
 export const battleRouter = createTRPCRouter({
   attackWildlife: wildlifeProcedure.mutation(async ({ ctx }) => {
+    if (ctx.wildlifeBattleId) {
+      throw new TRPCError({
+        code: "BAD_REQUEST",
+        message: "Wildlife is already in a battle",
+      })
+    }
+
     const playerInFight = await ctx.prisma.battleParticipation.findFirst({
       where: {
         playerId: ctx.player.id,
@@ -19,29 +29,14 @@ export const battleRouter = createTRPCRouter({
         },
       },
     })
-    if (playerInFight) {
+    if (playerInFight || ctx.player.metadata?.activeBattleId) {
       throw new TRPCError({
         code: "BAD_REQUEST",
-        message: "You are already in a fight",
+        message: "You are already in a battle",
       })
     }
 
-    const wildlifeInFight = await ctx.prisma.battleParticipation.findFirst({
-      where: {
-        wildlifeId: ctx.wildlife.id,
-        battle: {
-          status: "IN_PROGRESS",
-        },
-      },
-    })
-    if (wildlifeInFight) {
-      throw new TRPCError({
-        code: "BAD_REQUEST",
-        message: "Wildlife is already in a fight",
-      })
-    }
-
-    await ctx.prisma.battle.create({
+    const battle = await ctx.prisma.battle.create({
       data: {
         status: "IN_PROGRESS",
         metadata: {},
@@ -61,6 +56,23 @@ export const battleRouter = createTRPCRouter({
         },
       },
     })
+
+    await ctx.prisma.player.update({
+      where: {
+        id: ctx.player.id,
+      },
+      data: {
+        lat: ctx.player.lat,
+        lng: ctx.player.lng,
+        metadata: {
+          ...ctx.player.metadata,
+          activeBattleId: battle.id,
+          navigation: null,
+        } satisfies PlayerMetadata,
+      },
+    })
+
+    return battle
   }),
 
   getMyBattles: playerProcedure.query(async ({ ctx }) => {
@@ -73,8 +85,17 @@ export const battleRouter = createTRPCRouter({
         },
       },
       include: {
-        battleParticipants: true,
+        battleParticipants: {
+          include: {
+            player: true,
+            wildlife: true,
+          },
+        },
       },
+      orderBy: {
+        createdAt: "desc",
+      },
+      take: 20,
     })
     const battles = map(battlesRaw, (battle) => ({
       ...battle,
@@ -86,6 +107,22 @@ export const battleRouter = createTRPCRouter({
           metadata: BattleParticipationMetadata.parse(
             battleParticipant.metadata
           ),
+          player: battleParticipant.player
+            ? {
+                ...battleParticipant.player,
+                metadata: PlayerMetadata.parse(
+                  battleParticipant.player.metadata
+                ),
+              }
+            : null,
+          wildlife: battleParticipant.wildlife
+            ? {
+                ...battleParticipant.wildlife,
+                metadata: WildlifeMetadata.parse(
+                  battleParticipant.wildlife.metadata
+                ),
+              }
+            : null,
         })
       ),
     }))
@@ -99,11 +136,14 @@ export const battleRouter = createTRPCRouter({
       })
     )
     .query(async ({ ctx, input }) => {
-      const { battleStatus } = await simulateBattle({
+      const { battleStatus, battleDb } = await simulateBattle({
         prisma: ctx.prisma,
         battleId: input.battleId,
       })
-      return battleStatus
+      return {
+        battleStatus,
+        status: battleDb.status,
+      }
     }),
 
   reset: devProcedure
@@ -132,7 +172,7 @@ export const battleRouter = createTRPCRouter({
       // let inputLog = battle.metadata.inputLog ?? []
       // inputLog = [...inputLog, `>${participantId} ${input.choice}`]
 
-      const { battleJson, battleDb } = await simulateBattle({
+      const { battleJson, battleDb, battleStatus } = await simulateBattle({
         prisma: ctx.prisma,
         battleId: input.battleId,
         choice: {
@@ -141,17 +181,60 @@ export const battleRouter = createTRPCRouter({
         },
       })
       console.time("update")
+      const winner = battleStatus.winner
+      console.log("winner", winner)
       await ctx.prisma.battle.update({
         where: {
           id: input.battleId,
         },
         data: {
+          status: winner ? "FINISHED" : "IN_PROGRESS",
           metadata: {
             ...battleDb.metadata,
             battleJson,
           } satisfies BattleMetadata,
         },
       })
+
+      // END OF BATTLE
+      if (!!winner) {
+        const participants = battleDb.battleParticipants
+        const winnerParticipantId = find(
+          participants,
+          (p) =>
+            p.player?.name === winner ||
+            (!!p.wildlifeId && winner == "Wildlife")
+        )?.id
+        await Promise.all(
+          map(battleDb.battleParticipants, async (p) => {
+            const isWinner = p.id === winnerParticipantId
+            await ctx.prisma.battleParticipation.update({
+              where: {
+                id: p.id,
+              },
+              data: {
+                isWinner,
+                player: p.player
+                  ? {
+                      update: {
+                        metadata: {
+                          ...p.player?.metadata,
+                          activeBattleId: null,
+                        },
+                      },
+                    }
+                  : undefined,
+              },
+            })
+            if (p.wildlifeId) {
+              await respawnWildlife({
+                prisma: ctx.prisma,
+                wildlifeId: p.wildlifeId,
+              })
+            }
+          })
+        )
+      }
       console.timeEnd("update")
     }),
 
@@ -164,13 +247,39 @@ export const battleRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       // TODO: chance?
       // TODO: SECURITY: check if player is in battle
-      await ctx.prisma.battle.update({
+      const battle = await ctx.prisma.battle.update({
         where: {
           id: input.battleId,
         },
         data: {
           status: "CANCELLED",
         },
+        include: {
+          battleParticipants: true,
+        },
       })
+
+      await ctx.prisma.player.update({
+        where: {
+          id: ctx.player.id,
+        },
+        data: {
+          metadata: {
+            ...ctx.player.metadata,
+            activeBattleId: null,
+          } satisfies PlayerMetadata,
+        },
+      })
+
+      await Promise.all(
+        map(battle.battleParticipants, async (p) => {
+          if (p.wildlifeId) {
+            await respawnWildlife({
+              prisma: ctx.prisma,
+              wildlifeId: p.wildlifeId,
+            })
+          }
+        })
+      )
     }),
 })

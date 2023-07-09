@@ -19,13 +19,20 @@ import { playerProcedure } from "../middleware/playerProcedure"
 const baseClient = MapboxClient({ accessToken: env.NEXT_PUBLIC_MAPBOX_TOKEN })
 
 export const navigationRouter = createTRPCRouter({
-  calcNavigation: playerProcedure
+  startNavigation: playerProcedure
     .input(
       z.object({
         to: LatLng,
       })
     )
     .mutation(async ({ input, ctx }) => {
+      if (ctx.player.metadata?.activeBattleId) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Cannot start navigation while in a battle",
+        })
+      }
+
       const start = {
         lat: ctx.player.lat,
         lng: ctx.player.lng,
