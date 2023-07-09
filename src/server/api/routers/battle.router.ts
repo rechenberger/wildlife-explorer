@@ -41,7 +41,7 @@ export const battleRouter = createTRPCRouter({
       })
     }
 
-    await ctx.prisma.battle.create({
+    const battle = await ctx.prisma.battle.create({
       data: {
         status: "IN_PROGRESS",
         metadata: {},
@@ -61,6 +61,7 @@ export const battleRouter = createTRPCRouter({
         },
       },
     })
+    return battle
   }),
 
   getMyBattles: playerProcedure.query(async ({ ctx }) => {
