@@ -38,6 +38,12 @@ export const BattleViewButton = () => {
           }}
         >
           <Swords size={32} />
+          {!!activeBattle && (
+            <>
+              <div className="absolute -right-1 -top-1 h-3 w-3 rounded-full bg-red-500" />
+              <div className="absolute -right-1 -top-1 h-3 w-3 animate-ping rounded-full bg-red-500" />
+            </>
+          )}
         </button>
         <div className="font-bold [text-shadow:_0px_0px_2px_rgb(0_0_0_/_80%)]">
           Battle
