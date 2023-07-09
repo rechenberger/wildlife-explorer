@@ -1,10 +1,11 @@
 import NiceModal, { useModal } from "@ebay/nice-modal-react"
+import { BattleOverview } from "./BattleOverview"
 import { BattleView } from "./BattleView"
 import { cn } from "./cn"
 import { Dialog, DialogContent } from "./shadcn/ui/dialog"
 
 export const BattleViewModal = NiceModal.create<{
-  battleId: string
+  battleId?: string
 }>(({ battleId }) => {
   // Use a hook to manage the modal state
   const modal = useModal()
@@ -25,13 +26,17 @@ export const BattleViewModal = NiceModal.create<{
           "rounded-t-lg max-sm:bottom-0 max-sm:top-auto max-sm:translate-y-0 max-sm:p-4 max-sm:pt-3"
         )}
       >
-        <BattleView
-          battleId={battleId}
-          onClose={() => {
-            modal.reject()
-            modal.remove()
-          }}
-        />
+        {battleId ? (
+          <BattleView
+            battleId={battleId}
+            onClose={() => {
+              modal.reject()
+              modal.remove()
+            }}
+          />
+        ) : (
+          <BattleOverview />
+        )}
       </DialogContent>
     </Dialog>
   )

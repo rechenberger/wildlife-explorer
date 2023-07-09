@@ -6,7 +6,6 @@ import { ENABLE_BATTLE_VIEW } from "~/config"
 import { type LatLng } from "~/server/schema/LatLng"
 import { api } from "~/utils/api"
 import { BattleViewModal } from "./BattleViewModal"
-import { MyCatchesModal } from "./MyCatchesModal"
 import { cn } from "./cn"
 import { usePlayer } from "./usePlayer"
 
@@ -32,13 +31,9 @@ export const BattleViewButton = () => {
         <button
           className={cn("relative rounded-xl bg-black p-2 text-white")}
           onClick={async () => {
-            if (activeBattle) {
-              NiceModal.show(BattleViewModal, {
-                battleId: activeBattle.id,
-              })
-            } else {
-              NiceModal.show(MyCatchesModal, {})
-            }
+            NiceModal.show(BattleViewModal, {
+              battleId: activeBattle?.id ?? undefined,
+            })
           }}
         >
           <Swords size={32} />
