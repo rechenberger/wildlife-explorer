@@ -19,8 +19,8 @@ export const BattleViewModal = NiceModal.create<{}>(({}) => {
     >
       <DialogContent
         className={cn(
-          "border-0 bg-white",
-          "rounded-t-lg max-sm:bottom-0 max-sm:top-auto max-sm:translate-y-0 max-sm:p-4"
+          "border-0 bg-white pt-3",
+          "rounded-t-lg max-sm:bottom-0 max-sm:top-auto max-sm:translate-y-0 max-sm:p-4 max-sm:pt-3"
         )}
       >
         <BattleView />
