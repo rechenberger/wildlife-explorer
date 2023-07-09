@@ -24,7 +24,7 @@ import { usePlayer } from "./usePlayer"
 const BIG_INACTIVE_FIGHTER = false
 const SHOW_ENEMY_MOVES = false
 const SHOW_INACTIVE_MOVES = true
-const SHOW_FIGHTER_NAME = DEV_MODE
+const SHOW_FIGHTER_NAME = false
 const SHOW_FIGHTER_TYPES = true
 const SHOW_ABILITY = false
 const SHOW_NATURE = false
@@ -87,11 +87,13 @@ export const BattleView = ({
 
   return (
     <>
-      <div className="flex flex-row gap-2">
-        <h3 className="flex-1 truncate text-2xl">Active Battle</h3>
+      <div className="mb-4 flex flex-row gap-2">
+        <h3 className="flex-1">
+          {battleIsActive ? "Active Battle" : "Past Battle"}
+        </h3>
         {DEV_MODE && (
           <button
-            className="absolute right-8 top-1 shrink-0"
+            className="absolute right-12 top-4 shrink-0"
             disabled={!battleIsActive}
             onClick={() => {
               if (!battleIsActive) return
@@ -247,7 +249,7 @@ export const BattleView = ({
                               >
                                 <div className="flex items-baseline gap-1">
                                   <div
-                                    className="truncate font-bold"
+                                    className="truncate text-xs font-bold"
                                     title={
                                       fighter.wildlife
                                         ? getName(fighter.wildlife)

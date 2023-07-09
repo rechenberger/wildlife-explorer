@@ -27,19 +27,19 @@ export const BattleViewModal = NiceModal.create<{
           "rounded-t-lg max-sm:bottom-0 max-sm:top-auto max-sm:translate-y-0 max-sm:p-4 max-sm:pt-3"
         )}
       >
-        <ScrollArea className="max-h-[calc(100svh-100px)]">
-          {battleId ? (
-            <BattleView
-              battleId={battleId}
-              onClose={() => {
-                modal.reject()
-                modal.remove()
-              }}
-            />
-          ) : (
+        {battleId ? (
+          <BattleView
+            battleId={battleId}
+            onClose={() => {
+              modal.reject()
+              modal.remove()
+            }}
+          />
+        ) : (
+          <ScrollArea className="max-h-[calc(100svh-100px)]">
             <BattleOverview />
-          )}
-        </ScrollArea>
+          </ScrollArea>
+        )}
       </DialogContent>
     </Dialog>
   )
