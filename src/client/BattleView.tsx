@@ -14,9 +14,12 @@ import { cn } from "./cn"
 import { Progress } from "./shadcn/ui/progress"
 import {
   abilityIcon,
+  catchIcon,
   getTypeIcon,
   itemIcon,
+  leaveIcon,
   natureIcon,
+  runIcon,
   type TypeIcon,
 } from "./typeIcons"
 import { useGetWildlifeName } from "./useGetWildlifeName"
@@ -408,7 +411,7 @@ export const BattleView = ({
                                         {typeIcon && (
                                           <div
                                             className={cn(
-                                              "flex h-full items-center justify-center rounded-md p-1",
+                                              "flex h-full items-center justify-center rounded-md p-1.5",
                                               typeIcon.bgFull
                                             )}
                                             title={typeIcon.name}
@@ -536,8 +539,10 @@ export const BattleView = ({
                     >
                       {battleIsActive ? (
                         <>
-                          <button
-                            className="w-12 rounded bg-black/10 py-1 text-xs hover:bg-black/20 sm:w-28"
+                          <TypeBadge
+                            size="big"
+                            content="Run"
+                            icon={runIcon}
                             onClick={() => {
                               if (!playerId) return
                               run({
@@ -545,28 +550,29 @@ export const BattleView = ({
                                 playerId,
                               })
                             }}
-                          >
-                            Run
-                          </button>
-                          <button
-                            className="w-12 rounded bg-black/10 py-1 text-xs hover:bg-black/20 sm:w-28"
+                            className="w-[76px] sm:w-28"
+                          />
+                          <TypeBadge
+                            size="big"
+                            content="Catch"
+                            icon={catchIcon}
                             onClick={() => {
                               catchButton()
                             }}
-                          >
-                            Catch
-                          </button>
+                            className="w-[76px] sm:w-28"
+                          />
                         </>
                       ) : (
                         <>
-                          <button
-                            className="w-12 rounded bg-black/10 py-1 text-xs hover:bg-black/20 sm:w-28"
+                          <TypeBadge
+                            size="big"
+                            content="Leave"
+                            icon={leaveIcon}
                             onClick={() => {
                               onClose()
                             }}
-                          >
-                            Leave
-                          </button>
+                            className="w-[76px] sm:w-28"
+                          />
                         </>
                       )}
                     </div>
@@ -596,10 +602,16 @@ const TypeBadge = ({
   title,
   icon,
   content,
+  onClick,
+  size = "small",
+  className,
 }: {
   title?: string
   icon: TypeIcon
   content: string
+  onClick?: () => void
+  size?: "small" | "big"
+  className?: string
 }) => {
   return (
     <>
@@ -608,15 +620,27 @@ const TypeBadge = ({
         className={cn(
           "flex items-center gap-1 rounded-md pr-2 text-xs",
           icon.bgHalf,
-          !icon.icon && "pl-1"
+          !icon.icon && "pl-1",
+          onClick && "cursor-pointer",
+          // size === "big" && "text-sm",
+          className
         )}
+        onClick={onClick}
       >
         {icon.icon && (
-          <div className={cn("rounded-md p-1", icon.bgFull)}>
-            <icon.icon className="h-3 w-3" />
+          <div
+            className={cn(
+              "rounded-md p-1",
+              icon.bgFull,
+              size === "big" && "p-1.5"
+            )}
+          >
+            <icon.icon className={cn("h-3 w-3", size === "big" && "h-4 w-4")} />
           </div>
         )}
-        <div>{content}</div>
+        <div className={cn("flex-1", size === "big" && "text-center")}>
+          {content}
+        </div>
       </div>
     </>
   )
