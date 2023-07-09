@@ -1,11 +1,8 @@
 import { TRPCError } from "@trpc/server"
-import { addMinutes } from "date-fns"
 import { z } from "zod"
-import {
-  DEFAULT_CATCH_SUCCESS_RATE,
-  DEFAULT_RESPAWN_TIME_IN_MINUTES,
-} from "~/config"
+import { DEFAULT_CATCH_SUCCESS_RATE } from "~/config"
 import { createTRPCRouter } from "~/server/api/trpc"
+import { respawnWildlife } from "~/server/lib/respawnWildlife"
 import { WildlifeMetadata } from "~/server/schema/WildlifeMetadata"
 import { createSeed } from "~/utils/seed"
 import { playerProcedure } from "../middleware/playerProcedure"
@@ -71,14 +68,9 @@ export const catchRouter = createTRPCRouter({
     const luck = Math.random()
     const isLucky = luck > DEFAULT_CATCH_SUCCESS_RATE
 
-    const respawnsAt = addMinutes(new Date(), DEFAULT_RESPAWN_TIME_IN_MINUTES)
-    await ctx.prisma.wildlife.update({
-      where: {
-        id: ctx.wildlife.id,
-      },
-      data: {
-        respawnsAt,
-      },
+    await respawnWildlife({
+      prisma: ctx.prisma,
+      wildlifeId: ctx.wildlife.id,
     })
 
     if (!isLucky) {

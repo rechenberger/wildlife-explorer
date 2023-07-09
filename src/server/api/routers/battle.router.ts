@@ -3,6 +3,7 @@ import { map } from "lodash-es"
 import { z } from "zod"
 import { createTRPCRouter } from "~/server/api/trpc"
 import { simulateBattle } from "~/server/lib/battle/simulateBattle"
+import { respawnWildlife } from "~/server/lib/respawnWildlife"
 import { BattleMetadata } from "~/server/schema/BattleMetadata"
 import { BattleParticipationMetadata } from "~/server/schema/BattleParticipationMetadata"
 import { type PlayerMetadata } from "~/server/schema/PlayerMetadata"
@@ -182,12 +183,15 @@ export const battleRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       // TODO: chance?
       // TODO: SECURITY: check if player is in battle
-      await ctx.prisma.battle.update({
+      const battle = await ctx.prisma.battle.update({
         where: {
           id: input.battleId,
         },
         data: {
           status: "CANCELLED",
+        },
+        include: {
+          battleParticipants: true,
         },
       })
 
@@ -202,5 +206,16 @@ export const battleRouter = createTRPCRouter({
           } satisfies PlayerMetadata,
         },
       })
+
+      await Promise.all(
+        map(battle.battleParticipants, async (p) => {
+          if (p.wildlifeId) {
+            await respawnWildlife({
+              prisma: ctx.prisma,
+              wildlifeId: p.wildlifeId,
+            })
+          }
+        })
+      )
     }),
 })
