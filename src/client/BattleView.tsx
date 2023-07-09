@@ -289,7 +289,10 @@ export const BattleView = ({
                                         fighter.wildlife.metadata
                                           .taxonImageUrlSquare
                                       }
-                                      className="w-full object-cover object-center"
+                                      className={cn(
+                                        "w-full object-cover object-center transition-transform",
+                                        fainted && "rotate-180"
+                                      )}
                                       alt={"Observation"}
                                       unoptimized
                                       fill={true}
