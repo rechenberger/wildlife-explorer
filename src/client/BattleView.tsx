@@ -435,63 +435,66 @@ export const BattleView = ({
                     isMainSide ? "flex-row" : "flex-row-reverse"
                   )}
                 >
-                  {map(
-                    fillWithNulls(side.fighters, MAX_FIGHTERS_PER_TEAM),
-                    (fighter, fighterIdx) => {
-                      if (!fighter) {
+                  {side.fighters.length >= 2 &&
+                    map(
+                      fillWithNulls(side.fighters, MAX_FIGHTERS_PER_TEAM),
+                      (fighter, fighterIdx) => {
+                        if (!fighter) {
+                          return (
+                            <div
+                              key={fighterIdx}
+                              className={cn(
+                                "relative aspect-square h-4 w-4 overflow-hidden rounded-full border-2",
+                                "border-gray-100 bg-gray-50"
+                              )}
+                            />
+                          )
+                        }
+
+                        const { hp, hpMax } = fighter.fighterStatus
+                        const hpFull = hp >= hpMax
+                        const dead = hp <= 0
                         return (
-                          <div
-                            key={fighterIdx}
-                            className={cn(
-                              "relative aspect-square h-4 w-4 overflow-hidden rounded-full border-2",
-                              "border-gray-100 bg-gray-50"
-                            )}
-                          />
+                          <Fragment key={fighterIdx}>
+                            <button
+                              disabled={!isMySide}
+                              className={cn(
+                                "relative aspect-square h-4 w-4 overflow-hidden rounded-full border-2",
+                                hpFull
+                                  ? "border-green-500"
+                                  : dead
+                                  ? "border-red-500"
+                                  : "border-amber-400",
+                                isMySide ? "cursor-pointer" : "cursor-default"
+                              )}
+                              onClick={() => {
+                                if (!playerId) return
+                                if (!isMySide) return
+                                makeChoice({
+                                  battleId,
+                                  playerId: playerId,
+                                  choice: `switch ${fighterIdx + 1}`,
+                                })
+                              }}
+                            >
+                              {fighter.wildlife.metadata
+                                .taxonImageUrlSquare && (
+                                <Image
+                                  src={
+                                    fighter.wildlife.metadata
+                                      .taxonImageUrlSquare
+                                  }
+                                  className="w-full object-cover object-center"
+                                  alt={"Observation"}
+                                  unoptimized
+                                  fill={true}
+                                />
+                              )}
+                            </button>
+                          </Fragment>
                         )
                       }
-
-                      const { hp, hpMax } = fighter.fighterStatus
-                      const hpFull = hp >= hpMax
-                      const dead = hp <= 0
-                      return (
-                        <Fragment key={fighterIdx}>
-                          <button
-                            disabled={!isMySide}
-                            className={cn(
-                              "relative aspect-square h-4 w-4 overflow-hidden rounded-full border-2",
-                              hpFull
-                                ? "border-green-500"
-                                : dead
-                                ? "border-red-500"
-                                : "border-amber-400",
-                              isMySide ? "cursor-pointer" : "cursor-default"
-                            )}
-                            onClick={() => {
-                              if (!playerId) return
-                              if (!isMySide) return
-                              makeChoice({
-                                battleId,
-                                playerId: playerId,
-                                choice: `switch ${fighterIdx + 1}`,
-                              })
-                            }}
-                          >
-                            {fighter.wildlife.metadata.taxonImageUrlSquare && (
-                              <Image
-                                src={
-                                  fighter.wildlife.metadata.taxonImageUrlSquare
-                                }
-                                className="w-full object-cover object-center"
-                                alt={"Observation"}
-                                unoptimized
-                                fill={true}
-                              />
-                            )}
-                          </button>
-                        </Fragment>
-                      )
-                    }
-                  )}
+                    )}
                   {isMySide && (
                     <div
                       className={cn(
