@@ -91,7 +91,7 @@ export const BattleView = ({
         <h3 className="flex-1 truncate text-2xl">Active Battle</h3>
         {DEV_MODE && (
           <button
-            className="absolute right-12 top-4 shrink-0"
+            className="absolute right-8 top-1 shrink-0"
             disabled={!battleIsActive}
             onClick={() => {
               if (!battleIsActive) return
