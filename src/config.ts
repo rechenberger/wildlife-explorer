@@ -7,7 +7,6 @@ export const RADIUS_IN_KM_SEE_WILDLIFE = 1
 export const RADIUS_IN_KM_SCAN_WILDLIFE_SMALL = 0.5
 export const RADIUS_IN_KM_SCAN_WILDLIFE_BIG = 5
 export const RADIUS_IN_M_CATCH_WILDLIFE = 50
-export const DEFAULT_CATCH_SUCCESS_RATE = 0.5
 export const DEFAULT_RESPAWN_TIME_IN_MINUTES = 10
 export const WILDLIFE_REFETCH_INTERVAL_IN_MS = 3_000
 export const OTHER_PLAYER_REFETCH_INTERVAL_IN_MS = 1_000
@@ -25,3 +24,6 @@ export const DEV_MODE =
   (typeof localStorage !== "undefined" && !!localStorage.getItem("DEV_MODE"))
 
 export const ENABLE_BATTLE_VIEW = true
+
+export const CATCH_RATE_ALWAYS_WIN = 0.2
+export const CATCH_RATE_ALWAYS_LOOSE = 0.2

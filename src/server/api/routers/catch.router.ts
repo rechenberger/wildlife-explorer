@@ -1,7 +1,8 @@
 import { TRPCError } from "@trpc/server"
 import { z } from "zod"
-import { DEFAULT_CATCH_SUCCESS_RATE } from "~/config"
+import { CATCH_RATE_ALWAYS_LOOSE, CATCH_RATE_ALWAYS_WIN } from "~/config"
 import { createTRPCRouter } from "~/server/api/trpc"
+import { simulateBattle } from "~/server/lib/battle/simulateBattle"
 import { respawnWildlife } from "~/server/lib/respawnWildlife"
 import { PlayerMetadata } from "~/server/schema/PlayerMetadata"
 import { WildlifeMetadata } from "~/server/schema/WildlifeMetadata"
@@ -81,17 +82,26 @@ export const catchRouter = createTRPCRouter({
       })
     }
 
-    const battle = ctx.wildlifeBattleId
-      ? await ctx.prisma.battle.findUnique({
-          where: {
-            id: ctx.wildlifeBattleId,
-          },
+    const battleId = ctx.wildlifeBattleId
+    const battle = battleId
+      ? await simulateBattle({
+          prisma: ctx.prisma,
+          battleId,
         })
       : null
 
+    const status = battle?.battleStatus.sides
+      .flatMap((s) => s.fighters)
+      ?.find(
+        (f) => !f.catch && f.wildlife.id === ctx.wildlife.id
+      )?.fighterStatus
+    const hpPercent = status ? status.hp / status.hpMax : 1
+
+    const goal =
+      CATCH_RATE_ALWAYS_WIN +
+      hpPercent * (1 - CATCH_RATE_ALWAYS_WIN - CATCH_RATE_ALWAYS_LOOSE)
     const luck = Math.random()
-    const isLucky = luck > DEFAULT_CATCH_SUCCESS_RATE
-    // TODO: change luck depending on battle
+    const isLucky = luck > goal
 
     await respawnWildlife({
       prisma: ctx.prisma,
@@ -116,7 +126,7 @@ export const catchRouter = createTRPCRouter({
     if (battle) {
       await ctx.prisma.battle.update({
         where: {
-          id: battle.id,
+          id: battleId,
         },
         data: {
           status: "CANCELLED",
