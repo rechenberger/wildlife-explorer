@@ -71,7 +71,12 @@ export const CurrentObservation = () => {
           setCurrentObservationId(null)
         }}
       />
-      <div className="fixed bottom-0 right-0 z-50 flex w-full max-w-md flex-col gap-4 rounded-t-xl bg-white p-4 text-black shadow md:bottom-8 md:right-8 md:rounded-xl">
+      <div
+        className="fixed bottom-0 right-0 z-50 flex w-full max-w-md flex-col gap-4 rounded-t-xl bg-white p-4 text-black shadow md:bottom-8 md:right-8 md:rounded-xl"
+        style={{
+          paddingBottom: "calc(env(safe-area-inset-bottom) + 1rem)",
+        }}
+      >
         <div className="flex flex-row items-center gap-2">
           <div className="flex-1 truncate text-2xl">{getName(w)}</div>
           <button
@@ -144,7 +149,7 @@ export const CurrentObservation = () => {
             <JsonViewer value={w} theme="light" />
           </div>
         )}
-        <div className="flex flex-row flex-wrap items-center gap-2">
+        <div className="-my-2 flex flex-row flex-wrap items-center justify-center gap-2">
           {w.metadata.observationUrl && (
             <Link
               href={w.metadata.observationUrl}
@@ -165,11 +170,12 @@ export const CurrentObservation = () => {
               <div>Wikipedia</div>
             </Link>
           )}
-          <div className="flex-1" />
+        </div>
+        <div className="flex flex-row flex-wrap items-center justify-center gap-2">
           {location && (
             <button
               className={cn(
-                "rounded bg-black px-2 py-1 text-sm text-white",
+                "flex-1 rounded bg-black px-2 py-1 text-sm text-white",
                 navigatingToObservationId === w.observationId &&
                   "cursor-progress bg-blue-500 opacity-50"
               )}
@@ -177,12 +183,12 @@ export const CurrentObservation = () => {
                 navigate({ ...location, observationId: w.observationId })
               }}
             >
-              Navigate here
+              Visit
             </button>
           )}
           <button
             className={cn(
-              "rounded bg-black px-2 py-1 text-sm text-white",
+              "flex-1 rounded bg-black px-2 py-1 text-sm text-white",
               catching && "cursor-progress opacity-50"
             )}
             disabled={catching}
@@ -200,7 +206,7 @@ export const CurrentObservation = () => {
           {ENABLE_BATTLE_VIEW && (
             <button
               className={cn(
-                "rounded bg-black px-2 py-1 text-sm text-white",
+                "flex-1 rounded bg-black px-2 py-1 text-sm text-white",
                 attacking && "cursor-progress opacity-50"
               )}
               disabled={catching}
