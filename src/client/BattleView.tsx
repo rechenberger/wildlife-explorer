@@ -1,4 +1,4 @@
-import { find, first, map } from "lodash-es"
+import { find, map } from "lodash-es"
 import { Undo2 } from "lucide-react"
 import Image from "next/image"
 import { Fragment } from "react"
@@ -395,15 +395,17 @@ export const BattleView = () => {
                                               </div>
                                               <div
                                                 className="hidden w-2 shrink-0 opacity-60 sm:block"
-                                                title={readableEffectiveness(
-                                                  (move as any) ?? {}
-                                                )}
-                                              >
-                                                {first(
+                                                title={
                                                   readableEffectiveness(
                                                     (move as any) ?? {}
-                                                  )
-                                                )}
+                                                  ).desc
+                                                }
+                                              >
+                                                {
+                                                  readableEffectiveness(
+                                                    (move as any) ?? {}
+                                                  ).symbol
+                                                }
                                               </div>
                                               <div className="hidden w-5 shrink-0 opacity-60 sm:block">
                                                 {move?.definition.accuracy}
@@ -584,13 +586,48 @@ const readableEffectiveness = ({
   effectiveness,
   immunity,
 }: {
-  effectiveness?: 0 | -1 | 1 | null
+  effectiveness?: 0 | -1 | 1 | -2 | 2 | null
   immunity?: boolean | null
 }) => {
-  if (!immunity) return "immune"
-  if (effectiveness === -1) return "not very effective"
-  if (effectiveness === 0) return "effective"
-  if (effectiveness === 1) return "supper effective"
+  if (!immunity) {
+    return {
+      symbol: "x",
+      desc: "immune",
+    }
+  }
+  if (effectiveness === -2) {
+    return {
+      symbol: "--",
+      desc: "wet noodel",
+    }
+  }
+  if (effectiveness === -1) {
+    return {
+      symbol: "-",
+      desc: "not very effective",
+    }
+  }
+  if (effectiveness === 0) {
+    return {
+      symbol: "o",
+      desc: "effective",
+    }
+  }
+  if (effectiveness === 1) {
+    return {
+      symbol: "+",
+      desc: "super effective",
+    }
+  }
+  if (effectiveness === 2) {
+    return {
+      symbol: "++",
+      desc: "super duper effective",
+    }
+  }
   console.warn("Unknown effectiveness", { effectiveness, immunity })
-  return "???"
+  return {
+    symbol: "?",
+    desc: "???",
+  }
 }
