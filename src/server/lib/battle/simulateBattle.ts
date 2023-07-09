@@ -10,7 +10,6 @@ import { type PrismaClient } from "@prisma/client"
 import { findIndex, first, map } from "lodash-es"
 import { MAX_FIGHTERS_PER_TEAM } from "~/config"
 import { createSeed, rngInt } from "~/utils/seed"
-import { parseBattleLog } from "./battleLogParser"
 import { getBattleForSimulation } from "./getBattleForSimulation"
 import { getWildlifeFighter } from "./getWildlifeFighter"
 
@@ -165,13 +164,10 @@ export const simulateBattle = async ({
     return {
       winner: battle.winner,
       inputLog: battle.inputLog,
+
+      // TODO: this assumes that we are always viewing as p1
       outputLog: extractChannelMessages(battle.log.join("\n"), [1])[1],
-      // messagelog: extractChannelMessages(battle.log.join("\n"), [1]),
-      // messagelog2: parseBattleLog(
-      //   extractChannelMessages(battle.log.join("\n"), [1])[1]
-      // ),
-      // outputLogParsed: parseBattleLog(battle.messageLog),
-      // battleDb: battleDb,
+
       sides: battle.sides.map((side, sideIdx) => {
         const team = teams[sideIdx]!
         const fighters = side.pokemon.map((p) => {
