@@ -1,4 +1,4 @@
-import { map } from "lodash-es"
+import { find, flatMap, map } from "lodash-es"
 import { Undo2 } from "lucide-react"
 import Image from "next/image"
 import { Fragment } from "react"
@@ -84,6 +84,34 @@ export const BattleView = ({
   const { battleStatus, status } = data
 
   const battleIsActive = status === "IN_PROGRESS"
+
+  const { mutateAsync: doCatch } = api.catch.catch.useMutation({
+    onSettled: () => {
+      trpc.catch.invalidate()
+      trpc.wildlife.invalidate()
+      trpc.battle.invalidate()
+    },
+  })
+
+  const catchButton = () => {
+    if (!playerId) return
+
+    // Find un-caught wildlife
+    const wildlifeId = find(
+      flatMap(battleStatus.sides, (s) => s.fighters),
+      (f) => !f.catch
+    )?.wildlife.id
+
+    if (!wildlifeId) {
+      toast.error("No wildlife to catch")
+      return
+    }
+    toast.promise(doCatch({ wildlifeId, playerId }), {
+      loading: "Catching...",
+      success: "You caught it! 🎉",
+      error: (err) => err.message || "Failed to catch. Try again.",
+    })
+  }
 
   return (
     <>
@@ -519,7 +547,7 @@ export const BattleView = ({
                           <button
                             className="w-12 rounded bg-black/10 py-1 text-xs hover:bg-black/20 sm:w-28"
                             onClick={() => {
-                              toast.error("Not implemented yet")
+                              catchButton()
                             }}
                           >
                             Catch

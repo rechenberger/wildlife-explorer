@@ -3,6 +3,7 @@ import { z } from "zod"
 import { DEFAULT_CATCH_SUCCESS_RATE } from "~/config"
 import { createTRPCRouter } from "~/server/api/trpc"
 import { respawnWildlife } from "~/server/lib/respawnWildlife"
+import { PlayerMetadata } from "~/server/schema/PlayerMetadata"
 import { WildlifeMetadata } from "~/server/schema/WildlifeMetadata"
 import { createSeed } from "~/utils/seed"
 import { playerProcedure } from "../middleware/playerProcedure"
@@ -80,8 +81,17 @@ export const catchRouter = createTRPCRouter({
       })
     }
 
+    const battle = ctx.wildlifeBattleId
+      ? await ctx.prisma.battle.findUnique({
+          where: {
+            id: ctx.wildlifeBattleId,
+          },
+        })
+      : null
+
     const luck = Math.random()
     const isLucky = luck > DEFAULT_CATCH_SUCCESS_RATE
+    // TODO: change luck depending on battle
 
     await respawnWildlife({
       prisma: ctx.prisma,
@@ -102,6 +112,28 @@ export const catchRouter = createTRPCRouter({
         seed: createSeed(ctx.wildlife),
       },
     })
+
+    if (battle) {
+      await ctx.prisma.battle.update({
+        where: {
+          id: battle.id,
+        },
+        data: {
+          status: "CANCELLED",
+        },
+      })
+      await ctx.prisma.player.update({
+        where: {
+          id: ctx.player.id,
+        },
+        data: {
+          metadata: {
+            ...ctx.player.metadata,
+            activeBattleId: null,
+          } satisfies PlayerMetadata,
+        },
+      })
+    }
 
     return {
       success: true,

@@ -188,12 +188,10 @@ export const CurrentObservation = () => {
             disabled={catching}
             onClick={async () => {
               if (!playerId) return
-
               toast.promise(doCatch({ wildlifeId: w.id, playerId }), {
                 loading: "Catching...",
                 success: "You caught it! 🎉",
                 error: (err) => err.message || "Failed to catch. Try again.",
-                // icon: <></>,
               })
             }}
           >
@@ -210,10 +208,10 @@ export const CurrentObservation = () => {
                 if (!playerId) return
 
                 toast.promise(attackWildlife({ wildlifeId: w.id, playerId }), {
-                  loading: "Catching...",
+                  loading: "Starting Battle...",
                   success: "The Battle is on! 🔥",
-                  error: (err) => err.message || "Failed to catch. Try again.",
-                  // icon: <></>,
+                  error: (err) =>
+                    err.message || "Failed to start battle. Try again.",
                 })
               }}
             >
