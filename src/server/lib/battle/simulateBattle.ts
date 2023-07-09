@@ -1,5 +1,11 @@
 import { Dex } from "@pkmn/dex"
-import { Battle, toID, type PokemonSet, type SideID } from "@pkmn/sim"
+import {
+  Battle,
+  extractChannelMessages,
+  toID,
+  type PokemonSet,
+  type SideID,
+} from "@pkmn/sim"
 import { type PrismaClient } from "@prisma/client"
 import { findIndex, first, map } from "lodash-es"
 import { MAX_FIGHTERS_PER_TEAM } from "~/config"
@@ -159,8 +165,12 @@ export const simulateBattle = async ({
     return {
       winner: battle.winner,
       inputLog: battle.inputLog,
-      outputLog: battle.log,
-      outputLogParsed: parseBattleLog(battle.log),
+      outputLog: extractChannelMessages(battle.log.join("\n"), [1])[1],
+      // messagelog: extractChannelMessages(battle.log.join("\n"), [1]),
+      // messagelog2: parseBattleLog(
+      //   extractChannelMessages(battle.log.join("\n"), [1])[1]
+      // ),
+      // outputLogParsed: parseBattleLog(battle.messageLog),
       // battleDb: battleDb,
       sides: battle.sides.map((side, sideIdx) => {
         const team = teams[sideIdx]!

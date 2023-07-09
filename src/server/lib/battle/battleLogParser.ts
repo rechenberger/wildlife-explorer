@@ -1,14 +1,19 @@
 import { Protocol } from "@pkmn/protocol"
 import { LogFormatter } from "@pkmn/view"
 
-export const parseBattleLog = (line?: string | string[] | undefined) => {
-  const formatter = new LogFormatter()
+export const parseBattleLog = (
+  line?: string | string[] | undefined,
+  returnAsHtml: boolean = false
+) => {
+  const formatter = new LogFormatter("p1")
 
   const extractMessage = (buf: string) => {
     let out = ""
     for (const line of buf.split("\n")) {
       const { args, kwArgs } = Protocol.parseBattleLine(line)
-      out += formatter.formatText(args, kwArgs)
+      out += returnAsHtml
+        ? formatter.formatHTML(args, kwArgs)
+        : formatter.formatText(args, kwArgs)
     }
     return out
   }

@@ -8,6 +8,7 @@ import {
   MAX_FIGHTERS_PER_TEAM,
   MAX_MOVES_PER_FIGHTER,
 } from "~/config"
+import { parseBattleLog } from "~/server/lib/battle/battleLogParser"
 import { api } from "~/utils/api"
 import { replaceByWildlife } from "~/utils/replaceByWildlife"
 import { cn } from "./cn"
@@ -51,6 +52,8 @@ export const BattleView = ({
         },
       }
     )
+
+  const battleLogAsHtml = parseBattleLog(data?.battleStatus.outputLog, true)
 
   const trpc = api.useContext()
   const { mutate: makeChoice, isLoading: choiceLoading } =
@@ -137,6 +140,10 @@ export const BattleView = ({
       {/* <pre>{JSON.stringify(activeBattle, null, 2)}</pre> */}
       {/* <pre>{JSON.stringify(battleStatus, null, 2)}</pre> */}
       <div className="flex flex-col-reverse gap-2">
+        <div
+          className="prose max-h-24 overflow-auto"
+          dangerouslySetInnerHTML={{ __html: battleLogAsHtml }}
+        />
         {map(battleStatus?.sides, (side, sideIdx) => {
           const isMySide = side.player?.id === playerId
           const isMainSide = sideIdx === 0
@@ -202,7 +209,7 @@ export const BattleView = ({
                               <span className="italic text-black">
                                 {getName(fighter.wildlife)}
                               </span>{" "}
-                              {lastMove ? (
+                              {/* {lastMove ? (
                                 <>
                                   uses{" "}
                                   <span className="italic text-black">
@@ -218,7 +225,7 @@ export const BattleView = ({
                                 "fainted"
                               ) : (
                                 "enters the battle"
-                              )}
+                              )} */}
                             </>
                           )}
                         </div>
@@ -524,50 +531,53 @@ export const BattleView = ({
                       }
                     )}
                   {isMySide && (
-                    <div
-                      className={cn(
-                        "flex flex-1 gap-2",
-                        isMainSide ? "flex-row-reverse" : "flex-row"
-                      )}
-                    >
-                      {battleIsActive ? (
-                        <>
-                          <button
-                            className="w-12 rounded bg-black/10 py-1 text-xs hover:bg-black/20 sm:w-28"
-                            onClick={() => {
-                              if (!playerId) return
-                              run({
-                                battleId,
-                                playerId,
-                              })
-                            }}
-                          >
-                            Run
-                          </button>
-                          <button
-                            className="w-12 rounded bg-black/10 py-1 text-xs hover:bg-black/20 sm:w-28"
-                            onClick={() => {
-                              catchButton()
-                            }}
-                          >
-                            Catch
-                          </button>
-                        </>
-                      ) : (
-                        <>
-                          <button
-                            className="w-12 rounded bg-black/10 py-1 text-xs hover:bg-black/20 sm:w-28"
-                            onClick={() => {
-                              onClose()
-                            }}
-                          >
-                            Leave
-                          </button>
-                        </>
-                      )}
-                    </div>
+                    <>
+                      <div
+                        className={cn(
+                          "flex flex-1 gap-2",
+                          isMainSide ? "flex-row-reverse" : "flex-row"
+                        )}
+                      >
+                        {battleIsActive ? (
+                          <>
+                            <button
+                              className="w-12 rounded bg-black/10 py-1 text-xs hover:bg-black/20 sm:w-28"
+                              onClick={() => {
+                                if (!playerId) return
+                                run({
+                                  battleId,
+                                  playerId,
+                                })
+                              }}
+                            >
+                              Run
+                            </button>
+                            <button
+                              className="w-12 rounded bg-black/10 py-1 text-xs hover:bg-black/20 sm:w-28"
+                              onClick={() => {
+                                catchButton()
+                              }}
+                            >
+                              Catch
+                            </button>
+                          </>
+                        ) : (
+                          <>
+                            <button
+                              className="w-12 rounded bg-black/10 py-1 text-xs hover:bg-black/20 sm:w-28"
+                              onClick={() => {
+                                onClose()
+                              }}
+                            >
+                              Leave
+                            </button>
+                          </>
+                        )}
+                      </div>
+                    </>
                   )}
                 </div>
+
                 {/* <div className="text-xl">
                       {isMySide ? "You" : side.name}
                     </div> */}
