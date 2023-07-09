@@ -1,5 +1,6 @@
 import NiceModal, { useModal } from "@ebay/nice-modal-react"
 import { BattleView } from "./BattleView"
+import { cn } from "./cn"
 import { Dialog, DialogContent } from "./shadcn/ui/dialog"
 
 export const BattleViewModal = NiceModal.create<{}>(({}) => {
@@ -16,7 +17,12 @@ export const BattleViewModal = NiceModal.create<{}>(({}) => {
         }
       }}
     >
-      <DialogContent className="h-[100svh] sm:h-[70svh] sm:max-w-4xl">
+      <DialogContent
+        className={cn(
+          "border-0 bg-white",
+          "rounded-t-lg max-sm:bottom-0 max-sm:top-auto max-sm:translate-y-0 max-sm:p-4"
+        )}
+      >
         <BattleView />
       </DialogContent>
     </Dialog>
