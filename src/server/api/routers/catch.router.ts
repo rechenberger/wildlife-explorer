@@ -103,24 +103,12 @@ export const catchRouter = createTRPCRouter({
     const luck = Math.random()
     const isLucky = luck > goal
 
+    // Currently, we respawn wildlife even if the player is not lucky
+    // Also the battle always ends after the catch
+
     await respawnWildlife({
       prisma: ctx.prisma,
       wildlifeId: ctx.wildlife.id,
-    })
-
-    if (!isLucky) {
-      throw new TRPCError({
-        code: "BAD_REQUEST",
-        message: "Wildlife escaped 💨",
-      })
-    }
-
-    await ctx.prisma.catch.create({
-      data: {
-        playerId: ctx.player.id,
-        wildlifeId: ctx.wildlife.id,
-        seed: createSeed(ctx.wildlife),
-      },
     })
 
     if (battle) {
@@ -144,6 +132,20 @@ export const catchRouter = createTRPCRouter({
         },
       })
     }
+
+    if (!isLucky) {
+      throw new TRPCError({
+        code: "BAD_REQUEST",
+        message: "Wildlife escaped 💨",
+      })
+    }
+    await ctx.prisma.catch.create({
+      data: {
+        playerId: ctx.player.id,
+        wildlifeId: ctx.wildlife.id,
+        seed: createSeed(ctx.wildlife),
+      },
+    })
 
     return {
       success: true,
