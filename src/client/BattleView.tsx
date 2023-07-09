@@ -87,7 +87,7 @@ export const BattleView = ({
 
   return (
     <>
-      <div className="mb-4 flex flex-row gap-2">
+      <div className="flex flex-row gap-2">
         <h3 className="flex-1">
           {battleIsActive ? "Active Battle" : "Past Battle"}
         </h3>
