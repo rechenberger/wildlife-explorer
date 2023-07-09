@@ -1,4 +1,5 @@
 import { TRPCError } from "@trpc/server"
+import { first } from "lodash-es"
 import { z } from "zod"
 import { RADIUS_IN_M_CATCH_WILDLIFE } from "~/config"
 import { calcDistanceInMeter } from "~/server/lib/latLng"
@@ -15,6 +16,16 @@ export const wildlifeProcedure = playerProcedure
         catches: {
           where: {
             playerId: ctx.player.id,
+          },
+        },
+        battleParticipations: {
+          where: {
+            battle: {
+              status: "IN_PROGRESS",
+            },
+          },
+          select: {
+            battleId: true,
           },
         },
       },
@@ -49,10 +60,13 @@ export const wildlifeProcedure = playerProcedure
       })
     }
 
+    const wildlifeBattleId = first(wildlife.battleParticipations)?.battleId
+
     return next({
       ctx: {
         ...ctx,
         wildlife,
+        wildlifeBattleId,
       },
     })
   })

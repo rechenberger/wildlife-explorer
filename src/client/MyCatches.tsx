@@ -28,6 +28,7 @@ export const MyCatches = () => {
 
   return (
     <>
+      <div className="mb-4">Your Catches</div>
       <div className="grid grid-cols-6 gap-2 gap-y-3">
         {map(catches, (c, catchIdx) => (
           <div

@@ -1,3 +1,4 @@
+import NiceModal from "@ebay/nice-modal-react"
 import { atom, useAtomValue, useSetAtom } from "jotai"
 import { Check, Clock, ExternalLink, Frown, LocateOff, X } from "lucide-react"
 import dynamic from "next/dynamic"
@@ -11,6 +12,7 @@ import {
 } from "~/config"
 import { api } from "~/utils/api"
 import { Away } from "./Away"
+import { BattleViewModal } from "./BattleViewModal"
 import { TimeAgo } from "./TimeAgo"
 import { useWildlife } from "./WildlifeMarkers"
 import { cn } from "./cn"
@@ -44,8 +46,12 @@ export const CurrentObservation = () => {
     })
   const { mutateAsync: attackWildlife, isLoading: attacking } =
     api.battle.attackWildlife.useMutation({
-      onSettled: () => {
+      onSuccess: (data) => {
+        setCurrentObservationId(null)
         trpc.battle.invalidate()
+        NiceModal.show(BattleViewModal, {
+          battleId: data.id,
+        })
       },
     })
 
@@ -182,12 +188,10 @@ export const CurrentObservation = () => {
             disabled={catching}
             onClick={async () => {
               if (!playerId) return
-
               toast.promise(doCatch({ wildlifeId: w.id, playerId }), {
                 loading: "Catching...",
                 success: "You caught it! 🎉",
                 error: (err) => err.message || "Failed to catch. Try again.",
-                // icon: <></>,
               })
             }}
           >
@@ -204,10 +208,10 @@ export const CurrentObservation = () => {
                 if (!playerId) return
 
                 toast.promise(attackWildlife({ wildlifeId: w.id, playerId }), {
-                  loading: "Catching...",
+                  loading: "Starting Battle...",
                   success: "The Battle is on! 🔥",
-                  error: (err) => err.message || "Failed to catch. Try again.",
-                  // icon: <></>,
+                  error: (err) =>
+                    err.message || "Failed to start battle. Try again.",
                 })
               }}
             >

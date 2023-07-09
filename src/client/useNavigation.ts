@@ -7,8 +7,8 @@ import { usePlayer } from "./usePlayer"
 export const navigatingToObservationIdAtom = atom<number | null>(null)
 
 export const useNavigation = () => {
-  const { mutateAsync: calcNavigation } =
-    api.navigation.calcNavigation.useMutation()
+  const { mutateAsync: startNavigation } =
+    api.navigation.startNavigation.useMutation()
   const setObservationId = useSetAtom(navigatingToObservationIdAtom)
   const { playerId } = usePlayer()
   const trpc = api.useContext()
@@ -26,7 +26,7 @@ export const useNavigation = () => {
       if (!playerId) return
       setObservationId(observationId || null)
       try {
-        await calcNavigation({
+        await startNavigation({
           to: {
             lat,
             lng,
@@ -39,7 +39,7 @@ export const useNavigation = () => {
       }
       trpc.player.getMe.invalidate()
     },
-    [calcNavigation, playerId, setObservationId, trpc.player.getMe]
+    [startNavigation, playerId, setObservationId, trpc.player.getMe]
   )
 
   return { navigate }

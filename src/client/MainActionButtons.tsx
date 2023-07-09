@@ -1,12 +1,15 @@
+import { BattleViewButton } from "./BattleViewButton"
+import { MyCatchesButton } from "./MyCatchesButton"
 import { ScanButton } from "./ScanButton"
-import { TeleportToCurrentPositionButton } from "./TeleportToCurrentPositionButton"
 
 export const MainActionButtons = () => {
   return (
     <>
-      <div className="absolute bottom-8 right-8 z-40 flex flex-row gap-2">
-        <TeleportToCurrentPositionButton />
+      <div className="absolute inset-x-2 bottom-1 z-40 flex flex-row justify-center gap-4">
         <ScanButton />
+        <BattleViewButton />
+        <MyCatchesButton />
+        {/* <TeleportToCurrentPositionButton /> */}
       </div>
     </>
   )

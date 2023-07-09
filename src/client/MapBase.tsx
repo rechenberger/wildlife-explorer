@@ -69,6 +69,8 @@ export const MapBase = ({
         }}
         style={{ width: "100%", height: "100%" }}
         projection={"globe" as any}
+        logoPosition="top-right"
+        attributionControl={false}
         // mapStyle="mapbox://styles/mapbox/streets-v9"
         // mapStyle="mapbox://styles/mapbox/dark-v10"
         mapStyle="mapbox://styles/mapbox/outdoors-v12"

@@ -1,3 +1,4 @@
+import NiceModal from "@ebay/nice-modal-react"
 import "mapbox-gl/dist/mapbox-gl.css"
 import { type Session } from "next-auth"
 import { SessionProvider } from "next-auth/react"
@@ -13,7 +14,9 @@ const MyApp: AppType<{ session: Session | null }> = ({
   return (
     <SessionProvider session={session}>
       <Toaster position="top-center" />
-      <Component {...pageProps} />
+      <NiceModal.Provider>
+        <Component {...pageProps} />
+      </NiceModal.Provider>
     </SessionProvider>
   )
 }
