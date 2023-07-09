@@ -63,7 +63,7 @@ export const wildlifeRouter = createTRPCRouter({
         caughtAt: first(w.catches)?.createdAt,
       }
     })
-    wildlife = filter(wildlife, (w) => !w.metadata.observationIsDeadAnnotated)
+    wildlife = filter(wildlife, (w) => !w.metadata.observationIsDead)
     return wildlife
   }),
 
