@@ -6,16 +6,16 @@ import { type WildlifeMetadata } from "~/server/schema/WildlifeMetadata"
 import { rngInt, rngItem, rngItemWithWeights } from "~/utils/seed"
 import { taxonMappingByAncestors } from "./taxonMappingByAncestors"
 
-const MAX_NAME_LENGTH = 20
-
 export const getWildlifeFighter = async ({
   wildlife,
   // isCaught,
   seed,
+  idx,
 }: {
   wildlife: Wildlife & { metadata: WildlifeMetadata }
   isCaught: boolean
   seed: string
+  idx: number
 }) => {
   const mapping = taxonMappingByAncestors(wildlife.metadata.taxonAncestorIds)
   const speciesName = mapping.pokemon
@@ -56,9 +56,14 @@ export const getWildlifeFighter = async ({
   // TODO: ???
   const item = ""
 
+  // TODO: locale
+  const name = `#${idx + 1 || 1}: ${
+    wildlife.metadata.taxonCommonName ?? wildlife.metadata.taxonName
+  }`
+
   return {
     // ...base,
-    name: wildlife.id.substring(0, MAX_NAME_LENGTH),
+    name,
     species: speciesName,
     moves,
     level,
