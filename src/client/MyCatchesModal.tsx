@@ -23,6 +23,9 @@ export const MyCatchesModal = NiceModal.create<{}>(({}) => {
           "border-0 bg-white pt-3",
           "rounded-t-lg max-sm:bottom-0 max-sm:top-auto max-sm:translate-y-0 max-sm:p-4 max-sm:pt-3"
         )}
+        style={{
+          paddingBottom: "env(safe-area-inset-bottom)",
+        }}
       >
         <ScrollArea className="max-h-[calc(100svh-100px)]">
           <MyCatches />
