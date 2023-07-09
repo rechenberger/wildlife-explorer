@@ -1,7 +1,7 @@
 import { find, flatMap, map } from "lodash-es"
 import { Undo2 } from "lucide-react"
 import Image from "next/image"
-import { Fragment } from "react"
+import { Fragment, useEffect, useRef } from "react"
 import { toast } from "sonner"
 import {
   DEV_MODE,
@@ -93,6 +93,15 @@ export const BattleView = ({
       trpc.battle.invalidate()
     },
   })
+
+  const logRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    setTimeout(() => {
+      if (!logRef.current) return
+      logRef.current.scrollTop = logRef.current.scrollHeight
+    })
+  }, [battleLogAsHtml])
 
   if (!data) {
     return (
@@ -606,7 +615,7 @@ export const BattleView = ({
         </div>
         {SHOW_BATTLE_LOG && (
           <div className="flex-1 border-l p-2 hidden lg:flex flex-col h-[400px]">
-            <ScrollArea className="">
+            <ScrollArea className="" ref={logRef}>
               <div
                 className="prose overflow-auto prose-sm"
                 dangerouslySetInnerHTML={{ __html: battleLogAsHtml }}
