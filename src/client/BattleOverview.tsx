@@ -21,7 +21,7 @@ export const BattleOverview = () => {
   const getName = useGetWildlifeName()
   return (
     <>
-      <div className="mb-4">Your Battles</div>
+      <div className="mb-4">Recent Battles</div>
       <div className="flex flex-col gap-2">
         {battles?.map((battle) => {
           const myParticipation = battle.battleParticipants.find(
