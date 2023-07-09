@@ -180,6 +180,7 @@ export const simulateBattle = async ({
               hp: p.hp,
               hpMax: p.maxhp,
               status: p.status,
+              statusState: p.statusState,
               isActive: p.isActive,
               justFainted:
                 side.faintedThisTurn === p || side.faintedLastTurn === p,
