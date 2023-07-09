@@ -5,6 +5,7 @@ import { createTRPCRouter } from "~/server/api/trpc"
 import { simulateBattle } from "~/server/lib/battle/simulateBattle"
 import { BattleMetadata } from "~/server/schema/BattleMetadata"
 import { BattleParticipationMetadata } from "~/server/schema/BattleParticipationMetadata"
+import { type PlayerMetadata } from "~/server/schema/PlayerMetadata"
 import { devProcedure } from "../middleware/devProcedure"
 import { playerProcedure } from "../middleware/playerProcedure"
 import { wildlifeProcedure } from "../middleware/wildlifeProcedure"
@@ -19,7 +20,7 @@ export const battleRouter = createTRPCRouter({
         },
       },
     })
-    if (playerInFight) {
+    if (playerInFight || ctx.player.metadata?.activeBattleId) {
       throw new TRPCError({
         code: "BAD_REQUEST",
         message: "You are already in a fight",
@@ -61,6 +62,22 @@ export const battleRouter = createTRPCRouter({
         },
       },
     })
+
+    await ctx.prisma.player.update({
+      where: {
+        id: ctx.player.id,
+      },
+      data: {
+        lat: ctx.player.lat,
+        lng: ctx.player.lng,
+        metadata: {
+          ...ctx.player.metadata,
+          activeBattleId: battle.id,
+          navigation: null,
+        } satisfies PlayerMetadata,
+      },
+    })
+
     return battle
   }),
 
@@ -171,6 +188,18 @@ export const battleRouter = createTRPCRouter({
         },
         data: {
           status: "CANCELLED",
+        },
+      })
+
+      await ctx.prisma.player.update({
+        where: {
+          id: ctx.player.id,
+        },
+        data: {
+          metadata: {
+            ...ctx.player.metadata,
+            activeBattleId: null,
+          } satisfies PlayerMetadata,
         },
       })
     }),
