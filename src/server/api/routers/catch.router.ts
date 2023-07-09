@@ -17,12 +17,17 @@ export const catchRouter = createTRPCRouter({
       include: {
         wildlife: true,
       },
-      orderBy: {
-        battleOrderPosition: {
-          sort: "desc",
-          nulls: "last",
+      orderBy: [
+        {
+          battleOrderPosition: {
+            sort: "desc",
+            nulls: "last",
+          },
         },
-      },
+        {
+          createdAt: "asc",
+        },
+      ],
     })
     const catches = catchesRaw.map((c) => ({
       ...c,
