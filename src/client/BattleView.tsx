@@ -90,7 +90,11 @@ export const BattleView = ({
   })
 
   if (!data) {
-    return <>Loading</>
+    return (
+      <div className="flex items-center justify-center py-48 text-center text-sm opacity-60">
+        Loading...
+      </div>
+    )
   }
 
   const { battleStatus, status } = data
