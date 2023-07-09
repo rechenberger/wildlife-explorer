@@ -2,6 +2,10 @@ import { z } from "zod"
 import { type WildlifeMetadata } from "../schema/WildlifeMetadata"
 import { Observation } from "./schema"
 
+const ObservationAnnotationDeadOrAliveKey = 17
+const ObservationAnnotationDeadOrAliveValue_Dead = 19
+// const ObservationAnnotationDeadOrAliveValue_Alive = 18
+
 export const findObservations = async ({
   lat,
   lng,
@@ -30,6 +34,14 @@ export const findObservations = async ({
     const lat = o.geojson.coordinates[1]
     const lng = o.geojson.coordinates[0]
     if (!lat || !lng) return []
+
+    const deadOrAliveAnnotation = o.annotations?.find(
+      (a) => a.controlled_attribute_id === ObservationAnnotationDeadOrAliveKey
+    )
+    const isDeadAnnotated =
+      deadOrAliveAnnotation?.controlled_value_id ===
+      ObservationAnnotationDeadOrAliveValue_Dead
+
     return [
       {
         // ids:
@@ -67,6 +79,9 @@ export const findObservations = async ({
           "/square.",
           "/medium."
         ),
+
+        // annotations:
+        isDeadAnnotated: deadOrAliveAnnotation && isDeadAnnotated,
 
         // imagesObservation: map(o.photos, (p) => p.url),
       } satisfies WildlifeMetadata,
