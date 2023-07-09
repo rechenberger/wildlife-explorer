@@ -1,5 +1,5 @@
 import { TRPCError } from "@trpc/server"
-import { map } from "lodash-es"
+import { find, map } from "lodash-es"
 import { z } from "zod"
 import { createTRPCRouter } from "~/server/api/trpc"
 import { simulateBattle } from "~/server/lib/battle/simulateBattle"
@@ -151,7 +151,7 @@ export const battleRouter = createTRPCRouter({
       // let inputLog = battle.metadata.inputLog ?? []
       // inputLog = [...inputLog, `>${participantId} ${input.choice}`]
 
-      const { battleJson, battleDb } = await simulateBattle({
+      const { battleJson, battleDb, battleStatus } = await simulateBattle({
         prisma: ctx.prisma,
         battleId: input.battleId,
         choice: {
@@ -160,17 +160,60 @@ export const battleRouter = createTRPCRouter({
         },
       })
       console.time("update")
+      const winner = battleStatus.winner
+      console.log("winner", winner)
       await ctx.prisma.battle.update({
         where: {
           id: input.battleId,
         },
         data: {
+          status: winner ? "FINISHED" : "IN_PROGRESS",
           metadata: {
             ...battleDb.metadata,
             battleJson,
           } satisfies BattleMetadata,
         },
       })
+
+      // END OF BATTLE
+      if (!!winner) {
+        const participants = battleDb.battleParticipants
+        const winnerParticipantId = find(
+          participants,
+          (p) =>
+            p.player?.name === winner ||
+            (!!p.wildlifeId && winner == "Wildlife")
+        )?.id
+        await Promise.all(
+          map(battleDb.battleParticipants, async (p) => {
+            const isWinner = p.id === winnerParticipantId
+            await ctx.prisma.battleParticipation.update({
+              where: {
+                id: p.id,
+              },
+              data: {
+                isWinner,
+                player: p.player
+                  ? {
+                      update: {
+                        metadata: {
+                          ...p.player?.metadata,
+                          activeBattleId: null,
+                        },
+                      },
+                    }
+                  : undefined,
+              },
+            })
+            if (p.wildlifeId) {
+              await respawnWildlife({
+                prisma: ctx.prisma,
+                wildlifeId: p.wildlifeId,
+              })
+            }
+          })
+        )
+      }
       console.timeEnd("update")
     }),
 
