@@ -1,5 +1,11 @@
 import { Dex } from "@pkmn/dex"
-import { Battle, toID, type PokemonSet, type SideID } from "@pkmn/sim"
+import {
+  Battle,
+  extractChannelMessages,
+  toID,
+  type PokemonSet,
+  type SideID,
+} from "@pkmn/sim"
 import { type PrismaClient } from "@prisma/client"
 import { findIndex, first, map } from "lodash-es"
 import { MAX_FIGHTERS_PER_TEAM } from "~/config"
@@ -59,12 +65,13 @@ export const simulateBattle = async ({
 
       if (!!battleParticipant.player?.catches) {
         team = await Promise.all(
-          battleParticipant.player?.catches.map(async (c) => {
+          battleParticipant.player?.catches.map(async (c, idx) => {
             return {
               fighter: await getWildlifeFighter({
                 wildlife: c.wildlife,
                 isCaught: true,
                 seed: c.seed,
+                idx,
               }),
               wildlife: c.wildlife,
               catch: c,
@@ -78,6 +85,7 @@ export const simulateBattle = async ({
               wildlife: battleParticipant.wildlife,
               isCaught: false,
               seed: createSeed(battleParticipant.wildlife),
+              idx: 0,
             }),
             wildlife: battleParticipant.wildlife,
           },
@@ -158,20 +166,15 @@ export const simulateBattle = async ({
     return {
       winner: battle.winner,
       inputLog: battle.inputLog,
-      outputLog: battle.log,
-      // battleDb: battleDb,
+
+      // TODO: this assumes that we are always viewing as p1
+      outputLog: extractChannelMessages(battle.log.join("\n"), [1])[1],
+
       sides: battle.sides.map((side, sideIdx) => {
         const team = teams[sideIdx]!
         const fighters = side.pokemon.map((p) => {
-          let fighter = team.team.find((f) => f.fighter.name === p.name)!
-          if (!fighter) {
-            console.log(
-              "FIGHTER NOT FOUND",
-              p.name,
-              map(team.team, "fighter.name")
-            )
-            // fighter = team.team[idx]
-          }
+          const idxInTeam = parseInt(p.name[1]!) - 1
+          const fighter = team.team[idxInTeam]
 
           // const justFainted =
           //   side.faintedThisTurn === p || side.faintedLastTurn === p

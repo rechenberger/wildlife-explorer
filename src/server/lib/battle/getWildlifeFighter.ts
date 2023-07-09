@@ -6,16 +6,16 @@ import { type WildlifeMetadata } from "~/server/schema/WildlifeMetadata"
 import { rngInt, rngItem, rngItemWithWeights } from "~/utils/seed"
 import { taxonMappingByAncestors } from "./taxonMappingByAncestors"
 
-const MAX_NAME_LENGTH = 20
-
 export const getWildlifeFighter = async ({
   wildlife,
   // isCaught,
   seed,
+  idx,
 }: {
   wildlife: Wildlife & { metadata: WildlifeMetadata }
   isCaught: boolean
   seed: string
+  idx: number
 }) => {
   const mapping = taxonMappingByAncestors(wildlife.metadata.taxonAncestorIds)
   const speciesName = mapping.pokemon
@@ -56,45 +56,54 @@ export const getWildlifeFighter = async ({
   // TODO: ???
   const item = ""
 
+  // TODO: locale
+  const name = `#${idx + 1 || 1}: ${
+    wildlife.metadata.taxonCommonName ?? wildlife.metadata.taxonName
+  }`
+
+  const ivs = {
+    hp: rngInt({
+      seed: [seed, "iv", "hp"],
+      min: 0,
+      max: 31,
+    }),
+    atk: rngInt({
+      seed: [seed, "iv", "atk"],
+      min: 0,
+      max: 31,
+    }),
+    def: rngInt({
+      seed: [seed, "iv", "def"],
+      min: 0,
+      max: 31,
+    }),
+    spa: rngInt({
+      seed: [seed, "iv", "spa"],
+      min: 0,
+      max: 31,
+    }),
+    spd: rngInt({
+      seed: [seed, "iv", "spd"],
+      min: 0,
+      max: 31,
+    }),
+    spe: rngInt({
+      seed: [seed, "iv", "spe"],
+      min: 0,
+      max: 31,
+    }),
+  }
+
+  // console.log({ name, ivsSum: Object.values(ivs).reduce((a, b) => a + b) })
+
   return {
     // ...base,
-    name: wildlife.id.substring(0, MAX_NAME_LENGTH),
+    name,
     species: speciesName,
     moves,
     level,
     nature: nature.name,
-    ivs: {
-      hp: rngInt({
-        seed: [seed, "iv", "hp"],
-        min: 0,
-        max: 31,
-      }),
-      atk: rngInt({
-        seed: [seed, "iv", "atk"],
-        min: 0,
-        max: 31,
-      }),
-      def: rngInt({
-        seed: [seed, "iv", "def"],
-        min: 0,
-        max: 31,
-      }),
-      spa: rngInt({
-        seed: [seed, "iv", "spa"],
-        min: 0,
-        max: 31,
-      }),
-      spd: rngInt({
-        seed: [seed, "iv", "spd"],
-        min: 0,
-        max: 31,
-      }),
-      spe: rngInt({
-        seed: [seed, "iv", "spe"],
-        min: 0,
-        max: 31,
-      }),
-    },
+    ivs,
     evs: {
       hp: 0,
       atk: 0,
