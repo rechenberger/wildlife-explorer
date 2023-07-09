@@ -2,6 +2,7 @@ import NiceModal from "@ebay/nice-modal-react"
 import { atom } from "jotai"
 import { find } from "lodash-es"
 import { Swords } from "lucide-react"
+import { ENABLE_BATTLE_VIEW } from "~/config"
 import { type LatLng } from "~/server/schema/LatLng"
 import { api } from "~/utils/api"
 import { BattleViewModal } from "./BattleViewModal"
@@ -22,6 +23,9 @@ export const BattleViewButton = () => {
     }
   )
   const activeBattle = find(battles, (b) => b.status === "IN_PROGRESS")
+
+  if (!ENABLE_BATTLE_VIEW) return null
+
   return (
     <>
       <div className="flex flex-col items-center gap-1">
