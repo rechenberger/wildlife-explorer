@@ -153,7 +153,7 @@ export const BattleView = ({
                       <Fragment key={fighter.catch?.id ?? fighter.wildlife.id}>
                         <div
                           className={cn(
-                            "rounded-full border border-dashed border-black/10 bg-black/5 px-4 py-1 text-black/60",
+                            "rounded-full border border-dashed border-black/10 bg-black/5 px-4 py-1 text-xs text-black/60",
                             isMainSide
                               ? "ml-4 self-start rounded-bl-none"
                               : "mr-4 self-end rounded-tr-none"
@@ -161,7 +161,7 @@ export const BattleView = ({
                         >
                           {isLoading ? (
                             <>
-                              <div className="flex h-5 animate-pulse justify-center gap-0.5 text-lg font-extrabold">
+                              <div className="-mt-1 flex h-5 animate-pulse justify-center gap-0.5 text-lg font-extrabold">
                                 <div className="animate-bounce">•</div>
                                 <div className="animate-bounce delay-75">•</div>
                                 <div className="animate-bounce delay-150">
