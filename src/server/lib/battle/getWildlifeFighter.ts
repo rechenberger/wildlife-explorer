@@ -61,6 +61,41 @@ export const getWildlifeFighter = async ({
     wildlife.metadata.taxonCommonName ?? wildlife.metadata.taxonName
   }`
 
+  const ivs = {
+    hp: rngInt({
+      seed: [seed, "iv", "hp"],
+      min: 0,
+      max: 31,
+    }),
+    atk: rngInt({
+      seed: [seed, "iv", "atk"],
+      min: 0,
+      max: 31,
+    }),
+    def: rngInt({
+      seed: [seed, "iv", "def"],
+      min: 0,
+      max: 31,
+    }),
+    spa: rngInt({
+      seed: [seed, "iv", "spa"],
+      min: 0,
+      max: 31,
+    }),
+    spd: rngInt({
+      seed: [seed, "iv", "spd"],
+      min: 0,
+      max: 31,
+    }),
+    spe: rngInt({
+      seed: [seed, "iv", "spe"],
+      min: 0,
+      max: 31,
+    }),
+  }
+
+  // console.log({ name, ivsSum: Object.values(ivs).reduce((a, b) => a + b) })
+
   return {
     // ...base,
     name,
@@ -68,38 +103,7 @@ export const getWildlifeFighter = async ({
     moves,
     level,
     nature: nature.name,
-    ivs: {
-      hp: rngInt({
-        seed: [seed, "iv", "hp"],
-        min: 0,
-        max: 31,
-      }),
-      atk: rngInt({
-        seed: [seed, "iv", "atk"],
-        min: 0,
-        max: 31,
-      }),
-      def: rngInt({
-        seed: [seed, "iv", "def"],
-        min: 0,
-        max: 31,
-      }),
-      spa: rngInt({
-        seed: [seed, "iv", "spa"],
-        min: 0,
-        max: 31,
-      }),
-      spd: rngInt({
-        seed: [seed, "iv", "spd"],
-        min: 0,
-        max: 31,
-      }),
-      spe: rngInt({
-        seed: [seed, "iv", "spe"],
-        min: 0,
-        max: 31,
-      }),
-    },
+    ivs,
     evs: {
       hp: 0,
       atk: 0,
