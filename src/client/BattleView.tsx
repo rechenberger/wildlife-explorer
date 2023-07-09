@@ -38,7 +38,7 @@ export const BattleView = ({
 }) => {
   const { playerId } = usePlayer()
 
-  const { data: battleStatus, isFetching: battleLoading } =
+  const { data, isFetching: battleLoading } =
     api.battle.getBattleStatus.useQuery(
       {
         battleId,
@@ -77,9 +77,13 @@ export const BattleView = ({
 
   const getName = useGetWildlifeName()
 
-  if (!battleStatus) {
+  if (!data) {
     return <>Loading</>
   }
+
+  const { battleStatus, status } = data
+
+  const battleIsActive = status === "IN_PROGRESS"
 
   return (
     <>
@@ -88,7 +92,9 @@ export const BattleView = ({
         {DEV_MODE && (
           <button
             className="absolute right-12 top-4 shrink-0"
+            disabled={!battleIsActive}
             onClick={() => {
+              if (!battleIsActive) return
               reset({
                 battleId,
               })
@@ -334,7 +340,12 @@ export const BattleView = ({
                                   fillWithNulls(moves, MAX_MOVES_PER_FIGHTER),
                                   (move, moveIdx) => {
                                     // console.log(move)
-                                    const disabled = !move || isLoading
+                                    const disabled =
+                                      !move ||
+                                      isLoading ||
+                                      !isActive ||
+                                      !isMySide ||
+                                      !battleIsActive
                                     const typeIcon = move?.definition.type
                                       ? getTypeIcon(move?.definition.type)
                                       : null
@@ -486,26 +497,41 @@ export const BattleView = ({
                         isMainSide ? "flex-row-reverse" : "flex-row"
                       )}
                     >
-                      <button
-                        className="w-12 rounded bg-black/10 py-1 text-xs hover:bg-black/20 sm:w-28"
-                        onClick={() => {
-                          if (!playerId) return
-                          run({
-                            battleId,
-                            playerId,
-                          })
-                        }}
-                      >
-                        Run
-                      </button>
-                      <button
-                        className="w-12 rounded bg-black/10 py-1 text-xs hover:bg-black/20 sm:w-28"
-                        onClick={() => {
-                          toast.error("Not implemented yet")
-                        }}
-                      >
-                        Catch
-                      </button>
+                      {battleIsActive ? (
+                        <>
+                          <button
+                            className="w-12 rounded bg-black/10 py-1 text-xs hover:bg-black/20 sm:w-28"
+                            onClick={() => {
+                              if (!playerId) return
+                              run({
+                                battleId,
+                                playerId,
+                              })
+                            }}
+                          >
+                            Run
+                          </button>
+                          <button
+                            className="w-12 rounded bg-black/10 py-1 text-xs hover:bg-black/20 sm:w-28"
+                            onClick={() => {
+                              toast.error("Not implemented yet")
+                            }}
+                          >
+                            Catch
+                          </button>
+                        </>
+                      ) : (
+                        <>
+                          <button
+                            className="w-12 rounded bg-black/10 py-1 text-xs hover:bg-black/20 sm:w-28"
+                            onClick={() => {
+                              onClose()
+                            }}
+                          >
+                            Leave
+                          </button>
+                        </>
+                      )}
                     </div>
                   )}
                 </div>
