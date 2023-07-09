@@ -23,7 +23,12 @@ export const BattleViewModal = NiceModal.create<{}>(({}) => {
           "rounded-t-lg max-sm:bottom-0 max-sm:top-auto max-sm:translate-y-0 max-sm:p-4 max-sm:pt-3"
         )}
       >
-        <BattleView />
+        <BattleView
+          onClose={() => {
+            modal.reject()
+            modal.remove()
+          }}
+        />
       </DialogContent>
     </Dialog>
   )

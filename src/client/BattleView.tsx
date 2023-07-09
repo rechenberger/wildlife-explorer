@@ -30,7 +30,7 @@ const SHOW_FIGHTER_TYPES = true
 const SHOW_ABILITY = false
 const SHOW_NATURE = false
 
-export const BattleView = () => {
+export const BattleView = ({ onClose }: { onClose: () => void }) => {
   const { playerId } = usePlayer()
 
   const { data: battles } = api.battle.getMyBattles.useQuery(
@@ -73,6 +73,8 @@ export const BattleView = () => {
   })
   const { mutate: run } = api.battle.run.useMutation({
     onSuccess: () => {
+      onClose()
+      toast.success("Ran away successfully!")
       trpc.battle.invalidate()
     },
   })
