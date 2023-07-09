@@ -72,6 +72,12 @@ export const catchRouter = createTRPCRouter({
     }),
 
   catch: wildlifeProcedure.mutation(async ({ ctx }) => {
+    if (ctx.wildlife.metadata.observationCaptive) {
+      throw new TRPCError({
+        code: "BAD_REQUEST",
+        message: "Wildlife is captive and cannot be caught 🚫",
+      })
+    }
     if (
       ctx.wildlifeBattleId &&
       ctx.wildlifeBattleId !== ctx.player.metadata?.activeBattleId
