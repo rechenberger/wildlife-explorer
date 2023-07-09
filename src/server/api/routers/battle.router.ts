@@ -44,7 +44,7 @@ export const battleRouter = createTRPCRouter({
     if (!caughtWildlife) {
       throw new TRPCError({
         code: "BAD_REQUEST",
-        message: "You need at least one caught wildlife to battle 😉",
+        message: "You need to catch at least one wildlife to battle 😉",
       })
     }
 
