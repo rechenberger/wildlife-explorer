@@ -77,14 +77,6 @@ export const BattleView = ({
 
   const getName = useGetWildlifeName()
 
-  if (!data) {
-    return <>Loading</>
-  }
-
-  const { battleStatus, status } = data
-
-  const battleIsActive = status === "IN_PROGRESS"
-
   const { mutateAsync: doCatch } = api.catch.catch.useMutation({
     onSettled: () => {
       trpc.catch.invalidate()
@@ -92,6 +84,14 @@ export const BattleView = ({
       trpc.battle.invalidate()
     },
   })
+
+  if (!data) {
+    return <>Loading</>
+  }
+
+  const { battleStatus, status } = data
+
+  const battleIsActive = status === "IN_PROGRESS"
 
   const catchButton = () => {
     if (!playerId) return
