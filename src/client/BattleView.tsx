@@ -591,5 +591,6 @@ const readableEffectiveness = ({
   if (effectiveness === -1) return "not very effective"
   if (effectiveness === 0) return "effective"
   if (effectiveness === 1) return "supper effective"
+  console.warn("Unknown effectiveness", { effectiveness, immunity })
   return "???"
 }
