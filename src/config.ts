@@ -24,6 +24,7 @@ export const DEV_MODE =
   (typeof localStorage !== "undefined" && !!localStorage.getItem("DEV_MODE"))
 
 export const ENABLE_BATTLE_VIEW = true
+export const SHOW_BATTLE_LOG = DEV_MODE
 
 export const CATCH_RATE_ALWAYS_WIN = 0.2
 export const CATCH_RATE_ALWAYS_LOOSE = 0.2
