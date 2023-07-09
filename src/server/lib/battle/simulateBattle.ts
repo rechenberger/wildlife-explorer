@@ -158,6 +158,7 @@ export const simulateBattle = async ({
     return {
       winner: battle.winner,
       inputLog: battle.inputLog,
+      outputLog: battle.log,
       // battleDb: battleDb,
       sides: battle.sides.map((side, sideIdx) => {
         const team = teams[sideIdx]!

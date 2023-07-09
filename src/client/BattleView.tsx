@@ -52,6 +52,9 @@ export const BattleView = () => {
       },
       {
         enabled: !!activeBattle && !!playerId,
+        onSuccess: (data) => {
+          console.log(data)
+        },
       }
     )
 
