@@ -7,6 +7,7 @@ import {
   DEV_MODE,
   MAX_FIGHTERS_PER_TEAM,
   MAX_MOVES_PER_FIGHTER,
+  SHOW_BATTLE_LOG,
 } from "~/config"
 import { parseBattleLog } from "~/server/lib/battle/battleLogParser"
 import { api } from "~/utils/api"
@@ -34,7 +35,6 @@ const SHOW_FIGHTER_NAME = false
 const SHOW_FIGHTER_TYPES = true
 const SHOW_ABILITY = false
 const SHOW_NATURE = false
-const SHOW_LOG = DEV_MODE
 
 export const BattleView = ({
   onClose,
@@ -604,7 +604,7 @@ export const BattleView = ({
             )
           })}
         </div>
-        {SHOW_LOG && (
+        {SHOW_BATTLE_LOG && (
           <div className="flex-1 border-l p-2 hidden lg:flex flex-col h-[400px]">
             <ScrollArea className="">
               <div

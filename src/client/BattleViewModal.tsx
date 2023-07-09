@@ -1,4 +1,5 @@
 import NiceModal, { useModal } from "@ebay/nice-modal-react"
+import { SHOW_BATTLE_LOG } from "~/config"
 import { BattleOverview } from "./BattleOverview"
 import { BattleView } from "./BattleView"
 import { cn } from "./cn"
@@ -25,7 +26,7 @@ export const BattleViewModal = NiceModal.create<{
         className={cn(
           "border-0 bg-white pt-3",
           "rounded-t-lg max-sm:bottom-0 max-sm:top-auto max-sm:translate-y-0 max-sm:p-4 max-sm:pt-3",
-          !!battleId && "max-w-6xl",
+          !!battleId && SHOW_BATTLE_LOG && "lg:max-w-5xl"
         )}
         style={{
           paddingBottom: "calc(env(safe-area-inset-bottom) + 1.5rem)",
