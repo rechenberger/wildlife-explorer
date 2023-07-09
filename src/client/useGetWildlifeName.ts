@@ -15,7 +15,7 @@ export const useGetWildlifeName = () => {
         w.metadata.taxonCommonName ||
         w.metadata.taxonName
 
-      return `${name} ${w.metadata.isDeadAnnotated ? " ☠️" : ""}`
+      return name
     },
     [locale]
   )
