@@ -173,6 +173,10 @@ export const simulateBattle = async ({
             // fighter = team.team[idx]
           }
 
+          // const justFainted =
+          //   side.faintedThisTurn === p || side.faintedLastTurn === p
+          const justFainted = side.faintedThisTurn === p
+
           return {
             ...fighter!,
             fighterStatus: {
@@ -182,8 +186,7 @@ export const simulateBattle = async ({
               status: p.status,
               statusState: p.statusState,
               isActive: p.isActive,
-              justFainted:
-                side.faintedThisTurn === p || side.faintedLastTurn === p,
+              justFainted,
               moves: p.moves.map((move) => {
                 const data = p.getMoveData(move)
                 const definition = Dex.moves.getByID(toID(data?.id))
