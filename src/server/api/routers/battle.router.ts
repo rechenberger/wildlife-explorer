@@ -6,7 +6,8 @@ import { simulateBattle } from "~/server/lib/battle/simulateBattle"
 import { respawnWildlife } from "~/server/lib/respawnWildlife"
 import { BattleMetadata } from "~/server/schema/BattleMetadata"
 import { BattleParticipationMetadata } from "~/server/schema/BattleParticipationMetadata"
-import { type PlayerMetadata } from "~/server/schema/PlayerMetadata"
+import { PlayerMetadata } from "~/server/schema/PlayerMetadata"
+import { WildlifeMetadata } from "~/server/schema/WildlifeMetadata"
 import { devProcedure } from "../middleware/devProcedure"
 import { playerProcedure } from "../middleware/playerProcedure"
 import { wildlifeProcedure } from "../middleware/wildlifeProcedure"
@@ -84,8 +85,17 @@ export const battleRouter = createTRPCRouter({
         },
       },
       include: {
-        battleParticipants: true,
+        battleParticipants: {
+          include: {
+            player: true,
+            wildlife: true,
+          },
+        },
       },
+      orderBy: {
+        createdAt: "desc",
+      },
+      take: 20,
     })
     const battles = map(battlesRaw, (battle) => ({
       ...battle,
@@ -97,6 +107,22 @@ export const battleRouter = createTRPCRouter({
           metadata: BattleParticipationMetadata.parse(
             battleParticipant.metadata
           ),
+          player: battleParticipant.player
+            ? {
+                ...battleParticipant.player,
+                metadata: PlayerMetadata.parse(
+                  battleParticipant.player.metadata
+                ),
+              }
+            : null,
+          wildlife: battleParticipant.wildlife
+            ? {
+                ...battleParticipant.wildlife,
+                metadata: WildlifeMetadata.parse(
+                  battleParticipant.wildlife.metadata
+                ),
+              }
+            : null,
         })
       ),
     }))

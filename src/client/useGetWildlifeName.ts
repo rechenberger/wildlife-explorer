@@ -1,11 +1,10 @@
 import { useCallback } from "react"
-import { type RouterOutputs } from "~/utils/api"
+import { type WildlifeMetadata } from "~/server/schema/WildlifeMetadata"
 import { useLocale } from "./useLocale"
 
-type WildlifeWithMetadata = Pick<
-  RouterOutputs["wildlife"]["nearMe"][number],
-  "metadata"
->
+type WildlifeWithMetadata = {
+  metadata: WildlifeMetadata
+}
 
 export const useGetWildlifeName = () => {
   const locale = useLocale()
