@@ -22,8 +22,8 @@ import {
 import { useGetWildlifeName } from "./useGetWildlifeName"
 import { usePlayer } from "./usePlayer"
 
-const BIG_INACTIVE_FIGHTER = true
-const SHOW_ENEMY_MOVES = true
+const BIG_INACTIVE_FIGHTER = false
+const SHOW_ENEMY_MOVES = false
 const SHOW_INACTIVE_MOVES = true
 const SHOW_FIGHTER_NAME = DEV_MODE
 const SHOW_FIGHTER_TYPES = true
