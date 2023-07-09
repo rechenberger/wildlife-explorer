@@ -36,6 +36,18 @@ export const battleRouter = createTRPCRouter({
       })
     }
 
+    const caughtWildlife = await ctx.prisma.catch.findFirst({
+      where: {
+        playerId: ctx.player.id,
+      },
+    })
+    if (!caughtWildlife) {
+      throw new TRPCError({
+        code: "BAD_REQUEST",
+        message: "You need at least one caught wildlife to battle 😉",
+      })
+    }
+
     const battle = await ctx.prisma.battle.create({
       data: {
         status: "IN_PROGRESS",
