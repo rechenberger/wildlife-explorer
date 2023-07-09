@@ -11,6 +11,7 @@ import {
 import { api } from "~/utils/api"
 import { replaceByWildlife } from "~/utils/replaceByWildlife"
 import { cn } from "./cn"
+import { Progress } from "./shadcn/ui/progress"
 import {
   abilityIcon,
   getTypeIcon,
@@ -297,10 +298,16 @@ export const BattleView = ({
                                     </div>
                                   )}
                                 </div>
+                                <Progress
+                                  value={(hp / hpMax) * 100}
+                                  className="h-1 bg-slate-400"
+                                />
 
                                 <div className="flex flex-row gap-1 text-xs">
-                                  <div className="truncate">
-                                    {hp}/{hpMax} HP
+                                  <div className="truncate opacity-60">
+                                    {isMySide
+                                      ? `${hp}/${hpMax}`
+                                      : `${Math.ceil((hp / hpMax) * 100)}%`}
                                   </div>
                                   {!!status && (
                                     <div className="rounded-sm bg-red-300 px-1">
