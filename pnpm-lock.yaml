@@ -23,12 +23,18 @@ dependencies:
   '@pkmn/dex':
     specifier: ^0.7.45
     version: 0.7.45
+  '@pkmn/protocol':
+    specifier: ^0.6.12
+    version: 0.6.12
   '@pkmn/randoms':
     specifier: ^0.7.45
     version: 0.7.45
   '@pkmn/sim':
     specifier: ^0.7.45
     version: 0.7.45
+  '@pkmn/view':
+    specifier: ^0.6.12
+    version: 0.6.12
   '@prisma/client':
     specifier: ^4.16.2
     version: 4.16.2(prisma@4.16.2)
@@ -662,6 +668,13 @@ packages:
       '@pkmn/dex-types': 0.7.45
     dev: false
 
+  /@pkmn/protocol@0.6.12:
+    resolution: {integrity: sha512-/UWL8GZIAfJplp3bDKiYtpfKpu+kJGXKyH+ifTru1QH2gADvEnJN1nDHXqUxk0PbAgdm0XnwniFjlkm90jw7Ag==}
+    hasBin: true
+    dependencies:
+      '@pkmn/types': 3.0.0
+    dev: false
+
   /@pkmn/randoms@0.7.45:
     resolution: {integrity: sha512-0ld2VDpLfBYuh6Vrvo7m0ENEo9EqPgm+pDbaIENm15ZvgbHpRoc+S+PpSEepKn4Wb4eiIWgBol/gDre/UtCzVA==}
     dependencies:
@@ -687,6 +700,14 @@ packages:
 
   /@pkmn/types@3.0.0:
     resolution: {integrity: sha512-Vq3vlIaKi8EGFUx5AFcEch74i8wfFWPWb5OaNsJCgP31VADJVruKmLoSzs26xUW0vkiJENICH+YGFmJYwatJ8w==}
+    dev: false
+
+  /@pkmn/view@0.6.12:
+    resolution: {integrity: sha512-0jdmJ3M2K0xNycjZ2UeMih2kwkIAZqO4OX9ZPMKIRoxxRI4SaCEWIRc3Oh6WYaKOMIVz1L+4K2RKc5MMZfdwRQ==}
+    hasBin: true
+    dependencies:
+      '@pkmn/protocol': 0.6.12
+      '@pkmn/types': 3.0.0
     dev: false
 
   /@prisma/client@4.16.2(prisma@4.16.2):
