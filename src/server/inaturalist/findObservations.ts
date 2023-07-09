@@ -81,7 +81,7 @@ export const findObservations = async ({
         ),
 
         // annotations:
-        isDeadAnnotated: deadOrAliveAnnotation && isDeadAnnotated,
+        observationIsDeadAnnotated: deadOrAliveAnnotation && isDeadAnnotated,
 
         // imagesObservation: map(o.photos, (p) => p.url),
       } satisfies WildlifeMetadata,
