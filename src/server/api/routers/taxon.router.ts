@@ -4,7 +4,7 @@ import { createTRPCRouter } from "~/server/api/trpc"
 import { devProcedure } from "../middleware/devProcedure"
 
 export const taxonRouter = createTRPCRouter({
-  dev: devProcedure.mutation(async ({ ctx }) => {
+  dev: devProcedure.mutation(async ({}) => {
     const taxonId = 0
     const url = `https://api.inaturalist.org/v1/taxa/${taxonId}`
     const response = await fetch(url)
