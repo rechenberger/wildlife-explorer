@@ -39,6 +39,9 @@ export const getBattleForSimulation = async ({
           },
           wildlife: true,
         },
+        orderBy: {
+          id: "asc",
+        },
       },
     },
   })
