@@ -25,6 +25,8 @@ export const FighterMoves = ({
           const typeIcon = move?.definition.type
             ? getTypeIcon(move?.definition.type)
             : null
+
+          const effectiveness = readableEffectiveness((move as any) ?? {})
           return (
             <button
               key={moveIdx}
@@ -61,12 +63,14 @@ export const FighterMoves = ({
                 <div className="flex-1 truncate text-left">
                   {move?.name || "-"}
                 </div>
-                <div
-                  className="hidden w-2 shrink-0 opacity-60 sm:block"
-                  title={readableEffectiveness((move as any) ?? {}).desc}
-                >
-                  {readableEffectiveness((move as any) ?? {}).symbol}
-                </div>
+                {!!effectiveness && (
+                  <div
+                    className="hidden w-2 shrink-0 opacity-60 sm:block"
+                    title={effectiveness.desc}
+                  >
+                    {effectiveness.symbol}
+                  </div>
+                )}
                 <div className="hidden w-5 shrink-0 opacity-60 sm:block">
                   {move?.definition.accuracy}
                 </div>
@@ -92,6 +96,9 @@ const readableEffectiveness = ({
   effectiveness?: 0 | -1 | 1 | -2 | 2 | null
   immunity?: boolean | null
 }) => {
+  if (effectiveness == undefined || effectiveness == undefined) {
+    return null
+  }
   if (!immunity) {
     return {
       symbol: "x",

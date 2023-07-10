@@ -93,9 +93,9 @@ export const typeIcons = [
   {
     name: "Ice",
     icon: Snowflake,
-    bgFull: "bg-lightblue-400",
-    bgHalf: "bg-lightblue-400/50",
-    ringFull: "ring-lightblue-400",
+    bgFull: "bg-cyan-300",
+    bgHalf: "bg-cyan-300/50",
+    ringFull: "ring-cyan-300",
   },
   {
     name: "Poison",
