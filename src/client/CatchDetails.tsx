@@ -23,7 +23,14 @@ export const CatchDetails = ({ catchId }: { catchId: string }) => {
       <div className="p-2 flex flex-col gap-4">
         <FighterChip showAbsoluteHp ltr fighter={c} />
         <div className="flex flex-row gap-2">
-          <FighterTypeBadges fighter={c} showTypes showAbility showNature />
+          <FighterTypeBadges
+            fighter={c}
+            showTypes
+            showAbility
+            showNature
+            size={"big"}
+            className="flex-1"
+          />
         </div>
         <FighterMoves fighter={c} />
         <FighterStatsChart fighter={c} />
