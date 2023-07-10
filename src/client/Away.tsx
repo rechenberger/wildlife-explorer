@@ -6,7 +6,13 @@ import { playerLocationAtom } from "./PlayerMarker"
 import { cn } from "./cn"
 import { formatMeters } from "./formatMeters"
 
-export const Away = ({ location }: { location: LatLng }) => {
+export const Away = ({
+  location,
+  className,
+}: {
+  location: LatLng
+  className?: string
+}) => {
   const playerLocation = useAtomValue(playerLocationAtom)
   const distanceInMeter = Math.ceil(
     calcDistanceInMeter(location, playerLocation)
@@ -17,7 +23,8 @@ export const Away = ({ location }: { location: LatLng }) => {
       <div
         className={cn(
           "text-sm font-bold text-amber-500",
-          isClose && "text-green-600"
+          isClose && "text-green-600",
+          className
         )}
       >
         {formatMeters(distanceInMeter)} away

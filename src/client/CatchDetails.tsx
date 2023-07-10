@@ -1,7 +1,9 @@
+import { Away } from "./Away"
 import { FighterChip } from "./FighterChip"
 import { FighterMoves } from "./FighterMoves"
 import { FighterStatsChart } from "./FighterStatsChart"
 import { FighterTypeBadges } from "./FighterTypeBadges"
+import { TimeAgo } from "./TimeAgo"
 import { useMyCatch } from "./useCatches"
 import { useGetWildlifeName } from "./useGetWildlifeName"
 
@@ -26,8 +28,22 @@ export const CatchDetails = ({ catchId }: { catchId: string }) => {
           <div>Wildlife</div>
           <hr className="flex-1 border-black/60" />
         </div>
-        <div className="w-1/2">
-          <FighterChip showAbsoluteHp ltr fighter={c} />
+        <div className="flex flex-row gap-4 items-center justify-between">
+          <div className="flex-1 max-w-[50%]">
+            <FighterChip showAbsoluteHp ltr fighter={c} />
+          </div>
+          <div className="text-right text-xs font-normal text-black opacity-60 inline-block">
+            <div>
+              <span>Caught&nbsp;</span>
+              <Away
+                location={c.wildlife}
+                className="text-xs font-normal text-black inline-block"
+              />
+            </div>
+            <div className="">
+              <TimeAgo date={c.createdAt} addSuffix={true} />
+            </div>
+          </div>
         </div>
 
         <div className="flex flex-row gap-2 items-center text-xs font-bold opacity-60 mt-4">
