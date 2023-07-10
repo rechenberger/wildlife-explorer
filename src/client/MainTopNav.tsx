@@ -17,7 +17,7 @@ export const MainTopNav = () => {
         <BrushStrokeBackground>
           <Link
             href="/"
-            className="-mx-8 -my-2 flex flex-row items-center gap-2 text-2xl text-amber-400 [text-shadow:_1px_1px_4px_rgb(0_0_0_/_80%)] md:-mx-8 md:my-0 md:text-6xl"
+            className="-mx-8 -my-2 flex flex-row items-center gap-2 text-2xl text-amber-400 [text-shadow:_1px_1px_4px_rgb(0_0_0_/_80%)] md:-mx-8 md:my-0 md:text-6xl select-none"
           >
             <Image
               src={logo}
