@@ -13,9 +13,9 @@ import { parseBattleLog } from "~/server/lib/battle/battleLogParser"
 import { api } from "~/utils/api"
 import { atomWithLocalStorage } from "~/utils/atomWithLocalStorage"
 import { replaceByWildlife } from "~/utils/replaceByWildlife"
+import { FighterChip } from "./FighterChip"
 import { TypeBadge } from "./TypeBadge"
 import { cn } from "./cn"
-import { Progress } from "./shadcn/ui/progress"
 import {
   abilityIcon,
   catchIcon,
@@ -193,19 +193,10 @@ export const BattleView = ({
                     )}
                   >
                     {map(side.fighters, (fighter) => {
-                      const {
-                        hp,
-                        hpMax,
-                        isActive,
-                        moves,
-                        status,
-                        lastMove,
-                        justFainted,
-                      } = fighter.fighterStatus
+                      const { isActive, moves, lastMove, justFainted } =
+                        fighter.fighterStatus
                       if (!isActive && !BIG_INACTIVE_FIGHTER && !justFainted)
                         return null
-                      const hpFull = hp >= hpMax
-                      const fainted = hp <= 0
                       return (
                         <Fragment
                           key={fighter.catch?.id ?? fighter.wildlife.id}
@@ -268,94 +259,11 @@ export const BattleView = ({
                                 isMainSide ? "flex-col" : "flex-col-reverse"
                               )}
                             >
-                              <div
-                                className={cn(
-                                  "flex items-center gap-4 rounded-full bg-black/10",
-                                  isMainSide ? "flex-row" : "flex-row-reverse"
-                                  // 'ring',
-                                  // hpFull
-                                  //   ? "ring-green-500"
-                                  //   : dead
-                                  //   ? "ring-red-500"
-                                  //   : "ring-amber-400"
-                                )}
-                              >
-                                <div
-                                  className={cn(
-                                    "relative -m-1 aspect-square h-12 w-12 shrink-0 overflow-hidden rounded-full ring",
-                                    hpFull
-                                      ? "ring-green-500"
-                                      : fainted
-                                      ? "ring-red-500"
-                                      : "ring-amber-400",
-                                    !isActive && !justFainted && "grayscale"
-                                  )}
-                                >
-                                  {fighter.wildlife.metadata
-                                    .taxonImageUrlSquare && (
-                                    <Image
-                                      src={
-                                        fighter.wildlife.metadata
-                                          .taxonImageUrlSquare
-                                      }
-                                      className={cn(
-                                        "w-full object-cover object-center transition-transform",
-                                        fainted && "rotate-180"
-                                      )}
-                                      alt={"Observation"}
-                                      unoptimized
-                                      fill={true}
-                                    />
-                                  )}
-                                </div>
-                                <div
-                                  className={cn("flex-1 overflow-hidden py-1")}
-                                >
-                                  <div className="flex items-baseline gap-1">
-                                    <div
-                                      className="truncate text-xs font-bold"
-                                      title={`${getName(fighter.wildlife)} ${
-                                        DEV_MODE
-                                          ? `(${fighter.fighter.species} ${fighter.fighter.level} ${fighter.fighter.gender})`
-                                          : ""
-                                      }`}
-                                    >
-                                      {fighter.wildlife
-                                        ? getName(fighter.wildlife)
-                                        : fighter.fighter.name}
-                                    </div>
-                                    {SHOW_FIGHTER_NAME && (
-                                      <div
-                                        title={fighter.fighter.species}
-                                        className="whitespace-nowrap text-[10px] opacity-60"
-                                      >
-                                        {` ${fighter.fighter.species} ${fighter.fighter.level} ${fighter.fighter.gender}`}
-                                      </div>
-                                    )}
-                                  </div>
-                                  <Progress
-                                    value={(hp / hpMax) * 100}
-                                    className="h-1 bg-slate-400"
-                                  />
-
-                                  <div className="flex flex-row gap-1 text-xs justify-between">
-                                    <div className="truncate opacity-60">
-                                      {isMySide
-                                        ? `${hp}/${hpMax}`
-                                        : `${Math.ceil((hp / hpMax) * 100)}%`}
-                                    </div>
-                                    {!!status && (
-                                      <div className="rounded-sm bg-red-300 px-1">
-                                        {status.toUpperCase()}
-                                      </div>
-                                    )}
-                                    <div className="truncate opacity-60">
-                                      Lv. {fighter.fighter.level}
-                                    </div>
-                                  </div>
-                                </div>
-                                <div className="w-2" />
-                              </div>
+                              <FighterChip
+                                fighter={fighter}
+                                ltr={isMySide}
+                                showAbsoluteHp={isMySide}
+                              />
                               <div
                                 className={cn(
                                   "my-1 flex flex-wrap gap-1",

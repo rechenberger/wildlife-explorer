@@ -15,3 +15,9 @@ export const useMyCatches = () => {
     myCatches,
   }
 }
+
+export const useMyCatch = ({ catchId }: { catchId: string }) => {
+  const { myCatches } = useMyCatches()
+  const myCatch = myCatches?.find((c) => c.id === catchId)
+  return { myCatch }
+}

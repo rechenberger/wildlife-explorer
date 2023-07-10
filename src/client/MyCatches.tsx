@@ -3,19 +3,13 @@ import Image from "next/image"
 import { MAX_FIGHTERS_PER_TEAM } from "~/config"
 import { api } from "~/utils/api"
 import { cn } from "./cn"
+import { useMyCatches } from "./useCatches"
 import { useGetWildlifeName } from "./useGetWildlifeName"
 import { usePlayer } from "./usePlayer"
 
 export const MyCatches = () => {
   const { playerId } = usePlayer()
-  const { data: catches } = api.catch.getMyCatches.useQuery(
-    {
-      playerId: playerId!,
-    },
-    {
-      enabled: !!playerId,
-    }
-  )
+  const { myCatches } = useMyCatches()
   const getName = useGetWildlifeName()
 
   const trpc = api.useContext()
@@ -30,7 +24,7 @@ export const MyCatches = () => {
     <>
       <div className="mb-4">Your Catches</div>
       <div className="grid grid-cols-6 gap-2 gap-y-3">
-        {map(catches, (c, catchIdx) => (
+        {map(myCatches, (c, catchIdx) => (
           <div
             key={c.id}
             className="flex cursor-pointer flex-col gap-2 rounded px-1 pt-2 hover:bg-black/10"
