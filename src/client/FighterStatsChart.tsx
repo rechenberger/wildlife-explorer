@@ -1,5 +1,6 @@
 import React from "react"
 import {
+  LabelList,
   PolarAngleAxis,
   PolarGrid,
   PolarRadiusAxis,
@@ -29,15 +30,42 @@ export const FighterStatsChart: React.FC<{ fighter: FighterForChip }> = ({
       A: fighter.fighter.stats.spe,
     },
     {
-      subject: "Sp. Atk",
-      A: fighter.fighter.stats.spa,
-    },
-    {
       subject: "Sp. Def",
       A: fighter.fighter.stats.spd,
     },
+    {
+      subject: "Sp. Atk",
+      A: fighter.fighter.stats.spa,
+    },
   ]
   const size = 450
+
+  const CustomizedAxisTick = (props: any) => {
+    let { x, y, payload } = props
+
+    // move labels out
+    const moveOutFactor = 1.2
+    x = (x - size / 2) * moveOutFactor + size / 2
+    y = (y - size / 2) * moveOutFactor + size / 2
+
+    return (
+      <g transform={`translate(${x},${y})`}>
+        <text
+          x={0}
+          y={0}
+          // dy={30}
+          textAnchor="middle"
+          fill="#666"
+          // transform="rotate(-35)"
+        >
+          {payload.value}
+        </text>
+        <text x={0} y={20} textAnchor="middle" fill="#666">
+          {data.find((d) => d.subject === payload.value)?.A}
+        </text>
+      </g>
+    )
+  }
 
   return (
     <RadarChart
@@ -49,7 +77,7 @@ export const FighterStatsChart: React.FC<{ fighter: FighterForChip }> = ({
       data={data}
     >
       <PolarGrid />
-      <PolarAngleAxis dataKey="subject" />
+      <PolarAngleAxis dataKey="subject" tick={CustomizedAxisTick} />
       <PolarRadiusAxis />
       <Radar
         name={"Stats"}
@@ -58,6 +86,7 @@ export const FighterStatsChart: React.FC<{ fighter: FighterForChip }> = ({
         fill="#8884d8"
         fillOpacity={0.6}
       />
+      <LabelList dataKey="A" position="outside" />
     </RadarChart>
   )
 }
