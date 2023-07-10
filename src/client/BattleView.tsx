@@ -195,7 +195,7 @@ export const BattleView = ({
                         >
                           <div
                             className={cn(
-                              "rounded-full border border-dashed border-black/10 bg-black/5 px-4 py-1 text-xs text-black/60",
+                              "rounded-full border border-dashed border-gray-200 bg-gray-100 px-4 py-1 text-xs text-black/60",
                               isMainSide
                                 ? "ml-4 self-start rounded-bl-none"
                                 : "mr-4 self-end rounded-tr-none"

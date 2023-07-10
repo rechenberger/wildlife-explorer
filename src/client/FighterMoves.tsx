@@ -31,7 +31,7 @@ export const FighterMoves = ({
             <button
               key={moveIdx}
               className={cn(
-                "truncate rounded-md bg-black/10 text-xs",
+                "truncate rounded-md bg-gray-200 text-xs",
                 disabled && "opacity-20",
                 "flex items-center",
                 typeIcon?.bgHalf,

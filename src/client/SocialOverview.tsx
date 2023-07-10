@@ -28,7 +28,7 @@ export const SocialOverview = () => {
         {map(players, (player) => (
           <Fragment key={player.id}>
             <button
-              className="flex flex-row items-center gap-2 border-b p-4 text-left hover:bg-black/10"
+              className="flex flex-row items-center gap-2 border-b p-4 text-left hover:bg-gray-100"
               onClick={() => {
                 NiceModal.hide(SocialOverviewModal)
                 setMapCenter(player)

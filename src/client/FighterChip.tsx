@@ -33,7 +33,7 @@ export const FighterChip = ({
     <>
       <div
         className={cn(
-          "flex items-center gap-4 rounded-full bg-black/10",
+          "flex items-center gap-4 rounded-full bg-gray-200",
           ltr ? "flex-row" : "flex-row-reverse",
           onClick && "cursor-pointer"
         )}
@@ -63,7 +63,7 @@ export const FighterChip = ({
             />
           )}
         </div>
-        <div className={cn("flex-1 overflow-hidden py-1")}>
+        <div className={cn("flex-1 overflow-hidden py-1 select-none")}>
           <div className="flex items-baseline gap-1">
             <div
               className="truncate text-xs font-bold"

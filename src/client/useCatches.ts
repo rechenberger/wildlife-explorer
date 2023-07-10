@@ -1,5 +1,7 @@
-import { api } from "~/utils/api"
+import { api, type RouterOutputs } from "~/utils/api"
 import { usePlayer } from "./usePlayer"
+
+export type MyCatch = RouterOutputs["catch"]["getMyCatches"][number]
 
 export const useMyCatches = () => {
   const { playerId } = usePlayer()

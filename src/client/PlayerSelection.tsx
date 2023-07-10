@@ -59,7 +59,7 @@ export const PlayerSelection = () => {
             (player) => (
               <Link
                 href={`/play/${player.id}#${player.lat},${player.lng}`}
-                className="flex flex-row items-center gap-2 border-b p-4 text-left hover:bg-black/10"
+                className="flex flex-row items-center gap-2 border-b p-4 text-left hover:bg-gray-100"
               >
                 <User size={24} />
                 <div className="flex flex-col">

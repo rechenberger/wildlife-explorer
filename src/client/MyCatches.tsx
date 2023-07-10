@@ -1,56 +1,138 @@
-import NiceModal from "@ebay/nice-modal-react"
+import {
+  DndContext,
+  MouseSensor,
+  TouchSensor,
+  useSensor,
+  useSensors,
+  type DragEndEvent,
+} from "@dnd-kit/core"
+import { restrictToFirstScrollableAncestor } from "@dnd-kit/modifiers"
 import { map } from "lodash-es"
-import { MAX_FIGHTERS_PER_TEAM } from "~/config"
+import { z } from "zod"
 import { api } from "~/utils/api"
-import { CatchDetailsModal } from "./CatchDetailsModal"
-import { FighterChip } from "./FighterChip"
-import { useMyCatches } from "./useCatches"
+import { DraggableCatch } from "./DraggableCatch"
+import { DroppableTeamSlot } from "./DroppableTeamSlot"
+import { cn } from "./cn"
+import { useMyTeam } from "./useMyTeam"
 import { usePlayer } from "./usePlayer"
 
 export const MyCatches = () => {
   const { playerId } = usePlayer()
-  const { myCatches } = useMyCatches()
+
+  const { myTeam, catchesWithoutTeam } = useMyTeam()
 
   const trpc = api.useContext()
-  const { mutate: setBattleOrderPosition } =
-    api.catch.setBattleOrderPosition.useMutation({
+
+  const { mutate: setMyTeamBattleOrder } =
+    api.catch.setMyTeamBattleOrder.useMutation({
       onSuccess: () => {
         trpc.catch.getMyCatches.invalidate()
       },
     })
 
+  const isDefaultSwap = true
+
+  const addToTeamAtPos = ({
+    position,
+    catchId,
+    isSwapWithCurrentPosition = isDefaultSwap,
+  }: {
+    position: number
+    catchId: string
+    isSwapWithCurrentPosition?: boolean
+  }) => {
+    if (!playerId) return
+    const currentTeamOrder = myTeam.map((c) => c.id)
+
+    let newTeamOrder: string[] = []
+
+    if (isSwapWithCurrentPosition) {
+      const catchIdAtPos = currentTeamOrder[position]
+      if (!catchIdAtPos) {
+        newTeamOrder = [...currentTeamOrder, catchId]
+      } else {
+        const catchIdIsAlreadyInTeam = myTeam.some((c) => c.id === catchId)
+
+        newTeamOrder = [...currentTeamOrder]
+        newTeamOrder[position] = catchId
+
+        if (catchIdIsAlreadyInTeam) {
+          newTeamOrder[currentTeamOrder.indexOf(catchId)] = catchIdAtPos
+        }
+      }
+    } else {
+      const currentTeamWithoutCatchId = currentTeamOrder.filter(
+        (cId) => cId !== catchId
+      )
+      newTeamOrder = [
+        ...currentTeamWithoutCatchId.slice(0, position),
+        catchId,
+        ...currentTeamWithoutCatchId.slice(position),
+      ]
+    }
+
+    setMyTeamBattleOrder({
+      catchIds: newTeamOrder,
+      playerId,
+    })
+  }
+
+  const handleDragEnd = (event: DragEndEvent) => {
+    console.log({ event })
+
+    const { active, over } = event
+
+    if (!active || !over) return
+
+    const activeId = z.string().parse(active.id)
+    const overId = z.number().parse(over.id)
+
+    if (!activeId) return
+
+    addToTeamAtPos({
+      position: overId,
+      catchId: activeId,
+    })
+  }
+
+  const sensors = useSensors(
+    useSensor(MouseSensor, {
+      activationConstraint: {
+        distance: 5,
+      },
+    }),
+    useSensor(TouchSensor, {
+      activationConstraint: {
+        delay: 250,
+        tolerance: 5,
+      },
+    })
+  )
+
   return (
-    <>
-      <div className="mb-4">Your Catches</div>
-      <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-2 gap-y-3 p-2">
-        {map(myCatches, (c, idx) => (
-          <div
-            key={c.id}
-            className="flex cursor-pointer flex-col p-1"
-            onClick={(e) => {
-              if (e.shiftKey) {
-                NiceModal.show(CatchDetailsModal, {
-                  catchId: c.id,
-                })
-                return
-              }
-              if (!playerId) return
-              setBattleOrderPosition({
-                catchId: c.id,
-                playerId,
-              })
-            }}
-          >
-            <FighterChip
-              showAbsoluteHp
-              ltr
-              grayscale={idx >= MAX_FIGHTERS_PER_TEAM}
-              fighter={c}
-            />
-            {/* <div></div> */}
-          </div>
+    <DndContext
+      onDragEnd={handleDragEnd}
+      sensors={sensors}
+      modifiers={[restrictToFirstScrollableAncestor]}
+    >
+      <div className="mb-4">Your Team</div>
+      <div
+        className={cn(
+          "grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-2 gap-y-3 p-2"
+        )}
+      >
+        {map(myTeam, (c, idx) => (
+          <DroppableTeamSlot id={idx} key={c.id}>
+            <DraggableCatch c={c} />
+          </DroppableTeamSlot>
         ))}
       </div>
-    </>
+      <div className="mb-4">Your Catches</div>
+      <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-2 gap-y-3 p-2">
+        {map(catchesWithoutTeam, (c) => (
+          <DraggableCatch c={c} key={c.id} />
+        ))}
+      </div>
+    </DndContext>
   )
 }
