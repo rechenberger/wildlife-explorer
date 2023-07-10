@@ -1,4 +1,4 @@
-import { atom, useAtomValue, useSetAtom } from "jotai"
+import { useAtomValue, useSetAtom } from "jotai"
 import { find, flatMap, map } from "lodash-es"
 import { Scroll, ScrollText, Undo2 } from "lucide-react"
 import Image from "next/image"
@@ -11,6 +11,7 @@ import {
 } from "~/config"
 import { parseBattleLog } from "~/server/lib/battle/battleLogParser"
 import { api } from "~/utils/api"
+import { atomWithLocalStorage } from "~/utils/atomWithLocalStorage"
 import { replaceByWildlife } from "~/utils/replaceByWildlife"
 import { TypeBadge } from "./TypeBadge"
 import { cn } from "./cn"
@@ -36,7 +37,7 @@ const SHOW_FIGHTER_TYPES = true
 const SHOW_ABILITY = false
 const SHOW_NATURE = false
 
-export const showBattleLogAtom = atom(false)
+export const showBattleLogAtom = atomWithLocalStorage("showBattleLog", false)
 
 export const BattleView = ({
   onClose,
@@ -154,7 +155,7 @@ export const BattleView = ({
             title="Toggle battle log"
             className="hidden lg:block"
             onClick={() => {
-              setShowBattleLog((v) => !v)
+              setShowBattleLog(!showBattleLog)
             }}
           >
             {showBattleLog ? <ScrollText size={16} /> : <Scroll size={16} />}
