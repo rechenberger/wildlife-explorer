@@ -1,4 +1,4 @@
-import { Dex, PokemonSet, type Species } from "@pkmn/dex"
+import { Dex, type PokemonSet, type Species } from "@pkmn/dex"
 import { type Wildlife } from "@prisma/client"
 import { filter, map, orderBy, take } from "lodash-es"
 import { MAX_MOVES_PER_FIGHTER } from "~/config"
