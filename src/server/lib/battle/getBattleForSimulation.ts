@@ -24,15 +24,17 @@ export const getBattleForSimulation = async ({
           player: {
             include: {
               catches: {
+                where: {
+                  battleOrderPosition: {
+                    not: null,
+                  },
+                },
                 include: {
                   wildlife: true,
                 },
                 take: playerPartyLimit,
                 orderBy: {
-                  battleOrderPosition: {
-                    sort: "desc",
-                    nulls: "last",
-                  },
+                  battleOrderPosition: "asc",
                 },
               },
             },
