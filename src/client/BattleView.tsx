@@ -260,9 +260,16 @@ export const BattleView = ({
                               )}
                             >
                               <FighterChip
-                                fighter={fighter}
+                                fighter={{
+                                  ...fighter,
+                                  fighter: {
+                                    ...fighter.fighter,
+                                    ...fighter.fighterStatus,
+                                  },
+                                }}
                                 ltr={isMySide}
                                 showAbsoluteHp={isMySide}
+                                grayscale={!isActive && !justFainted}
                               />
                               <div
                                 className={cn(

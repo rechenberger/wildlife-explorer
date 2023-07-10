@@ -36,13 +36,9 @@ export const MyCatches = () => {
             <FighterChip
               showAbsoluteHp
               ltr
+              grayscale={idx >= MAX_FIGHTERS_PER_TEAM}
               fighter={{
                 wildlife: c.wildlife,
-                fighterStatus: {
-                  ...c.fighter,
-                  isActive: idx < MAX_FIGHTERS_PER_TEAM,
-                  justFainted: false,
-                },
                 fighter: {
                   ...c.fighter,
                   species: c.fighter.species.name,

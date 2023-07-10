@@ -10,26 +10,24 @@ export const FighterChip = ({
   fighter,
   ltr = true,
   showAbsoluteHp,
+  grayscale,
 }: {
   fighter: {
     fighter: {
       species: string
       level: number
       gender: string
-    }
-    fighterStatus: {
       hp: number
       hpMax: number
-      isActive: boolean
       status: string
-      justFainted: boolean
     }
     wildlife: Wildlife & { metadata: WildlifeMetadata }
   }
   ltr?: boolean
   showAbsoluteHp: boolean
+  grayscale?: boolean
 }) => {
-  const { hp, hpMax, isActive, status, justFainted } = fighter.fighterStatus
+  const { hp, hpMax, status } = fighter.fighter
   const hpFull = hp >= hpMax
   const fainted = hp <= 0
   const getName = useGetWildlifeName()
@@ -55,7 +53,7 @@ export const FighterChip = ({
               : fainted
               ? "ring-red-500"
               : "ring-amber-400",
-            !isActive && !justFainted && "grayscale"
+            grayscale && "grayscale"
           )}
         >
           {fighter.wildlife.metadata.taxonImageUrlSquare && (
