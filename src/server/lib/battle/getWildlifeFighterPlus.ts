@@ -39,6 +39,7 @@ export const getWildlifeFighterPlus = async (
     species: p.species.name,
     level: p.level,
     gender: p.gender,
+    nature: fighter.nature,
   }
 
   return fighterPlus

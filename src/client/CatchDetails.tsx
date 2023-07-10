@@ -1,4 +1,5 @@
 import { FighterChip } from "./FighterChip"
+import { FighterTypeBadges } from "./FighterTypeBadges"
 import { useMyCatch } from "./useCatches"
 import { useGetWildlifeName } from "./useGetWildlifeName"
 
@@ -17,8 +18,11 @@ export const CatchDetails = ({ catchId }: { catchId: string }) => {
   return (
     <>
       <div>{getName(c.wildlife)}</div>
-      <div className="p-2">
+      <div className="p-2 flex flex-col gap-4">
         <FighterChip showAbsoluteHp ltr fighter={c} />
+        <div className="flex flex-row gap-2">
+          <FighterTypeBadges fighter={c} showTypes showAbility showNature />
+        </div>
       </div>
     </>
   )

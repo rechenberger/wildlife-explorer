@@ -6,6 +6,24 @@ import { cn } from "./cn"
 import { Progress } from "./shadcn/ui/progress"
 import { useGetWildlifeName } from "./useGetWildlifeName"
 
+export type FighterForChip = {
+  fighter: {
+    species: string
+    level: number
+    gender: string
+    hp: number
+    hpMax: number
+    status: string
+    types: string[]
+    ability: {
+      name: string
+      desc: string
+    }
+    nature: string
+  }
+  wildlife: Wildlife & { metadata: WildlifeMetadata }
+}
+
 export const FighterChip = ({
   fighter,
   ltr = true,
@@ -13,17 +31,7 @@ export const FighterChip = ({
   grayscale,
   onClick,
 }: {
-  fighter: {
-    fighter: {
-      species: string
-      level: number
-      gender: string
-      hp: number
-      hpMax: number
-      status: string
-    }
-    wildlife: Wildlife & { metadata: WildlifeMetadata }
-  }
+  fighter: FighterForChip
   ltr?: boolean
   showAbsoluteHp: boolean
   grayscale?: boolean

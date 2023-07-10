@@ -16,17 +16,10 @@ import { atomWithLocalStorage } from "~/utils/atomWithLocalStorage"
 import { replaceByWildlife } from "~/utils/replaceByWildlife"
 import { CatchDetailsModal } from "./CatchDetailsModal"
 import { FighterChip } from "./FighterChip"
+import { FighterTypeBadges } from "./FighterTypeBadges"
 import { TypeBadge } from "./TypeBadge"
 import { cn } from "./cn"
-import {
-  abilityIcon,
-  catchIcon,
-  getTypeIcon,
-  itemIcon,
-  leaveIcon,
-  natureIcon,
-  runIcon,
-} from "./typeIcons"
+import { catchIcon, getTypeIcon, leaveIcon, runIcon } from "./typeIcons"
 import { useCatch } from "./useCatch"
 import { useGetWildlifeName } from "./useGetWildlifeName"
 import { usePlayer } from "./usePlayer"
@@ -286,49 +279,18 @@ export const BattleView = ({
                                   isMainSide ? "flex-row" : "flex-row-reverse"
                                 )}
                               >
-                                {SHOW_FIGHTER_TYPES && (
-                                  <>
-                                    {map(
-                                      fighter.fighterStatus.types,
-                                      (type) => {
-                                        const icon = getTypeIcon(type)
-                                        return (
-                                          <TypeBadge
-                                            key={type}
-                                            title={type}
-                                            icon={icon}
-                                            content={type}
-                                          />
-                                        )
-                                      }
-                                    )}
-                                  </>
-                                )}
-
-                                {SHOW_ABILITY && (
-                                  <TypeBadge
-                                    title={replaceByWildlife(
-                                      fighter.fighterStatus.ability.desc
-                                    )}
-                                    icon={abilityIcon}
-                                    content={fighter.fighterStatus.ability.name}
-                                  />
-                                )}
-                                {SHOW_NATURE && (
-                                  <TypeBadge
-                                    title={"Nature"}
-                                    icon={natureIcon}
-                                    content={fighter.fighter.nature}
-                                  />
-                                )}
-
-                                {fighter.fighter.item && (
-                                  <TypeBadge
-                                    title={fighter.fighter.item}
-                                    icon={itemIcon}
-                                    content={fighter.fighter.item}
-                                  />
-                                )}
+                                <FighterTypeBadges
+                                  fighter={{
+                                    ...fighter,
+                                    fighter: {
+                                      ...fighter.fighter,
+                                      ...fighter.fighterStatus,
+                                    },
+                                  }}
+                                  showTypes={SHOW_FIGHTER_TYPES}
+                                  showAbility={SHOW_ABILITY}
+                                  showNature={SHOW_NATURE}
+                                />
                               </div>
                             </div>
                             {/* <div className="hidden flex-1 md:flex" /> */}
