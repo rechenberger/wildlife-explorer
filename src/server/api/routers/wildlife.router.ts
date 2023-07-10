@@ -1,10 +1,20 @@
 import { type Wildlife } from "@prisma/client"
 import { TRPCError } from "@trpc/server"
 import { addSeconds, subSeconds } from "date-fns"
-import { chunk, filter, first, flatMap, map, uniqBy } from "lodash-es"
+import {
+  chunk,
+  filter,
+  first,
+  flatMap,
+  map,
+  orderBy,
+  take,
+  uniqBy,
+} from "lodash-es"
 import { z } from "zod"
 import {
   DEFAULT_DB_CHUNK_SIZE,
+  MAX_NUMBER_SEE_WILDLIFE,
   RADIUS_IN_KM_SCAN_WILDLIFE_BIG,
   RADIUS_IN_KM_SCAN_WILDLIFE_SMALL,
   RADIUS_IN_KM_SEE_WILDLIFE,
@@ -12,7 +22,7 @@ import {
 } from "~/config"
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc"
 import { findObservations } from "~/server/inaturalist/findObservations"
-import { calculateBoundingBox } from "~/server/lib/latLng"
+import { calcDistanceInMeter, calculateBoundingBox } from "~/server/lib/latLng"
 import { WildlifeMetadata } from "~/server/schema/WildlifeMetadata"
 import { playerProcedure } from "../middleware/playerProcedure"
 
@@ -26,12 +36,13 @@ export const wildlifeRouter = createTRPCRouter({
     }),
 
   nearMe: playerProcedure.query(async ({ ctx }) => {
+    console.time("nearMe")
     const bbox = calculateBoundingBox({
       center: ctx.player,
       radiusInKm: RADIUS_IN_KM_SEE_WILDLIFE,
     })
 
-    const wildlifeRaw = await ctx.prisma.wildlife.findMany({
+    let wildlifeRaw = await ctx.prisma.wildlife.findMany({
       where: {
         lat: {
           gte: bbox.minLat,
@@ -55,6 +66,12 @@ export const wildlifeRouter = createTRPCRouter({
         },
       },
     })
+    if (wildlifeRaw.length > MAX_NUMBER_SEE_WILDLIFE) {
+      wildlifeRaw = take(
+        orderBy(wildlifeRaw, (w) => calcDistanceInMeter(w, ctx.player), "asc"),
+        MAX_NUMBER_SEE_WILDLIFE
+      )
+    }
 
     let wildlife = map(wildlifeRaw, (w) => {
       return {
@@ -64,6 +81,7 @@ export const wildlifeRouter = createTRPCRouter({
       }
     })
     wildlife = filter(wildlife, (w) => !w.metadata.observationIsDead)
+    console.timeEnd("nearMe")
     return wildlife
   }),
 
