@@ -25,6 +25,8 @@ export const TypeBadge = ({
           icon.bgHalf,
           !icon.icon && "pl-1",
           onClick && "cursor-pointer",
+          "ring-inset",
+          onClick && icon.ringFull,
           // size === "big" && "text-sm",
           className
         )}
