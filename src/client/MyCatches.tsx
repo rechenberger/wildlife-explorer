@@ -20,7 +20,7 @@ import { usePlayer } from "./usePlayer"
 export const MyCatches = () => {
   const { playerId } = usePlayer()
 
-  const { myTeam, catchesWithoutTeam } = useMyTeam()
+  const { myTeam, catchesWithoutTeam, isLoading } = useMyTeam()
 
   const trpc = api.useContext()
 
@@ -109,6 +109,14 @@ export const MyCatches = () => {
       },
     })
   )
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center py-12 text-center text-sm opacity-60">
+        Loading...
+      </div>
+    )
+  }
 
   return (
     <DndContext

@@ -2,7 +2,7 @@ import { filter } from "lodash-es"
 import { useMyCatches } from "./useCatches"
 
 export const useMyTeam = () => {
-  const { myCatches } = useMyCatches()
+  const { myCatches, isLoading } = useMyCatches()
 
   const myTeam = filter(myCatches, (c) => c.battleOrderPosition !== null)
   const catchesWithoutTeam = filter(
@@ -13,5 +13,6 @@ export const useMyTeam = () => {
   return {
     myTeam,
     catchesWithoutTeam,
+    isLoading,
   }
 }
