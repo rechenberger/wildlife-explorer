@@ -1,7 +1,7 @@
 import NiceModal, { useModal } from "@ebay/nice-modal-react"
-import { SHOW_BATTLE_LOG } from "~/config"
+import { useAtomValue } from "jotai"
 import { BattleOverview } from "./BattleOverview"
-import { BattleView } from "./BattleView"
+import { BattleView, showBattleLogAtom } from "./BattleView"
 import { cn } from "./cn"
 import { Dialog, DialogContent } from "./shadcn/ui/dialog"
 import { ScrollArea } from "./shadcn/ui/scroll-area"
@@ -11,6 +11,7 @@ export const BattleViewModal = NiceModal.create<{
 }>(({ battleId }) => {
   // Use a hook to manage the modal state
   const modal = useModal()
+  const showBattleLog = useAtomValue(showBattleLogAtom)
 
   return (
     <Dialog
@@ -26,7 +27,7 @@ export const BattleViewModal = NiceModal.create<{
         className={cn(
           "border-0 bg-white pt-3",
           "rounded-t-lg max-sm:bottom-0 max-sm:top-auto max-sm:translate-y-0 max-sm:p-4 max-sm:pt-3",
-          !!battleId && SHOW_BATTLE_LOG && "lg:max-w-5xl"
+          !!battleId && showBattleLog && "lg:max-w-5xl"
         )}
         style={{
           paddingBottom: "calc(env(safe-area-inset-bottom) + 1.5rem)",

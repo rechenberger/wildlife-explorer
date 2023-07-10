@@ -1,5 +1,6 @@
+import { atom, useAtomValue, useSetAtom } from "jotai"
 import { find, flatMap, map } from "lodash-es"
-import { Undo2 } from "lucide-react"
+import { Scroll, ScrollText, Undo2 } from "lucide-react"
 import Image from "next/image"
 import { Fragment, useLayoutEffect, useRef } from "react"
 import { toast } from "sonner"
@@ -7,7 +8,6 @@ import {
   DEV_MODE,
   MAX_FIGHTERS_PER_TEAM,
   MAX_MOVES_PER_FIGHTER,
-  SHOW_BATTLE_LOG,
 } from "~/config"
 import { parseBattleLog } from "~/server/lib/battle/battleLogParser"
 import { api } from "~/utils/api"
@@ -36,6 +36,8 @@ const SHOW_FIGHTER_TYPES = true
 const SHOW_ABILITY = false
 const SHOW_NATURE = false
 
+export const showBattleLogAtom = atom(false)
+
 export const BattleView = ({
   onClose,
   battleId,
@@ -44,6 +46,9 @@ export const BattleView = ({
   battleId: string
 }) => {
   const { playerId } = usePlayer()
+
+  const showBattleLog = useAtomValue(showBattleLogAtom)
+  const setShowBattleLog = useSetAtom(showBattleLogAtom)
 
   const { data, isFetching: battleLoading } =
     api.battle.getBattleStatus.useQuery(
@@ -93,7 +98,7 @@ export const BattleView = ({
   useLayoutEffect(() => {
     if (!logRef.current) return
     logRef.current.scrollTop = logRef.current.scrollHeight
-  }, [battleLogAsHtml])
+  }, [battleLogAsHtml, showBattleLog])
 
   if (!data) {
     return (
@@ -129,20 +134,32 @@ export const BattleView = ({
         <h3 className="flex-1">
           {battleIsActive ? "Active Battle" : "Past Battle"}
         </h3>
-        {DEV_MODE && (
+
+        <div className="absolute right-12 top-4 shrink-0 flex flex-row gap-4">
+          {DEV_MODE && (
+            <button
+              title="Reset battle"
+              disabled={!battleIsActive}
+              onClick={() => {
+                if (!battleIsActive) return
+                reset({
+                  battleId,
+                })
+              }}
+            >
+              <Undo2 size={16} />
+            </button>
+          )}
           <button
-            className="absolute right-12 top-4 shrink-0"
-            disabled={!battleIsActive}
+            title="Toggle battle log"
+            className="hidden lg:block"
             onClick={() => {
-              if (!battleIsActive) return
-              reset({
-                battleId,
-              })
+              setShowBattleLog((v) => !v)
             }}
           >
-            <Undo2 size={16} />
+            {showBattleLog ? <ScrollText size={16} /> : <Scroll size={16} />}
           </button>
-        )}
+        </div>
       </div>
       {/* <pre>{JSON.stringify(activeBattle, null, 2)}</pre> */}
       {/* <pre>{JSON.stringify(battleStatus, null, 2)}</pre> */}
@@ -608,7 +625,7 @@ export const BattleView = ({
             )
           })}
         </div>
-        {SHOW_BATTLE_LOG && (
+        {showBattleLog && (
           <div className="flex-1 border-l p-2 hidden lg:flex flex-col h-[400px]">
             <div className="overflow-auto" ref={logRef}>
               <div
