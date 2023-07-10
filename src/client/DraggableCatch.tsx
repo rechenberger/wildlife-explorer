@@ -28,7 +28,7 @@ export const DraggableCatch = ({ c }: { c: MyCatch }) => {
         {...attributes}
         ref={setNodeRefDrag}
         key={c.id}
-        className="flex cursor-pointer flex-col p-1"
+        className="flex cursor-pointer flex-col p-1 touch-manipulation"
         onClick={(e) => {
           NiceModal.show(CatchDetailsModal, {
             catchId: c.id,

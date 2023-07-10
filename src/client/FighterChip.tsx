@@ -63,7 +63,7 @@ export const FighterChip = ({
             />
           )}
         </div>
-        <div className={cn("flex-1 overflow-hidden py-1")}>
+        <div className={cn("flex-1 overflow-hidden py-1 select-none")}>
           <div className="flex items-baseline gap-1">
             <div
               className="truncate text-xs font-bold"
