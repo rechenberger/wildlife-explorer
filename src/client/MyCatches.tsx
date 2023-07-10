@@ -72,7 +72,7 @@ export const MyCatches = () => {
     }
 
     setMyTeamBattleOrder({
-      teamIds: newTeamOrder,
+      catchIds: newTeamOrder,
       playerId,
     })
   }

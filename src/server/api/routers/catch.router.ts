@@ -1,5 +1,5 @@
 import { TRPCError } from "@trpc/server"
-import { map, slice } from "lodash-es"
+import { map, take } from "lodash-es"
 import { z } from "zod"
 import {
   CATCH_RATE_ALWAYS_LOOSE,
@@ -100,7 +100,7 @@ export const catchRouter = createTRPCRouter({
     }),
 
   setMyTeamBattleOrder: playerProcedure
-    .input(z.object({ teamIds: z.array(z.string()) }))
+    .input(z.object({ catchIds: z.array(z.string()) }))
     .mutation(async ({ ctx, input }) => {
       if (ctx.player.metadata?.activeBattleId) {
         throw new TRPCError({
@@ -109,7 +109,7 @@ export const catchRouter = createTRPCRouter({
         })
       }
 
-      const catchIdsMaxPerTeam = slice(input.teamIds, 0, MAX_FIGHTERS_PER_TEAM)
+      const catchIdsMaxPerTeam = take(input.catchIds, MAX_FIGHTERS_PER_TEAM)
 
       await ctx.prisma.catch.updateMany({
         where: {
@@ -120,11 +120,11 @@ export const catchRouter = createTRPCRouter({
         },
       })
 
-      map(catchIdsMaxPerTeam, async (teamId, index) => {
+      map(catchIdsMaxPerTeam, async (catchId, index) => {
         await ctx.prisma.catch.updateMany({
           where: {
             playerId: ctx.player.id,
-            id: teamId,
+            id: catchId,
           },
           data: {
             battleOrderPosition: index + 1,
