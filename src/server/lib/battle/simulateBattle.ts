@@ -12,6 +12,7 @@ import { MAX_FIGHTERS_PER_TEAM } from "~/config"
 import { createSeed, rngInt } from "~/utils/seed"
 import { getBattleForSimulation } from "./getBattleForSimulation"
 import { getWildlifeFighter } from "./getWildlifeFighter"
+import { transformWildlifeFighterPlus } from "./getWildlifeFighterPlus"
 
 export const simulateBattle = async ({
   prisma,
@@ -178,13 +179,15 @@ export const simulateBattle = async ({
           //   side.faintedThisTurn === p || side.faintedLastTurn === p
           const justFainted = side.faintedThisTurn === p
 
+          const fighterPlus = transformWildlifeFighterPlus({
+            pokemon: p,
+            pokemonSet: fighter!.fighter,
+          })
+
           return {
             ...fighter!,
-            fighterStatus: {
-              name: p.name,
-              hp: p.hp,
-              hpMax: p.maxhp,
-              status: p.status,
+            fighter: {
+              ...fighterPlus,
               statusState: p.statusState,
               isActive: p.isActive,
               justFainted,
@@ -218,8 +221,6 @@ export const simulateBattle = async ({
               }),
               lastMove: p.lastMove,
               lastDamage: p.lastDamage,
-              ability: Dex.abilities.get(p.ability),
-              types: p.types,
             },
           }
         })

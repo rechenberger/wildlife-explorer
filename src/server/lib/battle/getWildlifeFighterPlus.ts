@@ -25,13 +25,13 @@ export const getWildlifeFighterPlus = async (
     throw new Error("Could not build FighterPlus")
   }
 
-  return await transformWildlifeFighterPlus({
+  return transformWildlifeFighterPlus({
     pokemonSet: fighter,
     pokemon: p,
   })
 }
 
-export const transformWildlifeFighterPlus = async ({
+export const transformWildlifeFighterPlus = ({
   pokemonSet,
   pokemon,
 }: {

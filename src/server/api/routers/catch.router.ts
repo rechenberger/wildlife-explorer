@@ -132,9 +132,7 @@ export const catchRouter = createTRPCRouter({
     if (someCatch) {
       const status = battle?.battleStatus.sides
         .flatMap((s) => s.fighters)
-        ?.find(
-          (f) => !f.catch && f.wildlife.id === ctx.wildlife.id
-        )?.fighterStatus
+        ?.find((f) => !f.catch && f.wildlife.id === ctx.wildlife.id)?.fighter
       const hpPercent = status ? status.hp / status.hpMax : 1
 
       goal =

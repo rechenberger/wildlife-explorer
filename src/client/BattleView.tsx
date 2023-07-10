@@ -189,7 +189,7 @@ export const BattleView = ({
                   >
                     {map(side.fighters, (fighter) => {
                       const { isActive, moves, lastMove, justFainted } =
-                        fighter.fighterStatus
+                        fighter.fighter
                       if (!isActive && !BIG_INACTIVE_FIGHTER && !justFainted)
                         return null
                       return (
@@ -255,13 +255,7 @@ export const BattleView = ({
                               )}
                             >
                               <FighterChip
-                                fighter={{
-                                  ...fighter,
-                                  fighter: {
-                                    ...fighter.fighter,
-                                    ...fighter.fighterStatus,
-                                  },
-                                }}
+                                fighter={fighter}
                                 ltr={isMySide}
                                 showAbsoluteHp={isMySide}
                                 grayscale={!isActive && !justFainted}
@@ -280,13 +274,7 @@ export const BattleView = ({
                                 )}
                               >
                                 <FighterTypeBadges
-                                  fighter={{
-                                    ...fighter,
-                                    fighter: {
-                                      ...fighter.fighter,
-                                      ...fighter.fighterStatus,
-                                    },
-                                  }}
+                                  fighter={fighter}
                                   showTypes={SHOW_FIGHTER_TYPES}
                                   showAbility={SHOW_ABILITY}
                                   showNature={SHOW_NATURE}
@@ -410,7 +398,7 @@ export const BattleView = ({
                             )
                           }
 
-                          const { hp, hpMax } = fighter.fighterStatus
+                          const { hp, hpMax } = fighter.fighter
                           const hpFull = hp >= hpMax
                           const dead = hp <= 0
                           return (
