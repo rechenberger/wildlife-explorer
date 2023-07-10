@@ -39,6 +39,9 @@ export const battleRouter = createTRPCRouter({
     const caughtWildlife = await ctx.prisma.catch.findFirst({
       where: {
         playerId: ctx.player.id,
+        battleOrderPosition: {
+          not: null,
+        },
       },
     })
     if (!caughtWildlife) {
