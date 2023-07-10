@@ -1,6 +1,8 @@
+import NiceModal from "@ebay/nice-modal-react"
 import { map } from "lodash-es"
 import { MAX_FIGHTERS_PER_TEAM } from "~/config"
 import { api } from "~/utils/api"
+import { CatchDetailsModal } from "./CatchDetailsModal"
 import { FighterChip } from "./FighterChip"
 import { useMyCatches } from "./useCatches"
 import { usePlayer } from "./usePlayer"
@@ -26,10 +28,13 @@ export const MyCatches = () => {
             key={c.id}
             className="flex cursor-pointer flex-col p-1"
             onClick={() => {
-              if (!playerId) return
-              setBattleOrderPosition({
+              // if (!playerId) return
+              // setBattleOrderPosition({
+              //   catchId: c.id,
+              //   playerId,
+              // })
+              NiceModal.show(CatchDetailsModal, {
                 catchId: c.id,
-                playerId,
               })
             }}
           >

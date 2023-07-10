@@ -1,4 +1,3 @@
-import { Dex } from "@pkmn/dex"
 import {
   Battle,
   extractChannelMessages,
@@ -12,6 +11,7 @@ import { MAX_FIGHTERS_PER_TEAM } from "~/config"
 import { createSeed, rngInt } from "~/utils/seed"
 import { getBattleForSimulation } from "./getBattleForSimulation"
 import { getWildlifeFighter } from "./getWildlifeFighter"
+import { transformWildlifeFighterPlus } from "./getWildlifeFighterPlus"
 
 export const simulateBattle = async ({
   prisma,
@@ -178,48 +178,24 @@ export const simulateBattle = async ({
           //   side.faintedThisTurn === p || side.faintedLastTurn === p
           const justFainted = side.faintedThisTurn === p
 
+          const foe = first(p.foes())
+          const foeTypes = foe?.types
+
+          const fighterPlus = transformWildlifeFighterPlus({
+            pokemon: p,
+            pokemonSet: fighter!.fighter,
+            foeTypes,
+          })
+
           return {
             ...fighter!,
-            fighterStatus: {
-              name: p.name,
-              hp: p.hp,
-              hpMax: p.maxhp,
-              status: p.status,
+            fighter: {
+              ...fighterPlus,
               statusState: p.statusState,
               isActive: p.isActive,
               justFainted,
-              moves: p.moves.map((move) => {
-                const data = p.getMoveData(move)
-                const definition = Dex.moves.getByID(toID(data?.id))
-                const moveType = definition.type
-                const foe = first(p.foes())
-                const foeTypes = foe?.types
-                const immunity = foeTypes
-                  ? Dex.getImmunity(moveType, foeTypes)
-                  : null
-                const effectiveness = foeTypes
-                  ? Dex.getEffectiveness(moveType, foeTypes)
-                  : null
-
-                // console.log({
-                //   moveType,
-                //   foeTypes,
-                //   effectiveness,
-                //   immunity,
-                // })
-
-                return {
-                  name: data?.move || move,
-                  status: data,
-                  definition,
-                  effectiveness,
-                  immunity,
-                }
-              }),
               lastMove: p.lastMove,
               lastDamage: p.lastDamage,
-              ability: Dex.abilities.get(p.ability),
-              types: p.types,
             },
           }
         })

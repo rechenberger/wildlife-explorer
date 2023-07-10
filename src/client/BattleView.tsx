@@ -1,30 +1,22 @@
+import NiceModal from "@ebay/nice-modal-react"
 import { useAtomValue, useSetAtom } from "jotai"
 import { find, flatMap, map } from "lodash-es"
 import { Scroll, ScrollText, Undo2 } from "lucide-react"
 import Image from "next/image"
 import { Fragment, useLayoutEffect, useRef } from "react"
 import { toast } from "sonner"
-import {
-  DEV_MODE,
-  MAX_FIGHTERS_PER_TEAM,
-  MAX_MOVES_PER_FIGHTER,
-} from "~/config"
+import { DEV_MODE, MAX_FIGHTERS_PER_TEAM } from "~/config"
 import { parseBattleLog } from "~/server/lib/battle/battleLogParser"
 import { api } from "~/utils/api"
 import { atomWithLocalStorage } from "~/utils/atomWithLocalStorage"
-import { replaceByWildlife } from "~/utils/replaceByWildlife"
+import { fillWithNulls } from "~/utils/fillWithNulls"
+import { CatchDetailsModal } from "./CatchDetailsModal"
 import { FighterChip } from "./FighterChip"
+import { FighterMoves } from "./FighterMoves"
+import { FighterTypeBadges } from "./FighterTypeBadges"
 import { TypeBadge } from "./TypeBadge"
 import { cn } from "./cn"
-import {
-  abilityIcon,
-  catchIcon,
-  getTypeIcon,
-  itemIcon,
-  leaveIcon,
-  natureIcon,
-  runIcon,
-} from "./typeIcons"
+import { catchIcon, leaveIcon, runIcon } from "./typeIcons"
 import { useCatch } from "./useCatch"
 import { useGetWildlifeName } from "./useGetWildlifeName"
 import { usePlayer } from "./usePlayer"
@@ -193,8 +185,8 @@ export const BattleView = ({
                     )}
                   >
                     {map(side.fighters, (fighter) => {
-                      const { isActive, moves, lastMove, justFainted } =
-                        fighter.fighterStatus
+                      const { isActive, lastMove, justFainted } =
+                        fighter.fighter
                       if (!isActive && !BIG_INACTIVE_FIGHTER && !justFainted)
                         return null
                       return (
@@ -260,16 +252,17 @@ export const BattleView = ({
                               )}
                             >
                               <FighterChip
-                                fighter={{
-                                  ...fighter,
-                                  fighter: {
-                                    ...fighter.fighter,
-                                    ...fighter.fighterStatus,
-                                  },
-                                }}
+                                fighter={fighter}
                                 ltr={isMySide}
                                 showAbsoluteHp={isMySide}
                                 grayscale={!isActive && !justFainted}
+                                onClick={() => {
+                                  const catchId = fighter.catch?.id
+                                  if (!catchId) return
+                                  NiceModal.show(CatchDetailsModal, {
+                                    catchId,
+                                  })
+                                }}
                               />
                               <div
                                 className={cn(
@@ -277,140 +270,34 @@ export const BattleView = ({
                                   isMainSide ? "flex-row" : "flex-row-reverse"
                                 )}
                               >
-                                {SHOW_FIGHTER_TYPES && (
-                                  <>
-                                    {map(
-                                      fighter.fighterStatus.types,
-                                      (type) => {
-                                        const icon = getTypeIcon(type)
-                                        return (
-                                          <TypeBadge
-                                            key={type}
-                                            title={type}
-                                            icon={icon}
-                                            content={type}
-                                          />
-                                        )
-                                      }
-                                    )}
-                                  </>
-                                )}
-
-                                {SHOW_ABILITY && (
-                                  <TypeBadge
-                                    title={replaceByWildlife(
-                                      fighter.fighterStatus.ability.desc
-                                    )}
-                                    icon={abilityIcon}
-                                    content={fighter.fighterStatus.ability.name}
-                                  />
-                                )}
-                                {SHOW_NATURE && (
-                                  <TypeBadge
-                                    title={"Nature"}
-                                    icon={natureIcon}
-                                    content={fighter.fighter.nature}
-                                  />
-                                )}
-
-                                {fighter.fighter.item && (
-                                  <TypeBadge
-                                    title={fighter.fighter.item}
-                                    icon={itemIcon}
-                                    content={fighter.fighter.item}
-                                  />
-                                )}
+                                <FighterTypeBadges
+                                  fighter={fighter}
+                                  showTypes={SHOW_FIGHTER_TYPES}
+                                  showAbility={SHOW_ABILITY}
+                                  showNature={SHOW_NATURE}
+                                />
                               </div>
                             </div>
                             {/* <div className="hidden flex-1 md:flex" /> */}
                             {(isMySide || SHOW_ENEMY_MOVES) &&
                               (isActive || SHOW_INACTIVE_MOVES) && (
-                                <div className="grid flex-1 grid-cols-1 gap-1">
-                                  {map(
-                                    fillWithNulls(moves, MAX_MOVES_PER_FIGHTER),
-                                    (move, moveIdx) => {
-                                      // console.log(move)
-                                      const disabled =
-                                        !move ||
-                                        isLoading ||
-                                        !isActive ||
-                                        !isMySide ||
-                                        !battleIsActive
-                                      const typeIcon = move?.definition.type
-                                        ? getTypeIcon(move?.definition.type)
-                                        : null
-                                      return (
-                                        <button
-                                          key={moveIdx}
-                                          className={cn(
-                                            "truncate rounded-md bg-black/10 text-xs",
-                                            disabled && "opacity-20",
-                                            "flex items-center",
-                                            typeIcon?.bgHalf,
-                                            "ring-inset hover:ring",
-                                            typeIcon?.ringFull
-                                          )}
-                                          disabled={disabled}
-                                          onClick={() => {
-                                            if (!move) return
-                                            if (!playerId) return
-                                            makeChoice({
-                                              battleId,
-                                              playerId: playerId,
-                                              choice: `move ${moveIdx + 1}`,
-                                            })
-                                          }}
-                                        >
-                                          {typeIcon && (
-                                            <div
-                                              className={cn(
-                                                "flex h-full items-center justify-center rounded-md p-1.5",
-                                                typeIcon.bgFull
-                                              )}
-                                              title={typeIcon.name}
-                                            >
-                                              <typeIcon.icon className="h-4 w-4" />
-                                            </div>
-                                          )}
-                                          <div
-                                            className="flex flex-1 gap-3 overflow-hidden py-1 pl-1 pr-2 text-right"
-                                            title={replaceByWildlife(
-                                              move?.definition.desc || ""
-                                            )}
-                                          >
-                                            <div className="flex-1 truncate text-left">
-                                              {move?.name || "-"}
-                                            </div>
-                                            <div
-                                              className="hidden w-2 shrink-0 opacity-60 sm:block"
-                                              title={
-                                                readableEffectiveness(
-                                                  (move as any) ?? {}
-                                                ).desc
-                                              }
-                                            >
-                                              {
-                                                readableEffectiveness(
-                                                  (move as any) ?? {}
-                                                ).symbol
-                                              }
-                                            </div>
-                                            <div className="hidden w-5 shrink-0 opacity-60 sm:block">
-                                              {move?.definition.accuracy}
-                                            </div>
-                                            <div className="hidden w-5 shrink-0 opacity-60 sm:block">
-                                              {move?.definition.basePower}
-                                            </div>
-                                            <div className="w-8 shrink-0 opacity-60">
-                                              {move?.status?.pp}/
-                                              {move?.status?.maxpp}
-                                            </div>
-                                          </div>
-                                        </button>
-                                      )
-                                    }
-                                  )}
-                                </div>
+                                <FighterMoves
+                                  fighter={fighter}
+                                  disabled={
+                                    isLoading ||
+                                    !isActive ||
+                                    !isMySide ||
+                                    !battleIsActive
+                                  }
+                                  onClick={({ moveIdx }) => {
+                                    if (!playerId) return
+                                    makeChoice({
+                                      battleId,
+                                      playerId: playerId,
+                                      choice: `move ${moveIdx + 1}`,
+                                    })
+                                  }}
+                                />
                               )}
                           </div>
                         </Fragment>
@@ -439,7 +326,7 @@ export const BattleView = ({
                             )
                           }
 
-                          const { hp, hpMax } = fighter.fighterStatus
+                          const { hp, hpMax } = fighter.fighter
                           const hpFull = hp >= hpMax
                           const dead = hp <= 0
                           return (
@@ -554,62 +441,4 @@ export const BattleView = ({
       </div>
     </>
   )
-}
-
-function fillWithNulls<T>(arr: T[], length: number) {
-  const result: (T | null)[] = [...arr]
-  while (result.length < length) {
-    result.push(null)
-  }
-  return result
-}
-
-const readableEffectiveness = ({
-  effectiveness,
-  immunity,
-}: {
-  effectiveness?: 0 | -1 | 1 | -2 | 2 | null
-  immunity?: boolean | null
-}) => {
-  if (!immunity) {
-    return {
-      symbol: "x",
-      desc: "immune",
-    }
-  }
-  if (effectiveness === -2) {
-    return {
-      symbol: "--",
-      desc: "wet noodel",
-    }
-  }
-  if (effectiveness === -1) {
-    return {
-      symbol: "-",
-      desc: "not very effective",
-    }
-  }
-  if (effectiveness === 0) {
-    return {
-      symbol: "o",
-      desc: "effective",
-    }
-  }
-  if (effectiveness === 1) {
-    return {
-      symbol: "+",
-      desc: "super effective",
-    }
-  }
-  if (effectiveness === 2) {
-    return {
-      symbol: "++",
-      desc: "super duper effective",
-    }
-  }
-  console.warn("Unknown effectiveness", { effectiveness, immunity })
-  return {
-    symbol: "?",
-    desc: "???",
-  }
 }

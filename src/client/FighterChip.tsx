@@ -1,31 +1,29 @@
 import { type Wildlife } from "@prisma/client"
 import Image from "next/image"
 import { DEV_MODE } from "~/config"
+import { type WildlifeFighterPlus } from "~/server/lib/battle/getWildlifeFighterPlus"
 import { type WildlifeMetadata } from "~/server/schema/WildlifeMetadata"
 import { cn } from "./cn"
 import { Progress } from "./shadcn/ui/progress"
 import { useGetWildlifeName } from "./useGetWildlifeName"
+
+export type FighterForChip = {
+  fighter: WildlifeFighterPlus
+  wildlife: Wildlife & { metadata: WildlifeMetadata }
+}
 
 export const FighterChip = ({
   fighter,
   ltr = true,
   showAbsoluteHp,
   grayscale,
+  onClick,
 }: {
-  fighter: {
-    fighter: {
-      species: string
-      level: number
-      gender: string
-      hp: number
-      hpMax: number
-      status: string
-    }
-    wildlife: Wildlife & { metadata: WildlifeMetadata }
-  }
+  fighter: FighterForChip
   ltr?: boolean
   showAbsoluteHp: boolean
   grayscale?: boolean
+  onClick?: () => void
 }) => {
   const { hp, hpMax, status } = fighter.fighter
   const hpFull = hp >= hpMax
@@ -36,14 +34,10 @@ export const FighterChip = ({
       <div
         className={cn(
           "flex items-center gap-4 rounded-full bg-black/10",
-          ltr ? "flex-row" : "flex-row-reverse"
-          // 'ring',
-          // hpFull
-          //   ? "ring-green-500"
-          //   : dead
-          //   ? "ring-red-500"
-          //   : "ring-amber-400"
+          ltr ? "flex-row" : "flex-row-reverse",
+          onClick && "cursor-pointer"
         )}
+        onClick={onClick}
       >
         <div
           className={cn(
