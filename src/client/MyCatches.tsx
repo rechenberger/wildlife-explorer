@@ -1,8 +1,9 @@
-import NiceModal from "@ebay/nice-modal-react"
+import { DndContext, DragEndEvent } from "@dnd-kit/core"
 import { map } from "lodash-es"
 import { api } from "~/utils/api"
-import { CatchDetailsModal } from "./CatchDetailsModal"
-import { FighterChip } from "./FighterChip"
+import { cn } from "./cn"
+import { DoppableTeamSlot } from "./doppableTeamSlot"
+import { DraggableCatch } from "./draggableCatch"
 import { useMyTeam } from "./useMyTeam"
 import { usePlayer } from "./usePlayer"
 
@@ -37,14 +38,14 @@ export const MyCatches = () => {
     let newTeamOrder: string[] = []
 
     if (isSwapWithCurrentPosition) {
-      const catchIdAtPos = currentTeamOrder[position - 1]
+      const catchIdAtPos = currentTeamOrder[position]
       if (!catchIdAtPos) {
         newTeamOrder = [...currentTeamOrder, catchId]
       } else {
         const catchIdIsAlreadyInTeam = myTeam.some((c) => c.id === catchId)
 
         newTeamOrder = [...currentTeamOrder]
-        newTeamOrder[position - 1] = catchId
+        newTeamOrder[position] = catchId
 
         if (catchIdIsAlreadyInTeam) {
           newTeamOrder[currentTeamOrder.indexOf(catchId)] = catchIdAtPos
@@ -55,9 +56,9 @@ export const MyCatches = () => {
         (cId) => cId !== catchId
       )
       newTeamOrder = [
-        ...currentTeamWithoutCatchId.slice(0, position - 1),
+        ...currentTeamWithoutCatchId.slice(0, position),
         catchId,
-        ...currentTeamWithoutCatchId.slice(position - 1),
+        ...currentTeamWithoutCatchId.slice(position),
       ]
     }
 
@@ -67,64 +68,44 @@ export const MyCatches = () => {
     })
   }
 
+  const handleDragEnd = (event: DragEndEvent) => {
+    console.log({ event })
+
+    const { active, over } = event
+
+    if (!active || !over) return
+
+    const activeId = active.id as string
+    const overId = over.id as number
+
+    if (!activeId || typeof overId !== "number") return
+
+    addToTeamAtPos({
+      position: overId,
+      catchId: activeId,
+    })
+  }
+
   return (
-    <>
+    <DndContext onDragEnd={handleDragEnd}>
       <div className="mb-4">Your Team</div>
-      <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-2 gap-y-3 p-2">
+      <div
+        className={cn(
+          "grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-2 gap-y-3 p-2"
+        )}
+      >
         {map(myTeam, (c, idx) => (
-          <div
-            key={c.id}
-            className="flex cursor-pointer flex-col p-1"
-            onClick={(e) => {
-              if (e.shiftKey) {
-                NiceModal.show(CatchDetailsModal, {
-                  catchId: c.id,
-                })
-                return
-              }
-              const newPos = parseInt(prompt("Enter new position") as string)
-              addToTeamAtPos({
-                position: newPos,
-                catchId: c.id,
-              })
-            }}
-          >
-            <FighterChip showAbsoluteHp ltr grayscale={false} fighter={c} />
-            {/* <div></div> */}
-          </div>
+          <DoppableTeamSlot id={idx} key={c.id}>
+            <DraggableCatch c={c} />
+          </DoppableTeamSlot>
         ))}
       </div>
       <div className="mb-4">Your Catches</div>
       <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-2 gap-y-3 p-2">
         {map(catchesWithoutTeam, (c) => (
-          <div
-            key={c.id}
-            className="flex cursor-pointer flex-col p-1"
-            onClick={(e) => {
-              if (e.shiftKey) {
-                NiceModal.show(CatchDetailsModal, {
-                  catchId: c.id,
-                })
-                return
-              }
-
-              const newPos = parseInt(prompt("Enter new position") as string)
-              addToTeamAtPos({
-                position: newPos,
-                catchId: c.id,
-              })
-              // if (!playerId) return
-              // setBattleOrderPosition({
-              //   catchId: c.id,
-              //   playerId,
-              // })
-            }}
-          >
-            <FighterChip showAbsoluteHp ltr grayscale={true} fighter={c} />
-            {/* <div></div> */}
-          </div>
+          <DraggableCatch c={c} key={c.id} />
         ))}
       </div>
-    </>
+    </DndContext>
   )
 }

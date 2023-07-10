@@ -1,6 +1,8 @@
 import { api } from "~/utils/api"
 import { usePlayer } from "./usePlayer"
 
+export type MyCatch = ReturnType<typeof useMyCatch>[`myCatch`]
+
 export const useMyCatches = () => {
   const { playerId } = usePlayer()
   const { data: myCatches } = api.catch.getMyCatches.useQuery(
