@@ -1,4 +1,11 @@
-import { DndContext, type DragEndEvent } from "@dnd-kit/core"
+import {
+  DndContext,
+  PointerSensor,
+  TouchSensor,
+  useSensor,
+  useSensors,
+  type DragEndEvent,
+} from "@dnd-kit/core"
 import { map } from "lodash-es"
 import { z } from "zod"
 import { api } from "~/utils/api"
@@ -87,8 +94,21 @@ export const MyCatches = () => {
     })
   }
 
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 5,
+      },
+    }),
+    useSensor(TouchSensor, {
+      activationConstraint: {
+        distance: 5,
+      },
+    })
+  )
+
   return (
-    <DndContext onDragEnd={handleDragEnd}>
+    <DndContext onDragEnd={handleDragEnd} sensors={sensors}>
       <div className="mb-4">Your Team</div>
       <div
         className={cn(
