@@ -195,25 +195,25 @@ export const itemIcon = {
 export const leaveIcon = {
   name: "Leave",
   icon: ArrowRight,
-  bgFull: "bg-black/40 text-white",
-  bgHalf: "bg-black/20",
-  ringFull: "hover:ring ring-black",
+  bgFull: "bg-gray-500 text-white",
+  bgHalf: "bg-gray-500/50",
+  ringFull: "hover:ring ring-gray-500",
 }
 
 export const catchIcon = {
   name: "Catch",
   icon: HeartHandshake,
-  bgFull: "bg-black/40 text-white",
-  bgHalf: "bg-black/20",
-  ringFull: "hover:ring ring-black",
+  bgFull: "bg-gray-500 text-white",
+  bgHalf: "bg-gray-500/50",
+  ringFull: "hover:ring ring-gray-500",
 }
 
 export const runIcon = {
   name: "Run",
   icon: Milestone,
-  bgFull: "bg-black/40 text-white",
-  bgHalf: "bg-black/20",
-  ringFull: "hover:ring ring-black",
+  bgFull: "bg-gray-500 text-white",
+  bgHalf: "bg-gray-500/50",
+  ringFull: "hover:ring ring-gray-500",
 }
 
 export type TypeIcon = {
