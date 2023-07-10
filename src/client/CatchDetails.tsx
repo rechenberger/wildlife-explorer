@@ -21,7 +21,14 @@ export const CatchDetails = ({ catchId }: { catchId: string }) => {
     <>
       <div>{getName(c.wildlife)}</div>
       <div className="p-2 flex flex-col gap-4">
-        <FighterChip showAbsoluteHp ltr fighter={c} />
+        <div className="w-1/2">
+          <FighterChip showAbsoluteHp ltr fighter={c} />
+        </div>
+        <div className="flex flex-row gap-2 items-center text-xs font-bold opacity-60 mt-4">
+          <hr className="flex-1 border-black/60" />
+          <div>Types, Ability, Nature</div>
+          <hr className="flex-1 border-black/60" />
+        </div>
         <div className="flex flex-row gap-2">
           <FighterTypeBadges
             fighter={c}
@@ -32,7 +39,17 @@ export const CatchDetails = ({ catchId }: { catchId: string }) => {
             className="flex-1"
           />
         </div>
+        <div className="flex flex-row gap-2 items-center text-xs font-bold opacity-60 mt-4">
+          <hr className="flex-1 border-black/60" />
+          <div>Moves</div>
+          <hr className="flex-1 border-black/60" />
+        </div>
         <FighterMoves fighter={c} />
+        <div className="flex flex-row gap-2 items-center text-xs font-bold opacity-60 mt-4">
+          <hr className="flex-1 border-black/60" />
+          <div>Stats</div>
+          <hr className="flex-1 border-black/60" />
+        </div>
         <FighterStatsChart fighter={c} />
       </div>
     </>
