@@ -4,6 +4,6 @@ export const formatMeters = (meters: number) => {
   } else if (meters < 10_000) {
     return `${(meters / 1000).toFixed(1)}km`
   } else {
-    return `${(meters / 1000).toFixed(0)}km`
+    return `${Math.ceil(meters / 1000).toLocaleString()}km`
   }
 }

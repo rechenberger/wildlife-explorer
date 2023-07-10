@@ -1,5 +1,5 @@
-import { Dex, PokemonSet } from "@pkmn/dex"
-import { Battle, Pokemon, toID } from "@pkmn/sim"
+import { Dex, type PokemonSet } from "@pkmn/dex"
+import { Battle, toID, type Pokemon } from "@pkmn/sim"
 import { first } from "lodash-es"
 import {
   getWildlifeFighter,
@@ -70,6 +70,14 @@ export const transformWildlifeFighterPlus = ({
     level: p.level,
     gender: p.gender,
     nature: pokemonSet.nature,
+    stats: {
+      hp: p.maxhp,
+      atk: p.getStat("atk"),
+      def: p.getStat("def"),
+      spa: p.getStat("spa"),
+      spd: p.getStat("spd"),
+      spe: p.getStat("spe"),
+    },
   }
 
   return fighterPlus

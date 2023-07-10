@@ -2,8 +2,8 @@ import * as turf from "@turf/turf"
 import { type LatLng } from "~/server/schema/LatLng"
 
 export const calcDistanceInMeter = (from: LatLng, to: LatLng) => {
-  const fromTurf = turf.point([from.lat, from.lng])
-  const toTurf = turf.point([to.lat, to.lng])
+  const fromTurf = turf.point([from.lng, from.lat])
+  const toTurf = turf.point([to.lng, to.lat])
   const distanceInMeter = turf.distance(fromTurf, toTurf) * 1000 // convert to meters
   return distanceInMeter
 }

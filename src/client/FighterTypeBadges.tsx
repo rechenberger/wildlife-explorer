@@ -9,11 +9,15 @@ export const FighterTypeBadges = ({
   showTypes,
   showAbility,
   showNature,
+  size,
+  className,
 }: {
   fighter: FighterForChip
   showTypes?: boolean
   showAbility?: boolean
   showNature?: boolean
+  size?: "small" | "big"
+  className?: string
 }) => {
   return (
     <>
@@ -22,7 +26,14 @@ export const FighterTypeBadges = ({
           {map(fighter.fighter.types, (type) => {
             const icon = getTypeIcon(type)
             return (
-              <TypeBadge key={type} title={type} icon={icon} content={type} />
+              <TypeBadge
+                key={type}
+                title={type}
+                icon={icon}
+                content={type}
+                size={size}
+                className={className}
+              />
             )
           })}
         </>
@@ -33,6 +44,8 @@ export const FighterTypeBadges = ({
           title={replaceByWildlife(fighter.fighter.ability.desc)}
           icon={abilityIcon}
           content={fighter.fighter.ability.name}
+          size={size}
+          className={className}
         />
       )}
       {showNature && (
@@ -40,6 +53,8 @@ export const FighterTypeBadges = ({
           title={"Nature"}
           icon={natureIcon}
           content={fighter.fighter.nature}
+          size={size}
+          className={className}
         />
       )}
 
