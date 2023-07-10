@@ -1,4 +1,4 @@
-import { Dex, type Species } from "@pkmn/dex"
+import { Dex, PokemonSet, type Species } from "@pkmn/dex"
 import { type Wildlife } from "@prisma/client"
 import { filter, map, orderBy, take } from "lodash-es"
 import { MAX_MOVES_PER_FIGHTER } from "~/config"
@@ -94,9 +94,18 @@ export const getWildlifeFighter = async ({
     }),
   }
 
+  const evs = {
+    hp: 0,
+    atk: 0,
+    def: 0,
+    spa: 0,
+    spd: 0,
+    spe: 0,
+  }
+
   // console.log({ name, ivsSum: Object.values(ivs).reduce((a, b) => a + b) })
 
-  return {
+  const fighter: PokemonSet = {
     // ...base,
     name,
     species: speciesName,
@@ -104,18 +113,13 @@ export const getWildlifeFighter = async ({
     level,
     nature: nature.name,
     ivs,
-    evs: {
-      hp: 0,
-      atk: 0,
-      def: 0,
-      spa: 0,
-      spd: 0,
-      spe: 0,
-    },
+    evs,
     gender,
     item,
     ability,
   }
+
+  return fighter
 }
 
 async function getMovesInLearnset(species: Species) {
