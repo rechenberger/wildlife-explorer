@@ -69,7 +69,6 @@ export const simulateBattle = async ({
             return {
               fighter: await getWildlifeFighter({
                 wildlife: c.wildlife,
-                isCaught: true,
                 seed: c.seed,
                 idx,
               }),
@@ -83,7 +82,6 @@ export const simulateBattle = async ({
           {
             fighter: await getWildlifeFighter({
               wildlife: battleParticipant.wildlife,
-              isCaught: false,
               seed: createSeed(battleParticipant.wildlife),
               idx: 0,
             }),

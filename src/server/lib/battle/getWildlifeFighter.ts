@@ -6,17 +6,17 @@ import { type WildlifeMetadata } from "~/server/schema/WildlifeMetadata"
 import { rngInt, rngItem, rngItemWithWeights } from "~/utils/seed"
 import { taxonMappingByAncestors } from "./taxonMappingByAncestors"
 
+export type GetWildlifeFighterOptions = {
+  wildlife: Wildlife & { metadata: WildlifeMetadata }
+  seed: string
+  idx?: number
+}
+
 export const getWildlifeFighter = async ({
   wildlife,
-  // isCaught,
   seed,
   idx,
-}: {
-  wildlife: Wildlife & { metadata: WildlifeMetadata }
-  isCaught: boolean
-  seed: string
-  idx: number
-}) => {
+}: GetWildlifeFighterOptions) => {
   const mapping = taxonMappingByAncestors(wildlife.metadata.taxonAncestorIds)
   const speciesName = mapping.pokemon
   const species = Dex.species.get(speciesName)
@@ -57,7 +57,7 @@ export const getWildlifeFighter = async ({
   const item = ""
 
   // TODO: locale
-  const name = `#${idx + 1 || 1}: ${
+  const name = `${typeof idx === "number" ? `#${idx + 1}: ` : ""}${
     wildlife.metadata.taxonCommonName ?? wildlife.metadata.taxonName
   }`
 

@@ -1,14 +1,20 @@
-import { Dex, type PokemonSet } from "@pkmn/dex"
+import { Dex } from "@pkmn/dex"
 import { Battle, toID } from "@pkmn/sim"
 import { first, map } from "lodash-es"
+import {
+  getWildlifeFighter,
+  type GetWildlifeFighterOptions,
+} from "./getWildlifeFighter"
 
-export const getWildlifeFighterPlus = async (fighter: PokemonSet) => {
+export const getWildlifeFighterPlus = async (
+  options: GetWildlifeFighterOptions
+) => {
+  const fighter = await getWildlifeFighter(options)
+
   const battle = new Battle({
     formatid: toID("gen7randombattle"),
-    // formatid: toID("doubles"),
     seed: [13103, 5088, 17178, 48392], // TODO:
   })
-  // const pokemon = new Pokemon(fighter, battle.sides[0])
   battle.setPlayer("p1", {
     name: "Player",
     team: [fighter],

@@ -6,6 +6,7 @@ import {
   CATCH_RATE_FIRST_FIGHTER,
 } from "~/config"
 import { createTRPCRouter } from "~/server/api/trpc"
+import { getWildlifeFighterPlus } from "~/server/lib/battle/getWildlifeFighterPlus"
 import { simulateBattle } from "~/server/lib/battle/simulateBattle"
 import { respawnWildlife } from "~/server/lib/respawnWildlife"
 import { type PlayerMetadata } from "~/server/schema/PlayerMetadata"
@@ -42,7 +43,21 @@ export const catchRouter = createTRPCRouter({
         metadata: WildlifeMetadata.parse(c.wildlife.metadata),
       },
     }))
-    return catches
+
+    const catchesWithFighter = await Promise.all(
+      catches.map(async (c) => {
+        const fighter = await getWildlifeFighterPlus({
+          wildlife: c.wildlife,
+          seed: c.seed,
+        })
+        return {
+          ...c,
+          fighter,
+        }
+      })
+    )
+
+    return catchesWithFighter
   }),
 
   setBattleOrderPosition: playerProcedure
