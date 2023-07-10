@@ -6,6 +6,7 @@ import {
   PolarRadiusAxis,
   Radar,
   RadarChart,
+  ResponsiveContainer,
 } from "recharts"
 import { type FighterForChip } from "./FighterChip"
 
@@ -38,15 +39,16 @@ export const FighterStatsChart: React.FC<{ fighter: FighterForChip }> = ({
       A: fighter.fighter.stats.spa,
     },
   ]
-  const size = 450
+  const size = 400
 
   const CustomizedAxisTick = (props: any) => {
-    let { x, y, payload } = props
+    console.log(props)
+    let { x, y, payload, cx, cy } = props
 
     // move labels out
     const moveOutFactor = 1.2
-    x = (x - size / 2) * moveOutFactor + size / 2
-    y = (y - size / 2) * moveOutFactor + size / 2
+    x = (x - cx) * moveOutFactor + cx
+    y = (y - cy) * moveOutFactor + cy
 
     return (
       <g transform={`translate(${x},${y})`}>
@@ -68,25 +70,29 @@ export const FighterStatsChart: React.FC<{ fighter: FighterForChip }> = ({
   }
 
   return (
-    <RadarChart
-      cx={size / 2}
-      cy={size / 2}
-      outerRadius={150}
-      width={size}
-      height={size}
-      data={data}
-    >
-      <PolarGrid />
-      <PolarAngleAxis dataKey="subject" tick={CustomizedAxisTick} />
-      <PolarRadiusAxis />
-      <Radar
-        name={"Stats"}
-        dataKey="A"
-        stroke="#8884d8"
-        fill="#8884d8"
-        fillOpacity={0.6}
-      />
-      <LabelList dataKey="A" position="outside" />
-    </RadarChart>
+    <div className="w-full aspect-square">
+      <ResponsiveContainer width="100%" height="100%">
+        <RadarChart
+          cx={"50%"}
+          cy={"50%"}
+          outerRadius={"70%"}
+          width={size}
+          height={size}
+          data={data}
+        >
+          <PolarGrid />
+          <PolarAngleAxis dataKey="subject" tick={CustomizedAxisTick} />
+          <PolarRadiusAxis />
+          <Radar
+            name={"Stats"}
+            dataKey="A"
+            stroke="#8884d8"
+            fill="#8884d8"
+            fillOpacity={0.6}
+          />
+          <LabelList dataKey="A" position="outside" />
+        </RadarChart>
+      </ResponsiveContainer>
+    </div>
   )
 }
