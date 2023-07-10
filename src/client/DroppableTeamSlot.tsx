@@ -15,7 +15,7 @@ export const DroppableTeamSlot = ({
       ref={setNodeRef}
       className={cn(
         "transition-transform -my-1 -ml-2 py-1 pl-2 rounded-3xl",
-        isOver && "bg-gray-200"
+        isOver && "bg-gray-100"
       )}
     >
       {children}
