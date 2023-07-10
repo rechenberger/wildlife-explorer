@@ -11,6 +11,7 @@ export const FighterChip = ({
   ltr = true,
   showAbsoluteHp,
   grayscale,
+  onClick,
 }: {
   fighter: {
     fighter: {
@@ -26,6 +27,7 @@ export const FighterChip = ({
   ltr?: boolean
   showAbsoluteHp: boolean
   grayscale?: boolean
+  onClick?: () => void
 }) => {
   const { hp, hpMax, status } = fighter.fighter
   const hpFull = hp >= hpMax
@@ -36,14 +38,10 @@ export const FighterChip = ({
       <div
         className={cn(
           "flex items-center gap-4 rounded-full bg-black/10",
-          ltr ? "flex-row" : "flex-row-reverse"
-          // 'ring',
-          // hpFull
-          //   ? "ring-green-500"
-          //   : dead
-          //   ? "ring-red-500"
-          //   : "ring-amber-400"
+          ltr ? "flex-row" : "flex-row-reverse",
+          onClick && "cursor-pointer"
         )}
+        onClick={onClick}
       >
         <div
           className={cn(

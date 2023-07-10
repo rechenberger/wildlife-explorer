@@ -1,3 +1,4 @@
+import NiceModal from "@ebay/nice-modal-react"
 import { useAtomValue, useSetAtom } from "jotai"
 import { find, flatMap, map } from "lodash-es"
 import { Scroll, ScrollText, Undo2 } from "lucide-react"
@@ -13,6 +14,7 @@ import { parseBattleLog } from "~/server/lib/battle/battleLogParser"
 import { api } from "~/utils/api"
 import { atomWithLocalStorage } from "~/utils/atomWithLocalStorage"
 import { replaceByWildlife } from "~/utils/replaceByWildlife"
+import { CatchDetailsModal } from "./CatchDetailsModal"
 import { FighterChip } from "./FighterChip"
 import { TypeBadge } from "./TypeBadge"
 import { cn } from "./cn"
@@ -270,6 +272,13 @@ export const BattleView = ({
                                 ltr={isMySide}
                                 showAbsoluteHp={isMySide}
                                 grayscale={!isActive && !justFainted}
+                                onClick={() => {
+                                  const catchId = fighter.catch?.id
+                                  if (!catchId) return
+                                  NiceModal.show(CatchDetailsModal, {
+                                    catchId,
+                                  })
+                                }}
                               />
                               <div
                                 className={cn(
