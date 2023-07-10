@@ -69,7 +69,7 @@ export const FighterStatsChart: React.FC<{ fighter: FighterForChip }> = ({
   }
 
   return (
-    <div className="w-full aspect-square">
+    <div className="w-full aspect-square bg-gray-50 rounded-xl">
       <ResponsiveContainer width="100%" height="100%">
         <RadarChart
           cx={"50%"}
