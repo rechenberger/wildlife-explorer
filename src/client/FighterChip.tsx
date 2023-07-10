@@ -55,7 +55,8 @@ export const FighterChip = ({
               src={fighter.wildlife.metadata.taxonImageUrlSquare}
               className={cn(
                 "w-full object-cover object-center transition-transform",
-                fainted && "rotate-180"
+                fainted && "rotate-180",
+                "pointer-events-none"
               )}
               alt={"Observation"}
               unoptimized
