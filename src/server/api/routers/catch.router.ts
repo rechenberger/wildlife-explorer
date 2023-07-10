@@ -1,10 +1,14 @@
 import { TRPCError } from "@trpc/server"
 import { z } from "zod"
-import { CATCH_RATE_ALWAYS_LOOSE, CATCH_RATE_ALWAYS_WIN } from "~/config"
+import {
+  CATCH_RATE_ALWAYS_LOOSE,
+  CATCH_RATE_ALWAYS_WIN,
+  CATCH_RATE_FIRST_FIGHTER,
+} from "~/config"
 import { createTRPCRouter } from "~/server/api/trpc"
 import { simulateBattle } from "~/server/lib/battle/simulateBattle"
 import { respawnWildlife } from "~/server/lib/respawnWildlife"
-import { PlayerMetadata } from "~/server/schema/PlayerMetadata"
+import { type PlayerMetadata } from "~/server/schema/PlayerMetadata"
 import { WildlifeMetadata } from "~/server/schema/WildlifeMetadata"
 import { createSeed } from "~/utils/seed"
 import { playerProcedure } from "../middleware/playerProcedure"
@@ -88,6 +92,12 @@ export const catchRouter = createTRPCRouter({
       })
     }
 
+    const someCatch = await ctx.prisma.catch.findFirst({
+      where: {
+        playerId: ctx.player.id,
+      },
+    })
+
     const battleId = ctx.wildlifeBattleId
     const battle = battleId
       ? await simulateBattle({
@@ -96,18 +106,24 @@ export const catchRouter = createTRPCRouter({
         })
       : null
 
-    const status = battle?.battleStatus.sides
-      .flatMap((s) => s.fighters)
-      ?.find(
-        (f) => !f.catch && f.wildlife.id === ctx.wildlife.id
-      )?.fighterStatus
-    const hpPercent = status ? status.hp / status.hpMax : 1
+    let goal: number
+    if (someCatch) {
+      const status = battle?.battleStatus.sides
+        .flatMap((s) => s.fighters)
+        ?.find(
+          (f) => !f.catch && f.wildlife.id === ctx.wildlife.id
+        )?.fighterStatus
+      const hpPercent = status ? status.hp / status.hpMax : 1
 
-    const goal =
-      CATCH_RATE_ALWAYS_LOOSE +
-      hpPercent * (1 - CATCH_RATE_ALWAYS_WIN - CATCH_RATE_ALWAYS_LOOSE)
+      goal =
+        CATCH_RATE_ALWAYS_LOOSE +
+        hpPercent * (1 - CATCH_RATE_ALWAYS_WIN - CATCH_RATE_ALWAYS_LOOSE)
+    } else {
+      // FIRST CATCH: special case
+      goal = 1 - CATCH_RATE_FIRST_FIGHTER
+    }
     const luck = Math.random()
-    const isLucky = luck > goal
+    const isLucky = luck >= goal
 
     // Currently, we respawn wildlife even if the player is not lucky
     // Also the battle always ends after the catch
