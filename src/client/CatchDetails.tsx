@@ -1,5 +1,6 @@
 import { FighterChip } from "./FighterChip"
 import { FighterMoves } from "./FighterMoves"
+import { FighterStatsChart } from "./FighterStatsChart"
 import { FighterTypeBadges } from "./FighterTypeBadges"
 import { useMyCatch } from "./useCatches"
 import { useGetWildlifeName } from "./useGetWildlifeName"
@@ -25,6 +26,7 @@ export const CatchDetails = ({ catchId }: { catchId: string }) => {
           <FighterTypeBadges fighter={c} showTypes showAbility showNature />
         </div>
         <FighterMoves fighter={c} />
+        <FighterStatsChart />
       </div>
     </>
   )
