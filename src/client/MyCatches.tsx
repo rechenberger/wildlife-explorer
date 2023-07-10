@@ -6,6 +6,7 @@ import {
   useSensors,
   type DragEndEvent,
 } from "@dnd-kit/core"
+import { restrictToFirstScrollableAncestor } from "@dnd-kit/modifiers"
 import { map } from "lodash-es"
 import { z } from "zod"
 import { api } from "~/utils/api"
@@ -109,7 +110,11 @@ export const MyCatches = () => {
   )
 
   return (
-    <DndContext onDragEnd={handleDragEnd} sensors={sensors}>
+    <DndContext
+      onDragEnd={handleDragEnd}
+      sensors={sensors}
+      modifiers={[restrictToFirstScrollableAncestor]}
+    >
       <div className="mb-4">Your Team</div>
       <div
         className={cn(
