@@ -11,7 +11,7 @@ export const DraggableCatch = ({ c }: { c: MyCatch }) => {
     setNodeRef: setNodeRefDrag,
     transform,
   } = useDraggable({
-    id: c?.id || "0",
+    id: c.id,
   })
   const style = transform
     ? {
