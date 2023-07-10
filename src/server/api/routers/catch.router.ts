@@ -217,11 +217,23 @@ export const catchRouter = createTRPCRouter({
         message: "Wildlife escaped 💨",
       })
     }
+    const battleOrderCount = await ctx.prisma.catch.count({
+      where: {
+        playerId: ctx.player.id,
+        battleOrderPosition: {
+          not: null,
+        },
+      },
+    })
     await ctx.prisma.catch.create({
       data: {
         playerId: ctx.player.id,
         wildlifeId: ctx.wildlife.id,
         seed: createSeed(ctx.wildlife),
+        battleOrderPosition:
+          battleOrderCount < MAX_FIGHTERS_PER_TEAM
+            ? battleOrderCount + 1
+            : null,
       },
     })
 
