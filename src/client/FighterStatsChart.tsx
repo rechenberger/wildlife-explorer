@@ -42,7 +42,6 @@ export const FighterStatsChart: React.FC<{ fighter: FighterForChip }> = ({
   const size = 400
 
   const CustomizedAxisTick = (props: any) => {
-    console.log(props)
     let { x, y, payload, cx, cy } = props
 
     // move labels out
