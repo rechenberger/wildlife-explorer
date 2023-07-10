@@ -1,9 +1,10 @@
-import { DndContext, DragEndEvent } from "@dnd-kit/core"
+import { DndContext, type DragEndEvent } from "@dnd-kit/core"
 import { map } from "lodash-es"
+import { z } from "zod"
 import { api } from "~/utils/api"
+import { DraggableCatch } from "./DraggableCatch"
+import { DroppableTeamSlot } from "./DroppableTeamSlot"
 import { cn } from "./cn"
-import { DoppableTeamSlot } from "./doppableTeamSlot"
-import { DraggableCatch } from "./draggableCatch"
 import { useMyTeam } from "./useMyTeam"
 import { usePlayer } from "./usePlayer"
 
@@ -75,10 +76,10 @@ export const MyCatches = () => {
 
     if (!active || !over) return
 
-    const activeId = active.id as string
-    const overId = over.id as number
+    const activeId = z.string().parse(active.id)
+    const overId = z.number().parse(over.id)
 
-    if (!activeId || typeof overId !== "number") return
+    if (!activeId) return
 
     addToTeamAtPos({
       position: overId,
@@ -95,9 +96,9 @@ export const MyCatches = () => {
         )}
       >
         {map(myTeam, (c, idx) => (
-          <DoppableTeamSlot id={idx} key={c.id}>
+          <DroppableTeamSlot id={idx} key={c.id}>
             <DraggableCatch c={c} />
-          </DoppableTeamSlot>
+          </DroppableTeamSlot>
         ))}
       </div>
       <div className="mb-4">Your Catches</div>

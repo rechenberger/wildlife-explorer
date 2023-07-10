@@ -2,7 +2,7 @@ import { useDroppable } from "@dnd-kit/core"
 import { type PropsWithChildren } from "react"
 import { cn } from "./cn"
 
-export const DoppableTeamSlot = ({
+export const DroppableTeamSlot = ({
   children,
   id,
 }: PropsWithChildren<{ id: number }>) => {

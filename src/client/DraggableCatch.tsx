@@ -30,17 +30,9 @@ export const DraggableCatch = ({ c }: { c: MyCatch }) => {
         key={c.id}
         className="flex cursor-pointer flex-col p-1"
         onClick={(e) => {
-          if (e.shiftKey) {
-            NiceModal.show(CatchDetailsModal, {
-              catchId: c.id,
-            })
-            return
-          }
-          // const newPos = parseInt(prompt("Enter new position") as string)
-          // addToTeamAtPos({
-          //   position: newPos,
-          //   catchId: c.id,
-          // })
+          NiceModal.show(CatchDetailsModal, {
+            catchId: c.id,
+          })
         }}
       >
         <FighterChip showAbsoluteHp ltr grayscale={false} fighter={c} />
