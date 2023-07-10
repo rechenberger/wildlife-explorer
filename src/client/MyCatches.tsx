@@ -37,13 +37,7 @@ export const MyCatches = () => {
               showAbsoluteHp
               ltr
               grayscale={idx >= MAX_FIGHTERS_PER_TEAM}
-              fighter={{
-                wildlife: c.wildlife,
-                fighter: {
-                  ...c.fighter,
-                  species: c.fighter.species.name,
-                },
-              }}
+              fighter={c}
             />
             {/* <div></div> */}
           </div>
