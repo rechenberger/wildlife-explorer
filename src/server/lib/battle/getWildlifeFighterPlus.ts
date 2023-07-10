@@ -1,6 +1,6 @@
 import { Dex, PokemonSet } from "@pkmn/dex"
 import { Battle, Pokemon, toID } from "@pkmn/sim"
-import { first, map } from "lodash-es"
+import { first } from "lodash-es"
 import {
   getWildlifeFighter,
   type GetWildlifeFighterOptions,
@@ -34,21 +34,37 @@ export const getWildlifeFighterPlus = async (
 export const transformWildlifeFighterPlus = ({
   pokemonSet,
   pokemon,
+  foeTypes,
 }: {
   pokemonSet: PokemonSet
   pokemon: Pokemon
+  foeTypes?: string[]
 }) => {
   const p = pokemon
+
+  const moves = p.moves.map((move) => {
+    const data = p.getMoveData(move)
+    const definition = Dex.moves.getByID(toID(data?.id))
+    const moveType = definition.type
+    const immunity = foeTypes ? Dex.getImmunity(moveType, foeTypes) : null
+    const effectiveness = foeTypes
+      ? Dex.getEffectiveness(moveType, foeTypes)
+      : null
+
+    return {
+      name: data?.move || move,
+      status: data,
+      definition,
+      effectiveness,
+      immunity,
+    }
+  })
   const fighterPlus = {
     hp: p.hp,
     hpMax: p.hp,
     types: p.types,
     status: p.status,
-    moves: map(p.moves, (move) => {
-      const data = p.getMoveData(move)
-      const definition = Dex.moves.getByID(toID(data?.id))
-      return definition
-    }),
+    moves,
     ability: Dex.abilities.get(p.ability),
     species: p.species.name,
     level: p.level,

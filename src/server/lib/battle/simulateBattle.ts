@@ -1,4 +1,3 @@
-import { Dex } from "@pkmn/dex"
 import {
   Battle,
   extractChannelMessages,
@@ -179,9 +178,13 @@ export const simulateBattle = async ({
           //   side.faintedThisTurn === p || side.faintedLastTurn === p
           const justFainted = side.faintedThisTurn === p
 
+          const foe = first(p.foes())
+          const foeTypes = foe?.types
+
           const fighterPlus = transformWildlifeFighterPlus({
             pokemon: p,
             pokemonSet: fighter!.fighter,
+            foeTypes,
           })
 
           return {
@@ -191,34 +194,6 @@ export const simulateBattle = async ({
               statusState: p.statusState,
               isActive: p.isActive,
               justFainted,
-              moves: p.moves.map((move) => {
-                const data = p.getMoveData(move)
-                const definition = Dex.moves.getByID(toID(data?.id))
-                const moveType = definition.type
-                const foe = first(p.foes())
-                const foeTypes = foe?.types
-                const immunity = foeTypes
-                  ? Dex.getImmunity(moveType, foeTypes)
-                  : null
-                const effectiveness = foeTypes
-                  ? Dex.getEffectiveness(moveType, foeTypes)
-                  : null
-
-                // console.log({
-                //   moveType,
-                //   foeTypes,
-                //   effectiveness,
-                //   immunity,
-                // })
-
-                return {
-                  name: data?.move || move,
-                  status: data,
-                  definition,
-                  effectiveness,
-                  immunity,
-                }
-              }),
               lastMove: p.lastMove,
               lastDamage: p.lastDamage,
             },

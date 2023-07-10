@@ -1,26 +1,14 @@
 import { type Wildlife } from "@prisma/client"
 import Image from "next/image"
 import { DEV_MODE } from "~/config"
+import { type WildlifeFighterPlus } from "~/server/lib/battle/getWildlifeFighterPlus"
 import { type WildlifeMetadata } from "~/server/schema/WildlifeMetadata"
 import { cn } from "./cn"
 import { Progress } from "./shadcn/ui/progress"
 import { useGetWildlifeName } from "./useGetWildlifeName"
 
 export type FighterForChip = {
-  fighter: {
-    species: string
-    level: number
-    gender: string
-    hp: number
-    hpMax: number
-    status: string
-    types: string[]
-    ability: {
-      name: string
-      desc: string
-    }
-    nature: string
-  }
+  fighter: WildlifeFighterPlus
   wildlife: Wildlife & { metadata: WildlifeMetadata }
 }
 
