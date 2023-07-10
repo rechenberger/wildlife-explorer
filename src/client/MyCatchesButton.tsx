@@ -16,7 +16,7 @@ export const MyCatchesButton = () => {
           <HeartHandshake size={32} />
         </button>
         <div className="font-bold [text-shadow:_0px_0px_2px_rgb(0_0_0_/_80%)]">
-          Catches
+          Catch
         </div>
       </div>
     </>

@@ -1,5 +1,5 @@
 import NiceModal from "@ebay/nice-modal-react"
-import { User } from "lucide-react"
+import { Users } from "lucide-react"
 import { SocialOverviewModal } from "./SocialOverviewModal"
 import { cn } from "./cn"
 
@@ -13,10 +13,10 @@ export const SocialOverviewButton = () => {
             NiceModal.show(SocialOverviewModal, {})
           }}
         >
-          <User size={32} />
+          <Users size={32} />
         </button>
         <div className="font-bold [text-shadow:_0px_0px_2px_rgb(0_0_0_/_80%)]">
-          Social
+          Connect
         </div>
       </div>
     </>
