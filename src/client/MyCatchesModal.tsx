@@ -22,7 +22,7 @@ export const MyCatchesModal = NiceModal.create<{}>(({}) => {
         className={cn(
           "border-0 bg-white pt-3",
           "rounded-t-lg max-sm:bottom-0 max-sm:top-auto max-sm:translate-y-0 max-sm:p-4 max-sm:pt-3",
-          "max-w-6xl"
+          "md:max-w-2xl xl:max-w-6xl"
         )}
         style={{
           paddingBottom: "calc(env(safe-area-inset-bottom) + 1.5rem)",

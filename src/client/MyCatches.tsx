@@ -20,7 +20,7 @@ export const MyCatches = () => {
   return (
     <>
       <div className="mb-4">Your Catches</div>
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-2 gap-y-3 p-2">
+      <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-2 gap-y-3 p-2">
         {map(myCatches, (c, idx) => (
           <div
             key={c.id}
