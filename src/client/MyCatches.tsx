@@ -27,14 +27,17 @@ export const MyCatches = () => {
           <div
             key={c.id}
             className="flex cursor-pointer flex-col p-1"
-            onClick={() => {
-              // if (!playerId) return
-              // setBattleOrderPosition({
-              //   catchId: c.id,
-              //   playerId,
-              // })
-              NiceModal.show(CatchDetailsModal, {
+            onClick={(e) => {
+              if (e.shiftKey) {
+                NiceModal.show(CatchDetailsModal, {
+                  catchId: c.id,
+                })
+                return
+              }
+              if (!playerId) return
+              setBattleOrderPosition({
                 catchId: c.id,
+                playerId,
               })
             }}
           >

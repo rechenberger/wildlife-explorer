@@ -61,7 +61,7 @@ export const transformWildlifeFighterPlus = ({
   })
   const fighterPlus = {
     hp: p.hp,
-    hpMax: p.hp,
+    hpMax: p.maxhp,
     types: p.types,
     status: p.status,
     moves,
