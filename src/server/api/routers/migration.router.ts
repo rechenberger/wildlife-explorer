@@ -1,5 +1,5 @@
+import { MAX_FIGHTERS_PER_TEAM } from "~/config"
 import { createTRPCRouter } from "~/server/api/trpc"
-import { createSeed } from "~/utils/seed"
 import { devProcedure } from "../middleware/devProcedure"
 
 export const migrationRouter = createTRPCRouter({
@@ -12,33 +12,36 @@ export const migrationRouter = createTRPCRouter({
     return wildlife
   }),
 
-  seed: devProcedure.mutation(async ({ ctx }) => {
-    const catches = await ctx.prisma.catch.findMany({
-      select: {
-        id: true,
-        createdAt: true,
-        wildlife: {
-          select: {
-            observationId: true,
-          },
+  battleOrder: devProcedure.mutation(async ({ ctx }) => {
+    const players = await ctx.prisma.player.findMany({})
+    for (const player of players) {
+      const catches = await ctx.prisma.catch.findMany({
+        where: {
+          playerId: player.id,
         },
-      },
-    })
-
-    await Promise.all(
-      catches.map(async (catched) => {
+        orderBy: [
+          {
+            battleOrderPosition: {
+              sort: "desc",
+              nulls: "last",
+            },
+          },
+          {
+            createdAt: "desc",
+          },
+        ],
+      })
+      for (const [index, c] of catches.entries()) {
         await ctx.prisma.catch.update({
           where: {
-            id: catched.id,
+            id: c.id,
           },
           data: {
-            seed: createSeed({
-              observationId: catched.wildlife.observationId,
-              respawnsAt: catched.createdAt,
-            }),
+            battleOrderPosition:
+              index < MAX_FIGHTERS_PER_TEAM ? index + 1 : null,
           },
         })
-      })
-    )
+      }
+    }
   }),
 })
