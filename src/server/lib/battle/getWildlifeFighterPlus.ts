@@ -2,7 +2,7 @@ import { Dex, type PokemonSet } from "@pkmn/dex"
 import { Battle, toID } from "@pkmn/sim"
 import { first, map } from "lodash-es"
 
-export const getWildlifeFighterPlus = (fighter: PokemonSet) => {
+export const getWildlifeFighterPlus = async (fighter: PokemonSet) => {
   const battle = new Battle({
     formatid: toID("gen7randombattle"),
     // formatid: toID("doubles"),
@@ -34,3 +34,7 @@ export const getWildlifeFighterPlus = (fighter: PokemonSet) => {
 
   return fighterPlus
 }
+
+export type WildlifeFighterPlus = Awaited<
+  ReturnType<typeof getWildlifeFighterPlus>
+>
