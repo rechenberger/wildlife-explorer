@@ -42,7 +42,7 @@ export const BattleViewModal = NiceModal.create<{
             }}
           />
         ) : (
-          <ScrollArea className="max-h-[calc(100svh-100px)]">
+          <ScrollArea className="max-h-[calc(100svh-100px)] h-96">
             <BattleOverview />
           </ScrollArea>
         )}
