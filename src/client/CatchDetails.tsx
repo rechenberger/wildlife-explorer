@@ -12,6 +12,9 @@ export const CatchDetails = ({ catchId }: { catchId: string }) => {
 
   const getName = useGetWildlifeName()
 
+  // const mapSetCenter = useMapSetCenter()
+  // const setCurrentObservationId = useSetAtom(currentObservationIdAtom)
+
   if (!c)
     return (
       <div className="flex items-center justify-center py-12 text-center text-sm opacity-60">
@@ -32,7 +35,13 @@ export const CatchDetails = ({ catchId }: { catchId: string }) => {
           <div className="flex-1 max-w-[50%]">
             <FighterChip showAbsoluteHp ltr fighter={c} />
           </div>
-          <div className="text-right text-xs font-normal text-black opacity-60 inline-block">
+          <div
+            className="text-right text-xs font-normal text-black opacity-60 inline-block"
+            // onClick={() => {
+            //   setCurrentObservationId(c.wildlife.observationId)
+            //   mapSetCenter(c.wildlife)
+            // }}
+          >
             <div>
               <span>Caught&nbsp;</span>
               <Away
