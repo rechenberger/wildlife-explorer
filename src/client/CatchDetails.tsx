@@ -1,4 +1,6 @@
+import { useSetAtom } from "jotai"
 import { Away } from "./Away"
+import { currentObservationIdAtom } from "./CurrentObservation"
 import { FighterChip } from "./FighterChip"
 import { FighterMoves } from "./FighterMoves"
 import { FighterStatsChart } from "./FighterStatsChart"
@@ -6,14 +8,15 @@ import { FighterTypeBadges } from "./FighterTypeBadges"
 import { TimeAgo } from "./TimeAgo"
 import { useMyCatch } from "./useCatches"
 import { useGetWildlifeName } from "./useGetWildlifeName"
+import { useMapSetCenter } from "./useMapRef"
 
 export const CatchDetails = ({ catchId }: { catchId: string }) => {
   const { myCatch: c } = useMyCatch({ catchId })
 
   const getName = useGetWildlifeName()
 
-  // const mapSetCenter = useMapSetCenter()
-  // const setCurrentObservationId = useSetAtom(currentObservationIdAtom)
+  const mapSetCenter = useMapSetCenter()
+  const setCurrentObservationId = useSetAtom(currentObservationIdAtom)
 
   if (!c)
     return (
@@ -35,12 +38,12 @@ export const CatchDetails = ({ catchId }: { catchId: string }) => {
           <div className="flex-1 max-w-[50%]">
             <FighterChip showAbsoluteHp ltr fighter={c} />
           </div>
-          <div
+          <button
             className="text-right text-xs font-normal text-black opacity-60 inline-block"
-            // onClick={() => {
-            //   setCurrentObservationId(c.wildlife.observationId)
-            //   mapSetCenter(c.wildlife)
-            // }}
+            onClick={() => {
+              setCurrentObservationId(c.wildlife.observationId)
+              mapSetCenter(c.wildlife)
+            }}
           >
             <div>
               <span>Caught&nbsp;</span>
@@ -52,7 +55,7 @@ export const CatchDetails = ({ catchId }: { catchId: string }) => {
             <div className="">
               <TimeAgo date={c.createdAt} addSuffix={true} />
             </div>
-          </div>
+          </button>
         </div>
 
         <div className="flex flex-row gap-2 items-center text-xs font-bold opacity-60 mt-4">
