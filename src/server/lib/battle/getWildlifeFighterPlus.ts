@@ -59,6 +59,30 @@ export const transformWildlifeFighterPlus = ({
       immunity,
     }
   })
+
+  let stats = {
+    hp: p.maxhp,
+    atk: 0,
+    def: 0,
+    spa: 0,
+    spd: 0,
+    spe: 0,
+  }
+  try {
+    stats = {
+      hp: p.maxhp,
+      atk: p.getStat("atk"),
+      def: p.getStat("def"),
+      spa: p.getStat("spa"),
+      spd: p.getStat("spd"),
+      spe: p.getStat("spe"),
+    }
+  } catch (error) {
+    // Happens on Moorschneehuhn (Torchic 18 M) with ability blaze
+    console.error(p)
+    console.error("ERROR Getting stats:", error)
+  }
+
   const fighterPlus = {
     hp: p.hp,
     hpMax: p.maxhp,
@@ -70,14 +94,7 @@ export const transformWildlifeFighterPlus = ({
     level: p.level,
     gender: p.gender,
     nature: pokemonSet.nature,
-    stats: {
-      hp: p.maxhp,
-      atk: p.getStat("atk"),
-      def: p.getStat("def"),
-      spa: p.getStat("spa"),
-      spd: p.getStat("spd"),
-      spe: p.getStat("spe"),
-    },
+    stats,
   }
 
   return fighterPlus
