@@ -13,6 +13,7 @@ import {
 import { api } from "~/utils/api"
 import { Away } from "./Away"
 import { BattleViewModal } from "./BattleViewModal"
+import { FighterChip } from "./FighterChip"
 import { TimeAgo } from "./TimeAgo"
 import { useWildlife } from "./WildlifeMarkers"
 import { cn } from "./cn"
@@ -51,6 +52,16 @@ export const CurrentObservation = () => {
     })
 
   const getName = useGetWildlifeName()
+
+  const { data: fighter } = api.wildlife.getFighter.useQuery(
+    {
+      playerId: playerId!,
+      wildlifeId: w?.id!,
+    },
+    {
+      enabled: !!w && !!playerId,
+    }
+  )
 
   if (!w) return null
 
@@ -144,7 +155,7 @@ export const CurrentObservation = () => {
             <JsonViewer value={w} theme="light" />
           </div>
         )}
-        <div className="-my-2 flex flex-row flex-wrap items-center justify-center gap-2">
+        <div className="flex flex-row flex-wrap items-start justify-center gap-2 h-[44px]">
           {w.metadata.observationUrl && (
             <Link
               href={w.metadata.observationUrl}
@@ -164,6 +175,19 @@ export const CurrentObservation = () => {
               <ExternalLink size={12} />
               <div>Wikipedia</div>
             </Link>
+          )}
+          <div className="flex-1" />
+          {fighter && (
+            <>
+              <FighterChip
+                fighter={{
+                  fighter: fighter.fighter,
+                  wildlife: w,
+                }}
+                showAbsoluteHp={false}
+                ltr={false}
+              />
+            </>
           )}
         </div>
         <div className="flex flex-row flex-wrap items-center justify-center gap-2">
