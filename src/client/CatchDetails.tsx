@@ -1,6 +1,7 @@
 import { useSetAtom } from "jotai"
 import { Away } from "./Away"
 import { currentObservationIdAtom } from "./CurrentObservation"
+import { DividerHeading } from "./DividerHeading"
 import { FighterChip } from "./FighterChip"
 import { FighterMoves } from "./FighterMoves"
 import { FighterStatsChart } from "./FighterStatsChart"
@@ -29,11 +30,6 @@ export const CatchDetails = ({ catchId }: { catchId: string }) => {
     <>
       <div>{getName(c.wildlife)}</div>
       <div className="p-2 flex flex-col gap-4">
-        <div className="flex flex-row gap-2 items-center text-xs font-bold opacity-60 mt-4">
-          <hr className="flex-1 border-black/60" />
-          <div>Wildlife</div>
-          <hr className="flex-1 border-black/60" />
-        </div>
         <div className="flex flex-row gap-4 items-center justify-between">
           <div className="flex-1 max-w-[50%]">
             <FighterChip showAbsoluteHp ltr fighter={c} />
@@ -58,11 +54,7 @@ export const CatchDetails = ({ catchId }: { catchId: string }) => {
           </button>
         </div>
 
-        <div className="flex flex-row gap-2 items-center text-xs font-bold opacity-60 mt-4">
-          <hr className="flex-1 border-black/60" />
-          <div>Types, Ability, Nature</div>
-          <hr className="flex-1 border-black/60" />
-        </div>
+        <DividerHeading>Types, Ability, Nature</DividerHeading>
         <div className="flex flex-row gap-2">
           <FighterTypeBadges
             fighter={c}
@@ -74,18 +66,10 @@ export const CatchDetails = ({ catchId }: { catchId: string }) => {
           />
         </div>
 
-        <div className="flex flex-row gap-2 items-center text-xs font-bold opacity-60 mt-4">
-          <hr className="flex-1 border-black/60" />
-          <div>Moves</div>
-          <hr className="flex-1 border-black/60" />
-        </div>
+        <DividerHeading>Moves</DividerHeading>
         <FighterMoves fighter={c} />
 
-        <div className="flex flex-row gap-2 items-center text-xs font-bold opacity-60 mt-4">
-          <hr className="flex-1 border-black/60" />
-          <div>Stats</div>
-          <hr className="flex-1 border-black/60" />
-        </div>
+        <DividerHeading>Stats</DividerHeading>
         <FighterStatsChart fighter={c} />
       </div>
     </>

@@ -10,6 +10,7 @@ import { restrictToFirstScrollableAncestor } from "@dnd-kit/modifiers"
 import { map } from "lodash-es"
 import { z } from "zod"
 import { api } from "~/utils/api"
+import { DividerHeading } from "./DividerHeading"
 import { DraggableCatch } from "./DraggableCatch"
 import { DroppableTeamSlot } from "./DroppableTeamSlot"
 import { cn } from "./cn"
@@ -115,7 +116,8 @@ export const MyCatches = () => {
       sensors={sensors}
       modifiers={[restrictToFirstScrollableAncestor]}
     >
-      <div className="mb-4">Your Team</div>
+      <DividerHeading>Your Team</DividerHeading>
+
       <div
         className={cn(
           "grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-2 gap-y-3 p-2"
@@ -127,7 +129,7 @@ export const MyCatches = () => {
           </DroppableTeamSlot>
         ))}
       </div>
-      <div className="mb-4">Your Catches</div>
+      <DividerHeading>Your Catches</DividerHeading>
       <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-2 gap-y-3 p-2">
         {map(catchesWithoutTeam, (c) => (
           <DraggableCatch c={c} key={c.id} />
