@@ -36,6 +36,9 @@ export const getWildlifeFighterPlus = async (
       return definition
     }),
     ability: Dex.abilities.get(p.ability),
+    species: p.species,
+    level: p.level,
+    gender: p.gender,
   }
 
   return fighterPlus
