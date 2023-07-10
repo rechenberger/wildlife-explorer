@@ -9,7 +9,9 @@ import {
 import { restrictToFirstScrollableAncestor } from "@dnd-kit/modifiers"
 import { map } from "lodash-es"
 import { z } from "zod"
+import { MAX_FIGHTERS_PER_TEAM } from "~/config"
 import { api } from "~/utils/api"
+import { fillWithNulls } from "~/utils/fillWithNulls"
 import { DividerHeading } from "./DividerHeading"
 import { DraggableCatch } from "./DraggableCatch"
 import { DroppableTeamSlot } from "./DroppableTeamSlot"
@@ -128,12 +130,18 @@ export const MyCatches = () => {
 
       <div
         className={cn(
-          "grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-2 gap-y-3 p-2"
+          "grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-2 gap-y-3 p-2 items-center"
         )}
       >
-        {map(myTeam, (c, idx) => (
-          <DroppableTeamSlot id={idx} key={c.id}>
-            <DraggableCatch c={c} />
+        {map(fillWithNulls(myTeam, MAX_FIGHTERS_PER_TEAM), (c, idx) => (
+          <DroppableTeamSlot id={idx} key={c?.id ?? idx}>
+            {c ? (
+              <DraggableCatch c={c} />
+            ) : (
+              <div className="bg-gray-100 h-12 rounded-3xl flex items-center justify-center text-xs text-black/60">
+                Slot #{idx + 1}
+              </div>
+            )}
           </DroppableTeamSlot>
         ))}
       </div>
