@@ -1,5 +1,5 @@
-import { Dex } from "@pkmn/dex"
-import { Battle, toID } from "@pkmn/sim"
+import { Dex, PokemonSet } from "@pkmn/dex"
+import { Battle, Pokemon, toID } from "@pkmn/sim"
 import { first, map } from "lodash-es"
 import {
   getWildlifeFighter,
@@ -25,6 +25,20 @@ export const getWildlifeFighterPlus = async (
     throw new Error("Could not build FighterPlus")
   }
 
+  return await transformWildlifeFighterPlus({
+    pokemonSet: fighter,
+    pokemon: p,
+  })
+}
+
+export const transformWildlifeFighterPlus = async ({
+  pokemonSet,
+  pokemon,
+}: {
+  pokemonSet: PokemonSet
+  pokemon: Pokemon
+}) => {
+  const p = pokemon
   const fighterPlus = {
     hp: p.hp,
     hpMax: p.hp,
@@ -39,12 +53,12 @@ export const getWildlifeFighterPlus = async (
     species: p.species.name,
     level: p.level,
     gender: p.gender,
-    nature: fighter.nature,
+    nature: pokemonSet.nature,
   }
 
   return fighterPlus
 }
 
 export type WildlifeFighterPlus = Awaited<
-  ReturnType<typeof getWildlifeFighterPlus>
+  ReturnType<typeof transformWildlifeFighterPlus>
 >
