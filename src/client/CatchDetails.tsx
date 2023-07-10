@@ -26,7 +26,7 @@ export const CatchDetails = ({ catchId }: { catchId: string }) => {
           <FighterTypeBadges fighter={c} showTypes showAbility showNature />
         </div>
         <FighterMoves fighter={c} />
-        <FighterStatsChart />
+        <FighterStatsChart fighter={c} />
       </div>
     </>
   )
