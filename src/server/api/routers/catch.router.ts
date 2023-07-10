@@ -67,6 +67,13 @@ export const catchRouter = createTRPCRouter({
       })
     )
     .mutation(async ({ ctx, input }) => {
+      if (ctx.player.metadata?.activeBattleId) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Cannot change battle order while in a battle",
+        })
+      }
+
       const maxBattleOrderPositionData = await ctx.prisma.catch.aggregate({
         where: {
           playerId: ctx.player.id,
