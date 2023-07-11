@@ -91,6 +91,7 @@ export const transformWildlifeFighterPlus = ({
     moves,
     ability: Dex.abilities.get(p.ability),
     species: p.species.name,
+    speciesDefinition: p.species,
     level: p.level,
     gender: p.gender,
     nature: pokemonSet.nature,

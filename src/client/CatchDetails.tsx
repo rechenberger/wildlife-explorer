@@ -1,4 +1,6 @@
 import { useSetAtom } from "jotai"
+import dynamic from "next/dynamic"
+import { DEV_MODE } from "~/config"
 import { Away } from "./Away"
 import { currentObservationIdAtom } from "./CurrentObservation"
 import { DividerHeading } from "./DividerHeading"
@@ -10,6 +12,8 @@ import { TimeAgo } from "./TimeAgo"
 import { useMyCatch } from "./useCatches"
 import { useGetWildlifeName } from "./useGetWildlifeName"
 import { useMapSetCenter } from "./useMapRef"
+
+const JsonViewer = dynamic(() => import("../client/JsonViewer"), { ssr: false })
 
 export const CatchDetails = ({
   catchId,
@@ -84,6 +88,12 @@ export const CatchDetails = ({
           <>
             <DividerHeading>Stats</DividerHeading>
             <FighterStatsChart fighter={c} />
+          </>
+        )}
+        {!tiny && DEV_MODE && (
+          <>
+            <DividerHeading>JSON</DividerHeading>
+            <JsonViewer value={c} collapsed />
           </>
         )}
       </div>
