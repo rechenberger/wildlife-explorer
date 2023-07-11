@@ -148,7 +148,7 @@ model Battle {
 }
 
 enum BattleStatus {
-    // PENDING
+    INVITING
     IN_PROGRESS
     FINISHED
     CANCELLED
