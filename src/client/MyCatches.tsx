@@ -8,6 +8,7 @@ import {
 } from "@dnd-kit/core"
 import { restrictToFirstScrollableAncestor } from "@dnd-kit/modifiers"
 import { map } from "lodash-es"
+import { toast } from "sonner"
 import { z } from "zod"
 import { MAX_FIGHTERS_PER_TEAM } from "~/config"
 import { api } from "~/utils/api"
@@ -84,7 +85,10 @@ export const MyCatches = () => {
   }
 
   const handleDragEnd = (event: DragEndEvent) => {
-    if (disabled) return
+    if (disabled) {
+      toast.error("That was too fast, please try again.")
+      return
+    }
     const { active, over } = event
 
     if (!active || !over) return
@@ -146,7 +150,7 @@ export const MyCatches = () => {
         {map(fillWithNulls(myTeam, MAX_FIGHTERS_PER_TEAM), (c, idx) => (
           <DroppableTeamSlot id={idx} key={c?.id ?? idx}>
             {c ? (
-              <DraggableCatch c={c} disabled={disabled} />
+              <DraggableCatch c={c} />
             ) : (
               <div className="bg-gray-100 h-12 rounded-3xl flex items-center justify-center text-xs text-black/60">
                 Slot #{idx + 1}
