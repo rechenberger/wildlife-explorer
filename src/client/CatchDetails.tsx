@@ -30,6 +30,7 @@ export const CatchDetails = ({ catchId }: { catchId: string }) => {
     <>
       <div>{getName(c.wildlife)}</div>
       <div className="p-2 flex flex-col gap-4">
+        <DividerHeading>Wildlife</DividerHeading>
         <div className="flex flex-row gap-4 items-center justify-between">
           <div className="flex-1 max-w-[50%]">
             <FighterChip showAbsoluteHp ltr fighter={c} />
