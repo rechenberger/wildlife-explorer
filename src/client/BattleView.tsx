@@ -1,7 +1,7 @@
 import NiceModal from "@ebay/nice-modal-react"
 import { useAtomValue, useSetAtom } from "jotai"
 import { find, flatMap, map } from "lodash-es"
-import { Scroll, ScrollText, Swords, Undo2 } from "lucide-react"
+import { Scroll, ScrollText, Undo2 } from "lucide-react"
 import Image from "next/image"
 import { Fragment, useLayoutEffect, useRef } from "react"
 import { toast } from "sonner"
@@ -10,20 +10,14 @@ import { parseBattleLog } from "~/server/lib/battle/battleLogParser"
 import { api } from "~/utils/api"
 import { atomWithLocalStorage } from "~/utils/atomWithLocalStorage"
 import { fillWithNulls } from "~/utils/fillWithNulls"
+import { BattleViewPvp } from "./BattleViewPvp"
 import { CatchDetailsModal } from "./CatchDetailsModal"
-import { DividerHeading } from "./DividerHeading"
 import { FighterChip } from "./FighterChip"
 import { FighterMoves } from "./FighterMoves"
 import { FighterTypeBadges } from "./FighterTypeBadges"
 import { TypeBadge } from "./TypeBadge"
 import { cn } from "./cn"
-import {
-  catchIcon,
-  leaveIcon,
-  readyIcon,
-  runIcon,
-  waitingIcon,
-} from "./typeIcons"
+import { catchIcon, leaveIcon, runIcon } from "./typeIcons"
 import { useCatch } from "./useCatch"
 import { useGetWildlifeName } from "./useGetWildlifeName"
 import { usePlayer } from "./usePlayer"
@@ -123,32 +117,7 @@ export const BattleView = ({
   }
 
   if (!pvpStatus.allReady) {
-    return (
-      <div className="flex items-center justify-center py-48 text-center gap-4">
-        <Swords className="w-8 h-8" />
-        <div>PvP Battle</div>
-
-        <div className="flex flex-col gap-4">
-          {map(pvpStatus.players, (p, idx) => (
-            <Fragment key={p.id}>
-              {idx > 0 && <DividerHeading className="m-0">vs.</DividerHeading>}
-              <div className="flex flex-col gap-2">
-                <div>{p.name}</div>
-                <TypeBadge
-                  icon={p.isReady ? readyIcon : waitingIcon}
-                  content={p.isReady ? "Ready!" : "Waiting..."}
-                  size="big"
-                />
-              </div>
-            </Fragment>
-          ))}
-        </div>
-
-        <div className="mt-8 flex flex-row items-end">
-          <TypeBadge icon={runIcon} content={"Cancel"} size="big" />
-        </div>
-      </div>
-    )
+    return <BattleViewPvp battleId={battleId} pvpStatus={pvpStatus} />
   }
 
   const { battleStatus, status } = data
