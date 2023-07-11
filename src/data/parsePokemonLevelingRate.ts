@@ -1,24 +1,8 @@
 import * as fs from "fs"
 import * as readline from "readline"
-interface PokemonLevelTypeObj {
+interface PokemonLevelingRateObj {
   num?: number
-  levelTypeString?: string
-  levelTypeMapped?: number
-}
-
-const levelTypeMap = {
-  "Medium Fast": 1,
-  Erratic: 2,
-  Fluctuating: 3,
-  "Medium Slow": 4,
-  Fast: 5,
-  Slow: 6,
-}
-
-const mapLevelType = (str: string | undefined) => {
-  if (!str) return 0
-  const num = levelTypeMap[str]
-  return isNaN(num) ? 0 : num
+  levelingRate?: string
 }
 
 const safeParseInt = (str: string | undefined) => {
@@ -28,27 +12,26 @@ const safeParseInt = (str: string | undefined) => {
 }
 
 async function processLineByLine() {
-  const fileStream = fs.createReadStream("pokemonLevelTypeRaw.txt")
+  const fileStream = fs.createReadStream("pokemonLevelingRateRaw.txt")
 
   const rl = readline.createInterface({
     input: fileStream,
     crlfDelay: Infinity,
   })
 
-  let data: { [key: number]: PokemonLevelTypeObj } = {}
+  let data: { [key: number]: PokemonLevelingRateObj } = {}
 
   for await (const line of rl) {
     let splitLine = line.split("|")
-    let obj: PokemonLevelTypeObj = {
+    let obj: PokemonLevelingRateObj = {
       num: safeParseInt(splitLine[0]),
-      levelTypeString: splitLine[1],
-      levelTypeMapped: mapLevelType(splitLine[1]),
+      levelingRate: splitLine[1],
     }
     data[obj.num] = obj
   }
 
   fs.writeFile(
-    "outputPokemonLevelType.json",
+    "outputPokemonLevelingRate.json",
     JSON.stringify(data, null, 2),
     (err: any) => {
       if (err) throw err
