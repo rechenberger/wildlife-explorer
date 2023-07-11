@@ -1,18 +1,19 @@
 import { z } from "zod"
 
+export const LevelingRate = z.enum([
+  "Medium Fast",
+  "Erratic",
+  "Fluctuating",
+  "Medium Slow",
+  "Fast",
+  "Slow",
+])
+export type LevelingRate = z.infer<typeof LevelingRate>
+
 export const CatchMetadata = z.object({
   speciesNum: z.number().nullish(),
   speciesName: z.string().nullish(),
-  levelingRate: z
-    .enum([
-      "Medium Fast",
-      "Erratic",
-      "Fluctuating",
-      "Medium Slow",
-      "Fast",
-      "Slow",
-    ])
-    .nullish(),
+  levelingRate: LevelingRate.nullish(),
   exp: z.number().nullish(),
   level: z.number().nullish(),
   evs: z

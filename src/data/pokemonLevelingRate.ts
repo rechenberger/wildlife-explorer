@@ -1,4 +1,6 @@
-export const PokemonLevelingRate = {
+export const PokemonLevelingRate: {
+  [key: string]: { num: number; levelingRate: string }
+} = {
   "1": {
     num: 1,
     levelingRate: "Medium Slow",
@@ -4039,4 +4041,4 @@ export const PokemonLevelingRate = {
     num: 1010,
     levelingRate: "Slow",
   },
-} as const
+}

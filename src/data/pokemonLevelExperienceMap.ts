@@ -1,4 +1,10 @@
-export const PokemonExperienceMap = {
+export const PokemonExperienceMap: {
+  [key: string]: {
+    level: number
+    levelingRate: string
+    requiredExperience: number
+  }
+} = {
   "1-Erratic": {
     level: 1,
     levelingRate: "Erratic",

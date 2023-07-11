@@ -7,10 +7,13 @@ import {
   CATCH_RATE_FIRST_FIGHTER,
   MAX_FIGHTERS_PER_TEAM,
 } from "~/config"
+import { PokemonExperienceMap } from "~/data/pokemonLevelExperienceMap"
+import { PokemonLevelingRate } from "~/data/pokemonLevelingRate"
 import { createTRPCRouter } from "~/server/api/trpc"
 import { getWildlifeFighterPlus } from "~/server/lib/battle/getWildlifeFighterPlus"
 import { simulateBattle } from "~/server/lib/battle/simulateBattle"
 import { respawnWildlife } from "~/server/lib/respawnWildlife"
+import { CatchMetadata, LevelingRate } from "~/server/schema/CatchMetdata"
 import { type PlayerMetadata } from "~/server/schema/PlayerMetadata"
 import { WildlifeMetadata } from "~/server/schema/WildlifeMetadata"
 import { createSeed } from "~/utils/seed"
@@ -228,11 +231,35 @@ export const catchRouter = createTRPCRouter({
         },
       },
     })
+
+    const seed = createSeed(ctx.wildlife)
+    const wildlifeFighterPlus = await getWildlifeFighterPlus({
+      wildlife: ctx.wildlife,
+      seed,
+    })
+
+    const speciesName = wildlifeFighterPlus.species
+    const speciesNum = wildlifeFighterPlus.speciesDefinition.num
+    const level = wildlifeFighterPlus.level
+    const levelingRate = LevelingRate.parse(
+      PokemonLevelingRate[speciesNum]?.levelingRate
+    )
+    const baseExp =
+      PokemonExperienceMap[`${level}-${levelingRate}`]?.requiredExperience
+
+    const catchMetadata = {
+      speciesNum,
+      level,
+      exp: baseExp,
+      levelingRate,
+      speciesName,
+    } satisfies CatchMetadata
+
     await ctx.prisma.catch.create({
       data: {
         playerId: ctx.player.id,
         wildlifeId: ctx.wildlife.id,
-        seed: createSeed(ctx.wildlife),
+        seed,
         battleOrderPosition:
           battleOrderCount < MAX_FIGHTERS_PER_TEAM
             ? battleOrderCount + 1
