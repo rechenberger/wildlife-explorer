@@ -415,15 +415,17 @@ export const BattleView = ({
                               }}
                               className="w-[76px] sm:w-28"
                             />
-                            <TypeBadge
-                              size="big"
-                              content="Catch"
-                              icon={catchIcon}
-                              onClick={() => {
-                                catchButton()
-                              }}
-                              className="w-[76px] sm:w-28"
-                            />
+                            {!pvpStatus.isPvp && (
+                              <TypeBadge
+                                size="big"
+                                content="Catch"
+                                icon={catchIcon}
+                                onClick={() => {
+                                  catchButton()
+                                }}
+                                className="w-[76px] sm:w-28"
+                              />
+                            )}
                           </>
                         ) : (
                           <>
