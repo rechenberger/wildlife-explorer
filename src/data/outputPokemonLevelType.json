@@ -1,0 +1,5052 @@
+[
+  {
+    "num": 1,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 2,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 3,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 4,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 5,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 6,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 7,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 8,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 9,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 10,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 11,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 12,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 13,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 14,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 15,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 16,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 17,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 18,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 19,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 20,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 21,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 22,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 23,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 24,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 25,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 26,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 27,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 28,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 29,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 30,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 31,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 32,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 33,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 34,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 35,
+    "levelTypeString": "Fast",
+    "levelTypeMapped": 5
+  },
+  {
+    "num": 36,
+    "levelTypeString": "Fast",
+    "levelTypeMapped": 5
+  },
+  {
+    "num": 37,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 38,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 39,
+    "levelTypeString": "Fast",
+    "levelTypeMapped": 5
+  },
+  {
+    "num": 40,
+    "levelTypeString": "Fast",
+    "levelTypeMapped": 5
+  },
+  {
+    "num": 41,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 42,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 43,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 44,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 45,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 46,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 47,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 48,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 49,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 50,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 51,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 52,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 53,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 54,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 55,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 56,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 57,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 58,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 59,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 60,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 61,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 62,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 63,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 64,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 65,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 66,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 67,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 68,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 69,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 70,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 71,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 72,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 73,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 74,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 75,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 76,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 77,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 78,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 79,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 80,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 81,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 82,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 83,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 84,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 85,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 86,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 87,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 88,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 89,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 90,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 91,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 92,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 93,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 94,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 95,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 96,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 97,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 98,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 99,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 100,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 101,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 102,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 103,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 104,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 105,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 106,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 107,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 108,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 109,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 110,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 111,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 112,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 113,
+    "levelTypeString": "Fast",
+    "levelTypeMapped": 5
+  },
+  {
+    "num": 114,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 115,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 116,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 117,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 118,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 119,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 120,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 121,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 122,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 123,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 124,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 125,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 126,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 127,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 128,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 129,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 130,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 131,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 132,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 133,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 134,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 135,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 136,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 137,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 138,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 139,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 140,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 141,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 142,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 143,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 144,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 145,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 146,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 147,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 148,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 149,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 150,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 151,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 152,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 153,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 154,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 155,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 156,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 157,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 158,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 159,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 160,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 161,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 162,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 163,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 164,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 165,
+    "levelTypeString": "Fast",
+    "levelTypeMapped": 5
+  },
+  {
+    "num": 166,
+    "levelTypeString": "Fast",
+    "levelTypeMapped": 5
+  },
+  {
+    "num": 167,
+    "levelTypeString": "Fast",
+    "levelTypeMapped": 5
+  },
+  {
+    "num": 168,
+    "levelTypeString": "Fast",
+    "levelTypeMapped": 5
+  },
+  {
+    "num": 169,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 170,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 171,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 172,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 173,
+    "levelTypeString": "Fast",
+    "levelTypeMapped": 5
+  },
+  {
+    "num": 174,
+    "levelTypeString": "Fast",
+    "levelTypeMapped": 5
+  },
+  {
+    "num": 175,
+    "levelTypeString": "Fast",
+    "levelTypeMapped": 5
+  },
+  {
+    "num": 176,
+    "levelTypeString": "Fast",
+    "levelTypeMapped": 5
+  },
+  {
+    "num": 177,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 178,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 179,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 180,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 181,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 182,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 183,
+    "levelTypeString": "Fast",
+    "levelTypeMapped": 5
+  },
+  {
+    "num": 184,
+    "levelTypeString": "Fast",
+    "levelTypeMapped": 5
+  },
+  {
+    "num": 185,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 186,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 187,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 188,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 189,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 190,
+    "levelTypeString": "Fast",
+    "levelTypeMapped": 5
+  },
+  {
+    "num": 191,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 192,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 193,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 194,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 195,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 196,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 197,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 198,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 199,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 200,
+    "levelTypeString": "Fast",
+    "levelTypeMapped": 5
+  },
+  {
+    "num": 201,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 202,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 203,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 204,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 205,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 206,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 207,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 208,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 209,
+    "levelTypeString": "Fast",
+    "levelTypeMapped": 5
+  },
+  {
+    "num": 210,
+    "levelTypeString": "Fast",
+    "levelTypeMapped": 5
+  },
+  {
+    "num": 211,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 212,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 213,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 214,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 215,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 216,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 217,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 218,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 219,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 220,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 221,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 222,
+    "levelTypeString": "Fast",
+    "levelTypeMapped": 5
+  },
+  {
+    "num": 223,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 224,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 225,
+    "levelTypeString": "Fast",
+    "levelTypeMapped": 5
+  },
+  {
+    "num": 226,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 227,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 228,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 229,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 230,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 231,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 232,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 233,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 234,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 235,
+    "levelTypeString": "Fast",
+    "levelTypeMapped": 5
+  },
+  {
+    "num": 236,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 237,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 238,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 239,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 240,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 241,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 242,
+    "levelTypeString": "Fast",
+    "levelTypeMapped": 5
+  },
+  {
+    "num": 243,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 244,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 245,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 246,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 247,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 248,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 249,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 250,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 251,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 252,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 253,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 254,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 255,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 256,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 257,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 258,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 259,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 260,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 261,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 262,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 263,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 264,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 265,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 266,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 267,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 268,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 269,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 270,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 271,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 272,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 273,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 274,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 275,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 276,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 277,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 278,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 279,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 280,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 281,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 282,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 283,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 284,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 285,
+    "levelTypeString": "Fluctuating",
+    "levelTypeMapped": 3
+  },
+  {
+    "num": 286,
+    "levelTypeString": "Fluctuating",
+    "levelTypeMapped": 3
+  },
+  {
+    "num": 287,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 288,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 289,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 290,
+    "levelTypeString": "Erratic",
+    "levelTypeMapped": 2
+  },
+  {
+    "num": 291,
+    "levelTypeString": "Erratic",
+    "levelTypeMapped": 2
+  },
+  {
+    "num": 292,
+    "levelTypeString": "Erratic",
+    "levelTypeMapped": 2
+  },
+  {
+    "num": 293,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 294,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 295,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 296,
+    "levelTypeString": "Fluctuating",
+    "levelTypeMapped": 3
+  },
+  {
+    "num": 297,
+    "levelTypeString": "Fluctuating",
+    "levelTypeMapped": 3
+  },
+  {
+    "num": 298,
+    "levelTypeString": "Fast",
+    "levelTypeMapped": 5
+  },
+  {
+    "num": 299,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 300,
+    "levelTypeString": "Fast",
+    "levelTypeMapped": 5
+  },
+  {
+    "num": 301,
+    "levelTypeString": "Fast",
+    "levelTypeMapped": 5
+  },
+  {
+    "num": 302,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 303,
+    "levelTypeString": "Fast",
+    "levelTypeMapped": 5
+  },
+  {
+    "num": 304,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 305,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 306,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 307,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 308,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 309,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 310,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 311,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 312,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 313,
+    "levelTypeString": "Erratic",
+    "levelTypeMapped": 2
+  },
+  {
+    "num": 314,
+    "levelTypeString": "Fluctuating",
+    "levelTypeMapped": 3
+  },
+  {
+    "num": 315,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 316,
+    "levelTypeString": "Fluctuating",
+    "levelTypeMapped": 3
+  },
+  {
+    "num": 317,
+    "levelTypeString": "Fluctuating",
+    "levelTypeMapped": 3
+  },
+  {
+    "num": 318,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 319,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 320,
+    "levelTypeString": "Fluctuating",
+    "levelTypeMapped": 3
+  },
+  {
+    "num": 321,
+    "levelTypeString": "Fluctuating",
+    "levelTypeMapped": 3
+  },
+  {
+    "num": 322,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 323,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 324,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 325,
+    "levelTypeString": "Fast",
+    "levelTypeMapped": 5
+  },
+  {
+    "num": 326,
+    "levelTypeString": "Fast",
+    "levelTypeMapped": 5
+  },
+  {
+    "num": 327,
+    "levelTypeString": "Fast",
+    "levelTypeMapped": 5
+  },
+  {
+    "num": 328,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 329,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 330,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 331,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 332,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 333,
+    "levelTypeString": "Erratic",
+    "levelTypeMapped": 2
+  },
+  {
+    "num": 334,
+    "levelTypeString": "Erratic",
+    "levelTypeMapped": 2
+  },
+  {
+    "num": 335,
+    "levelTypeString": "Erratic",
+    "levelTypeMapped": 2
+  },
+  {
+    "num": 336,
+    "levelTypeString": "Fluctuating",
+    "levelTypeMapped": 3
+  },
+  {
+    "num": 337,
+    "levelTypeString": "Fast",
+    "levelTypeMapped": 5
+  },
+  {
+    "num": 338,
+    "levelTypeString": "Fast",
+    "levelTypeMapped": 5
+  },
+  {
+    "num": 339,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 340,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 341,
+    "levelTypeString": "Fluctuating",
+    "levelTypeMapped": 3
+  },
+  {
+    "num": 342,
+    "levelTypeString": "Fluctuating",
+    "levelTypeMapped": 3
+  },
+  {
+    "num": 343,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 344,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 345,
+    "levelTypeString": "Erratic",
+    "levelTypeMapped": 2
+  },
+  {
+    "num": 346,
+    "levelTypeString": "Erratic",
+    "levelTypeMapped": 2
+  },
+  {
+    "num": 347,
+    "levelTypeString": "Erratic",
+    "levelTypeMapped": 2
+  },
+  {
+    "num": 348,
+    "levelTypeString": "Erratic",
+    "levelTypeMapped": 2
+  },
+  {
+    "num": 349,
+    "levelTypeString": "Erratic",
+    "levelTypeMapped": 2
+  },
+  {
+    "num": 350,
+    "levelTypeString": "Erratic",
+    "levelTypeMapped": 2
+  },
+  {
+    "num": 351,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 352,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 353,
+    "levelTypeString": "Fast",
+    "levelTypeMapped": 5
+  },
+  {
+    "num": 354,
+    "levelTypeString": "Fast",
+    "levelTypeMapped": 5
+  },
+  {
+    "num": 355,
+    "levelTypeString": "Fast",
+    "levelTypeMapped": 5
+  },
+  {
+    "num": 356,
+    "levelTypeString": "Fast",
+    "levelTypeMapped": 5
+  },
+  {
+    "num": 357,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 358,
+    "levelTypeString": "Fast",
+    "levelTypeMapped": 5
+  },
+  {
+    "num": 359,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 360,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 361,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 362,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 363,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 364,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 365,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 366,
+    "levelTypeString": "Erratic",
+    "levelTypeMapped": 2
+  },
+  {
+    "num": 367,
+    "levelTypeString": "Erratic",
+    "levelTypeMapped": 2
+  },
+  {
+    "num": 368,
+    "levelTypeString": "Erratic",
+    "levelTypeMapped": 2
+  },
+  {
+    "num": 369,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 370,
+    "levelTypeString": "Fast",
+    "levelTypeMapped": 5
+  },
+  {
+    "num": 371,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 372,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 373,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 374,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 375,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 376,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 377,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 378,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 379,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 380,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 381,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 382,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 383,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 384,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 385,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 386,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 387,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 388,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 389,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 390,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 391,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 392,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 393,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 394,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 395,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 396,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 397,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 398,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 399,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 400,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 401,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 402,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 403,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 404,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 405,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 406,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 407,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 408,
+    "levelTypeString": "Erratic",
+    "levelTypeMapped": 2
+  },
+  {
+    "num": 409,
+    "levelTypeString": "Erratic",
+    "levelTypeMapped": 2
+  },
+  {
+    "num": 410,
+    "levelTypeString": "Erratic",
+    "levelTypeMapped": 2
+  },
+  {
+    "num": 411,
+    "levelTypeString": "Erratic",
+    "levelTypeMapped": 2
+  },
+  {
+    "num": 412,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 413,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 414,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 415,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 416,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 417,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 418,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 419,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 420,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 421,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 422,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 423,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 424,
+    "levelTypeString": "Fast",
+    "levelTypeMapped": 5
+  },
+  {
+    "num": 425,
+    "levelTypeString": "Fluctuating",
+    "levelTypeMapped": 3
+  },
+  {
+    "num": 426,
+    "levelTypeString": "Fluctuating",
+    "levelTypeMapped": 3
+  },
+  {
+    "num": 427,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 428,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 429,
+    "levelTypeString": "Fast",
+    "levelTypeMapped": 5
+  },
+  {
+    "num": 430,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 431,
+    "levelTypeString": "Fast",
+    "levelTypeMapped": 5
+  },
+  {
+    "num": 432,
+    "levelTypeString": "Fast",
+    "levelTypeMapped": 5
+  },
+  {
+    "num": 433,
+    "levelTypeString": "Fast",
+    "levelTypeMapped": 5
+  },
+  {
+    "num": 434,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 435,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 436,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 437,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 438,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 439,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 440,
+    "levelTypeString": "Fast",
+    "levelTypeMapped": 5
+  },
+  {
+    "num": 441,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 442,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 443,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 444,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 445,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 446,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 447,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 448,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 449,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 450,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 451,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 452,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 453,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 454,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 455,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 456,
+    "levelTypeString": "Erratic",
+    "levelTypeMapped": 2
+  },
+  {
+    "num": 457,
+    "levelTypeString": "Erratic",
+    "levelTypeMapped": 2
+  },
+  {
+    "num": 458,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 459,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 460,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 461,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 462,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 463,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 464,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 465,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 466,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 467,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 468,
+    "levelTypeString": "Fast",
+    "levelTypeMapped": 5
+  },
+  {
+    "num": 469,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 470,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 471,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 472,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 473,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 474,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 475,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 476,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 477,
+    "levelTypeString": "Fast",
+    "levelTypeMapped": 5
+  },
+  {
+    "num": 478,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 479,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 480,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 481,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 482,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 483,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 484,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 485,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 486,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 487,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 488,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 489,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 490,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 491,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 492,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 493,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 494,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 495,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 496,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 497,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 498,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 499,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 500,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 501,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 502,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 503,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 504,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 505,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 506,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 507,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 508,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 509,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 510,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 511,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 512,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 513,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 514,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 515,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 516,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 517,
+    "levelTypeString": "Fast",
+    "levelTypeMapped": 5
+  },
+  {
+    "num": 518,
+    "levelTypeString": "Fast",
+    "levelTypeMapped": 5
+  },
+  {
+    "num": 519,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 520,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 521,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 522,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 523,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 524,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 525,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 526,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 527,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 528,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 529,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 530,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 531,
+    "levelTypeString": "Fast",
+    "levelTypeMapped": 5
+  },
+  {
+    "num": 532,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 533,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 534,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 535,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 536,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 537,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 538,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 539,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 540,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 541,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 542,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 543,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 544,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 545,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 546,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 547,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 548,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 549,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 550,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 551,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 552,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 553,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 554,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 555,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 556,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 557,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 558,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 559,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 560,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 561,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 562,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 563,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 564,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 565,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 566,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 567,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 568,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 569,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 570,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 571,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 572,
+    "levelTypeString": "Fast",
+    "levelTypeMapped": 5
+  },
+  {
+    "num": 573,
+    "levelTypeString": "Fast",
+    "levelTypeMapped": 5
+  },
+  {
+    "num": 574,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 575,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 576,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 577,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 578,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 579,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 580,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 581,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 582,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 583,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 584,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 585,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 586,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 587,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 588,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 589,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 590,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 591,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 592,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 593,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 594,
+    "levelTypeString": "Fast",
+    "levelTypeMapped": 5
+  },
+  {
+    "num": 595,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 596,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 597,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 598,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 599,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 600,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 601,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 602,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 603,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 604,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 605,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 606,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 607,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 608,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 609,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 610,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 611,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 612,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 613,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 614,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 615,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 616,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 617,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 618,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 619,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 620,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 621,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 622,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 623,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 624,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 625,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 626,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 627,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 628,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 629,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 630,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 631,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 632,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 633,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 634,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 635,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 636,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 637,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 638,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 639,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 640,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 641,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 642,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 643,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 644,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 645,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 646,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 647,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 648,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 649,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 650,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 651,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 652,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 653,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 654,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 655,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 656,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 657,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 658,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 659,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 660,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 661,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 662,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 663,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 664,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 665,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 666,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 667,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 668,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 669,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 670,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 671,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 672,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 673,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 674,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 675,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 676,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 677,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 678,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 679,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 680,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 681,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 682,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 683,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 684,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 685,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 686,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 687,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 688,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 689,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 690,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 691,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 692,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 693,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 694,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 695,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 696,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 697,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 698,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 699,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 700,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 701,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 702,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 703,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 704,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 705,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 706,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 707,
+    "levelTypeString": "Fast",
+    "levelTypeMapped": 5
+  },
+  {
+    "num": 708,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 709,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 710,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 711,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 712,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 713,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 714,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 715,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 716,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 717,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 718,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 719,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 720,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 721,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 722,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 723,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 724,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 725,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 726,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 727,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 728,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 729,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 730,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 731,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 732,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 733,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 734,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 735,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 736,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 737,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 738,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 739,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 740,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 741,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 742,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 743,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 744,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 745,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 746,
+    "levelTypeString": "Fast",
+    "levelTypeMapped": 5
+  },
+  {
+    "num": 747,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 748,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 749,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 750,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 751,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 752,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 753,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 754,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 755,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 756,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 757,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 758,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 759,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 760,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 761,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 762,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 763,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 764,
+    "levelTypeString": "Fast",
+    "levelTypeMapped": 5
+  },
+  {
+    "num": 765,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 766,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 767,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 768,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 769,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 770,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 771,
+    "levelTypeString": "Fast",
+    "levelTypeMapped": 5
+  },
+  {
+    "num": 772,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 773,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 774,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 775,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 776,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 777,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 778,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 779,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 780,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 781,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 782,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 783,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 784,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 785,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 786,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 787,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 788,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 789,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 790,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 791,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 792,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 793,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 794,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 795,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 796,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 797,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 798,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 799,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 800,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 801,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 802,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 803,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 804,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 805,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 806,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 807,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 808,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 809,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 810,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 811,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 812,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 813,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 814,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 815,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 816,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 817,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 818,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 819,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 820,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 821,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 822,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 823,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 824,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 825,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 826,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 827,
+    "levelTypeString": "Fast",
+    "levelTypeMapped": 5
+  },
+  {
+    "num": 828,
+    "levelTypeString": "Fast",
+    "levelTypeMapped": 5
+  },
+  {
+    "num": 829,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 830,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 831,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 832,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 833,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 834,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 835,
+    "levelTypeString": "Fast",
+    "levelTypeMapped": 5
+  },
+  {
+    "num": 836,
+    "levelTypeString": "Fast",
+    "levelTypeMapped": 5
+  },
+  {
+    "num": 837,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 838,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 839,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 840,
+    "levelTypeString": "Erratic",
+    "levelTypeMapped": 2
+  },
+  {
+    "num": 841,
+    "levelTypeString": "Erratic",
+    "levelTypeMapped": 2
+  },
+  {
+    "num": 842,
+    "levelTypeString": "Erratic",
+    "levelTypeMapped": 2
+  },
+  {
+    "num": 843,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 844,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 845,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 846,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 847,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 848,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 849,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 850,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 851,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 852,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 853,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 854,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 855,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 856,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 857,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 858,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 859,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 860,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 861,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 862,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 863,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 864,
+    "levelTypeString": "Fast",
+    "levelTypeMapped": 5
+  },
+  {
+    "num": 865,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 866,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 867,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 868,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 869,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 870,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 871,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 872,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 873,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 874,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 875,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 876,
+    "levelTypeString": "Fast",
+    "levelTypeMapped": 5
+  },
+  {
+    "num": 877,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 878,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 879,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 880,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 881,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 882,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 883,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 884,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 885,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 886,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 887,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 888,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 889,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 890,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 891,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 892,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 893,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 894,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 895,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 896,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 897,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 898,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 899,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 900,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 901,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 902,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 903,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 904,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 905,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 906,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 907,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 908,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 909,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 910,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 911,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 912,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 913,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 914,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 915,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 916,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 917,
+    "levelTypeString": "Erratic",
+    "levelTypeMapped": 2
+  },
+  {
+    "num": 918,
+    "levelTypeString": "Erratic",
+    "levelTypeMapped": 2
+  },
+  {
+    "num": 919,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 920,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 921,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 922,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 923,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 924,
+    "levelTypeString": "Fast",
+    "levelTypeMapped": 5
+  },
+  {
+    "num": 925,
+    "levelTypeString": "Fast",
+    "levelTypeMapped": 5
+  },
+  {
+    "num": 926,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 927,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 928,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 929,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 930,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 931,
+    "levelTypeString": "Erratic",
+    "levelTypeMapped": 2
+  },
+  {
+    "num": 932,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 933,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 934,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 935,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 936,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 937,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 938,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 939,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 940,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 941,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 942,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 943,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 944,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 945,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 946,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 947,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 948,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 949,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 950,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 951,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 952,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 953,
+    "levelTypeString": "Fast",
+    "levelTypeMapped": 5
+  },
+  {
+    "num": 954,
+    "levelTypeString": "Fast",
+    "levelTypeMapped": 5
+  },
+  {
+    "num": 955,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 956,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 957,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 958,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 959,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 960,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 961,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 962,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 963,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 964,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 965,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 966,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 967,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 968,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 969,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 970,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 971,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 972,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 973,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 974,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 975,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 976,
+    "levelTypeString": "Fast",
+    "levelTypeMapped": 5
+  },
+  {
+    "num": 977,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 978,
+    "levelTypeString": "Medium Slow",
+    "levelTypeMapped": 4
+  },
+  {
+    "num": 979,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 980,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 981,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 982,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 983,
+    "levelTypeString": "Medium Fast",
+    "levelTypeMapped": 1
+  },
+  {
+    "num": 984,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 985,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 986,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 987,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 988,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 989,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 990,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 991,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 992,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 993,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 994,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 995,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 996,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 997,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 998,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 999,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 1000,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 1001,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 1002,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 1003,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 1004,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 1005,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 1006,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 1007,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 1008,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 1009,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  },
+  {
+    "num": 1010,
+    "levelTypeString": "Slow",
+    "levelTypeMapped": 6
+  }
+]
