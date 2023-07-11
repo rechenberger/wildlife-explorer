@@ -197,6 +197,7 @@ export const simulateBattle = async ({
               lastMove: p.lastMove,
               lastDamage: p.lastDamage,
             },
+            name: fighter?.catch?.name,
           }
         })
         return { name: team.name, fighters, player: team.player }
