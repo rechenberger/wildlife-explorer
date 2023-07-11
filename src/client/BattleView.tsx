@@ -17,7 +17,7 @@ import { FighterMoves } from "./FighterMoves"
 import { FighterTypeBadges } from "./FighterTypeBadges"
 import { TypeBadge } from "./TypeBadge"
 import { cn } from "./cn"
-import { catchIcon, leaveIcon, runIcon } from "./typeIcons"
+import { catchIcon, leaveIcon, readyIcon, runIcon } from "./typeIcons"
 import { useCatch } from "./useCatch"
 import { useGetWildlifeName } from "./useGetWildlifeName"
 import { usePlayer } from "./usePlayer"
@@ -183,6 +183,7 @@ export const BattleView = ({
           {map(battleStatus?.sides, (side, sideIdx) => {
             const isMySide = side.player?.id === playerId
             const isMainSide = sideIdx === 0
+            const isChoiceDone = data.playerChoices[sideIdx]?.isChoiceDone
             return (
               <Fragment key={sideIdx}>
                 {sideIdx > 0 && (
@@ -298,6 +299,12 @@ export const BattleView = ({
                                   showAbility={SHOW_ABILITY}
                                   showNature={SHOW_NATURE}
                                 />
+                                {isChoiceDone && (
+                                  <TypeBadge
+                                    icon={readyIcon}
+                                    content="Ready!"
+                                  />
+                                )}
                               </div>
                             </div>
                             {/* <div className="hidden flex-1 md:flex" /> */}
@@ -309,7 +316,8 @@ export const BattleView = ({
                                     isLoading ||
                                     !isActive ||
                                     !isMySide ||
-                                    !battleIsActive
+                                    !battleIsActive ||
+                                    !!isChoiceDone
                                   }
                                   onClick={({ moveIdx }) => {
                                     if (!playerId) return

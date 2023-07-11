@@ -39,7 +39,7 @@ export const simulateBattle = async ({
         ? [
             {
               playerId: bp.playerId,
-              nextChoice: bp.metadata?.nextChoice,
+              // nextChoice: bp.metadata?.nextChoice,
               participantIdx,
             },
           ]
@@ -236,6 +236,14 @@ export const simulateBattle = async ({
     battleStatus: battleStatus(),
     battleJson: battle.toJSON(),
     battleDb,
+    playerChoices: playerChoices.map((pc) => {
+      const sideId = `p${pc.participantIdx + 1}` as SideID
+      const isChoiceDone = battle[sideId]!.isChoiceDone()
+      return {
+        ...pc,
+        isChoiceDone,
+      }
+    }),
   }
   console.timeEnd("simulateBattle")
   return result

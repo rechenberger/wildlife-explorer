@@ -151,13 +151,14 @@ export const battleRouter = createTRPCRouter({
       })
     )
     .query(async ({ ctx, input }) => {
-      const { battleStatus, battleDb } = await simulateBattle({
+      const { battleStatus, battleDb, playerChoices } = await simulateBattle({
         prisma: ctx.prisma,
         battleId: input.battleId,
       })
       return {
         battleStatus,
         status: battleDb.status,
+        playerChoices,
       }
     }),
 
