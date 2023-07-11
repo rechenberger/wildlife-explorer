@@ -291,7 +291,7 @@ export const battleRouter = createTRPCRouter({
           if (p.player) {
             await ctx.prisma.player.update({
               where: {
-                id: ctx.player.id,
+                id: p.player.id,
               },
               data: {
                 metadata: {
