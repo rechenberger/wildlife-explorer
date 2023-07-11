@@ -1,23 +1,35 @@
+import NiceModal from "@ebay/nice-modal-react"
 import { map } from "lodash-es"
 import { ArrowUp, Swords } from "lucide-react"
 import { Fragment } from "react"
-import { api, type RouterOutputs } from "~/utils/api"
+import { toast } from "sonner"
+import { api } from "~/utils/api"
+import { BattleViewModal } from "./BattleViewModal"
 import { DividerHeading } from "./DividerHeading"
 import { TypeBadge } from "./TypeBadge"
 import { cn } from "./cn"
 import { readyIcon, runIcon, waitingIcon } from "./typeIcons"
 import { usePlayer } from "./usePlayer"
 
-type PvpStatus = RouterOutputs["pvp"]["getStatus"]
-
-export const BattleViewPvp = ({
-  pvpStatus,
-  battleId,
-}: {
-  pvpStatus: PvpStatus
-  battleId: string
-}) => {
+export const BattleViewPvp = ({ battleId }: { battleId: string }) => {
   const { playerId } = usePlayer()
+  const { data: pvpStatus } = api.pvp.getStatus.useQuery(
+    {
+      battleId,
+      playerId: playerId!,
+    },
+    {
+      enabled: !!playerId,
+      refetchInterval: 1000,
+      onSuccess: (data) => {
+        if (data.status === "CANCELLED") {
+          toast("PvP-Battle cancelled")
+          NiceModal.hide(BattleViewModal)
+        }
+      },
+    }
+  )
+
   const trpc = api.useContext()
   const { mutate: acceptInvite } = api.pvp.acceptInvite.useMutation({
     onSuccess: () => {
@@ -38,7 +50,7 @@ export const BattleViewPvp = ({
       <div>PvP Battle</div>
 
       <div className="flex flex-col gap-4">
-        {map(pvpStatus.players, (p, idx) => {
+        {map(pvpStatus?.players, (p, idx) => {
           const isMe = p.id === playerId
           const ready = p.isReady
           return (

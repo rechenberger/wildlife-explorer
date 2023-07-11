@@ -184,19 +184,25 @@ export const pvpRouter = createTRPCRouter({
         },
       })
 
-      if (ctx.player.metadata?.activeBattleId === input.battleId) {
-        await ctx.prisma.player.update({
-          where: {
-            id: ctx.player.id,
-          },
-          data: {
-            metadata: {
-              ...ctx.player.metadata,
-              activeBattleId: null,
-            },
-          },
+      await Promise.all(
+        battle.battleParticipants.map(async (bp) => {
+          if (!bp.player) return
+          const metadata = PlayerMetadata.parse(bp.player.metadata)
+          if (metadata?.activeBattleId === input.battleId) {
+            await ctx.prisma.player.update({
+              where: {
+                id: bp.player.id,
+              },
+              data: {
+                metadata: {
+                  ...metadata,
+                  activeBattleId: null,
+                },
+              },
+            })
+          }
         })
-      }
+      )
     }),
 
   getStatus: playerProcedure
