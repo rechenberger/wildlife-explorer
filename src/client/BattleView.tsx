@@ -1,6 +1,6 @@
 import NiceModal from "@ebay/nice-modal-react"
 import { useAtomValue, useSetAtom } from "jotai"
-import { find, flatMap, map } from "lodash-es"
+import { find, flatMap, map, orderBy } from "lodash-es"
 import { Scroll, ScrollText, Undo2 } from "lucide-react"
 import Image from "next/image"
 import { Fragment, useLayoutEffect, useRef } from "react"
@@ -63,9 +63,9 @@ export const BattleView = ({
       },
       {
         enabled: !!playerId,
-        onSuccess: (data) => {
-          console.log(data)
-        },
+        // onSuccess: (data) => {
+        //   console.log(data)
+        // },
         refetchInterval: pvpStatus?.isPvp ? 1000 : undefined,
       }
     )
@@ -140,6 +140,10 @@ export const BattleView = ({
     doCatch({ wildlifeId })
   }
 
+  const sides = orderBy(battleStatus?.sides, (s) =>
+    s.player?.id === playerId ? 0 : 1
+  )
+
   return (
     <>
       <div className="flex flex-row gap-2">
@@ -177,10 +181,13 @@ export const BattleView = ({
       {/* <pre>{JSON.stringify(battleStatus, null, 2)}</pre> */}
       <div className="flex flex-row gap-4">
         <div className="flex flex-col-reverse gap-2 flex-1">
-          {map(battleStatus?.sides, (side, sideIdx) => {
+          {map(sides, (side, sideIdx) => {
             const isMySide = side.player?.id === playerId
             const isMainSide = sideIdx === 0
-            const isChoiceDone = data.playerChoices[sideIdx]?.isChoiceDone
+            const isChoiceDone = find(
+              data.playerChoices,
+              (pc) => pc.playerId === side.player?.id
+            )?.isChoiceDone
             return (
               <Fragment key={sideIdx}>
                 {sideIdx > 0 && (
