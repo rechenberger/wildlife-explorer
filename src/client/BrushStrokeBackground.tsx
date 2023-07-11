@@ -1,17 +1,34 @@
 import { type ReactNode } from "react"
 import brushStyles from "../styles/BrushStrokeBackground.module.css"
+import { cn } from "./cn"
 
 // FROM: https://stackoverflow.com/questions/71201080/brushstroke-effect-using-css-javascript
 
 export const BrushStrokeBackground = ({
   children,
+  classNameOuter,
+  classNameInner,
+  styleOuter,
+  styleInner,
 }: {
   children?: ReactNode
+  classNameOuter?: string
+  classNameInner?: string
+  styleOuter?: React.CSSProperties
+  styleInner?: React.CSSProperties
 }) => {
   return (
     <>
-      <div className={brushStyles.brushWrap}>
-        <div className={brushStyles.brushWrapContent}>{children}</div>
+      <div
+        className={cn(brushStyles.brushWrap, classNameOuter)}
+        style={styleOuter}
+      >
+        <div
+          className={cn(brushStyles.brushWrapContent, classNameInner)}
+          style={styleInner}
+        >
+          {children}
+        </div>
       </div>
 
       <svg height="0" width="0" xmlns="http://www.w3.org/2000/svg">

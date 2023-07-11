@@ -3,6 +3,7 @@ import Image from "next/image"
 import { DEV_MODE } from "~/config"
 import { type WildlifeFighterPlus } from "~/server/lib/battle/getWildlifeFighterPlus"
 import { type WildlifeMetadata } from "~/server/schema/WildlifeMetadata"
+import { BrushStrokeBackground } from "./BrushStrokeBackground"
 import { cn } from "./cn"
 import { Progress } from "./shadcn/ui/progress"
 import { useGetWildlifeName } from "./useGetWildlifeName"
@@ -33,52 +34,61 @@ export const FighterChip = ({
   const name = fighter.name || getName(fighter.wildlife)
   return (
     <>
-      <div
-        className={cn(
-          "flex items-center gap-4 rounded-full bg-gray-200",
-          ltr ? "flex-row" : "flex-row-reverse",
-          onClick && "cursor-pointer"
-        )}
-        onClick={onClick}
+      <BrushStrokeBackground
+        styleOuter={{
+          paddingTop: 4,
+          paddingBottom: 4,
+          paddingLeft: 8,
+          paddingRight: 8,
+          display: "block",
+        }}
       >
         <div
           className={cn(
-            "relative -m-1 aspect-square h-12 w-12 shrink-0 overflow-hidden rounded-full ring",
-            hpFull
-              ? "ring-green-500"
-              : fainted
-              ? "ring-red-500"
-              : "ring-amber-400",
-            grayscale && "grayscale"
+            "flex items-center gap-4 rounded-full text-amber-400 [text-shadow:_1px_1px_4px_rgb(0_0_0_/_80%)] ",
+            ltr ? "flex-row" : "flex-row-reverse",
+            onClick && "cursor-pointer"
           )}
+          onClick={onClick}
         >
-          {fighter.wildlife.metadata.taxonImageUrlSquare && (
-            <Image
-              src={fighter.wildlife.metadata.taxonImageUrlSquare}
-              className={cn(
-                "w-full object-cover object-center transition-transform",
-                fainted && "rotate-180",
-                "pointer-events-none"
-              )}
-              alt={"Observation"}
-              unoptimized
-              fill={true}
-            />
-          )}
-        </div>
-        <div className={cn("flex-1 overflow-hidden py-1 select-none")}>
-          <div className="flex items-baseline gap-1">
-            <div
-              className="truncate text-xs font-bold"
-              title={`${name} ${
-                DEV_MODE
-                  ? `(${fighter.fighter.species} ${fighter.fighter.level} ${fighter.fighter.gender})`
-                  : ""
-              }`}
-            >
-              {name}
-            </div>
-            {/* {SHOW_FIGHTER_NAME && (
+          <div
+            className={cn(
+              "relative -m-1 aspect-square h-12 w-12 shrink-0 overflow-hidden rounded-full ring",
+              hpFull
+                ? "ring-green-500"
+                : fainted
+                ? "ring-red-500"
+                : "ring-amber-400",
+              grayscale && "grayscale"
+            )}
+          >
+            {fighter.wildlife.metadata.taxonImageUrlSquare && (
+              <Image
+                src={fighter.wildlife.metadata.taxonImageUrlSquare}
+                className={cn(
+                  "w-full object-cover object-center transition-transform",
+                  fainted && "rotate-180",
+                  "pointer-events-none"
+                )}
+                alt={"Observation"}
+                unoptimized
+                fill={true}
+              />
+            )}
+          </div>
+          <div className={cn("flex-1 overflow-hidden py-1 select-none")}>
+            <div className="flex items-baseline gap-1">
+              <div
+                className="truncate text-xs font-bold"
+                title={`${name} ${
+                  DEV_MODE
+                    ? `(${fighter.fighter.species} ${fighter.fighter.level} ${fighter.fighter.gender})`
+                    : ""
+                }`}
+              >
+                {name}
+              </div>
+              {/* {SHOW_FIGHTER_NAME && (
               <div
                 title={fighter.fighter.species}
                 className="whitespace-nowrap text-[10px] opacity-60"
@@ -86,27 +96,28 @@ export const FighterChip = ({
                 {` ${fighter.fighter.species} ${fighter.fighter.level} ${fighter.fighter.gender}`}
               </div>
             )} */}
-          </div>
-          <Progress value={(hp / hpMax) * 100} className="h-1 bg-slate-400" />
+            </div>
+            <Progress value={(hp / hpMax) * 100} className="h-1 bg-amber-600" />
 
-          <div className="flex flex-row gap-1 text-xs justify-between">
-            <div className="truncate opacity-60">
-              {showAbsoluteHp
-                ? `${hp}/${hpMax}`
-                : `${Math.ceil((hp / hpMax) * 100)}%`}
-            </div>
-            {!!status && (
-              <div className="rounded-sm bg-red-300 px-1">
-                {status.toUpperCase()}
+            <div className="flex flex-row gap-1 text-xs justify-between">
+              <div className="truncate opacity-60">
+                {showAbsoluteHp
+                  ? `${hp}/${hpMax}`
+                  : `${Math.ceil((hp / hpMax) * 100)}%`}
               </div>
-            )}
-            <div className="truncate opacity-60">
-              Lv. {fighter.fighter.level}
+              {!!status && (
+                <div className="rounded-sm bg-red-300 px-1">
+                  {status.toUpperCase()}
+                </div>
+              )}
+              <div className="truncate opacity-60">
+                Lv. {fighter.fighter.level}
+              </div>
             </div>
           </div>
+          <div className="w-2" />
         </div>
-        <div className="w-2" />
-      </div>
+      </BrushStrokeBackground>
     </>
   )
 }
