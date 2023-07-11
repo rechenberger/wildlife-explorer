@@ -81,8 +81,6 @@ export const MyCatches = () => {
   }
 
   const handleDragEnd = (event: DragEndEvent) => {
-    console.log({ event })
-
     const { active, over } = event
 
     if (!active || !over) return
