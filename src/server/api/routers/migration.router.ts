@@ -24,7 +24,10 @@ export const migrationRouter = createTRPCRouter({
       },
     })
 
+    let i = 0
     for (const c of catches) {
+      i++
+      if (Object.keys(c.metadata as any).length) continue
       const wildlife = {
         ...c.wildlife,
         metadata: WildlifeMetadata.parse(c.wildlife.metadata),
@@ -59,7 +62,9 @@ export const migrationRouter = createTRPCRouter({
           metadata: catchMetadata,
         },
       })
+      console.log(`${i} of ${catches.length} done`)
     }
+    console.log(`${i} of ${catches.length} done`)
   }),
 
   battleOrder: devProcedure.mutation(async ({ ctx }) => {
