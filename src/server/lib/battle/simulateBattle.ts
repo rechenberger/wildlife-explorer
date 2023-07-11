@@ -219,7 +219,12 @@ export const simulateBattle = async ({
             name: fighter?.catch?.name,
           }
         })
-        return { name: team.name, fighters, player: team.player }
+        return {
+          name: team.name,
+          fighters,
+          player: team.player,
+          isWinner: battle.winner === side.name,
+        }
       }),
     }
   }

@@ -17,7 +17,14 @@ import { FighterMoves } from "./FighterMoves"
 import { FighterTypeBadges } from "./FighterTypeBadges"
 import { TypeBadge } from "./TypeBadge"
 import { cn } from "./cn"
-import { catchIcon, leaveIcon, readyIcon, runIcon } from "./typeIcons"
+import {
+  catchIcon,
+  leaveIcon,
+  loserIcon,
+  readyIcon,
+  runIcon,
+  winnerIcon,
+} from "./typeIcons"
 import { useCatch } from "./useCatch"
 import { useGetWildlifeName } from "./useGetWildlifeName"
 import { usePlayer } from "./usePlayer"
@@ -188,6 +195,7 @@ export const BattleView = ({
               data.playerChoices,
               (pc) => pc.playerId === side.player?.id
             )?.isChoiceDone
+            const isWinner = side.isWinner
             return (
               <Fragment key={sideIdx}>
                 {sideIdx > 0 && (
@@ -303,15 +311,28 @@ export const BattleView = ({
                                   showAbility={SHOW_ABILITY}
                                   showNature={SHOW_NATURE}
                                 />
-                                <TypeBadge
-                                  icon={readyIcon}
-                                  content="Ready!"
-                                  className={cn(
-                                    isChoiceDone
-                                      ? "opacity-100 animate-pulse"
-                                      : "opacity-0"
-                                  )}
-                                />
+                                {pvpStatus.status === "IN_PROGRESS" ? (
+                                  <>
+                                    {pvpStatus.isPvp && (
+                                      <TypeBadge
+                                        icon={readyIcon}
+                                        content="Ready!"
+                                        className={cn(
+                                          isChoiceDone
+                                            ? "opacity-100 animate-pulse"
+                                            : "opacity-0"
+                                        )}
+                                      />
+                                    )}
+                                  </>
+                                ) : (
+                                  <>
+                                    <TypeBadge
+                                      icon={isWinner ? winnerIcon : loserIcon}
+                                      content={isWinner ? "Won" : "Defeated"}
+                                    />
+                                  </>
+                                )}
                               </div>
                             </div>
                             {/* <div className="hidden flex-1 md:flex" /> */}
