@@ -1,7 +1,5 @@
 import * as fs from "fs"
-
 import * as readline from "readline"
-
 interface EffortValueYieldObj {
   num?: number
   name?: string
@@ -59,10 +57,14 @@ async function processLineByLine() {
     data.push(obj)
   }
 
-  fs.writeFile("output.json", JSON.stringify(data, null, 2), (err: any) => {
-    if (err) throw err
-    console.log("Data written to file")
-  })
+  fs.writeFile(
+    "outputPokemonEffortValueYield.json",
+    JSON.stringify(data, null, 2),
+    (err: any) => {
+      if (err) throw err
+      console.log("Data written to file")
+    }
+  )
 }
 
 processLineByLine()
