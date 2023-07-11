@@ -1,7 +1,14 @@
 import { useDraggable } from "@dnd-kit/core"
 import NiceModal from "@ebay/nice-modal-react"
+import { CatchDetails } from "./CatchDetails"
 import { CatchDetailsModal } from "./CatchDetailsModal"
 import { FighterChip } from "./FighterChip"
+import { cn } from "./cn"
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "./shadcn/ui/hover-card"
 import { type MyCatch } from "./useCatches"
 
 export const DraggableCatch = ({
@@ -18,6 +25,7 @@ export const DraggableCatch = ({
     listeners,
     setNodeRef: setNodeRefDrag,
     transform,
+    isDragging,
   } = useDraggable({
     id: c.id,
     disabled,
@@ -40,14 +48,26 @@ export const DraggableCatch = ({
         {...attributes}
         ref={setNodeRefDrag}
         key={c.id}
-        className="flex cursor-pointer flex-col p-1 touch-manipulation"
+        className={cn(
+          "flex flex-col p-1 touch-manipulation cursor-grab",
+          isDragging && "z-30 cursor-grabbing"
+        )}
         onClick={() => {
           NiceModal.show(CatchDetailsModal, {
             catchId: c.id,
           })
         }}
       >
-        <FighterChip showAbsoluteHp ltr grayscale={false} fighter={c} />
+        <HoverCard>
+          <HoverCardTrigger>
+            <FighterChip showAbsoluteHp ltr grayscale={false} fighter={c} />
+          </HoverCardTrigger>
+          {!isDragging && (
+            <HoverCardContent className="w-80">
+              <CatchDetails catchId={c.id} tiny />
+            </HoverCardContent>
+          )}
+        </HoverCard>
       </div>
     </>
   )
