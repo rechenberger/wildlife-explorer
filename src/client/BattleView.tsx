@@ -119,7 +119,7 @@ export const BattleView = ({
     )
   }
 
-  if (!pvpStatus.allReady) {
+  if (pvpStatus.status === "INVITING" && !pvpStatus.allReady) {
     return <BattleViewPvp battleId={battleId} pvpStatus={pvpStatus} />
   }
 
