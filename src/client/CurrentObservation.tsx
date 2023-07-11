@@ -155,12 +155,12 @@ export const CurrentObservation = () => {
             <JsonViewer value={w} theme="light" />
           </div>
         )}
-        <div className="flex flex-row flex-wrap items-start justify-center gap-2 h-[44px]">
+        <div className="flex flex-row items-start justify-center gap-2 h-[44px]">
           {w.metadata.observationUrl && (
             <Link
               href={w.metadata.observationUrl}
               target="_blank"
-              className="flex flex-row items-center gap-1 rounded px-1 py-0.5 hover:bg-black/10"
+              className="flex flex-row items-center gap-1 rounded px-1 py-0.5 hover:bg-black/10 shrink-0"
             >
               <ExternalLink size={12} />
               <div>iNaturalist</div>
@@ -170,7 +170,7 @@ export const CurrentObservation = () => {
             <Link
               href={w.metadata.taxonWikiUrl}
               target="_blank"
-              className="flex flex-row items-center gap-1 rounded px-1 py-0.5 hover:bg-black/10"
+              className="flex flex-row items-center gap-1 rounded px-1 py-0.5 hover:bg-black/10 shrink-0"
             >
               <ExternalLink size={12} />
               <div>Wikipedia</div>
@@ -178,7 +178,7 @@ export const CurrentObservation = () => {
           )}
           <div className="flex-1" />
           {fighter && (
-            <>
+            <div className="max-w-[50%]">
               <FighterChip
                 fighter={{
                   fighter: fighter.fighter,
@@ -187,7 +187,7 @@ export const CurrentObservation = () => {
                 showAbsoluteHp={false}
                 ltr={false}
               />
-            </>
+            </div>
           )}
         </div>
         <div className="flex flex-row flex-wrap items-center justify-center gap-2">
