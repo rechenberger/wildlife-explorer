@@ -212,6 +212,7 @@ export const pvpRouter = createTRPCRouter({
               player: {
                 select: {
                   id: true,
+                  name: true,
                   metadata: true,
                 },
               },

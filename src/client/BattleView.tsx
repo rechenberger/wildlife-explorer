@@ -1,7 +1,7 @@
 import NiceModal from "@ebay/nice-modal-react"
 import { useAtomValue, useSetAtom } from "jotai"
 import { find, flatMap, map } from "lodash-es"
-import { Scroll, ScrollText, Undo2 } from "lucide-react"
+import { Scroll, ScrollText, Swords, Undo2 } from "lucide-react"
 import Image from "next/image"
 import { Fragment, useLayoutEffect, useRef } from "react"
 import { toast } from "sonner"
@@ -11,12 +11,19 @@ import { api } from "~/utils/api"
 import { atomWithLocalStorage } from "~/utils/atomWithLocalStorage"
 import { fillWithNulls } from "~/utils/fillWithNulls"
 import { CatchDetailsModal } from "./CatchDetailsModal"
+import { DividerHeading } from "./DividerHeading"
 import { FighterChip } from "./FighterChip"
 import { FighterMoves } from "./FighterMoves"
 import { FighterTypeBadges } from "./FighterTypeBadges"
 import { TypeBadge } from "./TypeBadge"
 import { cn } from "./cn"
-import { catchIcon, leaveIcon, runIcon } from "./typeIcons"
+import {
+  catchIcon,
+  leaveIcon,
+  readyIcon,
+  runIcon,
+  waitingIcon,
+} from "./typeIcons"
 import { useCatch } from "./useCatch"
 import { useGetWildlifeName } from "./useGetWildlifeName"
 import { usePlayer } from "./usePlayer"
@@ -57,6 +64,20 @@ export const BattleView = ({
       }
     )
 
+  const { data: pvpStatus, isLoading: pvpStatusLoading } =
+    api.pvp.getStatus.useQuery(
+      {
+        battleId,
+        playerId: playerId!,
+      },
+      {
+        enabled: !!playerId,
+        onSuccess: (data) => {
+          console.log(data)
+        },
+      }
+    )
+
   const battleLogAsHtml = parseBattleLog(data?.battleStatus.outputLog, true)
 
   const trpc = api.useContext()
@@ -80,7 +101,7 @@ export const BattleView = ({
     },
   })
 
-  const isLoading = battleLoading || choiceLoading
+  const isLoading = battleLoading || choiceLoading || pvpStatusLoading
 
   const getName = useGetWildlifeName()
 
@@ -93,10 +114,39 @@ export const BattleView = ({
     logRef.current.scrollTop = logRef.current.scrollHeight
   }, [battleLogAsHtml, showBattleLog])
 
-  if (!data) {
+  if (!data || !pvpStatus) {
     return (
       <div className="flex items-center justify-center py-48 text-center text-sm opacity-60">
         Loading...
+      </div>
+    )
+  }
+
+  if (!pvpStatus.allReady) {
+    return (
+      <div className="flex items-center justify-center py-48 text-center gap-4">
+        <Swords className="w-8 h-8" />
+        <div>PvP Battle</div>
+
+        <div className="flex flex-col gap-4">
+          {map(pvpStatus.players, (p, idx) => (
+            <Fragment key={p.id}>
+              {idx > 0 && <DividerHeading className="m-0">vs.</DividerHeading>}
+              <div className="flex flex-col gap-2">
+                <div>{p.name}</div>
+                <TypeBadge
+                  icon={p.isReady ? readyIcon : waitingIcon}
+                  content={p.isReady ? "Ready!" : "Waiting..."}
+                  size="big"
+                />
+              </div>
+            </Fragment>
+          ))}
+        </div>
+
+        <div className="mt-8 flex flex-row items-end">
+          <TypeBadge icon={runIcon} content={"Cancel"} size="big" />
+        </div>
       </div>
     )
   }
