@@ -22,6 +22,7 @@ export const BattleViewButton = () => {
     }
   )
   const activeBattle = find(battles, (b) => b.status === "IN_PROGRESS")
+  const pvpInviteBattle = find(battles, (b) => b.status === "INVITING")
 
   if (!ENABLE_BATTLE_VIEW) return null
 
@@ -41,6 +42,12 @@ export const BattleViewButton = () => {
             <>
               <div className="absolute -right-1 -top-1 h-3 w-3 rounded-full bg-red-500" />
               <div className="absolute -right-1 -top-1 h-3 w-3 animate-ping rounded-full bg-red-500" />
+            </>
+          )}
+          {!!pvpInviteBattle && (
+            <>
+              <div className="absolute -right-1 -top-1 h-3 w-3 rounded-full bg-yellow-500" />
+              <div className="absolute -right-1 -top-1 h-3 w-3 animate-ping rounded-full bg-yellow-500" />
             </>
           )}
         </button>

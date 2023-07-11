@@ -10,13 +10,14 @@ import { parseBattleLog } from "~/server/lib/battle/battleLogParser"
 import { api } from "~/utils/api"
 import { atomWithLocalStorage } from "~/utils/atomWithLocalStorage"
 import { fillWithNulls } from "~/utils/fillWithNulls"
+import { BattleViewPvp } from "./BattleViewPvp"
 import { CatchDetailsModal } from "./CatchDetailsModal"
 import { FighterChip } from "./FighterChip"
 import { FighterMoves } from "./FighterMoves"
 import { FighterTypeBadges } from "./FighterTypeBadges"
 import { TypeBadge } from "./TypeBadge"
 import { cn } from "./cn"
-import { catchIcon, leaveIcon, runIcon } from "./typeIcons"
+import { catchIcon, leaveIcon, readyIcon, runIcon } from "./typeIcons"
 import { useCatch } from "./useCatch"
 import { useGetWildlifeName } from "./useGetWildlifeName"
 import { usePlayer } from "./usePlayer"
@@ -43,6 +44,18 @@ export const BattleView = ({
   const showBattleLog = useAtomValue(showBattleLogAtom)
   const setShowBattleLog = useSetAtom(showBattleLogAtom)
 
+  const { data: pvpStatus, isLoading: pvpStatusLoading } =
+    api.pvp.getStatus.useQuery(
+      {
+        battleId,
+        playerId: playerId!,
+      },
+      {
+        enabled: !!playerId,
+        refetchInterval: 1000,
+      }
+    )
+
   const { data, isFetching: battleLoading } =
     api.battle.getBattleStatus.useQuery(
       {
@@ -54,6 +67,7 @@ export const BattleView = ({
         onSuccess: (data) => {
           console.log(data)
         },
+        refetchInterval: pvpStatus?.isPvp ? 1000 : undefined,
       }
     )
 
@@ -80,7 +94,9 @@ export const BattleView = ({
     },
   })
 
-  const isLoading = battleLoading || choiceLoading
+  const isLoading = pvpStatus?.isPvp
+    ? false
+    : battleLoading || choiceLoading || pvpStatusLoading
 
   const getName = useGetWildlifeName()
 
@@ -93,12 +109,16 @@ export const BattleView = ({
     logRef.current.scrollTop = logRef.current.scrollHeight
   }, [battleLogAsHtml, showBattleLog])
 
-  if (!data) {
+  if (!data || !pvpStatus) {
     return (
       <div className="flex items-center justify-center py-48 text-center text-sm opacity-60">
         Loading...
       </div>
     )
+  }
+
+  if (pvpStatus.status === "INVITING" && !pvpStatus.allReady) {
+    return <BattleViewPvp battleId={battleId} pvpStatus={pvpStatus} />
   }
 
   const { battleStatus, status } = data
@@ -161,6 +181,7 @@ export const BattleView = ({
           {map(battleStatus?.sides, (side, sideIdx) => {
             const isMySide = side.player?.id === playerId
             const isMainSide = sideIdx === 0
+            const isChoiceDone = data.playerChoices[sideIdx]?.isChoiceDone
             return (
               <Fragment key={sideIdx}>
                 {sideIdx > 0 && (
@@ -276,6 +297,15 @@ export const BattleView = ({
                                   showAbility={SHOW_ABILITY}
                                   showNature={SHOW_NATURE}
                                 />
+                                <TypeBadge
+                                  icon={readyIcon}
+                                  content="Ready!"
+                                  className={cn(
+                                    isChoiceDone
+                                      ? "opacity-100 animate-pulse"
+                                      : "opacity-0"
+                                  )}
+                                />
                               </div>
                             </div>
                             {/* <div className="hidden flex-1 md:flex" /> */}
@@ -287,7 +317,8 @@ export const BattleView = ({
                                     isLoading ||
                                     !isActive ||
                                     !isMySide ||
-                                    !battleIsActive
+                                    !battleIsActive ||
+                                    !!isChoiceDone
                                   }
                                   onClick={({ moveIdx }) => {
                                     if (!playerId) return
@@ -393,15 +424,17 @@ export const BattleView = ({
                               }}
                               className="w-[76px] sm:w-28"
                             />
-                            <TypeBadge
-                              size="big"
-                              content="Catch"
-                              icon={catchIcon}
-                              onClick={() => {
-                                catchButton()
-                              }}
-                              className="w-[76px] sm:w-28"
-                            />
+                            {!pvpStatus.isPvp && (
+                              <TypeBadge
+                                size="big"
+                                content="Catch"
+                                icon={catchIcon}
+                                onClick={() => {
+                                  catchButton()
+                                }}
+                                className="w-[76px] sm:w-28"
+                              />
+                            )}
                           </>
                         ) : (
                           <>
