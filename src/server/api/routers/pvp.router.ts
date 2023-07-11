@@ -186,4 +186,61 @@ export const pvpRouter = createTRPCRouter({
         })
       }
     }),
+
+  getStatus: playerProcedure
+    .input(
+      z.object({
+        battleId: z.string(),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const battle = await ctx.prisma.battle.findFirst({
+        where: {
+          id: input.battleId,
+          battleParticipants: {
+            some: {
+              playerId: ctx.player.id,
+            },
+          },
+        },
+        select: {
+          id: true,
+          status: true,
+          battleParticipants: {
+            select: {
+              id: true,
+              player: {
+                select: {
+                  id: true,
+                  metadata: true,
+                },
+              },
+            },
+          },
+        },
+      })
+      if (!battle) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Battle not found",
+        })
+      }
+
+      const players = battle.battleParticipants
+        .flatMap((bp) => (bp.player ? [bp.player] : []))
+        .map((p) => ({ ...p, metadata: PlayerMetadata.parse(p.metadata) }))
+        .map((p) => ({
+          ...p,
+          isReady: p.metadata?.activeBattleId === battle.id,
+        }))
+
+      const allReady = players.every((p) => p.isReady)
+
+      return {
+        id: battle.id,
+        status: battle.status,
+        players,
+        allReady,
+      }
+    }),
 })
