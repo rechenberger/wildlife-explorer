@@ -39,7 +39,6 @@ export const simulateBattle = async ({
         ? [
             {
               playerId: bp.playerId,
-              // nextChoice: bp.metadata?.nextChoice,
               participantIdx,
             },
           ]

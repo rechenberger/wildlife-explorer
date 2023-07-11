@@ -49,7 +49,7 @@ export const SocialOverview = () => {
                 <div>{player._count.foundWildlife} found</div>
                 <div>{player._count.catches} caught</div>
                 <div>{player._count.battleParticipations} defeated</div>
-              </div>{" "}
+              </div>
               <div className="flex flex-col gap-1">
                 <button
                   className="flex flex-row gap-1 rounded text-xs items-center bg-black text-white px-2 py-0.5 border"
