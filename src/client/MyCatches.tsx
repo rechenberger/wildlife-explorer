@@ -120,6 +120,14 @@ export const MyCatches = () => {
     )
   }
 
+  if (!myTeam.length && !catchesWithoutTeam.length) {
+    catchesWithoutTeam.length === 0 && (
+      <div className="flex items-center justify-center py-12 text-center text-sm opacity-60">
+        Catch some Wildlife and your team will appear here.
+      </div>
+    )
+  }
+
   return (
     <DndContext
       onDragEnd={handleDragEnd}
@@ -146,6 +154,12 @@ export const MyCatches = () => {
         ))}
       </div>
       <DividerHeading>Your Catches</DividerHeading>
+      {!catchesWithoutTeam.length && (
+        <div className="flex items-center justify-center py-12 text-center text-sm opacity-60">
+          Once you have more than {MAX_FIGHTERS_PER_TEAM} catches. New catches
+          will be added here.
+        </div>
+      )}
       <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-2 gap-y-3 p-2">
         {map(catchesWithoutTeam, (c) => (
           <DraggableCatch c={c} key={c.id} />
