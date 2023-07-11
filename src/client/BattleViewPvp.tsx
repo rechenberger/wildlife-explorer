@@ -51,12 +51,13 @@ export const BattleViewPvp = ({
                   content={ready ? "Ready!" : isMe ? "Ready?" : "Waiting..."}
                   size="big"
                   onClick={
-                    isMe && !ready
+                    isMe
                       ? () => {
                           if (!playerId) return
                           acceptInvite({
                             battleId,
                             playerId,
+                            isReady: !ready,
                           })
                         }
                       : undefined
