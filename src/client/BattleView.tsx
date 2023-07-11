@@ -302,8 +302,8 @@ export const BattleView = ({
                                   content="Ready!"
                                   className={cn(
                                     isChoiceDone
-                                      ? "opacity-0"
-                                      : "opacity-100 animate-pulse"
+                                      ? "opacity-100 animate-pulse"
+                                      : "opacity-0"
                                   )}
                                 />
                               </div>
