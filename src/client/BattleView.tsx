@@ -297,12 +297,15 @@ export const BattleView = ({
                                   showAbility={SHOW_ABILITY}
                                   showNature={SHOW_NATURE}
                                 />
-                                {isChoiceDone && (
-                                  <TypeBadge
-                                    icon={readyIcon}
-                                    content="Ready!"
-                                  />
-                                )}
+                                <TypeBadge
+                                  icon={readyIcon}
+                                  content="Ready!"
+                                  className={cn(
+                                    isChoiceDone
+                                      ? "opacity-0"
+                                      : "opacity-100 animate-pulse"
+                                  )}
+                                />
                               </div>
                             </div>
                             {/* <div className="hidden flex-1 md:flex" /> */}
