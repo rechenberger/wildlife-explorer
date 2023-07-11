@@ -1,0 +1,600 @@
+1|Erratic|1
+1|Fast|1
+1|Medium Fast|1
+1|Medium Slow|1
+1|Slow|1
+1|Fluctuating|1
+2|Erratic|15
+2|Fast|6
+2|Medium Fast|8
+2|Medium Slow|9
+2|Slow|10
+2|Fluctuating|4
+3|Erratic|52
+3|Fast|21
+3|Medium Fast|27
+3|Medium Slow|57
+3|Slow|33
+3|Fluctuating|13
+4|Erratic|122
+4|Fast|51
+4|Medium Fast|64
+4|Medium Slow|96
+4|Slow|80
+4|Fluctuating|32
+5|Erratic|237
+5|Fast|100
+5|Medium Fast|125
+5|Medium Slow|135
+5|Slow|156
+5|Fluctuating|65
+6|Erratic|406
+6|Fast|172
+6|Medium Fast|216
+6|Medium Slow|179
+6|Slow|270
+6|Fluctuating|112
+7|Erratic|637
+7|Fast|274
+7|Medium Fast|343
+7|Medium Slow|236
+7|Slow|428
+7|Fluctuating|178
+8|Erratic|942
+8|Fast|409
+8|Medium Fast|512
+8|Medium Slow|314
+8|Slow|640
+8|Fluctuating|276
+9|Erratic|1,326
+9|Fast|583
+9|Medium Fast|729
+9|Medium Slow|419
+9|Slow|911
+9|Fluctuating|393
+10|Erratic|1,800
+10|Fast|800
+10|Medium Fast|1,000
+10|Medium Slow|560
+10|Slow|1,250
+10|Fluctuating|540
+11|Erratic|2,369
+11|Fast|1,064
+11|Medium Fast|1,331
+11|Medium Slow|742
+11|Slow|1,663
+11|Fluctuating|745
+12|Erratic|3,041
+12|Fast|1,382
+12|Medium Fast|1,728
+12|Medium Slow|973
+12|Slow|2,160
+12|Fluctuating|967
+13|Erratic|3,822
+13|Fast|1,757
+13|Medium Fast|2,197
+13|Medium Slow|1,261
+13|Slow|2,746
+13|Fluctuating|1,230
+14|Erratic|4,719
+14|Fast|2,195
+14|Medium Fast|2,744
+14|Medium Slow|1,612
+14|Slow|3,430
+14|Fluctuating|1,591
+15|Erratic|5,737
+15|Fast|2,700
+15|Medium Fast|3,375
+15|Medium Slow|2,035
+15|Slow|4,218
+15|Fluctuating|1,957
+16|Erratic|6,881
+16|Fast|3,276
+16|Medium Fast|4,096
+16|Medium Slow|2,535
+16|Slow|5,120
+16|Fluctuating|2,457
+17|Erratic|8,155
+17|Fast|3,930
+17|Medium Fast|4,913
+17|Medium Slow|3,120
+17|Slow|6,141
+17|Fluctuating|3,046
+18|Erratic|9,564
+18|Fast|4,665
+18|Medium Fast|5,832
+18|Medium Slow|3,798
+18|Slow|7,290
+18|Fluctuating|3,732
+19|Erratic|11,111
+19|Fast|5,487
+19|Medium Fast|6,859
+19|Medium Slow|4,575
+19|Slow|8,573
+19|Fluctuating|4,526
+20|Erratic|12,800
+20|Fast|6,400
+20|Medium Fast|8,000
+20|Medium Slow|5,460
+20|Slow|10,000
+20|Fluctuating|5,440
+21|Erratic|14,632
+21|Fast|7,408
+21|Medium Fast|9,261
+21|Medium Slow|6,458
+21|Slow|11,576
+21|Fluctuating|6,482
+22|Erratic|16,610
+22|Fast|8,518
+22|Medium Fast|10,648
+22|Medium Slow|7,577
+22|Slow|13,310
+22|Fluctuating|7,666
+23|Erratic|18,737
+23|Fast|9,733
+23|Medium Fast|12,167
+23|Medium Slow|8,825
+23|Slow|15,208
+23|Fluctuating|9,003
+24|Erratic|21,012
+24|Fast|11,059
+24|Medium Fast|13,824
+24|Medium Slow|10,208
+24|Slow|17,280
+24|Fluctuating|10,506
+25|Erratic|23,437
+25|Fast|12,500
+25|Medium Fast|15,625
+25|Medium Slow|11,735
+25|Slow|19,531
+25|Fluctuating|12,187
+26|Erratic|26,012
+26|Fast|14,060
+26|Medium Fast|17,576
+26|Medium Slow|13,411
+26|Slow|21,970
+26|Fluctuating|14,060
+27|Erratic|28,737
+27|Fast|15,746
+27|Medium Fast|19,683
+27|Medium Slow|15,244
+27|Slow|24,603
+27|Fluctuating|16,140
+28|Erratic|31,610
+28|Fast|17,561
+28|Medium Fast|21,952
+28|Medium Slow|17,242
+28|Slow|27,440
+28|Fluctuating|18,439
+29|Erratic|34,632
+29|Fast|19,511
+29|Medium Fast|24,389
+29|Medium Slow|19,411
+29|Slow|30,486
+29|Fluctuating|20,974
+30|Erratic|37,800
+30|Fast|21,600
+30|Medium Fast|27,000
+30|Medium Slow|21,760
+30|Slow|33,750
+30|Fluctuating|23,760
+31|Erratic|41,111
+31|Fast|23,832
+31|Medium Fast|29,791
+31|Medium Slow|24,294
+31|Slow|37,238
+31|Fluctuating|26,811
+32|Erratic|44,564
+32|Fast|26,214
+32|Medium Fast|32,768
+32|Medium Slow|27,021
+32|Slow|40,960
+32|Fluctuating|30,146
+33|Erratic|48,155
+33|Fast|28,749
+33|Medium Fast|35,937
+33|Medium Slow|29,949
+33|Slow|44,921
+33|Fluctuating|33,780
+34|Erratic|51,881
+34|Fast|31,443
+34|Medium Fast|39,304
+34|Medium Slow|33,084
+34|Slow|49,130
+34|Fluctuating|37,731
+35|Erratic|55,737
+35|Fast|34,300
+35|Medium Fast|42,875
+35|Medium Slow|36,435
+35|Slow|53,593
+35|Fluctuating|42,017
+36|Erratic|59,719
+36|Fast|37,324
+36|Medium Fast|46,656
+36|Medium Slow|40,007
+36|Slow|58,320
+36|Fluctuating|46,656
+37|Erratic|63,822
+37|Fast|40,522
+37|Medium Fast|50,653
+37|Medium Slow|43,808
+37|Slow|63,316
+37|Fluctuating|50,653
+38|Erratic|68,041
+38|Fast|43,897
+38|Medium Fast|54,872
+38|Medium Slow|47,846
+38|Slow|68,590
+38|Fluctuating|55,969
+39|Erratic|72,369
+39|Fast|47,455
+39|Medium Fast|59,319
+39|Medium Slow|52,127
+39|Slow|74,148
+39|Fluctuating|60,505
+40|Erratic|76,800
+40|Fast|51,200
+40|Medium Fast|64,000
+40|Medium Slow|56,660
+40|Slow|80,000
+40|Fluctuating|66,560
+41|Erratic|81,326
+41|Fast|55,136
+41|Medium Fast|68,921
+41|Medium Slow|61,450
+41|Slow|86,151
+41|Fluctuating|71,677
+42|Erratic|85,942
+42|Fast|59,270
+42|Medium Fast|74,088
+42|Medium Slow|66,505
+42|Slow|92,610
+42|Fluctuating|78,533
+43|Erratic|90,637
+43|Fast|63,605
+43|Medium Fast|79,507
+43|Medium Slow|71,833
+43|Slow|99,383
+43|Fluctuating|84,277
+44|Erratic|95,406
+44|Fast|68,147
+44|Medium Fast|85,184
+44|Medium Slow|77,440
+44|Slow|106,480
+44|Fluctuating|91,998
+45|Erratic|100,237
+45|Fast|72,900
+45|Medium Fast|91,125
+45|Medium Slow|83,335
+45|Slow|113,906
+45|Fluctuating|98,415
+46|Erratic|105,122
+46|Fast|77,868
+46|Medium Fast|97,336
+46|Medium Slow|89,523
+46|Slow|121,670
+46|Fluctuating|107,069
+47|Erratic|110,052
+47|Fast|83,058
+47|Medium Fast|103,823
+47|Medium Slow|96,012
+47|Slow|129,778
+47|Fluctuating|114,205
+48|Erratic|115,015
+48|Fast|88,473
+48|Medium Fast|110,592
+48|Medium Slow|102,810
+48|Slow|138,240
+48|Fluctuating|123,863
+49|Erratic|120,001
+49|Fast|94,119
+49|Medium Fast|117,649
+49|Medium Slow|109,923
+49|Slow|147,061
+49|Fluctuating|131,766
+50|Erratic|125,000
+50|Fast|100,000
+50|Medium Fast|125,000
+50|Medium Slow|117,360
+50|Slow|156,250
+50|Fluctuating|142,500
+51|Erratic|131,324
+51|Fast|106,120
+51|Medium Fast|132,651
+51|Medium Slow|125,126
+51|Slow|165,813
+51|Fluctuating|151,222
+52|Erratic|137,795
+52|Fast|112,486
+52|Medium Fast|140,608
+52|Medium Slow|133,229
+52|Slow|175,760
+52|Fluctuating|163,105
+53|Erratic|144,410
+53|Fast|119,101
+53|Medium Fast|148,877
+53|Medium Slow|141,677
+53|Slow|186,096
+53|Fluctuating|172,697
+54|Erratic|151,165
+54|Fast|125,971
+54|Medium Fast|157,464
+54|Medium Slow|150,476
+54|Slow|196,830
+54|Fluctuating|185,807
+55|Erratic|158,056
+55|Fast|133,100
+55|Medium Fast|166,375
+55|Medium Slow|159,635
+55|Slow|207,968
+55|Fluctuating|196,322
+56|Erratic|165,079
+56|Fast|140,492
+56|Medium Fast|175,616
+56|Medium Slow|169,159
+56|Slow|219,520
+56|Fluctuating|210,739
+57|Erratic|172,229
+57|Fast|148,154
+57|Medium Fast|185,193
+57|Medium Slow|179,056
+57|Slow|231,491
+57|Fluctuating|222,231
+58|Erratic|179,503
+58|Fast|156,089
+58|Medium Fast|195,112
+58|Medium Slow|189,334
+58|Slow|243,890
+58|Fluctuating|238,036
+59|Erratic|186,894
+59|Fast|164,303
+59|Medium Fast|205,379
+59|Medium Slow|199,999
+59|Slow|256,723
+59|Fluctuating|250,562
+60|Erratic|194,400
+60|Fast|172,800
+60|Medium Fast|216,000
+60|Medium Slow|211,060
+60|Slow|270,000
+60|Fluctuating|267,840
+61|Erratic|202,013
+61|Fast|181,584
+61|Medium Fast|226,981
+61|Medium Slow|222,522
+61|Slow|283,726
+61|Fluctuating|281,456
+62|Erratic|209,728
+62|Fast|190,662
+62|Medium Fast|238,328
+62|Medium Slow|234,393
+62|Slow|297,910
+62|Fluctuating|300,293
+63|Erratic|217,540
+63|Fast|200,037
+63|Medium Fast|250,047
+63|Medium Slow|246,681
+63|Slow|312,558
+63|Fluctuating|315,059
+64|Erratic|225,443
+64|Fast|209,715
+64|Medium Fast|262,144
+64|Medium Slow|259,392
+64|Slow|327,680
+64|Fluctuating|335,544
+65|Erratic|233,431
+65|Fast|219,700
+65|Medium Fast|274,625
+65|Medium Slow|272,535
+65|Slow|343,281
+65|Fluctuating|351,520
+66|Erratic|241,496
+66|Fast|229,996
+66|Medium Fast|287,496
+66|Medium Slow|286,115
+66|Slow|359,370
+66|Fluctuating|373,744
+67|Erratic|249,633
+67|Fast|240,610
+67|Medium Fast|300,763
+67|Medium Slow|300,140
+67|Slow|375,953
+67|Fluctuating|390,991
+68|Erratic|257,834
+68|Fast|251,545
+68|Medium Fast|314,432
+68|Medium Slow|314,618
+68|Slow|393,040
+68|Fluctuating|415,050
+69|Erratic|267,406
+69|Fast|262,807
+69|Medium Fast|328,509
+69|Medium Slow|329,555
+69|Slow|410,636
+69|Fluctuating|433,631
+70|Erratic|276,458
+70|Fast|274,400
+70|Medium Fast|343,000
+70|Medium Slow|344,960
+70|Slow|428,750
+70|Fluctuating|459,620
+71|Erratic|286,328
+71|Fast|286,328
+71|Medium Fast|357,911
+71|Medium Slow|360,838
+71|Slow|447,388
+71|Fluctuating|479,600
+72|Erratic|296,358
+72|Fast|298,598
+72|Medium Fast|373,248
+72|Medium Slow|377,197
+72|Slow|466,560
+72|Fluctuating|507,617
+73|Erratic|305,767
+73|Fast|311,213
+73|Medium Fast|389,017
+73|Medium Slow|394,045
+73|Slow|486,271
+73|Fluctuating|529,063
+74|Erratic|316,074
+74|Fast|324,179
+74|Medium Fast|405,224
+74|Medium Slow|411,388
+74|Slow|506,530
+74|Fluctuating|559,209
+75|Erratic|326,531
+75|Fast|337,500
+75|Medium Fast|421,875
+75|Medium Slow|429,235
+75|Slow|527,343
+75|Fluctuating|582,187
+76|Erratic|336,255
+76|Fast|351,180
+76|Medium Fast|438,976
+76|Medium Slow|447,591
+76|Slow|548,720
+76|Fluctuating|614,566
+77|Erratic|346,965
+77|Fast|365,226
+77|Medium Fast|456,533
+77|Medium Slow|466,464
+77|Slow|570,666
+77|Fluctuating|639,146
+78|Erratic|357,812
+78|Fast|379,641
+78|Medium Fast|474,552
+78|Medium Slow|485,862
+78|Slow|593,190
+78|Fluctuating|673,863
+79|Erratic|367,807
+79|Fast|394,431
+79|Medium Fast|493,039
+79|Medium Slow|505,791
+79|Slow|616,298
+79|Fluctuating|700,115
+80|Erratic|378,880
+80|Fast|409,600
+80|Medium Fast|512,000
+80|Medium Slow|526,260
+80|Slow|640,000
+80|Fluctuating|737,280
+81|Erratic|390,077
+81|Fast|425,152
+81|Medium Fast|531,441
+81|Medium Slow|547,274
+81|Slow|664,301
+81|Fluctuating|765,275
+82|Erratic|400,293
+82|Fast|441,094
+82|Medium Fast|551,368
+82|Medium Slow|568,841
+82|Slow|689,210
+82|Fluctuating|804,997
+83|Erratic|411,686
+83|Fast|457,429
+83|Medium Fast|571,787
+83|Medium Slow|590,969
+83|Slow|714,733
+83|Fluctuating|834,809
+84|Erratic|423,190
+84|Fast|474,163
+84|Medium Fast|592,704
+84|Medium Slow|613,664
+84|Slow|740,880
+84|Fluctuating|877,201
+85|Erratic|433,572
+85|Fast|491,300
+85|Medium Fast|614,125
+85|Medium Slow|636,935
+85|Slow|767,656
+85|Fluctuating|908,905
+86|Erratic|445,239
+86|Fast|508,844
+86|Medium Fast|636,056
+86|Medium Slow|660,787
+86|Slow|795,070
+86|Fluctuating|954,084
+87|Erratic|457,001
+87|Fast|526,802
+87|Medium Fast|658,503
+87|Medium Slow|685,228
+87|Slow|823,128
+87|Fluctuating|987,754
+88|Erratic|467,489
+88|Fast|545,177
+88|Medium Fast|681,472
+88|Medium Slow|710,266
+88|Slow|851,840
+88|Fluctuating|1,035,837
+89|Erratic|479,378
+89|Fast|563,975
+89|Medium Fast|704,969
+89|Medium Slow|735,907
+89|Slow|881,211
+89|Fluctuating|1,071,552
+90|Erratic|491,346
+90|Fast|583,200
+90|Medium Fast|729,000
+90|Medium Slow|762,160
+90|Slow|911,250
+90|Fluctuating|1,122,660
+91|Erratic|501,878
+91|Fast|602,856
+91|Medium Fast|753,571
+91|Medium Slow|789,030
+91|Slow|941,963
+91|Fluctuating|1,160,499
+92|Erratic|513,934
+92|Fast|622,950
+92|Medium Fast|778,688
+92|Medium Slow|816,525
+92|Slow|973,360
+92|Fluctuating|1,214,753
+93|Erratic|526,049
+93|Fast|643,485
+93|Medium Fast|804,357
+93|Medium Slow|844,653
+93|Slow|1,005,446
+93|Fluctuating|1,254,796
+94|Erratic|536,557
+94|Fast|664,467
+94|Medium Fast|830,584
+94|Medium Slow|873,420
+94|Slow|1,038,230
+94|Fluctuating|1,312,322
+95|Erratic|548,720
+95|Fast|685,900
+95|Medium Fast|857,375
+95|Medium Slow|902,835
+95|Slow|1,071,718
+95|Fluctuating|1,354,652
+96|Erratic|560,922
+96|Fast|707,788
+96|Medium Fast|884,736
+96|Medium Slow|932,903
+96|Slow|1,105,920
+96|Fluctuating|1,415,577
+97|Erratic|571,333
+97|Fast|730,138
+97|Medium Fast|912,673
+97|Medium Slow|963,632
+97|Slow|1,140,841
+97|Fluctuating|1,460,276
+98|Erratic|583,539
+98|Fast|752,953
+98|Medium Fast|941,192
+98|Medium Slow|995,030
+98|Slow|1,176,490
+98|Fluctuating|1,524,731
+99|Erratic|591,882
+99|Fast|776,239
+99|Medium Fast|970,299
+99|Medium Slow|1,027,103
+99|Slow|1,212,873
+99|Fluctuating|1,571,884
+100|Erratic|600,000
+100|Fast|800,000
+100|Medium Fast|1,000,000
+100|Medium Slow|1,059,860
+100|Slow|1,250,000
+100|Fluctuating|1,640,000
