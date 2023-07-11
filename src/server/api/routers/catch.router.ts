@@ -111,18 +111,39 @@ export const catchRouter = createTRPCRouter({
 
       const catchIdsMaxPerTeam = take(input.catchIds, MAX_FIGHTERS_PER_TEAM)
 
-      await ctx.prisma.catch.updateMany({
-        where: {
-          playerId: ctx.player.id,
-        },
-        data: {
-          battleOrderPosition: null,
-        },
-      })
+      // await ctx.prisma.catch.updateMany({
+      //   where: {
+      //     playerId: ctx.player.id,
+      //   },
+      //   data: {
+      //     battleOrderPosition: null,
+      //   },
+      // })
 
-      await Promise.all(
-        map(catchIdsMaxPerTeam, async (catchId, index) => {
-          await ctx.prisma.catch.updateMany({
+      // await Promise.all(
+      //   map(catchIdsMaxPerTeam, async (catchId, index) => {
+      //     await ctx.prisma.catch.updateMany({
+      //       where: {
+      //         playerId: ctx.player.id,
+      //         id: catchId,
+      //       },
+      //       data: {
+      //         battleOrderPosition: index + 1,
+      //       },
+      //     })
+      //   })
+      // )
+      await ctx.prisma.$transaction([
+        ctx.prisma.catch.updateMany({
+          where: {
+            playerId: ctx.player.id,
+          },
+          data: {
+            battleOrderPosition: null,
+          },
+        }),
+        ...map(catchIdsMaxPerTeam, (catchId, index) =>
+          ctx.prisma.catch.updateMany({
             where: {
               playerId: ctx.player.id,
               id: catchId,
@@ -131,8 +152,8 @@ export const catchRouter = createTRPCRouter({
               battleOrderPosition: index + 1,
             },
           })
-        })
-      )
+        ),
+      ])
       return true
     }),
 
