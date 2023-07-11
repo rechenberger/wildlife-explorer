@@ -35,7 +35,7 @@ async function processLineByLine() {
     crlfDelay: Infinity,
   })
 
-  let data: PokemonLevelTypeObj[] = []
+  let data: { [key: number]: PokemonLevelTypeObj } = {}
 
   for await (const line of rl) {
     let splitLine = line.split("|")
@@ -44,7 +44,7 @@ async function processLineByLine() {
       levelTypeString: splitLine[1],
       levelTypeMapped: mapLevelType(splitLine[1]),
     }
-    data.push(obj)
+    data[obj.num] = obj
   }
 
   fs.writeFile(
