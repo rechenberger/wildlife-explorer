@@ -6,7 +6,9 @@ import {
   Brain,
   Bug,
   Cat,
+  Check,
   Circle,
+  Clock,
   Droplets,
   Dumbbell,
   Flame,
@@ -214,6 +216,22 @@ export const runIcon = {
   bgFull: "bg-gray-500 text-white",
   bgHalf: "bg-gray-500/50",
   ringFull: "hover:ring ring-gray-500",
+}
+
+export const readyIcon = {
+  name: "Ready",
+  icon: Check,
+  bgFull: "bg-green-500 text-white",
+  bgHalf: "bg-green-500/50",
+  ringFull: "hover:ring ring-green-500",
+}
+
+export const waitingIcon = {
+  name: "Waiting",
+  icon: Clock,
+  bgFull: "bg-yellow-500 text-white",
+  bgHalf: "bg-yellow-500/50",
+  ringFull: "hover:ring ring-yellow-500",
 }
 
 export type TypeIcon = {

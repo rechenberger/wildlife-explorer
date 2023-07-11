@@ -151,13 +151,14 @@ export const battleRouter = createTRPCRouter({
       })
     )
     .query(async ({ ctx, input }) => {
-      const { battleStatus, battleDb } = await simulateBattle({
+      const { battleStatus, battleDb, playerChoices } = await simulateBattle({
         prisma: ctx.prisma,
         battleId: input.battleId,
       })
       return {
         battleStatus,
         status: battleDb.status,
+        playerChoices,
       }
     }),
 
@@ -270,19 +271,11 @@ export const battleRouter = createTRPCRouter({
           status: "CANCELLED",
         },
         include: {
-          battleParticipants: true,
-        },
-      })
-
-      await ctx.prisma.player.update({
-        where: {
-          id: ctx.player.id,
-        },
-        data: {
-          metadata: {
-            ...ctx.player.metadata,
-            activeBattleId: null,
-          } satisfies PlayerMetadata,
+          battleParticipants: {
+            include: {
+              player: true,
+            },
+          },
         },
       })
 
@@ -292,6 +285,20 @@ export const battleRouter = createTRPCRouter({
             await respawnWildlife({
               prisma: ctx.prisma,
               wildlifeId: p.wildlifeId,
+            })
+          }
+
+          if (p.player) {
+            await ctx.prisma.player.update({
+              where: {
+                id: p.player.id,
+              },
+              data: {
+                metadata: {
+                  ...PlayerMetadata.parse(p.player.metadata),
+                  activeBattleId: null,
+                } satisfies PlayerMetadata,
+              },
             })
           }
         })

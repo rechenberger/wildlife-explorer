@@ -1,5 +1,5 @@
 import NiceModal from "@ebay/nice-modal-react"
-import { Award, CircleDashed, Frown } from "lucide-react"
+import { Award, CircleDashed, Clock, Frown } from "lucide-react"
 import { Fragment } from "react"
 import { api } from "~/utils/api"
 import { BattleViewModal } from "./BattleViewModal"
@@ -47,11 +47,14 @@ export const BattleOverview = () => {
               ? "Cancelled"
               : battle.status === "FINISHED"
               ? "Finished"
+              : battle.status === "INVITING"
+              ? "Invite Pending"
               : "???"
 
           const isFinished = battle.status === "FINISHED"
           const isActive = battle.status === "IN_PROGRESS"
           const isCancelled = battle.status === "CANCELLED"
+          const isInviting = battle.status === "INVITING"
           const isWin = isFinished && myParticipation?.isWinner === true
           const isLoss = isFinished && myParticipation?.isWinner === false
 
@@ -62,8 +65,9 @@ export const BattleOverview = () => {
                 "flex flex-row items-center",
                 "cursor-pointer rounded-xl bg-gray-300 bg-opacity-50 px-4 py-1 hover:bg-opacity-80",
                 isActive && "animate-pulse",
-                isWin && "bg-yellow-500",
-                isLoss && "bg-red-500"
+                isWin && "bg-green-500",
+                isLoss && "bg-red-500",
+                isInviting && "bg-yellow-500"
               )}
               onClick={() => {
                 NiceModal.show(BattleViewModal, {
@@ -98,6 +102,8 @@ export const BattleOverview = () => {
                   <Frown className="h-6 w-6 text-black/50" />
                 ) : isCancelled ? (
                   <CircleDashed className="h-6 w-6 text-black/50" />
+                ) : isInviting ? (
+                  <Clock className="h-6 w-6 text-black/50" />
                 ) : null}
               </div>
             </div>
