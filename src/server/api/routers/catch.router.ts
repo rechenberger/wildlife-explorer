@@ -264,6 +264,7 @@ export const catchRouter = createTRPCRouter({
           battleOrderCount < MAX_FIGHTERS_PER_TEAM
             ? battleOrderCount + 1
             : null,
+        metadata: catchMetadata,
       },
     })
 
