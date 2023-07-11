@@ -22,16 +22,18 @@ import { usePlayer } from "./usePlayer"
 export const MyCatches = () => {
   const { playerId } = usePlayer()
 
-  const { myTeam, catchesWithoutTeam, isLoading } = useMyTeam()
+  const { myTeam, catchesWithoutTeam, isLoading, isFetching } = useMyTeam()
 
   const trpc = api.useContext()
 
-  const { mutate: setMyTeamBattleOrder } =
+  const { mutate: setMyTeamBattleOrder, isLoading: isMutating } =
     api.catch.setMyTeamBattleOrder.useMutation({
       onSuccess: () => {
         trpc.catch.getMyCatches.invalidate()
       },
     })
+
+  const disabled = isMutating || isFetching
 
   const isDefaultSwap = true
 
@@ -44,6 +46,7 @@ export const MyCatches = () => {
     catchId: string
     isSwapWithCurrentPosition?: boolean
   }) => {
+    if (disabled) return
     if (!playerId) return
     const currentTeamOrder = myTeam.map((c) => c.id)
 
@@ -81,6 +84,7 @@ export const MyCatches = () => {
   }
 
   const handleDragEnd = (event: DragEndEvent) => {
+    if (disabled) return
     const { active, over } = event
 
     if (!active || !over) return
@@ -142,7 +146,7 @@ export const MyCatches = () => {
         {map(fillWithNulls(myTeam, MAX_FIGHTERS_PER_TEAM), (c, idx) => (
           <DroppableTeamSlot id={idx} key={c?.id ?? idx}>
             {c ? (
-              <DraggableCatch c={c} />
+              <DraggableCatch c={c} disabled={disabled} />
             ) : (
               <div className="bg-gray-100 h-12 rounded-3xl flex items-center justify-center text-xs text-black/60">
                 Slot #{idx + 1}

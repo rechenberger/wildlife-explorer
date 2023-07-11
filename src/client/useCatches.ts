@@ -5,7 +5,11 @@ export type MyCatch = RouterOutputs["catch"]["getMyCatches"][number]
 
 export const useMyCatches = () => {
   const { playerId } = usePlayer()
-  const { data: myCatches, isLoading } = api.catch.getMyCatches.useQuery(
+  const {
+    data: myCatches,
+    isLoading,
+    isFetching,
+  } = api.catch.getMyCatches.useQuery(
     {
       playerId: playerId!,
     },
@@ -16,6 +20,7 @@ export const useMyCatches = () => {
   return {
     myCatches,
     isLoading,
+    isFetching,
   }
 }
 

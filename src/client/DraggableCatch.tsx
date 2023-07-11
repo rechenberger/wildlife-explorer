@@ -4,7 +4,13 @@ import { CatchDetailsModal } from "./CatchDetailsModal"
 import { FighterChip } from "./FighterChip"
 import { type MyCatch } from "./useCatches"
 
-export const DraggableCatch = ({ c }: { c: MyCatch }) => {
+export const DraggableCatch = ({
+  c,
+  disabled,
+}: {
+  c: MyCatch
+  disabled?: boolean
+}) => {
   const {
     attributes,
     listeners,
@@ -12,6 +18,7 @@ export const DraggableCatch = ({ c }: { c: MyCatch }) => {
     transform,
   } = useDraggable({
     id: c.id,
+    disabled,
   })
   const style = transform
     ? {
@@ -29,7 +36,7 @@ export const DraggableCatch = ({ c }: { c: MyCatch }) => {
         ref={setNodeRefDrag}
         key={c.id}
         className="flex cursor-pointer flex-col p-1 touch-manipulation"
-        onClick={(e) => {
+        onClick={() => {
           NiceModal.show(CatchDetailsModal, {
             catchId: c.id,
           })
