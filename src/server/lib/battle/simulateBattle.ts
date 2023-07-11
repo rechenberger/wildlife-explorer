@@ -33,15 +33,17 @@ export const simulateBattle = async ({
   })
   console.timeEnd("getBattleForSimulation")
 
-  const playerChoices = battleDb.battleParticipants.flatMap((bp) =>
-    bp.playerId
-      ? [
-          {
-            playerId: bp.playerId,
-            nextChoice: bp.metadata?.nextChoice,
-          },
-        ]
-      : []
+  const playerChoices = battleDb.battleParticipants.flatMap(
+    (bp, participantIdx) =>
+      bp.playerId
+        ? [
+            {
+              playerId: bp.playerId,
+              nextChoice: bp.metadata?.nextChoice,
+              participantIdx,
+            },
+          ]
+        : []
   )
 
   console.time("simulateBattle")
@@ -142,7 +144,14 @@ export const simulateBattle = async ({
     if (!success) {
       throw new Error(`Invalid choice: "${choice.choice}"`)
     }
-    if (battle[sideId]!.isChoiceDone()) {
+
+    const allPlayerChoicesDone = () =>
+      playerChoices.every((pc) => {
+        const sideId = `p${pc.participantIdx + 1}` as SideID
+        return battle[sideId]!.isChoiceDone()
+      })
+
+    if (allPlayerChoicesDone()) {
       // TODO: AI
 
       // CHOSE RANDOM MOVE:
@@ -164,7 +173,7 @@ export const simulateBattle = async ({
       }
     }
     // When player defeats wildlife, check if there are more wildlife to fight:
-    if (battle[sideId]!.isChoiceDone()) {
+    if (allPlayerChoicesDone()) {
       // TODO: AI
       battle.makeChoices()
     }
