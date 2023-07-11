@@ -6,9 +6,11 @@ import { type MyCatch } from "./useCatches"
 
 export const DraggableCatch = ({
   c,
+  type,
   disabled,
 }: {
   c: MyCatch
+  type: "team" | "bench"
   disabled?: boolean
 }) => {
   const {
@@ -19,6 +21,9 @@ export const DraggableCatch = ({
   } = useDraggable({
     id: c.id,
     disabled,
+    data: {
+      type,
+    },
   })
   const style = transform
     ? {

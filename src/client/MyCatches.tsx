@@ -7,7 +7,7 @@ import {
   type DragEndEvent,
 } from "@dnd-kit/core"
 import { restrictToFirstScrollableAncestor } from "@dnd-kit/modifiers"
-import { map } from "lodash-es"
+import { includes, map } from "lodash-es"
 import { toast } from "sonner"
 import { z } from "zod"
 import { MAX_FIGHTERS_PER_TEAM } from "~/config"
@@ -38,6 +38,18 @@ export const MyCatches = () => {
 
   const isDefaultSwap = true
 
+  const removeFromTeam = ({ catchId }: { catchId: string }) => {
+    if (disabled) return
+    if (!playerId) return
+    const teamWithoutCatchId = myTeam
+      .map((c) => c.id)
+      .filter((cId) => cId !== catchId)
+
+    setMyTeamBattleOrder({
+      catchIds: teamWithoutCatchId,
+      playerId,
+    })
+  }
   const addToTeamAtPos = ({
     position,
     catchId,
@@ -85,11 +97,19 @@ export const MyCatches = () => {
   }
 
   const handleDragEnd = (event: DragEndEvent) => {
+    // console.log({ event })
+    const { active, over } = event
+
+    const acceptsTypes = over?.data?.current?.accepts
+    const dropType = active?.data?.current?.type
+    if (!!acceptsTypes && !includes(acceptsTypes, dropType)) {
+      // console.info("wrong type")
+      return
+    }
     if (disabled) {
       toast.error("That was too fast, please try again.")
       return
     }
-    const { active, over } = event
 
     if (!active || !over) return
 
@@ -97,11 +117,16 @@ export const MyCatches = () => {
     const overId = z.number().parse(over.id)
 
     if (!activeId) return
-
-    addToTeamAtPos({
-      position: overId,
-      catchId: activeId,
-    })
+    if (overId === -1) {
+      removeFromTeam({
+        catchId: activeId,
+      })
+    } else {
+      addToTeamAtPos({
+        position: overId,
+        catchId: activeId,
+      })
+    }
   }
 
   const sensors = useSensors(
@@ -150,7 +175,7 @@ export const MyCatches = () => {
         {map(fillWithNulls(myTeam, MAX_FIGHTERS_PER_TEAM), (c, idx) => (
           <DroppableTeamSlot id={idx} key={c?.id ?? idx}>
             {c ? (
-              <DraggableCatch c={c} />
+              <DraggableCatch c={c} type="team" />
             ) : (
               <div className="bg-gray-100 h-12 rounded-3xl flex items-center justify-center text-xs text-black/60">
                 Slot #{idx + 1}
@@ -166,11 +191,13 @@ export const MyCatches = () => {
           will be added here.
         </div>
       )}
-      <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-2 gap-y-3 p-2">
-        {map(catchesWithoutTeam, (c) => (
-          <DraggableCatch c={c} key={c.id} />
-        ))}
-      </div>
+      <DroppableTeamSlot id={-1} accepts={["team"]}>
+        <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-2 gap-y-3 p-2">
+          {map(catchesWithoutTeam, (c) => (
+            <DraggableCatch c={c} key={c.id} type="bench" />
+          ))}
+        </div>
+      </DroppableTeamSlot>
     </DndContext>
   )
 }
