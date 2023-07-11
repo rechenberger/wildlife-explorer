@@ -1,10 +1,10 @@
 import { map } from "lodash-es"
-import { Swords } from "lucide-react"
+import { ArrowUp, Swords } from "lucide-react"
 import { Fragment } from "react"
 import { api, type RouterOutputs } from "~/utils/api"
-import { cn } from "./cn"
 import { DividerHeading } from "./DividerHeading"
 import { TypeBadge } from "./TypeBadge"
+import { cn } from "./cn"
 import { readyIcon, runIcon, waitingIcon } from "./typeIcons"
 import { usePlayer } from "./usePlayer"
 
@@ -46,27 +46,39 @@ export const BattleViewPvp = ({
               {idx > 0 && <DividerHeading className="m-0">vs.</DividerHeading>}
               <div className="flex flex-col gap-2">
                 <div>{p.name}</div>
-                <TypeBadge
-                  icon={ready ? readyIcon : waitingIcon}
-                  content={ready ? "Ready!" : isMe ? "Ready?" : "Waiting..."}
-                  size="big"
-                  onClick={
-                    isMe
-                      ? () => {
-                          if (!playerId) return
-                          acceptInvite({
-                            battleId,
-                            playerId,
-                            isReady: !ready,
-                          })
-                        }
-                      : undefined
-                  }
-                  className={cn(
-                    "self-center w-40",
-                    ready ? "animate - pulse" : undefined
+                <div className="flex flex-row gap-4 self-center justify-center items-center">
+                  {isMe && !ready && (
+                    <div className="rotate-90">
+                      <ArrowUp className="w-4 h-4 animate-bounce" />
+                    </div>
                   )}
-                />
+                  <TypeBadge
+                    icon={ready ? readyIcon : waitingIcon}
+                    content={ready ? "Ready!" : isMe ? "Ready?" : "Waiting..."}
+                    size="big"
+                    onClick={
+                      isMe
+                        ? () => {
+                            if (!playerId) return
+                            acceptInvite({
+                              battleId,
+                              playerId,
+                              isReady: !ready,
+                            })
+                          }
+                        : undefined
+                    }
+                    className={cn(
+                      "w-40",
+                      ready ? "animate - pulse" : undefined
+                    )}
+                  />
+                  {isMe && !ready && (
+                    <div className="-rotate-90">
+                      <ArrowUp className="w-4 h-4 animate-bounce" />
+                    </div>
+                  )}
+                </div>
               </div>
             </Fragment>
           )
