@@ -52,9 +52,7 @@ export const BattleView = ({
       },
       {
         enabled: !!playerId,
-        onSuccess: (data) => {
-          console.log(data)
-        },
+        refetchInterval: 1000,
       }
     )
 
