@@ -1,10 +1,11 @@
 import { map } from "lodash-es"
 import { Swords } from "lucide-react"
 import { Fragment } from "react"
-import { type RouterOutputs } from "~/utils/api"
+import { api, type RouterOutputs } from "~/utils/api"
 import { DividerHeading } from "./DividerHeading"
 import { TypeBadge } from "./TypeBadge"
 import { readyIcon, runIcon, waitingIcon } from "./typeIcons"
+import { usePlayer } from "./usePlayer"
 
 type PvpStatus = RouterOutputs["pvp"]["getStatus"]
 
@@ -15,6 +16,21 @@ export const BattleViewPvp = ({
   pvpStatus: PvpStatus
   battleId: string
 }) => {
+  const { playerId } = usePlayer()
+  const trpc = api.useContext()
+  const { mutate: acceptInvite } = api.pvp.acceptInvite.useMutation({
+    onSuccess: () => {
+      trpc.pvp.invalidate()
+      trpc.battle.invalidate()
+    },
+  })
+  const { mutate: cancelInvite } = api.pvp.cancelInvite.useMutation({
+    onSuccess: () => {
+      trpc.pvp.invalidate()
+      trpc.battle.invalidate()
+    },
+  })
+
   return (
     <div className="flex items-center justify-center py-48 text-center gap-4">
       <Swords className="w-8 h-8" />
@@ -30,6 +46,18 @@ export const BattleViewPvp = ({
                 icon={p.isReady ? readyIcon : waitingIcon}
                 content={p.isReady ? "Ready!" : "Waiting..."}
                 size="big"
+                onClick={
+                  p.id === playerId && !p.isReady
+                    ? () => {
+                        if (!playerId) return
+                        acceptInvite({
+                          battleId,
+                          playerId,
+                        })
+                      }
+                    : undefined
+                }
+                className={p.isReady ? "animate-ping" : undefined}
               />
             </div>
           </Fragment>
@@ -37,7 +65,12 @@ export const BattleViewPvp = ({
       </div>
 
       <div className="mt-8 flex flex-row items-end">
-        <TypeBadge icon={runIcon} content={"Cancel"} size="big" />
+        <TypeBadge
+          icon={runIcon}
+          content={"Cancel"}
+          size="big"
+          onClick={() => {}}
+        />
       </div>
     </div>
   )
