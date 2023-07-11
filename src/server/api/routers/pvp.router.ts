@@ -122,4 +122,68 @@ export const pvpRouter = createTRPCRouter({
 
       return true
     }),
+
+  cancelInvite: playerProcedure
+    .input(
+      z.object({
+        battleId: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const battle = await ctx.prisma.battle.findFirst({
+        where: {
+          id: input.battleId,
+          status: "INVITING",
+          battleParticipants: {
+            some: {
+              playerId: ctx.player.id,
+            },
+          },
+        },
+        select: {
+          id: true,
+          battleParticipants: {
+            select: {
+              id: true,
+              player: {
+                select: {
+                  id: true,
+                  metadata: true,
+                },
+              },
+            },
+          },
+        },
+      })
+
+      if (!battle) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Battle not found",
+        })
+      }
+
+      await ctx.prisma.battle.update({
+        where: {
+          id: battle.id,
+        },
+        data: {
+          status: "CANCELLED",
+        },
+      })
+
+      if (ctx.player.metadata?.activeBattleId === input.battleId) {
+        await ctx.prisma.player.update({
+          where: {
+            id: ctx.player.id,
+          },
+          data: {
+            metadata: {
+              ...ctx.player.metadata,
+              activeBattleId: null,
+            },
+          },
+        })
+      }
+    }),
 })
