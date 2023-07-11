@@ -44,8 +44,8 @@ export const BattleView = ({
   const showBattleLog = useAtomValue(showBattleLogAtom)
   const setShowBattleLog = useSetAtom(showBattleLogAtom)
 
-  const { data, isFetching: battleLoading } =
-    api.battle.getBattleStatus.useQuery(
+  const { data: pvpStatus, isLoading: pvpStatusLoading } =
+    api.pvp.getStatus.useQuery(
       {
         battleId,
         playerId: playerId!,
@@ -58,8 +58,8 @@ export const BattleView = ({
       }
     )
 
-  const { data: pvpStatus, isLoading: pvpStatusLoading } =
-    api.pvp.getStatus.useQuery(
+  const { data, isFetching: battleLoading } =
+    api.battle.getBattleStatus.useQuery(
       {
         battleId,
         playerId: playerId!,
@@ -69,6 +69,7 @@ export const BattleView = ({
         onSuccess: (data) => {
           console.log(data)
         },
+        refetchInterval: pvpStatus?.isPvp ? 1000 : undefined,
       }
     )
 
@@ -95,7 +96,9 @@ export const BattleView = ({
     },
   })
 
-  const isLoading = battleLoading || choiceLoading || pvpStatusLoading
+  const isLoading = pvpStatus?.isPvp
+    ? false
+    : battleLoading || choiceLoading || pvpStatusLoading
 
   const getName = useGetWildlifeName()
 

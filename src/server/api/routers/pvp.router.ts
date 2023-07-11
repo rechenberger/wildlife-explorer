@@ -242,6 +242,7 @@ export const pvpRouter = createTRPCRouter({
         status: battle.status,
         players,
         allReady,
+        isPvp: players.length > 1,
       }
     }),
 })
