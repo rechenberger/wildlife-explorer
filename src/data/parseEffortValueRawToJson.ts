@@ -29,7 +29,7 @@ async function processLineByLine() {
     crlfDelay: Infinity,
   })
 
-  let data: EffortValueYieldObj[] = []
+  let data: { [key: string]: EffortValueYieldObj } = {}
 
   for await (const line of rl) {
     let splitLine = line.split(",")
@@ -54,7 +54,7 @@ async function processLineByLine() {
       obj["form"] = formSplit[1]
       obj["formName"] = splitLine[10]
     }
-    data.push(obj)
+    data[`${obj.num}${obj["form"] ?? ""}`] = obj
   }
 
   fs.writeFile(
