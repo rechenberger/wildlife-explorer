@@ -1,6 +1,7 @@
 import {
   Apple,
   ArrowRight,
+  Award,
   Biohazard,
   Bird,
   Brain,
@@ -12,6 +13,7 @@ import {
   Droplets,
   Dumbbell,
   Flame,
+  Frown,
   Gem,
   Ghost,
   HeartHandshake,
@@ -232,6 +234,22 @@ export const waitingIcon = {
   bgFull: "bg-yellow-500 text-white",
   bgHalf: "bg-yellow-500/50",
   ringFull: "hover:ring ring-yellow-500",
+}
+
+export const winnerIcon = {
+  name: "Winner",
+  icon: Award,
+  bgFull: "bg-green-500 text-white",
+  bgHalf: "bg-green-500/50",
+  ringFull: "hover:ring ring-green-500",
+}
+
+export const loserIcon = {
+  name: "Loser",
+  icon: Frown,
+  bgFull: "bg-red-500 text-white",
+  bgHalf: "bg-red-500/50",
+  ringFull: "hover:ring ring-red-500",
 }
 
 export type TypeIcon = {
