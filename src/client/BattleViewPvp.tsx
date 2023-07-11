@@ -32,7 +32,7 @@ export const BattleViewPvp = ({
   })
 
   return (
-    <div className="flex items-center justify-center py-48 text-center gap-4">
+    <div className="flex flex-col items-center justify-center py-48 text-center gap-4">
       <Swords className="w-8 h-8" />
       <div>PvP Battle</div>
 
