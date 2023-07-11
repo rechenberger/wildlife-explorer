@@ -33,6 +33,17 @@ export const simulateBattle = async ({
   })
   console.timeEnd("getBattleForSimulation")
 
+  const playerChoices = battleDb.battleParticipants.flatMap((bp) =>
+    bp.playerId
+      ? [
+          {
+            playerId: bp.playerId,
+            nextChoice: bp.metadata?.nextChoice,
+          },
+        ]
+      : []
+  )
+
   console.time("simulateBattle")
   // INIT BATTLE
   const battleJson = battleDb.metadata.battleJson
