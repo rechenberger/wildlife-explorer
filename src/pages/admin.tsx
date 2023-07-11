@@ -39,6 +39,7 @@ const MigrationButton = ({
 export default function Page() {
   const taxons = api.migration.taxons.useMutation()
   const battleOrder = api.migration.battleOrder.useMutation()
+  const catchMetadata = api.migration.catchMetadata.useMutation()
   const taxonDev = api.taxon.dev.useMutation()
   return (
     <MainLayout>
@@ -47,6 +48,7 @@ export default function Page() {
         <MigrationButton {...taxons} label="Taxons" />
         <MigrationButton {...battleOrder} label="battleOrder" />
         <MigrationButton {...taxonDev} label="taxonDev" />
+        <MigrationButton {...catchMetadata} label="catchMetadata" />
       </div>
     </MainLayout>
   )

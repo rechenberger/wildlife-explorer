@@ -1,0 +1,1010 @@
+0001|Medium Slow
+0002|Medium Slow
+0003|Medium Slow
+0004|Medium Slow
+0005|Medium Slow
+0006|Medium Slow
+0007|Medium Slow
+0008|Medium Slow
+0009|Medium Slow
+0010|Medium Fast
+0011|Medium Fast
+0012|Medium Fast
+0013|Medium Fast
+0014|Medium Fast
+0015|Medium Fast
+0016|Medium Slow
+0017|Medium Slow
+0018|Medium Slow
+0019|Medium Fast
+0020|Medium Fast
+0021|Medium Fast
+0022|Medium Fast
+0023|Medium Fast
+0024|Medium Fast
+0025|Medium Fast
+0026|Medium Fast
+0027|Medium Fast
+0028|Medium Fast
+0029|Medium Slow
+0030|Medium Slow
+0031|Medium Slow
+0032|Medium Slow
+0033|Medium Slow
+0034|Medium Slow
+0035|Fast
+0036|Fast
+0037|Medium Fast
+0038|Medium Fast
+0039|Fast
+0040|Fast
+0041|Medium Fast
+0042|Medium Fast
+0043|Medium Slow
+0044|Medium Slow
+0045|Medium Slow
+0046|Medium Fast
+0047|Medium Fast
+0048|Medium Fast
+0049|Medium Fast
+0050|Medium Fast
+0051|Medium Fast
+0052|Medium Fast
+0053|Medium Fast
+0054|Medium Fast
+0055|Medium Fast
+0056|Medium Fast
+0057|Medium Fast
+0058|Slow
+0059|Slow
+0060|Medium Slow
+0061|Medium Slow
+0062|Medium Slow
+0063|Medium Slow
+0064|Medium Slow
+0065|Medium Slow
+0066|Medium Slow
+0067|Medium Slow
+0068|Medium Slow
+0069|Medium Slow
+0070|Medium Slow
+0071|Medium Slow
+0072|Slow
+0073|Slow
+0074|Medium Slow
+0075|Medium Slow
+0076|Medium Slow
+0077|Medium Fast
+0078|Medium Fast
+0079|Medium Fast
+0080|Medium Fast
+0081|Medium Fast
+0082|Medium Fast
+0083|Medium Fast
+0084|Medium Fast
+0085|Medium Fast
+0086|Medium Fast
+0087|Medium Fast
+0088|Medium Fast
+0089|Medium Fast
+0090|Slow
+0091|Slow
+0092|Medium Slow
+0093|Medium Slow
+0094|Medium Slow
+0095|Medium Fast
+0096|Medium Fast
+0097|Medium Fast
+0098|Medium Fast
+0099|Medium Fast
+0100|Medium Fast
+0101|Medium Fast
+0102|Slow
+0103|Slow
+0104|Medium Fast
+0105|Medium Fast
+0106|Medium Fast
+0107|Medium Fast
+0108|Medium Fast
+0109|Medium Fast
+0110|Medium Fast
+0111|Slow
+0112|Slow
+0113|Fast
+0114|Medium Fast
+0115|Medium Fast
+0116|Medium Fast
+0117|Medium Fast
+0118|Medium Fast
+0119|Medium Fast
+0120|Slow
+0121|Slow
+0122|Medium Fast
+0123|Medium Fast
+0124|Medium Fast
+0125|Medium Fast
+0126|Medium Fast
+0127|Slow
+0128|Slow
+0129|Slow
+0130|Slow
+0131|Slow
+0132|Medium Fast
+0133|Medium Fast
+0134|Medium Fast
+0135|Medium Fast
+0136|Medium Fast
+0137|Medium Fast
+0138|Medium Fast
+0139|Medium Fast
+0140|Medium Fast
+0141|Medium Fast
+0142|Slow
+0143|Slow
+0144|Slow
+0145|Slow
+0146|Slow
+0147|Slow
+0148|Slow
+0149|Slow
+0150|Slow
+0151|Medium Slow
+0152|Medium Slow
+0153|Medium Slow
+0154|Medium Slow
+0155|Medium Slow
+0156|Medium Slow
+0157|Medium Slow
+0158|Medium Slow
+0159|Medium Slow
+0160|Medium Slow
+0161|Medium Fast
+0162|Medium Fast
+0163|Medium Fast
+0164|Medium Fast
+0165|Fast
+0166|Fast
+0167|Fast
+0168|Fast
+0169|Medium Fast
+0170|Slow
+0171|Slow
+0172|Medium Fast
+0173|Fast
+0174|Fast
+0175|Fast
+0176|Fast
+0177|Medium Fast
+0178|Medium Fast
+0179|Medium Slow
+0180|Medium Slow
+0181|Medium Slow
+0182|Medium Slow
+0183|Fast
+0184|Fast
+0185|Medium Fast
+0186|Medium Slow
+0187|Medium Slow
+0188|Medium Slow
+0189|Medium Slow
+0190|Fast
+0191|Medium Slow
+0192|Medium Slow
+0193|Medium Fast
+0194|Medium Fast
+0195|Medium Fast
+0196|Medium Fast
+0197|Medium Fast
+0198|Medium Slow
+0199|Medium Fast
+0200|Fast
+0201|Medium Fast
+0202|Medium Fast
+0203|Medium Fast
+0204|Medium Fast
+0205|Medium Fast
+0206|Medium Fast
+0207|Medium Slow
+0208|Medium Fast
+0209|Fast
+0210|Fast
+0211|Medium Fast
+0212|Medium Fast
+0213|Medium Slow
+0214|Slow
+0215|Medium Slow
+0216|Medium Fast
+0217|Medium Fast
+0218|Medium Fast
+0219|Medium Fast
+0220|Slow
+0221|Slow
+0222|Fast
+0223|Medium Fast
+0224|Medium Fast
+0225|Fast
+0226|Slow
+0227|Slow
+0228|Slow
+0229|Slow
+0230|Medium Fast
+0231|Medium Fast
+0232|Medium Fast
+0233|Medium Fast
+0234|Slow
+0235|Fast
+0236|Medium Fast
+0237|Medium Fast
+0238|Medium Fast
+0239|Medium Fast
+0240|Medium Fast
+0241|Slow
+0242|Fast
+0243|Slow
+0244|Slow
+0245|Slow
+0246|Slow
+0247|Slow
+0248|Slow
+0249|Slow
+0250|Slow
+0251|Medium Slow
+0252|Medium Slow
+0253|Medium Slow
+0254|Medium Slow
+0255|Medium Slow
+0256|Medium Slow
+0257|Medium Slow
+0258|Medium Slow
+0259|Medium Slow
+0260|Medium Slow
+0261|Medium Fast
+0262|Medium Fast
+0263|Medium Fast
+0264|Medium Fast
+0265|Medium Fast
+0266|Medium Fast
+0267|Medium Fast
+0268|Medium Fast
+0269|Medium Fast
+0270|Medium Slow
+0271|Medium Slow
+0272|Medium Slow
+0273|Medium Slow
+0274|Medium Slow
+0275|Medium Slow
+0276|Medium Slow
+0277|Medium Slow
+0278|Medium Fast
+0279|Medium Fast
+0280|Slow
+0281|Slow
+0282|Slow
+0283|Medium Fast
+0284|Medium Fast
+0285|Fluctuating
+0286|Fluctuating
+0287|Slow
+0288|Slow
+0289|Slow
+0290|Erratic
+0291|Erratic
+0292|Erratic
+0293|Medium Slow
+0294|Medium Slow
+0295|Medium Slow
+0296|Fluctuating
+0297|Fluctuating
+0298|Fast
+0299|Medium Fast
+0300|Fast
+0301|Fast
+0302|Medium Slow
+0303|Fast
+0304|Slow
+0305|Slow
+0306|Slow
+0307|Medium Fast
+0308|Medium Fast
+0309|Slow
+0310|Slow
+0311|Medium Fast
+0312|Medium Fast
+0313|Erratic
+0314|Fluctuating
+0315|Medium Slow
+0316|Fluctuating
+0317|Fluctuating
+0318|Slow
+0319|Slow
+0320|Fluctuating
+0321|Fluctuating
+0322|Medium Fast
+0323|Medium Fast
+0324|Medium Fast
+0325|Fast
+0326|Fast
+0327|Fast
+0328|Medium Slow
+0329|Medium Slow
+0330|Medium Slow
+0331|Medium Slow
+0332|Medium Slow
+0333|Erratic
+0334|Erratic
+0335|Erratic
+0336|Fluctuating
+0337|Fast
+0338|Fast
+0339|Medium Fast
+0340|Medium Fast
+0341|Fluctuating
+0342|Fluctuating
+0343|Medium Fast
+0344|Medium Fast
+0345|Erratic
+0346|Erratic
+0347|Erratic
+0348|Erratic
+0349|Erratic
+0350|Erratic
+0351|Medium Fast
+0352|Medium Slow
+0353|Fast
+0354|Fast
+0355|Fast
+0356|Fast
+0357|Slow
+0358|Fast
+0359|Medium Slow
+0360|Medium Fast
+0361|Medium Fast
+0362|Medium Fast
+0363|Medium Slow
+0364|Medium Slow
+0365|Medium Slow
+0366|Erratic
+0367|Erratic
+0368|Erratic
+0369|Slow
+0370|Fast
+0371|Slow
+0372|Slow
+0373|Slow
+0374|Slow
+0375|Slow
+0376|Slow
+0377|Slow
+0378|Slow
+0379|Slow
+0380|Slow
+0381|Slow
+0382|Slow
+0383|Slow
+0384|Slow
+0385|Slow
+0386|Slow
+0387|Medium Slow
+0388|Medium Slow
+0389|Medium Slow
+0390|Medium Slow
+0391|Medium Slow
+0392|Medium Slow
+0393|Medium Slow
+0394|Medium Slow
+0395|Medium Slow
+0396|Medium Slow
+0397|Medium Slow
+0398|Medium Slow
+0399|Medium Fast
+0400|Medium Fast
+0401|Medium Slow
+0402|Medium Slow
+0403|Medium Slow
+0404|Medium Slow
+0405|Medium Slow
+0406|Medium Slow
+0407|Medium Slow
+0408|Erratic
+0409|Erratic
+0410|Erratic
+0411|Erratic
+0412|Medium Fast
+0413|Medium Fast
+0414|Medium Fast
+0415|Medium Slow
+0416|Medium Slow
+0417|Medium Fast
+0418|Medium Fast
+0419|Medium Fast
+0420|Medium Fast
+0421|Medium Fast
+0422|Medium Fast
+0423|Medium Fast
+0424|Fast
+0425|Fluctuating
+0426|Fluctuating
+0427|Medium Fast
+0428|Medium Fast
+0429|Fast
+0430|Medium Slow
+0431|Fast
+0432|Fast
+0433|Fast
+0434|Medium Fast
+0435|Medium Fast
+0436|Medium Fast
+0437|Medium Fast
+0438|Medium Fast
+0439|Medium Fast
+0440|Fast
+0441|Medium Slow
+0442|Medium Fast
+0443|Slow
+0444|Slow
+0445|Slow
+0446|Slow
+0447|Medium Slow
+0448|Medium Slow
+0449|Slow
+0450|Slow
+0451|Slow
+0452|Slow
+0453|Medium Fast
+0454|Medium Fast
+0455|Slow
+0456|Erratic
+0457|Erratic
+0458|Slow
+0459|Slow
+0460|Slow
+0461|Medium Slow
+0462|Medium Fast
+0463|Medium Fast
+0464|Slow
+0465|Medium Fast
+0466|Medium Fast
+0467|Medium Fast
+0468|Fast
+0469|Medium Fast
+0470|Medium Fast
+0471|Medium Fast
+0472|Medium Slow
+0473|Slow
+0474|Medium Fast
+0475|Slow
+0476|Medium Fast
+0477|Fast
+0478|Medium Fast
+0479|Medium Fast
+0480|Slow
+0481|Slow
+0482|Slow
+0483|Slow
+0484|Slow
+0485|Slow
+0486|Slow
+0487|Slow
+0488|Slow
+0489|Slow
+0490|Slow
+0491|Slow
+0492|Medium Slow
+0493|Slow
+0494|Slow
+0495|Medium Slow
+0496|Medium Slow
+0497|Medium Slow
+0498|Medium Slow
+0499|Medium Slow
+0500|Medium Slow
+0501|Medium Slow
+0502|Medium Slow
+0503|Medium Slow
+0504|Medium Fast
+0505|Medium Fast
+0506|Medium Slow
+0507|Medium Slow
+0508|Medium Slow
+0509|Medium Fast
+0510|Medium Fast
+0511|Medium Fast
+0512|Medium Fast
+0513|Medium Fast
+0514|Medium Fast
+0515|Medium Fast
+0516|Medium Fast
+0517|Fast
+0518|Fast
+0519|Medium Slow
+0520|Medium Slow
+0521|Medium Slow
+0522|Medium Fast
+0523|Medium Fast
+0524|Medium Slow
+0525|Medium Slow
+0526|Medium Slow
+0527|Medium Fast
+0528|Medium Fast
+0529|Medium Fast
+0530|Medium Fast
+0531|Fast
+0532|Medium Slow
+0533|Medium Slow
+0534|Medium Slow
+0535|Medium Slow
+0536|Medium Slow
+0537|Medium Slow
+0538|Medium Fast
+0539|Medium Fast
+0540|Medium Slow
+0541|Medium Slow
+0542|Medium Slow
+0543|Medium Slow
+0544|Medium Slow
+0545|Medium Slow
+0546|Medium Fast
+0547|Medium Fast
+0548|Medium Fast
+0549|Medium Fast
+0550|Medium Fast
+0551|Medium Slow
+0552|Medium Slow
+0553|Medium Slow
+0554|Medium Slow
+0555|Medium Slow
+0556|Medium Fast
+0557|Medium Fast
+0558|Medium Fast
+0559|Medium Fast
+0560|Medium Fast
+0561|Medium Fast
+0562|Medium Fast
+0563|Medium Fast
+0564|Medium Fast
+0565|Medium Fast
+0566|Medium Fast
+0567|Medium Fast
+0568|Medium Fast
+0569|Medium Fast
+0570|Medium Slow
+0571|Medium Slow
+0572|Fast
+0573|Fast
+0574|Medium Slow
+0575|Medium Slow
+0576|Medium Slow
+0577|Medium Slow
+0578|Medium Slow
+0579|Medium Slow
+0580|Medium Fast
+0581|Medium Fast
+0582|Slow
+0583|Slow
+0584|Slow
+0585|Medium Fast
+0586|Medium Fast
+0587|Medium Fast
+0588|Medium Fast
+0589|Medium Fast
+0590|Medium Fast
+0591|Medium Fast
+0592|Medium Fast
+0593|Medium Fast
+0594|Fast
+0595|Medium Fast
+0596|Medium Fast
+0597|Medium Fast
+0598|Medium Fast
+0599|Medium Slow
+0600|Medium Slow
+0601|Medium Slow
+0602|Slow
+0603|Slow
+0604|Slow
+0605|Medium Fast
+0606|Medium Fast
+0607|Medium Slow
+0608|Medium Slow
+0609|Medium Slow
+0610|Slow
+0611|Slow
+0612|Slow
+0613|Medium Fast
+0614|Medium Fast
+0615|Medium Fast
+0616|Medium Fast
+0617|Medium Fast
+0618|Medium Fast
+0619|Medium Slow
+0620|Medium Slow
+0621|Medium Fast
+0622|Medium Fast
+0623|Medium Fast
+0624|Medium Fast
+0625|Medium Fast
+0626|Medium Fast
+0627|Slow
+0628|Slow
+0629|Slow
+0630|Slow
+0631|Medium Fast
+0632|Medium Fast
+0633|Slow
+0634|Slow
+0635|Slow
+0636|Slow
+0637|Slow
+0638|Slow
+0639|Slow
+0640|Slow
+0641|Slow
+0642|Slow
+0643|Slow
+0644|Slow
+0645|Slow
+0646|Slow
+0647|Slow
+0648|Slow
+0649|Slow
+0650|Medium Slow
+0651|Medium Slow
+0652|Medium Slow
+0653|Medium Slow
+0654|Medium Slow
+0655|Medium Slow
+0656|Medium Slow
+0657|Medium Slow
+0658|Medium Slow
+0659|Medium Fast
+0660|Medium Fast
+0661|Medium Slow
+0662|Medium Slow
+0663|Medium Slow
+0664|Medium Fast
+0665|Medium Fast
+0666|Medium Fast
+0667|Medium Slow
+0668|Medium Slow
+0669|Medium Fast
+0670|Medium Fast
+0671|Medium Fast
+0672|Medium Fast
+0673|Medium Fast
+0674|Medium Fast
+0675|Medium Fast
+0676|Medium Fast
+0677|Medium Fast
+0678|Medium Fast
+0679|Medium Fast
+0680|Medium Fast
+0681|Medium Fast
+0682|Medium Fast
+0683|Medium Fast
+0684|Medium Fast
+0685|Medium Fast
+0686|Medium Fast
+0687|Medium Fast
+0688|Medium Fast
+0689|Medium Fast
+0690|Medium Fast
+0691|Medium Fast
+0692|Slow
+0693|Slow
+0694|Medium Fast
+0695|Medium Fast
+0696|Medium Fast
+0697|Medium Fast
+0698|Medium Fast
+0699|Medium Fast
+0700|Medium Fast
+0701|Medium Fast
+0702|Medium Fast
+0703|Slow
+0704|Slow
+0705|Slow
+0706|Slow
+0707|Fast
+0708|Medium Fast
+0709|Medium Fast
+0710|Medium Fast
+0711|Medium Fast
+0712|Medium Fast
+0713|Medium Fast
+0714|Medium Fast
+0715|Medium Fast
+0716|Slow
+0717|Slow
+0718|Slow
+0719|Slow
+0720|Slow
+0721|Slow
+0722|Medium Slow
+0723|Medium Slow
+0724|Medium Slow
+0725|Medium Slow
+0726|Medium Slow
+0727|Medium Slow
+0728|Medium Slow
+0729|Medium Slow
+0730|Medium Slow
+0731|Medium Fast
+0732|Medium Fast
+0733|Medium Fast
+0734|Medium Fast
+0735|Medium Fast
+0736|Medium Fast
+0737|Medium Fast
+0738|Medium Fast
+0739|Medium Fast
+0740|Medium Fast
+0741|Medium Fast
+0742|Medium Fast
+0743|Medium Fast
+0744|Medium Fast
+0745|Medium Fast
+0746|Fast
+0747|Medium Fast
+0748|Medium Fast
+0749|Medium Fast
+0750|Medium Fast
+0751|Medium Fast
+0752|Medium Fast
+0753|Medium Fast
+0754|Medium Fast
+0755|Medium Fast
+0756|Medium Fast
+0757|Medium Fast
+0758|Medium Fast
+0759|Medium Fast
+0760|Medium Fast
+0761|Medium Slow
+0762|Medium Slow
+0763|Medium Slow
+0764|Fast
+0765|Slow
+0766|Slow
+0767|Medium Fast
+0768|Medium Fast
+0769|Medium Fast
+0770|Medium Fast
+0771|Fast
+0772|Slow
+0773|Slow
+0774|Medium Slow
+0775|Slow
+0776|Medium Fast
+0777|Medium Fast
+0778|Medium Fast
+0779|Medium Fast
+0780|Medium Fast
+0781|Medium Fast
+0782|Slow
+0783|Slow
+0784|Slow
+0785|Slow
+0786|Slow
+0787|Slow
+0788|Slow
+0789|Slow
+0790|Slow
+0791|Slow
+0792|Slow
+0793|Slow
+0794|Slow
+0795|Slow
+0796|Slow
+0797|Slow
+0798|Slow
+0799|Slow
+0800|Slow
+0801|Slow
+0802|Slow
+0803|Slow
+0804|Slow
+0805|Slow
+0806|Slow
+0807|Slow
+0808|Slow
+0809|Slow
+0810|Medium Slow
+0811|Medium Slow
+0812|Medium Slow
+0813|Medium Slow
+0814|Medium Slow
+0815|Medium Slow
+0816|Medium Slow
+0817|Medium Slow
+0818|Medium Slow
+0819|Medium Fast
+0820|Medium Fast
+0821|Medium Slow
+0822|Medium Slow
+0823|Medium Slow
+0824|Medium Fast
+0825|Medium Fast
+0826|Medium Fast
+0827|Fast
+0828|Fast
+0829|Medium Fast
+0830|Medium Fast
+0831|Medium Fast
+0832|Medium Fast
+0833|Medium Fast
+0834|Medium Fast
+0835|Fast
+0836|Fast
+0837|Medium Slow
+0838|Medium Slow
+0839|Medium Slow
+0840|Erratic
+0841|Erratic
+0842|Erratic
+0843|Medium Fast
+0844|Medium Fast
+0845|Medium Fast
+0846|Slow
+0847|Slow
+0848|Medium Slow
+0849|Medium Slow
+0850|Medium Fast
+0851|Medium Fast
+0852|Medium Slow
+0853|Medium Slow
+0854|Medium Fast
+0855|Medium Fast
+0856|Slow
+0857|Slow
+0858|Slow
+0859|Medium Fast
+0860|Medium Fast
+0861|Medium Fast
+0862|Medium Fast
+0863|Medium Fast
+0864|Fast
+0865|Medium Fast
+0866|Medium Fast
+0867|Medium Fast
+0868|Medium Fast
+0869|Medium Fast
+0870|Medium Fast
+0871|Medium Fast
+0872|Medium Fast
+0873|Medium Fast
+0874|Slow
+0875|Slow
+0876|Fast
+0877|Medium Fast
+0878|Medium Fast
+0879|Medium Fast
+0880|Slow
+0881|Slow
+0882|Slow
+0883|Slow
+0884|Medium Fast
+0885|Slow
+0886|Slow
+0887|Slow
+0888|Slow
+0889|Slow
+0890|Slow
+0891|Slow
+0892|Slow
+0893|Slow
+0894|Slow
+0895|Slow
+0896|Slow
+0897|Slow
+0898|Slow
+0899|Slow
+0900|Medium Fast
+0901|Medium Fast
+0902|Medium Fast
+0903|Medium Slow
+0904|Medium Fast
+0905|Slow
+0906|Medium Slow
+0907|Medium Slow
+0908|Medium Slow
+0909|Medium Slow
+0910|Medium Slow
+0911|Medium Slow
+0912|Medium Slow
+0913|Medium Slow
+0914|Medium Slow
+0915|Medium Fast
+0916|Medium Fast
+0917|Erratic
+0918|Erratic
+0919|Medium Fast
+0920|Medium Fast
+0921|Medium Fast
+0922|Medium Fast
+0923|Medium Fast
+0924|Fast
+0925|Fast
+0926|Medium Slow
+0927|Medium Slow
+0928|Medium Slow
+0929|Medium Slow
+0930|Medium Slow
+0931|Erratic
+0932|Medium Slow
+0933|Medium Slow
+0934|Medium Slow
+0935|Slow
+0936|Slow
+0937|Slow
+0938|Medium Fast
+0939|Medium Fast
+0940|Medium Slow
+0941|Medium Slow
+0942|Medium Slow
+0943|Medium Slow
+0944|Medium Slow
+0945|Medium Slow
+0946|Medium Fast
+0947|Medium Fast
+0948|Medium Slow
+0949|Medium Slow
+0950|Medium Fast
+0951|Medium Fast
+0952|Medium Fast
+0953|Fast
+0954|Fast
+0955|Medium Slow
+0956|Medium Slow
+0957|Medium Slow
+0958|Medium Slow
+0959|Medium Slow
+0960|Medium Fast
+0961|Medium Fast
+0962|Slow
+0963|Slow
+0964|Slow
+0965|Medium Fast
+0966|Medium Fast
+0967|Medium Slow
+0968|Slow
+0969|Medium Slow
+0970|Medium Slow
+0971|Medium Slow
+0972|Medium Slow
+0973|Medium Slow
+0974|Medium Slow
+0975|Medium Slow
+0976|Fast
+0977|Slow
+0978|Medium Slow
+0979|Medium Fast
+0980|Medium Fast
+0981|Medium Fast
+0982|Medium Fast
+0983|Medium Fast
+0984|Slow
+0985|Slow
+0986|Slow
+0987|Slow
+0988|Slow
+0989|Slow
+0990|Slow
+0991|Slow
+0992|Slow
+0993|Slow
+0994|Slow
+0995|Slow
+0996|Slow
+0997|Slow
+0998|Slow
+0999|Slow
+1000|Slow
+1001|Slow
+1002|Slow
+1003|Slow
+1004|Slow
+1005|Slow
+1006|Slow
+1007|Slow
+1008|Slow
+1009|Slow
+1010|Slow
