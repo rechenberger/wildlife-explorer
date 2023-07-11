@@ -1,0 +1,1111 @@
+0001,Bulbasaur,64,0,0,0,1,0,0
+0002,Ivysaur,142,0,0,0,1,1,0
+0003,Venusaur,263,0,0,0,2,1,0
+0003,Venusaur,313,0,0,0,2,1,0,form=-Mega,Mega Venusaur
+0004,Charmander,62,0,0,0,0,0,1
+0005,Charmeleon,142,0,0,0,1,0,1
+0006,Charizard,267,0,0,0,3,0,0
+0006,Charizard,317,0,0,0,3,0,0,form=-Mega X,Mega Charizard X
+0006,Charizard,317,0,0,0,3,0,0,form=-Mega Y,Mega Charizard Y
+0007,Squirtle,63,0,0,1,0,0,0
+0008,Wartortle,142,0,0,1,0,1,0
+0009,Blastoise,265,0,0,0,0,3,0
+0009,Blastoise,315,0,0,0,0,3,0,form=-Mega,Mega Blastoise
+0010,Caterpie,39,1,0,0,0,0,0
+0011,Metapod,72,0,0,2,0,0,0
+0012,Butterfree,198,0,0,0,2,1,0
+0013,Weedle,39,0,0,0,0,0,1
+0014,Kakuna,72,0,0,2,0,0,0
+0015,Beedrill,198,0,2,0,0,1,0
+0015,Beedrill,248,0,2,0,0,1,0,form=-Mega,Mega Beedrill
+0016,Pidgey,50,0,0,0,0,0,1
+0017,Pidgeotto,122,0,0,0,0,0,2
+0018,Pidgeot,240,0,0,0,0,0,3
+0018,Pidgeot,290,0,0,0,0,0,3,form=-Mega,Mega Pidgeot
+0019,Rattata,51,0,0,0,0,0,1
+0020,Raticate,145,0,0,0,0,0,2
+0021,Spearow,52,0,0,0,0,0,1
+0022,Fearow,155,0,0,0,0,0,2
+0023,Ekans,58,0,1,0,0,0,0
+0024,Arbok,157,0,2,0,0,0,0
+0025,Pikachu,112,0,0,0,0,0,2
+0025,Pikachu,151,0,0,0,0,0,2,form=-Starter,Partner
+0026,Raichu,243,0,0,0,0,0,3
+0027,Sandshrew,60,0,0,1,0,0,0
+0028,Sandslash,158,0,0,2,0,0,0
+0029,Nidoran♀,55,1,0,0,0,0,0
+0030,Nidorina,128,2,0,0,0,0,0
+0031,Nidoqueen,253,3,0,0,0,0,0
+0032,Nidoran♂,55,0,1,0,0,0,0
+0033,Nidorino,128,0,2,0,0,0,0
+0034,Nidoking,253,0,3,0,0,0,0
+0035,Clefairy,113,2,0,0,0,0,0
+0036,Clefable,242,3,0,0,0,0,0
+0037,Vulpix,60,0,0,0,0,0,1
+0038,Ninetales,177,0,0,0,0,1,1
+0038,Ninetales,177,0,0,0,0,0,2,form=-Alola,Alolan Form
+0039,Jigglypuff,95,2,0,0,0,0,0
+0040,Wigglytuff,218,3,0,0,0,0,0
+0041,Zubat,49,0,0,0,0,0,1
+0042,Golbat,159,0,0,0,0,0,2
+0043,Oddish,64,0,0,0,1,0,0
+0044,Gloom,138,0,0,0,2,0,0
+0045,Vileplume,245,0,0,0,3,0,0
+0046,Paras,57,0,1,0,0,0,0
+0047,Parasect,142,0,2,1,0,0,0
+0048,Venonat,61,0,0,0,0,1,0
+0049,Venomoth,158,0,0,0,1,0,1
+0050,Diglett,53,0,0,0,0,0,1
+0051,Dugtrio,149,0,0,0,0,0,2
+0051,Dugtrio,149,0,2,0,0,0,0,form=-Alola,Alolan Form
+0052,Meowth,58,0,0,0,0,0,1
+0052,Meowth,58,0,0,0,0,0,1,form=-Alola,Alolan Form
+0052,Meowth,58,0,1,0,0,0,0,form=-Galar,Galarian Form
+0053,Persian,154,0,0,0,0,0,2
+0054,Psyduck,64,0,0,0,1,0,0
+0055,Golduck,175,0,0,0,2,0,0
+0056,Mankey,61,0,1,0,0,0,0
+0057,Primeape,159,0,2,0,0,0,0
+0058,Growlithe,70,0,1,0,0,0,0
+0059,Arcanine,194,0,2,0,0,0,0
+0060,Poliwag,60,0,0,0,0,0,1
+0061,Poliwhirl,135,0,0,0,0,0,2
+0062,Poliwrath,255,0,0,3,0,0,0
+0063,Abra,62,0,0,0,1,0,0
+0064,Kadabra,140,0,0,0,2,0,0
+0065,Alakazam,250,0,0,0,3,0,0
+0065,Alakazam,300,0,0,0,3,0,0,form=-Mega,Mega Alakazam
+0066,Machop,61,0,1,0,0,0,0
+0067,Machoke,142,0,2,0,0,0,0
+0068,Machamp,253,0,3,0,0,0,0
+0069,Bellsprout,60,0,1,0,0,0,0
+0070,Weepinbell,137,0,2,0,0,0,0
+0071,Victreebel,245,0,3,0,0,0,0
+0072,Tentacool,67,0,0,0,0,1,0
+0073,Tentacruel,180,0,0,0,0,2,0
+0074,Geodude,60,0,0,1,0,0,0
+0075,Graveler,137,0,0,2,0,0,0
+0076,Golem,248,0,0,3,0,0,0
+0077,Ponyta,82,0,0,0,0,0,1
+0078,Rapidash,175,0,0,0,0,0,2
+0079,Slowpoke,63,1,0,0,0,0,0
+0080,Slowbro,172,0,0,2,0,0,0
+0080,Slowbro,207,0,0,2,0,0,0,form=-Mega,Mega Slowbro
+0080,Slowbro,172,0,2,0,0,0,0,form=-Galar,Galarian Form
+0081,Magnemite,65,0,0,0,1,0,0
+0082,Magneton,163,0,0,0,2,0,0
+0083,Farfetch'd,132,0,1,0,0,0,0
+0084,Doduo,62,0,1,0,0,0,0
+0085,Dodrio,165,0,2,0,0,0,0
+0086,Seel,65,0,0,0,0,1,0
+0087,Dewgong,166,0,0,0,0,2,0
+0088,Grimer,65,1,0,0,0,0,0
+0089,Muk,175,1,1,0,0,0,0
+0090,Shellder,61,0,0,1,0,0,0
+0091,Cloyster,184,0,0,2,0,0,0
+0092,Gastly,62,0,0,0,1,0,0
+0093,Haunter,142,0,0,0,2,0,0
+0094,Gengar,250,0,0,0,3,0,0
+0094,Gengar,300,0,0,0,3,0,0,form=-Mega,Mega Gengar
+0095,Onix,77,0,0,1,0,0,0
+0096,Drowzee,66,0,0,0,0,1,0
+0097,Hypno,169,0,0,0,0,2,0
+0098,Krabby,65,0,1,0,0,0,0
+0099,Kingler,166,0,2,0,0,0,0
+0100,Voltorb,66,0,0,0,0,0,1
+0101,Electrode,172,0,0,0,0,0,2
+0102,Exeggcute,65,0,0,1,0,0,0
+0103,Exeggutor,186,0,0,0,2,0,0
+0104,Cubone,64,0,0,1,0,0,0
+0105,Marowak,149,0,0,2,0,0,0
+0106,Hitmonlee,159,0,2,0,0,0,0
+0107,Hitmonchan,159,0,0,0,0,2,0
+0108,Lickitung,77,2,0,0,0,0,0
+0109,Koffing,68,0,0,1,0,0,0
+0110,Weezing,172,0,0,2,0,0,0
+0111,Rhyhorn,69,0,0,1,0,0,0
+0112,Rhydon,170,0,2,0,0,0,0
+0113,Chansey,395,2,0,0,0,0,0
+0114,Tangela,87,0,0,1,0,0,0
+0115,Kangaskhan,172,2,0,0,0,0,0
+0115,Kangaskhan,207,2,0,0,0,0,0,form=-Mega,Mega Kangaskhan
+0116,Horsea,59,0,0,0,1,0,0
+0117,Seadra,154,0,0,1,1,0,0
+0118,Goldeen,64,0,1,0,0,0,0
+0119,Seaking,158,0,2,0,0,0,0
+0120,Staryu,68,0,0,0,0,0,1
+0121,Starmie,182,0,0,0,0,0,2
+0122,Mr. Mime,161,0,0,0,0,2,0
+0122,Mr. Mime,161,0,0,0,0,0,2,form=-Galar,Galarian Form
+0123,Scyther,100,0,1,0,0,0,0
+0124,Jynx,159,0,0,0,2,0,0
+0125,Electabuzz,172,0,0,0,0,0,2
+0126,Magmar,173,0,0,0,2,0,0
+0127,Pinsir,175,0,2,0,0,0,0
+0127,Pinsir,210,0,2,0,0,0,0,form=-Mega,Mega Pinsir
+0128,Tauros,172,0,1,0,0,0,1
+0129,Magikarp,40,0,0,0,0,0,1
+0130,Gyarados,189,0,2,0,0,0,0
+0130,Gyarados,224,0,2,0,0,0,0,form=-Mega,Mega Gyarados
+0131,Lapras,187,2,0,0,0,0,0
+0132,Ditto,101,1,0,0,0,0,0
+0133,Eevee,65,0,0,0,0,1,0
+0133,Eevee,87,0,0,0,0,1,0,form=-Starter,Partner
+0134,Vaporeon,184,2,0,0,0,0,0
+0135,Jolteon,184,0,0,0,0,0,2
+0136,Flareon,184,0,2,0,0,0,0
+0137,Porygon,79,0,0,0,1,0,0
+0138,Omanyte,71,0,0,1,0,0,0
+0139,Omastar,173,0,0,2,0,0,0
+0140,Kabuto,71,0,0,1,0,0,0
+0141,Kabutops,173,0,2,0,0,0,0
+0142,Aerodactyl,180,0,0,0,0,0,2
+0142,Aerodactyl,215,0,0,0,0,0,2,form=-Mega,Mega Aerodactyl
+0143,Snorlax,189,2,0,0,0,0,0
+0144,Articuno,290,0,0,0,0,3,0
+0144,Articuno,290,0,0,0,3,0,0,form=-Galar,Galarian Form
+0145,Zapdos,290,0,0,0,3,0,0
+0145,Zapdos,290,0,3,0,0,0,0,form=-Galar,Galarian Form
+0146,Moltres,290,0,0,0,3,0,0
+0146,Moltres,290,0,0,0,0,3,0,form=-Galar,Galarian Form
+0147,Dratini,60,0,1,0,0,0,0
+0148,Dragonair,147,0,2,0,0,0,0
+0149,Dragonite,300,0,3,0,0,0,0
+0150,Mewtwo,340,0,0,0,3,0,0
+0150,Mewtwo,390,0,0,0,3,0,0,form=-Mega X,Mega Mewtwo X
+0150,Mewtwo,390,0,0,0,3,0,0,form=-Mega Y,Mega Mewtwo Y
+0151,Mew,300,3,0,0,0,0,0
+0152,Chikorita,64,0,0,0,0,1,0
+0153,Bayleef,142,0,0,1,0,1,0
+0154,Meganium,263,0,0,1,0,2,0
+0155,Cyndaquil,62,0,0,0,0,0,1
+0156,Quilava,142,0,0,0,1,0,1
+0157,Typhlosion,267,0,0,0,3,0,0
+0158,Totodile,63,0,1,0,0,0,0
+0159,Croconaw,142,0,1,1,0,0,0
+0160,Feraligatr,265,0,2,1,0,0,0
+0161,Sentret,43,0,1,0,0,0,0
+0162,Furret,145,0,0,0,0,0,2
+0163,Hoothoot,52,1,0,0,0,0,0
+0164,Noctowl,158,2,0,0,0,0,0
+0165,Ledyba,53,0,0,0,0,1,0
+0166,Ledian,137,0,0,0,0,2,0
+0167,Spinarak,50,0,1,0,0,0,0
+0168,Ariados,140,0,2,0,0,0,0
+0169,Crobat,268,0,0,0,0,0,3
+0170,Chinchou,66,1,0,0,0,0,0
+0171,Lanturn,161,2,0,0,0,0,0
+0172,Pichu,41,0,0,0,0,0,1
+0173,Cleffa,44,0,0,0,0,1,0
+0174,Igglybuff,42,1,0,0,0,0,0
+0175,Togepi,49,0,0,0,0,1,0
+0176,Togetic,142,0,0,0,0,2,0
+0177,Natu,64,0,0,0,1,0,0
+0178,Xatu,165,0,0,0,1,0,1
+0179,Mareep,56,0,0,0,1,0,0
+0180,Flaaffy,128,0,0,0,2,0,0
+0181,Ampharos,255,0,0,0,3,0,0
+0181,Ampharos,305,0,0,0,3,0,0,form=-Mega,Mega Ampharos
+0182,Bellossom,245,0,0,0,0,3,0
+0183,Marill,88,2,0,0,0,0,0
+0184,Azumarill,210,3,0,0,0,0,0
+0185,Sudowoodo,144,0,0,2,0,0,0
+0186,Politoed,250,0,0,0,0,3,0
+0187,Hoppip,50,0,0,0,0,1,0
+0188,Skiploom,119,0,0,0,0,0,2
+0189,Jumpluff,230,0,0,0,0,0,3
+0190,Aipom,72,0,0,0,0,0,1
+0191,Sunkern,36,0,0,0,1,0,0
+0192,Sunflora,149,0,0,0,2,0,0
+0193,Yanma,78,0,0,0,0,0,1
+0194,Wooper,42,1,0,0,0,0,0
+0195,Quagsire,151,2,0,0,0,0,0
+0196,Espeon,184,0,0,0,2,0,0
+0197,Umbreon,184,0,0,0,0,2,0
+0198,Murkrow,81,0,0,0,0,0,1
+0199,Slowking,172,0,0,0,0,2,0
+0200,Misdreavus,87,0,0,0,0,1,0
+0201,Unown,118,0,1,0,1,0,0
+0202,Wobbuffet,142,2,0,0,0,0,0
+0203,Girafarig,159,0,0,0,2,0,0
+0204,Pineco,58,0,0,1,0,0,0
+0205,Forretress,163,0,0,2,0,0,0
+0206,Dunsparce,145,1,0,0,0,0,0
+0207,Gligar,86,0,0,1,0,0,0
+0208,Steelix,179,0,0,2,0,0,0
+0208,Steelix,214,0,0,2,0,0,0,form=-Mega,Mega Steelix
+0209,Snubbull,60,0,1,0,0,0,0
+0210,Granbull,158,0,2,0,0,0,0
+0211,Qwilfish,88,0,1,0,0,0,0
+0212,Scizor,175,0,2,0,0,0,0
+0212,Scizor,210,0,2,0,0,0,0,form=-Mega,Mega Scizor
+0213,Shuckle,177,0,0,1,0,1,0
+0214,Heracross,175,0,2,0,0,0,0
+0214,Heracross,210,0,2,0,0,0,0,form=-Mega,Mega Heracross
+0215,Sneasel,86,0,0,0,0,0,1
+0216,Teddiursa,66,0,1,0,0,0,0
+0217,Ursaring,175,0,2,0,0,0,0
+0218,Slugma,50,0,0,0,1,0,0
+0219,Magcargo,151,0,0,2,0,0,0
+0220,Swinub,50,0,1,0,0,0,0
+0221,Piloswine,158,1,1,0,0,0,0
+0222,Corsola,144,0,0,1,0,1,0
+0222,Corsola,144,0,0,0,0,1,0,form=-Galar,Galarian Form
+0223,Remoraid,60,0,0,0,1,0,0
+0224,Octillery,168,0,1,0,1,0,0
+0225,Delibird,116,0,0,0,0,0,1
+0226,Mantine,170,0,0,0,0,2,0
+0227,Skarmory,163,0,0,2,0,0,0
+0228,Houndour,66,0,0,0,1,0,0
+0229,Houndoom,175,0,0,0,2,0,0
+0229,Houndoom,210,0,0,0,2,0,0,form=-Mega,Mega Houndoom
+0230,Kingdra,270,0,1,0,1,1,0
+0231,Phanpy,66,1,0,0,0,0,0
+0232,Donphan,175,0,1,1,0,0,0
+0233,Porygon2,180,0,0,0,2,0,0
+0234,Stantler,163,0,1,0,0,0,0
+0235,Smeargle,88,0,0,0,0,0,1
+0236,Tyrogue,42,0,1,0,0,0,0
+0237,Hitmontop,159,0,0,0,0,2,0
+0238,Smoochum,61,0,0,0,1,0,0
+0239,Elekid,72,0,0,0,0,0,1
+0240,Magby,73,0,0,0,0,0,1
+0241,Miltank,172,0,0,2,0,0,0
+0242,Blissey,608,3,0,0,0,0,0
+0243,Raikou,290,0,0,0,1,0,2
+0244,Entei,290,1,2,0,0,0,0
+0245,Suicune,290,0,0,1,0,2,0
+0246,Larvitar,60,0,1,0,0,0,0
+0247,Pupitar,144,0,2,0,0,0,0
+0248,Tyranitar,300,0,3,0,0,0,0
+0248,Tyranitar,350,0,3,0,0,0,0,form=-Mega,Mega Tyranitar
+0249,Lugia,340,0,0,0,0,3,0
+0250,Ho-Oh,340,0,0,0,0,3,0
+0251,Celebi,300,3,0,0,0,0,0
+0252,Treecko,62,0,0,0,0,0,1
+0253,Grovyle,142,0,0,0,0,0,2
+0254,Sceptile,265,0,0,0,0,0,3
+0254,Sceptile,315,0,0,0,0,0,3,form=-Mega,Mega Sceptile
+0255,Torchic,62,0,0,0,1,0,0
+0256,Combusken,142,0,1,0,1,0,0
+0257,Blaziken,265,0,3,0,0,0,0
+0257,Blaziken,315,0,3,0,0,0,0,form=-Mega,Mega Blaziken
+0258,Mudkip,62,0,1,0,0,0,0
+0259,Marshtomp,142,0,2,0,0,0,0
+0260,Swampert,268,0,3,0,0,0,0
+0260,Swampert,318,0,3,0,0,0,0,form=-Mega,Mega Swampert
+0261,Poochyena,56,0,1,0,0,0,0
+0262,Mightyena,147,0,2,0,0,0,0
+0263,Zigzagoon,56,0,0,0,0,0,1
+0264,Linoone,147,0,0,0,0,0,2
+0265,Wurmple,56,1,0,0,0,0,0
+0266,Silcoon,72,0,0,2,0,0,0
+0267,Beautifly,198,0,0,0,3,0,0
+0268,Cascoon,72,0,0,2,0,0,0
+0269,Dustox,193,0,0,0,0,3,0
+0270,Lotad,44,0,0,0,0,1,0
+0271,Lombre,119,0,0,0,0,2,0
+0272,Ludicolo,240,0,0,0,0,3,0
+0273,Seedot,44,0,0,1,0,0,0
+0274,Nuzleaf,119,0,2,0,0,0,0
+0275,Shiftry,240,0,3,0,0,0,0
+0276,Taillow,54,0,0,0,0,0,1
+0277,Swellow,159,0,0,0,0,0,2
+0278,Wingull,54,0,0,0,0,0,1
+0279,Pelipper,154,0,0,2,0,0,0
+0280,Ralts,40,0,0,0,1,0,0
+0281,Kirlia,97,0,0,0,2,0,0
+0282,Gardevoir,259,0,0,0,3,0,0
+0282,Gardevoir,309,0,0,0,3,0,0,form=-Mega,Mega Gardevoir
+0283,Surskit,54,0,0,0,0,0,1
+0284,Masquerain,159,0,0,0,1,1,0
+0285,Shroomish,59,1,0,0,0,0,0
+0286,Breloom,161,0,2,0,0,0,0
+0287,Slakoth,56,1,0,0,0,0,0
+0288,Vigoroth,154,0,0,0,0,0,2
+0289,Slaking,285,3,0,0,0,0,0
+0290,Nincada,53,0,0,1,0,0,0
+0291,Ninjask,160,0,0,0,0,0,2
+0292,Shedinja,83,2,0,0,0,0,0
+0293,Whismur,48,1,0,0,0,0,0
+0294,Loudred,126,2,0,0,0,0,0
+0295,Exploud,245,3,0,0,0,0,0
+0296,Makuhita,47,1,0,0,0,0,0
+0297,Hariyama,166,2,0,0,0,0,0
+0298,Azurill,38,1,0,0,0,0,0
+0299,Nosepass,75,0,0,1,0,0,0
+0300,Skitty,52,0,0,0,0,0,1
+0301,Delcatty,140,1,0,0,0,0,1
+0302,Sableye,133,0,1,1,0,0,0
+0302,Sableye,168,0,1,1,0,0,0,form=-Mega,Mega Sableye
+0303,Mawile,133,0,1,1,0,0,0
+0303,Mawile,168,0,1,1,0,0,0,form=-Mega,Mega Mawile
+0304,Aron,66,0,0,1,0,0,0
+0305,Lairon,151,0,0,2,0,0,0
+0306,Aggron,265,0,0,3,0,0,0
+0306,Aggron,315,0,0,3,0,0,0,form=-Mega,Mega Aggron
+0307,Meditite,56,0,0,0,0,0,1
+0308,Medicham,144,0,0,0,0,0,2
+0308,Medicham,179,0,0,0,0,0,2,form=-Mega,Mega Medicham
+0309,Electrike,59,0,0,0,0,0,1
+0310,Manectric,166,0,0,0,0,0,2
+0310,Manectric,201,0,0,0,0,0,2,form=-Mega,Mega Manectric
+0311,Plusle,142,0,0,0,0,0,1
+0312,Minun,142,0,0,0,0,0,1
+0313,Volbeat,151,0,0,0,0,0,1
+0314,Illumise,151,0,0,0,0,0,1
+0315,Roselia,140,0,0,0,2,0,0
+0316,Gulpin,60,1,0,0,0,0,0
+0317,Swalot,163,2,0,0,0,0,0
+0318,Carvanha,61,0,1,0,0,0,0
+0319,Sharpedo,161,0,2,0,0,0,0
+0319,Sharpedo,196,0,2,0,0,0,0,form=-Mega,Mega Sharpedo
+0320,Wailmer,80,1,0,0,0,0,0
+0321,Wailord,175,2,0,0,0,0,0
+0322,Numel,61,0,0,0,1,0,0
+0323,Camerupt,161,0,1,0,1,0,0
+0323,Camerupt,196,0,1,0,1,0,0,form=-Mega,Mega Camerupt
+0324,Torkoal,165,0,0,2,0,0,0
+0325,Spoink,66,0,0,0,0,1,0
+0326,Grumpig,165,0,0,0,0,2,0
+0327,Spinda,126,0,0,0,1,0,0
+0328,Trapinch,58,0,1,0,0,0,0
+0329,Vibrava,119,0,1,0,0,0,1
+0330,Flygon,260,0,1,0,0,0,2
+0331,Cacnea,67,0,0,0,1,0,0
+0332,Cacturne,166,0,1,0,1,0,0
+0333,Swablu,62,0,0,0,0,1,0
+0334,Altaria,172,0,0,0,0,2,0
+0334,Altaria,207,0,0,0,0,2,0,form=-Mega,Mega Altaria
+0335,Zangoose,160,0,2,0,0,0,0
+0336,Seviper,160,0,1,0,1,0,0
+0337,Lunatone,161,0,0,0,2,0,0
+0338,Solrock,161,0,2,0,0,0,0
+0339,Barboach,58,1,0,0,0,0,0
+0340,Whiscash,164,2,0,0,0,0,0
+0341,Corphish,62,0,1,0,0,0,0
+0342,Crawdaunt,164,0,2,0,0,0,0
+0343,Baltoy,60,0,0,0,0,1,0
+0344,Claydol,175,0,0,0,0,2,0
+0345,Lileep,71,0,0,0,0,1,0
+0346,Cradily,173,0,0,0,0,2,0
+0347,Anorith,71,0,1,0,0,0,0
+0348,Armaldo,173,0,2,0,0,0,0
+0349,Feebas,40,0,0,0,0,0,1
+0350,Milotic,189,0,0,0,0,2,0
+0351,Castform,147,1,0,0,0,0,0
+0352,Kecleon,154,0,0,0,0,1,0
+0353,Shuppet,59,0,1,0,0,0,0
+0354,Banette,159,0,2,0,0,0,0
+0354,Banette,194,0,2,0,0,0,0,form=-Mega,Mega Banette
+0355,Duskull,59,0,0,0,0,1,0
+0356,Dusclops,159,0,0,1,0,1,0
+0357,Tropius,161,2,0,0,0,0,0
+0358,Chimecho,159,0,0,0,1,1,0
+0359,Absol,163,0,2,0,0,0,0
+0359,Absol,198,0,2,0,0,0,0,form=-Mega,Mega Absol
+0360,Wynaut,52,1,0,0,0,0,0
+0361,Snorunt,60,1,0,0,0,0,0
+0362,Glalie,168,2,0,0,0,0,0
+0362,Glalie,203,2,0,0,0,0,0,form=-Mega,Mega Glalie
+0363,Spheal,58,1,0,0,0,0,0
+0364,Sealeo,144,2,0,0,0,0,0
+0365,Walrein,265,3,0,0,0,0,0
+0366,Clamperl,69,0,0,1,0,0,0
+0367,Huntail,170,0,1,1,0,0,0
+0368,Gorebyss,170,0,0,0,2,0,0
+0369,Relicanth,170,1,0,1,0,0,0
+0370,Luvdisc,116,0,0,0,0,0,1
+0371,Bagon,60,0,1,0,0,0,0
+0372,Shelgon,147,0,0,2,0,0,0
+0373,Salamence,300,0,3,0,0,0,0
+0373,Salamence,350,0,3,0,0,0,0,form=-Mega,Mega Salamence
+0374,Beldum,60,0,0,1,0,0,0
+0375,Metang,147,0,0,2,0,0,0
+0376,Metagross,300,0,0,3,0,0,0
+0376,Metagross,350,0,0,3,0,0,0,form=-Mega,Mega Metagross
+0377,Regirock,290,0,0,3,0,0,0
+0378,Regice,290,0,0,0,0,3,0
+0379,Registeel,290,0,0,2,0,1,0
+0380,Latias,300,0,0,0,0,3,0
+0380,Latias,350,0,0,0,0,3,0,form=-Mega,Mega Latias
+0381,Latios,300,0,0,0,3,0,0
+0381,Latios,350,0,0,0,3,0,0,form=-Mega,Mega Latios
+0382,Kyogre,335,0,0,0,3,0,0
+0382,Kyogre,385,0,0,0,3,0,0,form=-Primal,Primal Reversion
+0383,Groudon,335,0,3,0,0,0,0
+0383,Groudon,385,0,3,0,0,0,0,form=-Primal,Primal Reversion
+0384,Rayquaza,340,0,2,0,1,0,0
+0384,Rayquaza,390,0,2,0,1,0,0,form=-Mega,Mega Rayquaza
+0385,Jirachi,300,3,0,0,0,0,0
+0386,Deoxys,300,0,1,0,1,0,1,Normal Forme
+0386,Deoxys,300,0,2,0,1,0,0,form=-Attack,Attack Forme
+0386,Deoxys,300,0,0,2,0,1,0,form=-Defense,Defense Forme
+0386,Deoxys,300,0,0,0,0,0,3,form=-Speed,Speed Forme
+0387,Turtwig,64,0,1,0,0,0,0
+0388,Grotle,142,0,1,1,0,0,0
+0389,Torterra,263,0,2,1,0,0,0
+0390,Chimchar,62,0,0,0,0,0,1
+0391,Monferno,142,0,0,0,1,0,1
+0392,Infernape,267,0,1,0,1,0,1
+0393,Piplup,63,0,0,0,1,0,0
+0394,Prinplup,142,0,0,0,2,0,0
+0395,Empoleon,265,0,0,0,3,0,0
+0396,Starly,49,0,0,0,0,0,1
+0397,Staravia,119,0,0,0,0,0,2
+0398,Staraptor,243,0,3,0,0,0,0
+0399,Bidoof,50,1,0,0,0,0,0
+0400,Bibarel,144,0,2,0,0,0,0
+0401,Kricketot,39,0,0,1,0,0,0
+0402,Kricketune,134,0,2,0,0,0,0
+0403,Shinx,53,0,1,0,0,0,0
+0404,Luxio,127,0,2,0,0,0,0
+0405,Luxray,262,0,3,0,0,0,0
+0406,Budew,56,0,0,0,1,0,0
+0407,Roserade,258,0,0,0,3,0,0
+0408,Cranidos,70,0,1,0,0,0,0
+0409,Rampardos,173,0,2,0,0,0,0
+0410,Shieldon,70,0,0,1,0,0,0
+0411,Bastiodon,173,0,0,2,0,0,0
+0412,Burmy,45,0,0,0,0,1,0
+0413,Wormadam,148,0,0,0,0,2,0,form=-Plant,Plant Cloak
+0413,Wormadam,148,0,0,2,0,0,0,form=-Sandy,Sandy Cloak
+0413,Wormadam,148,0,0,1,0,1,0,form=-Trash,Trash Cloak
+0414,Mothim,148,0,1,0,1,0,0
+0415,Combee,49,0,0,0,0,0,1
+0416,Vespiquen,166,0,0,1,0,1,0
+0417,Pachirisu,142,0,0,0,0,0,1
+0418,Buizel,66,0,0,0,0,0,1
+0419,Floatzel,173,0,0,0,0,0,2
+0420,Cherubi,55,0,0,0,1,0,0
+0421,Cherrim,158,0,0,0,2,0,0
+0422,Shellos,65,1,0,0,0,0,0
+0423,Gastrodon,166,2,0,0,0,0,0
+0424,Ambipom,169,0,0,0,0,0,2
+0425,Drifloon,70,1,0,0,0,0,0
+0426,Drifblim,174,2,0,0,0,0,0
+0427,Buneary,70,0,0,0,0,0,1
+0428,Lopunny,168,0,0,0,0,0,2
+0428,Lopunny,203,0,0,0,0,0,2,form=-Mega,Mega Lopunny
+0429,Mismagius,173,0,0,0,1,1,0
+0430,Honchkrow,177,0,2,0,0,0,0
+0431,Glameow,62,0,0,0,0,0,1
+0432,Purugly,158,0,0,0,0,0,2
+0433,Chingling,57,0,0,0,1,0,0
+0434,Stunky,66,0,0,0,0,0,1
+0435,Skuntank,168,2,0,0,0,0,0
+0436,Bronzor,60,0,0,1,0,0,0
+0437,Bronzong,175,0,0,1,0,1,0
+0438,Bonsly,58,0,0,1,0,0,0
+0439,Mime Jr.,62,0,0,0,0,1,0
+0440,Happiny,110,1,0,0,0,0,0
+0441,Chatot,144,0,1,0,0,0,0
+0442,Spiritomb,170,0,0,1,0,1,0
+0443,Gible,60,0,1,0,0,0,0
+0444,Gabite,144,0,2,0,0,0,0
+0445,Garchomp,300,0,3,0,0,0,0
+0445,Garchomp,350,0,3,0,0,0,0,form=-Mega,Mega Garchomp
+0446,Munchlax,78,1,0,0,0,0,0
+0447,Riolu,57,0,1,0,0,0,0
+0448,Lucario,184,0,1,0,1,0,0
+0448,Lucario,219,0,1,0,1,0,0,form=-Mega,Mega Lucario
+0449,Hippopotas,66,0,0,1,0,0,0
+0450,Hippowdon,184,0,0,2,0,0,0
+0451,Skorupi,66,0,0,1,0,0,0
+0452,Drapion,175,0,0,2,0,0,0
+0453,Croagunk,60,0,1,0,0,0,0
+0454,Toxicroak,172,0,2,0,0,0,0
+0455,Carnivine,159,0,2,0,0,0,0
+0456,Finneon,66,0,0,0,0,0,1
+0457,Lumineon,161,0,0,0,0,0,2
+0458,Mantyke,69,0,0,0,0,1,0
+0459,Snover,67,0,1,0,0,0,0
+0460,Abomasnow,173,0,1,0,1,0,0
+0460,Abomasnow,208,0,1,0,1,0,0,form=-Mega,Mega Abomasnow
+0461,Weavile,179,0,1,0,0,0,1
+0462,Magnezone,268,0,0,0,3,0,0
+0463,Lickilicky,180,3,0,0,0,0,0
+0464,Rhyperior,268,0,3,0,0,0,0
+0465,Tangrowth,187,0,0,2,0,0,0
+0466,Electivire,270,0,3,0,0,0,0
+0467,Magmortar,270,0,0,0,3,0,0
+0468,Togekiss,273,0,0,0,2,1,0
+0469,Yanmega,180,0,2,0,0,0,0
+0470,Leafeon,184,0,0,2,0,0,0
+0471,Glaceon,184,0,0,0,2,0,0
+0472,Gliscor,179,0,0,2,0,0,0
+0473,Mamoswine,265,0,3,0,0,0,0
+0474,Porygon-Z,268,0,0,0,3,0,0
+0475,Gallade,259,0,3,0,0,0,0
+0475,Gallade,309,0,3,0,0,0,0,form=-Mega,Mega Gallade
+0476,Probopass,184,0,0,1,0,2,0
+0477,Dusknoir,263,0,0,1,0,2,0
+0478,Froslass,168,0,0,0,0,0,2
+0479,Rotom,154,0,0,0,1,0,1
+0479,Rotom,182,0,0,0,1,0,1,form=-Heat,Heat Rotom
+0479,Rotom,182,0,0,0,1,0,1,form=-Wash,Wash Rotom
+0479,Rotom,182,0,0,0,1,0,1,form=-Frost,Frost Rotom
+0479,Rotom,182,0,0,0,1,0,1,form=-Fan,Fan Rotom
+0479,Rotom,182,0,0,0,1,0,1,form=-Mow,Mow Rotom
+0480,Uxie,290,0,0,2,0,1,0
+0481,Mesprit,290,0,1,0,1,1,0
+0482,Azelf,290,0,2,0,1,0,0
+0483,Dialga,340,0,0,0,3,0,0
+0484,Palkia,340,0,0,0,3,0,0
+0485,Heatran,300,0,0,0,3,0,0
+0486,Regigigas,335,0,3,0,0,0,0
+0487,Giratina,340,3,0,0,0,0,0
+0488,Cresselia,300,0,0,0,0,3,0
+0489,Phione,240,1,0,0,0,0,0
+0490,Manaphy,300,3,0,0,0,0,0
+0491,Darkrai,300,0,0,0,2,0,1
+0492,Shaymin,300,3,0,0,0,0,0,Land Forme
+0492,Shaymin,300,0,0,0,0,0,3,form=-Sky,Sky Forme
+0493,Arceus,360,3,0,0,0,0,0
+0494,Victini,300,3,0,0,0,0,0
+0495,Snivy,62,0,0,0,0,0,1
+0496,Servine,145,0,0,0,0,0,2
+0497,Serperior,264,0,0,0,0,0,3
+0498,Tepig,62,1,0,0,0,0,0
+0499,Pignite,146,0,2,0,0,0,0
+0500,Emboar,264,0,3,0,0,0,0
+0501,Oshawott,62,0,0,0,1,0,0
+0502,Dewott,145,0,0,0,2,0,0
+0503,Samurott,264,0,0,0,3,0,0
+0504,Patrat,51,0,1,0,0,0,0
+0505,Watchog,147,0,2,0,0,0,0
+0506,Lillipup,55,0,1,0,0,0,0
+0507,Herdier,130,0,2,0,0,0,0
+0508,Stoutland,250,0,3,0,0,0,0
+0509,Purrloin,56,0,0,0,0,0,1
+0510,Liepard,156,0,0,0,0,0,2
+0511,Pansage,63,0,0,0,0,0,1
+0512,Simisage,174,0,0,0,0,0,2
+0513,Pansear,63,0,0,0,0,0,1
+0514,Simisear,174,0,0,0,0,0,2
+0515,Panpour,63,0,0,0,0,0,1
+0516,Simipour,174,0,0,0,0,0,2
+0517,Munna,58,1,0,0,0,0,0
+0518,Musharna,170,2,0,0,0,0,0
+0519,Pidove,53,0,1,0,0,0,0
+0520,Tranquill,125,0,2,0,0,0,0
+0521,Unfezant,244,0,3,0,0,0,0
+0522,Blitzle,59,0,0,0,0,0,1
+0523,Zebstrika,174,0,0,0,0,0,2
+0524,Roggenrola,56,0,0,1,0,0,0
+0525,Boldore,137,0,1,1,0,0,0
+0526,Gigalith,258,0,3,0,0,0,0
+0527,Woobat,65,0,0,0,0,0,1
+0528,Swoobat,149,0,0,0,0,0,2
+0529,Drilbur,66,0,1,0,0,0,0
+0530,Excadrill,178,0,2,0,0,0,0
+0531,Audino,390,2,0,0,0,0,0
+0531,Audino,425,2,0,0,0,0,0,form=-Mega,Mega Audino
+0532,Timburr,61,0,1,0,0,0,0
+0533,Gurdurr,142,0,2,0,0,0,0
+0534,Conkeldurr,253,0,3,0,0,0,0
+0535,Tympole,59,0,0,0,0,0,1
+0536,Palpitoad,134,2,0,0,0,0,0
+0537,Seismitoad,255,3,0,0,0,0,0
+0538,Throh,163,2,0,0,0,0,0
+0539,Sawk,163,0,2,0,0,0,0
+0540,Sewaddle,62,0,0,1,0,0,0
+0541,Swadloon,133,0,0,2,0,0,0
+0542,Leavanny,250,0,3,0,0,0,0
+0543,Venipede,52,0,0,1,0,0,0
+0544,Whirlipede,126,0,0,2,0,0,0
+0545,Scolipede,243,0,0,0,0,0,3
+0546,Cottonee,56,0,0,0,0,0,1
+0547,Whimsicott,168,0,0,0,0,0,2
+0548,Petilil,56,0,0,0,1,0,0
+0549,Lilligant,168,0,0,0,2,0,0
+0550,Basculin,161,0,0,0,0,0,2
+0551,Sandile,58,0,1,0,0,0,0
+0552,Krokorok,123,0,2,0,0,0,0
+0553,Krookodile,260,0,3,0,0,0,0
+0554,Darumaka,63,0,1,0,0,0,0
+0555,Darmanitan,168,0,2,0,0,0,0,Standard Mode
+0555,Darmanitan,189,0,0,0,2,0,0,form=-Zen,Zen Mode
+0555,Darmanitan,168,0,2,0,0,0,0,form=-Galar,Galarian Form
+0555,Darmanitan,189,0,0,0,2,0,0,form=-Galar-Zen,Galarian Form<br>Zen Mode
+0556,Maractus,161,0,0,0,2,0,0
+0557,Dwebble,65,0,0,1,0,0,0
+0558,Crustle,170,0,0,2,0,0,0
+0559,Scraggy,70,0,1,0,0,0,0
+0560,Scrafty,171,0,0,1,0,1,0
+0561,Sigilyph,172,0,0,0,2,0,0
+0562,Yamask,61,0,0,1,0,0,0
+0563,Cofagrigus,169,0,0,2,0,0,0
+0564,Tirtouga,71,0,0,1,0,0,0
+0565,Carracosta,173,0,0,2,0,0,0
+0566,Archen,71,0,1,0,0,0,0
+0567,Archeops,177,0,2,0,0,0,0
+0568,Trubbish,66,0,0,0,0,0,1
+0569,Garbodor,166,0,2,0,0,0,0
+0570,Zorua,66,0,0,0,1,0,0
+0571,Zoroark,179,0,0,0,2,0,0
+0572,Minccino,60,0,0,0,0,0,1
+0573,Cinccino,165,0,0,0,0,0,2
+0574,Gothita,58,0,0,0,0,1,0
+0575,Gothorita,137,0,0,0,0,2,0
+0576,Gothitelle,245,0,0,0,0,3,0
+0577,Solosis,58,0,0,0,1,0,0
+0578,Duosion,130,0,0,0,2,0,0
+0579,Reuniclus,245,0,0,0,3,0,0
+0580,Ducklett,61,1,0,0,0,0,0
+0581,Swanna,166,0,0,0,0,0,2
+0582,Vanillite,61,0,0,0,1,0,0
+0583,Vanillish,138,0,0,0,2,0,0
+0584,Vanilluxe,268,0,0,0,3,0,0
+0585,Deerling,67,0,0,0,0,0,1
+0586,Sawsbuck,166,0,2,0,0,0,0
+0587,Emolga,150,0,0,0,0,0,2
+0588,Karrablast,63,0,1,0,0,0,0
+0589,Escavalier,173,0,2,0,0,0,0
+0590,Foongus,59,1,0,0,0,0,0
+0591,Amoonguss,162,2,0,0,0,0,0
+0592,Frillish,67,0,0,0,0,1,0
+0593,Jellicent,168,0,0,0,0,2,0
+0594,Alomomola,165,2,0,0,0,0,0
+0595,Joltik,64,0,0,0,0,0,1
+0596,Galvantula,165,0,0,0,0,0,2
+0597,Ferroseed,61,0,0,1,0,0,0
+0598,Ferrothorn,171,0,0,2,0,0,0
+0599,Klink,60,0,0,1,0,0,0
+0600,Klang,154,0,0,2,0,0,0
+0601,Klinklang,260,0,0,3,0,0,0
+0602,Tynamo,55,0,0,0,0,0,1
+0603,Eelektrik,142,0,2,0,0,0,0
+0604,Eelektross,258,0,3,0,0,0,0
+0605,Elgyem,67,0,0,0,1,0,0
+0606,Beheeyem,170,0,0,0,2,0,0
+0607,Litwick,55,0,0,0,1,0,0
+0608,Lampent,130,0,0,0,2,0,0
+0609,Chandelure,260,0,0,0,3,0,0
+0610,Axew,64,0,1,0,0,0,0
+0611,Fraxure,144,0,2,0,0,0,0
+0612,Haxorus,270,0,3,0,0,0,0
+0613,Cubchoo,61,0,1,0,0,0,0
+0614,Beartic,177,0,2,0,0,0,0
+0615,Cryogonal,180,0,0,0,0,2,0
+0616,Shelmet,61,0,0,1,0,0,0
+0617,Accelgor,173,0,0,0,0,0,2
+0618,Stunfisk,165,2,0,0,0,0,0
+0619,Mienfoo,70,0,1,0,0,0,0
+0620,Mienshao,179,0,2,0,0,0,0
+0621,Druddigon,170,0,2,0,0,0,0
+0622,Golett,61,0,1,0,0,0,0
+0623,Golurk,169,0,2,0,0,0,0
+0624,Pawniard,68,0,1,0,0,0,0
+0625,Bisharp,172,0,2,0,0,0,0
+0626,Bouffalant,172,0,2,0,0,0,0
+0627,Rufflet,70,0,1,0,0,0,0
+0628,Braviary,179,0,2,0,0,0,0
+0629,Vullaby,74,0,0,1,0,0,0
+0630,Mandibuzz,179,0,0,0,2,0,0
+0631,Heatmor,169,0,0,0,2,0,0
+0632,Durant,169,0,0,2,0,0,0
+0633,Deino,60,0,1,0,0,0,0
+0634,Zweilous,147,0,2,0,0,0,0
+0635,Hydreigon,300,0,0,0,3,0,0
+0636,Larvesta,72,0,1,0,0,0,0
+0637,Volcarona,275,0,0,0,3,0,0
+0638,Cobalion,290,0,0,3,0,0,0
+0639,Terrakion,290,0,3,0,0,0,0
+0640,Virizion,290,0,0,0,0,3,0
+0641,Tornadus,290,0,3,0,0,0,0,Incarnate Forme
+0641,Tornadus,290,0,0,0,0,0,3,form=-Therian,Therian Forme
+0642,Thundurus,290,0,3,0,0,0,0,Incarnate Forme
+0642,Thundurus,290,0,0,0,3,0,0,form=-Therian,Therian Forme
+0643,Reshiram,340,0,0,0,3,0,0
+0644,Zekrom,340,0,3,0,0,0,0
+0645,Landorus,300,0,0,0,3,0,0,Incarnate Forme
+0645,Landorus,300,0,3,0,0,0,0,form=-Therian,Therian Forme
+0646,Kyurem,330,1,1,0,1,0,0
+0646,Kyurem,350,0,0,0,3,0,0,form=-White,White Kyurem
+0646,Kyurem,350,0,3,0,0,0,0,form=-Black,Black Kyurem
+0647,Keldeo,290,0,0,0,3,0,0
+0648,Meloetta,300,0,0,0,1,1,1,Aria Forme
+0648,Meloetta,300,0,1,1,0,0,1,form=-Pirouette,Pirouette Forme
+0649,Genesect,300,0,1,0,1,0,1
+0650,Chespin,63,0,0,1,0,0,0
+0651,Quilladin,142,0,0,2,0,0,0
+0652,Chesnaught,265,0,0,3,0,0,0
+0653,Fennekin,61,0,0,0,1,0,0
+0654,Braixen,143,0,0,0,2,0,0
+0655,Delphox,267,0,0,0,3,0,0
+0656,Froakie,63,0,0,0,0,0,1
+0657,Frogadier,142,0,0,0,0,0,2
+0658,Greninja,265,0,0,0,0,0,3
+0658,Greninja,320,0,0,0,0,0,3,form=-Ash,Ash-Greninja
+0659,Bunnelby,47,0,0,0,0,0,1
+0660,Diggersby,148,2,0,0,0,0,0
+0661,Fletchling,56,0,0,0,0,0,1
+0662,Fletchinder,134,0,0,0,0,0,2
+0663,Talonflame,175,0,0,0,0,0,3
+0664,Scatterbug,40,0,0,1,0,0,0
+0665,Spewpa,75,0,0,2,0,0,0
+0666,Vivillon,206,1,0,0,1,0,1
+0667,Litleo,74,0,0,0,1,0,0
+0668,Pyroar,177,0,0,0,2,0,0
+0669,Flabébé,61,0,0,0,0,1,0
+0670,Floette,130,0,0,0,0,2,0
+0670,Floette,243,0,0,0,0,2,0,form=-Eternal,Eternal Flower
+0671,Florges,276,0,0,0,0,3,0
+0672,Skiddo,70,1,0,0,0,0,0
+0673,Gogoat,186,2,0,0,0,0,0
+0674,Pancham,70,0,1,0,0,0,0
+0675,Pangoro,173,0,2,0,0,0,0
+0676,Furfrou,165,0,0,0,0,0,1
+0677,Espurr,71,0,0,0,0,0,1
+0678,Meowstic,163,0,0,0,0,0,2
+0679,Honedge,65,0,0,1,0,0,0
+0680,Doublade,157,0,0,2,0,0,0
+0681,Aegislash,250,0,0,2,0,1,0,form=-Shield,Shield Forme
+0681,Aegislash,250,0,2,0,1,0,0,form=-Blade,Blade Forme
+0682,Spritzee,68,1,0,0,0,0,0
+0683,Aromatisse,162,2,0,0,0,0,0
+0684,Swirlix,68,0,0,1,0,0,0
+0685,Slurpuff,168,0,0,2,0,0,0
+0686,Inkay,58,0,1,0,0,0,0
+0687,Malamar,169,0,2,0,0,0,0
+0688,Binacle,61,0,1,0,0,0,0
+0689,Barbaracle,175,0,2,0,0,0,0
+0690,Skrelp,64,0,0,0,0,1,0
+0691,Dragalge,173,0,0,0,0,2,0
+0692,Clauncher,66,0,0,0,1,0,0
+0693,Clawitzer,100,0,0,0,2,0,0
+0694,Helioptile,58,0,0,0,0,0,1
+0695,Heliolisk,168,0,0,0,1,0,1
+0696,Tyrunt,72,0,1,0,0,0,0
+0697,Tyrantrum,182,0,2,0,0,0,0
+0698,Amaura,72,1,0,0,0,0,0
+0699,Aurorus,104,2,0,0,0,0,0
+0700,Sylveon,184,0,0,0,0,2,0
+0701,Hawlucha,175,0,2,0,0,0,0
+0702,Dedenne,151,0,0,0,0,0,2
+0703,Carbink,100,0,0,1,0,1,0
+0704,Goomy,60,0,0,0,0,1,0
+0705,Sliggoo,158,0,0,0,0,2,0
+0706,Goodra,300,0,0,0,0,3,0
+0707,Klefki,165,0,0,1,0,0,0
+0708,Phantump,62,0,1,0,0,0,0
+0709,Trevenant,166,0,2,0,0,0,0
+0710,Pumpkaboo,67,0,0,1,0,0,0
+0711,Gourgeist,173,0,0,2,0,0,0
+0712,Bergmite,61,0,0,1,0,0,0
+0713,Avalugg,180,0,0,2,0,0,0
+0714,Noibat,49,0,0,0,0,0,1
+0715,Noivern,187,0,0,0,0,0,2
+0716,Xerneas,340,3,0,0,0,0,0
+0717,Yveltal,340,3,0,0,0,0,0
+0718,Zygarde,300,3,0,0,0,0,0,50% Forme
+0718,Zygarde,243,3,0,0,0,0,0,form=-10Percent,10% Forme
+0718,Zygarde,354,3,0,0,0,0,0,form=-Complete,Complete Forme
+0719,Diancie,300,0,0,1,0,2,0
+0719,Diancie,350,0,0,1,0,2,0,form=-Mega,Mega Diancie
+0720,Hoopa,300,0,0,0,3,0,0,Hoopa Confined
+0720,Hoopa,340,0,0,0,3,0,0,form=-Unbound,Hoopa Unbound
+0721,Volcanion,300,0,0,0,3,0,0
+0722,Rowlet,64,1,0,0,0,0,0
+0723,Dartrix,147,2,0,0,0,0,0
+0724,Decidueye,265,0,3,0,0,0,0
+0725,Litten,64,0,0,0,0,0,1
+0726,Torracat,147,0,0,0,0,0,2
+0727,Incineroar,265,0,3,0,0,0,0
+0728,Popplio,64,0,0,0,1,0,0
+0729,Brionne,147,0,0,0,2,0,0
+0730,Primarina,265,0,0,0,3,0,0
+0731,Pikipek,53,0,1,0,0,0,0
+0732,Trumbeak,124,0,2,0,0,0,0
+0733,Toucannon,243,0,3,0,0,0,0
+0734,Yungoos,51,0,1,0,0,0,0
+0735,Gumshoos,146,0,2,0,0,0,0
+0736,Grubbin,60,0,1,0,0,0,0
+0737,Charjabug,140,0,0,2,0,0,0
+0738,Vikavolt,250,0,0,0,3,0,0
+0739,Crabrawler,68,0,1,0,0,0,0
+0740,Crabominable,167,0,2,0,0,0,0
+0741,Oricorio,167,0,0,0,2,0,0
+0742,Cutiefly,61,0,0,0,0,0,1
+0743,Ribombee,162,0,0,0,0,0,2
+0744,Rockruff,56,0,1,0,0,0,0
+0745,Lycanroc,170,0,2,0,0,0,0
+0746,Wishiwashi,61,1,0,0,0,0,0,Solo Form
+0746,Wishiwashi,217,1,0,0,0,0,0,form=-School,School Form
+0747,Mareanie,61,0,0,1,0,0,0
+0748,Toxapex,173,0,0,2,0,0,0
+0749,Mudbray,77,0,1,0,0,0,0
+0750,Mudsdale,175,0,2,0,0,0,0
+0751,Dewpider,54,0,0,0,0,1,0
+0752,Araquanid,159,0,0,0,0,2,0
+0753,Fomantis,50,0,1,0,0,0,0
+0754,Lurantis,168,0,2,0,0,0,0
+0755,Morelull,57,0,0,0,0,1,0
+0756,Shiinotic,142,0,0,0,0,2,0
+0757,Salandit,64,0,0,0,0,0,1
+0758,Salazzle,168,0,0,0,0,0,2
+0759,Stufful,68,0,1,0,0,0,0
+0760,Bewear,175,0,2,0,0,0,0
+0761,Bounsweet,42,1,0,0,0,0,0
+0762,Steenee,102,0,0,0,0,0,2
+0763,Tsareena,255,0,3,0,0,0,0
+0764,Comfey,170,0,0,0,0,2,0
+0765,Oranguru,172,0,0,0,0,2,0
+0766,Passimian,172,0,2,0,0,0,0
+0767,Wimpod,46,0,0,0,0,0,1
+0768,Golisopod,186,0,0,2,0,0,0
+0769,Sandygast,64,0,0,1,0,0,0
+0770,Palossand,168,0,0,2,0,0,0
+0771,Pyukumuku,144,0,0,0,0,2,0
+0772,Type: Null,107,2,0,0,0,0,0
+0773,Silvally,285,3,0,0,0,0,0
+0774,Minior,154,0,0,1,0,1,0,Meteor Form
+0774,Minior,175,0,1,0,1,0,0,form=-Core,All Core Forms
+0775,Komala,168,0,2,0,0,0,0
+0776,Turtonator,170,0,0,2,0,0,0
+0777,Togedemaru,152,0,2,0,0,0,0
+0778,Mimikyu,167,0,0,0,0,2,0
+0779,Bruxish,166,0,2,0,0,0,0
+0780,Drampa,170,0,0,0,2,0,0
+0781,Dhelmise,181,0,2,0,0,0,0
+0782,Jangmo-o,60,0,0,1,0,0,0
+0783,Hakamo-o,147,0,0,2,0,0,0
+0784,Kommo-o,300,0,0,3,0,0,0
+0785,Tapu Koko,285,0,0,0,0,0,3
+0786,Tapu Lele,285,0,0,0,3,0,0
+0787,Tapu Bulu,285,0,3,0,0,0,0
+0788,Tapu Fini,285,0,0,0,0,3,0
+0789,Cosmog,40,1,0,0,0,0,0
+0790,Cosmoem,140,0,0,1,0,1,0
+0791,Solgaleo,340,0,3,0,0,0,0
+0792,Lunala,340,0,0,0,3,0,0
+0793,Nihilego,285,0,0,0,0,3,0
+0794,Buzzwole,285,0,1,2,0,0,0
+0795,Pheromosa,285,0,0,0,0,0,3
+0796,Xurkitree,285,0,0,0,3,0,0
+0797,Celesteela,285,0,1,1,1,0,0
+0798,Kartana,285,0,3,0,0,0,0
+0799,Guzzlord,285,3,0,0,0,0,0
+0800,Necrozma,300,0,1,0,2,0,0
+0800,Necrozma,340,0,3,0,0,0,0,form=-Dusk Mane,Dusk Mane
+0800,Necrozma,340,0,0,0,3,0,0,form=-Dawn Wings,Dawn Wings
+0800,Necrozma,377,0,1,0,1,0,1,form=-Ultra,Ultra Necrozma
+0801,Magearna,300,0,0,0,3,0,0
+0802,Marshadow,300,0,2,0,0,0,1
+0803,Poipole,210,0,0,0,0,0,1
+0804,Naganadel,270,0,0,0,3,0,0
+0805,Stakataka,285,0,0,3,0,0,0
+0806,Blacephalon,285,0,0,0,3,0,0
+0807,Zeraora,300,0,0,0,0,0,3
+0808,Meltan,150,0,1,0,0,0,0
+0809,Melmetal,300,0,3,0,0,0,0
+0810,Grookey,62,0,1,0,0,0,0
+0811,Thwackey,147,0,2,0,0,0,0
+0812,Rillaboom,265,0,3,0,0,0,0
+0813,Scorbunny,62,0,0,0,0,0,1
+0814,Raboot,147,0,0,0,0,0,2
+0815,Cinderace,265,0,0,0,0,0,3
+0816,Sobble,62,0,0,0,0,1,1
+0817,Drizzile,147,0,0,0,2,0,0
+0818,Inteleon,265,0,0,0,0,0,3
+0819,Skwovet,55,1,0,0,0,0,0
+0820,Greedent,161,2,0,0,0,0,0
+0821,Rookidee,49,0,0,0,0,0,1
+0822,Corvisquire,128,0,0,0,0,0,2
+0823,Corviknight,248,0,0,3,0,0,0
+0824,Blipbug,36,0,0,0,0,1,0
+0825,Dottler,117,0,0,0,0,2,0
+0826,Orbeetle,253,0,0,0,0,3,0
+0827,Nickit,49,0,0,0,0,1,0
+0828,Thievul,159,0,0,0,0,2,0
+0829,Gossifleur,50,0,0,0,0,1,0
+0830,Eldegoss,161,0,0,0,0,2,0
+0831,Wooloo,122,0,0,1,0,0,0
+0832,Dubwool,172,0,0,2,0,0,0
+0833,Chewtle,57,0,1,0,0,0,0
+0834,Drednaw,170,0,2,0,0,0,0
+0835,Yamper,54,1,0,0,0,0,0
+0836,Boltund,172,0,0,0,0,0,2
+0837,Rolycoly,48,0,0,1,0,0,0
+0838,Carkol,144,0,0,2,0,0,0
+0839,Coalossal,255,0,0,3,0,0,0
+0840,Applin,52,0,0,1,0,0,0
+0841,Flapple,170,0,2,0,0,0,0
+0842,Appletun,170,2,0,0,0,0,0
+0843,Silicobra,63,0,0,1,0,0,0
+0844,Sandaconda,179,0,0,2,0,0,0
+0845,Cramorant,166,0,0,0,0,2,0
+0846,Arrokuda,56,0,0,0,0,0,1
+0847,Barraskewda,172,0,0,0,0,0,2
+0848,Toxel,48,0,0,0,1,0,0
+0849,Toxtricity,176,0,0,0,2,0,0
+0850,Sizzlipede,61,0,1,0,0,0,0
+0851,Centiskorch,184,0,2,0,0,0,0
+0852,Clobbopus,62,0,1,0,0,0,0
+0853,Grapploct,168,0,2,0,0,0,0
+0854,Sinistea,62,0,0,0,1,0,0
+0855,Polteageist,178,0,0,0,2,0,0
+0856,Hatenna,53,0,0,0,1,0,0
+0857,Hattrem,130,0,0,0,2,0,0
+0858,Hatterene,255,0,0,0,3,0,0
+0859,Impidimp,53,0,0,0,1,0,0
+0860,Morgrem,130,0,0,0,2,0,0
+0861,Grimmsnarl,255,0,3,0,0,0,0
+0862,Obstagoon,260,0,0,3,0,0,0
+0863,Perrserker,154,0,2,0,0,0,0
+0864,Cursola,179,0,0,0,2,0,0
+0865,Sirfetch'd,177,0,2,0,0,0,0
+0866,Mr. Rime,182,0,0,0,3,0,0
+0867,Runerigus,169,0,0,2,0,0,0
+0868,Milcery,54,0,0,0,0,1,0
+0869,Alcremie,173,0,0,0,0,2,0
+0870,Falinks,165,0,2,0,0,1,0
+0871,Pincurchin,152,0,2,0,0,0,0
+0872,Snom,37,0,0,0,1,0,0
+0873,Frosmoth,166,0,0,0,2,0,0
+0874,Stonjourner,165,0,0,2,0,0,0
+0875,Eiscue,165,0,0,2,0,0,0
+0876,Indeedee,166,0,0,0,2,0,0,form=-Male,Male
+0876,Indeedee,166,0,0,0,0,2,0,form=-Female,Female
+0877,Morpeko,153,0,0,0,0,0,2
+0878,Cufant,66,0,1,0,0,0,0
+0879,Copperajah,175,0,2,0,0,0,0
+0880,Dracozolt,177,0,2,0,0,0,0
+0881,Arctozolt,177,0,2,0,0,0,0
+0882,Dracovish,177,0,0,2,0,0,0
+0883,Arctovish,177,0,0,2,0,0,0
+0884,Duraludon,187,0,0,0,2,0,0
+0885,Dreepy,54,0,0,0,0,0,1
+0886,Drakloak,144,0,0,0,0,0,2
+0887,Dragapult,300,0,0,0,0,0,3
+0888,Zacian,335,0,0,0,0,0,3,form=-Hero,Hero of Many Battles
+0888,Zacian,360,0,0,0,0,0,3,Crowned Sword
+0889,Zamazenta,335,0,0,0,0,0,3,form=-Hero,Hero of Many Battles
+0889,Zamazenta,360,0,0,0,0,0,3,Crowned Shield
+0890,Eternatus,345,3,0,0,0,0,0
+0890,Eternatus,563,3,0,0,0,0,0,form=-Eternamax,Eternamax
+0891,Kubfu,77,0,1,0,0,0,0
+0892,Urshifu,275,0,3,0,0,0,0
+0893,Zarude,300,0,3,0,0,0,0
+0894,Regieleki,290,0,0,0,0,0,3
+0895,Regidrago,290,3,0,0,0,0,0
+0896,Glastrier,290,0,3,0,0,0,0
+0897,Spectrier,290,0,0,0,3,0,0
+0898,Calyrex,250,3,0,0,0,0,0
+0898,Calyrex,340,0,3,0,0,0,0,form=-Ice Rider,Ice Rider
+0898,Calyrex,340,0,0,0,3,0,0,form=-Shadow Rider,Shadow Rider
+0899,Wyrdeer,Unknown,0,1,0,0,0,0
+0900,Kleavor,Unknown,0,2,0,0,0,0
+0901,Ursaluna,Unknown,0,3,0,0,0,0
+0902,Basculegion,Unknown,2,0,0,0,0,0
+0903,Sneasler,Unknown,0,1,0,0,0,1
+0904,Overqwil,Unknown,0,1,0,0,0,0
+0905,Enamorus,Unknown,0,0,0,3,0,0,Incarnate Forme
+0905,Enamorus,Unknown,0,3,0,0,0,0,form=-Therian,Therian Forme
+0906,Sprigatito,62,0,0,0,0,0,1
+0907,Floragato,144,0,0,0,0,0,2
+0908,Meowscarada,265,0,0,0,0,0,3
+0909,Fuecoco,62,1,0,0,0,0,0
+0910,Crocalor,144,0,0,0,2,0,0
+0911,Skeledirge,265,0,0,0,3,0,0
+0912,Quaxly,62,0,1,0,0,0,0
+0913,Quaxwell,144,0,2,0,0,0,0
+0914,Quaquaval,265,0,3,0,0,0,0
+0915,Lechonk,51,1,0,0,0,0,0
+0916,Oinkologne,171,2,0,0,0,0,0
+0917,Tarountula,42,0,0,1,0,0,0
+0918,Spidops,141,0,0,2,0,0,0
+0919,Nymble,42,0,1,0,0,0,0
+0920,Lokix,158,0,2,0,0,0,0
+0921,Pawmi,48,0,0,0,0,0,1
+0922,Pawmo,123,0,0,0,0,0,2
+0923,Pawmot,245,0,3,0,0,0,0
+0924,Tandemaus,61,0,0,0,0,0,1
+0925,Maushold,165,0,0,0,0,0,2
+0926,Fidough,62,0,0,0,0,0,1
+0927,Dachsbun,167,0,0,0,0,0,2
+0928,Smoliv,52,0,0,0,1,0,0
+0929,Dolliv,124,0,0,0,2,0,0
+0930,Arboliva,255,0,0,0,3,0,0
+0931,Squawkabilly,146,0,1,0,0,0,0
+0932,Nacli,56,0,0,1,0,0,0
+0933,Naclstack,124,0,0,2,0,0,0
+0934,Garganacl,250,0,0,3,0,0,0
+0935,Charcadet,51,0,0,0,1,0,0
+0936,Armarouge,263,0,0,0,2,0,0
+0937,Ceruledge,263,0,2,0,0,0,0
+0938,Tadbulb,54,1,0,0,0,0,0
+0939,Bellibolt,173,2,0,0,0,0,0
+0940,Wattrel,56,0,0,0,0,0,1
+0941,Kilowattrel,172,0,0,0,0,0,2
+0942,Maschiff,68,0,1,0,0,0,0
+0943,Mabosstiff,177,0,2,0,0,0,0
+0944,Shroodle,58,0,0,0,0,0,1
+0945,Grafaiai,170,0,0,0,0,0,2
+0946,Bramblin,55,0,1,0,0,0,0
+0947,Brambleghast,168,0,2,0,0,0,0
+0948,Toedscool,67,0,0,0,0,1,0
+0949,Toedscruel,180,0,0,0,0,2,0
+0950,Klawf,158,0,0,2,0,0,0
+0951,Capsakid,61,0,1,0,0,0,0
+0952,Scovillain,170,0,2,0,0,0,0
+0953,Rellor,54,0,0,1,0,0,0
+0954,Rabsca,165,0,0,0,2,0,0
+0955,Flittle,51,0,0,0,0,0,1
+0956,Espathra,168,0,0,0,0,0,2
+0957,Tinkatink,59,0,0,0,0,1,0
+0958,Tinkatuff,133,0,0,0,0,2,0
+0959,Tinkaton,253,0,0,0,0,3,0
+0960,Wiglett,49,0,0,0,0,0,1
+0961,Wugtrio,149,0,0,0,0,0,2
+0962,Bombirdier,243,0,2,0,0,0,0
+0963,Finizen,63,0,0,0,0,0,1
+0964,Palafin,160,2,0,0,0,0,0,Zero Form
+0964,Palafin,160,2,0,0,0,0,0,form=-Hero,Hero Form
+0965,Varoom,60,0,1,0,0,0,0
+0966,Revavroom,175,0,2,0,0,0,0
+0967,Cyclizar,175,0,0,0,0,0,2
+0968,Orthworm,240,0,0,2,0,0,0
+0969,Glimmet,70,0,0,0,1,0,0
+0970,Glimmora,184,0,0,0,2,0,0
+0971,Greavard,58,0,1,0,0,0,0
+0972,Houndstone,171,0,2,0,0,0,0
+0973,Flamigo,175,0,2,0,0,0,0
+0974,Cetoddle,67,1,0,0,0,0,0
+0975,Cetitan,182,2,0,0,0,0,0
+0976,Veluza,167,0,2,0,0,0,0
+0977,Dondozo,265,3,0,0,0,0,0
+0978,Tatsugiri,166,0,0,0,2,0,0
+0979,Annihilape,268,0,3,0,0,0,0
+0980,Clodsire,151,2,0,0,0,0,0
+0981,Farigiraf,260,3,0,0,0,0,0
+0982,Dudunsparce,182,2,0,0,0,0,0
+0983,Kingambit,275,0,3,0,0,0,0
+0984,Great Tusk,285,0,3,0,0,0,0
+0985,Scream Tail,285,3,0,0,0,0,0
+0986,Brute Bonnet,285,0,3,0,0,0,0
+0987,Flutter Mane,285,0,0,0,1,1,1
+0988,Slither Wing,285,0,3,0,0,0,0
+0989,Sandy Shocks,285,0,0,0,3,0,0
+0990,Iron Treads,285,0,0,3,0,0,0
+0991,Iron Bundle,285,0,0,0,0,0,3
+0992,Iron Hands,285,0,3,0,0,0,0
+0993,Iron Jugulis,285,0,0,0,3,0,0
+0994,Iron Moth,285,0,0,0,3,0,0
+0995,Iron Thorns,285,0,3,0,0,0,0
+0996,Frigibax,64,0,1,0,0,0,0
+0997,Arctibax,148,0,2,0,0,0,0
+0998,Baxcalibur,300,0,3,0,0,0,0
+0999,Gimmighoul,60,0,0,0,1,0,0
+1000,Gholdengo,275,0,0,0,2,0,0
+1001,Wo-Chien,285,0,0,0,0,3,0
+1002,Chien-Pao,285,0,0,0,0,0,3
+1003,Ting-Lu,285,0,0,3,0,0,0
+1004,Chi-Yu,285,0,0,0,3,0,0
+1005,Roaring Moon,295,0,3,0,0,0,0
+1006,Iron Valiant,295,0,3,0,0,0,0
+1007,Koraidon,335,0,3,0,0,0,0,Apex Build
+1008,Miraidon,335,0,0,0,3,0,0,Ultimate Mode
+1009,Walking Wake,295,0,0,0,3,0,0
+1010,Iron Leaves,295,0,3,0,0,0,0
