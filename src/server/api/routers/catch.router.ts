@@ -241,4 +241,23 @@ export const catchRouter = createTRPCRouter({
       success: true,
     }
   }),
+
+  rename: playerProcedure
+    .input(
+      z.object({
+        catchId: z.string(),
+        name: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      await ctx.prisma.catch.updateMany({
+        where: {
+          playerId: ctx.player.id,
+          id: input.catchId,
+        },
+        data: {
+          name: input.name,
+        },
+      })
+    }),
 })
