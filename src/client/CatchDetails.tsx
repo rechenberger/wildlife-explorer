@@ -11,7 +11,13 @@ import { useMyCatch } from "./useCatches"
 import { useGetWildlifeName } from "./useGetWildlifeName"
 import { useMapSetCenter } from "./useMapRef"
 
-export const CatchDetails = ({ catchId }: { catchId: string }) => {
+export const CatchDetails = ({
+  catchId,
+  tiny,
+}: {
+  catchId: string
+  tiny?: boolean
+}) => {
   const { myCatch: c } = useMyCatch({ catchId })
 
   const getName = useGetWildlifeName()
@@ -28,50 +34,58 @@ export const CatchDetails = ({ catchId }: { catchId: string }) => {
 
   return (
     <>
-      <div>{getName(c.wildlife)}</div>
+      {!tiny && <div>{getName(c.wildlife)}</div>}
       <div className="p-2 flex flex-col gap-4">
-        <DividerHeading>Wildlife</DividerHeading>
-        <div className="flex flex-row gap-4 items-center justify-between">
-          <div className="flex-1 max-w-[50%]">
-            <FighterChip showAbsoluteHp ltr fighter={c} />
-          </div>
-          <button
-            className="text-right text-xs font-normal text-black opacity-60 inline-block"
-            onClick={() => {
-              setCurrentObservationId(c.wildlife.observationId)
-              mapSetCenter(c.wildlife)
-            }}
-          >
-            <div>
-              <span>Caught&nbsp;</span>
-              <Away
-                location={c.wildlife}
-                className="text-xs font-normal text-black inline-block"
-              />
+        {!tiny && (
+          <>
+            <DividerHeading>Wildlife</DividerHeading>
+            <div className="flex flex-row gap-4 items-center justify-between">
+              <div className="flex-1 max-w-[50%]">
+                <FighterChip showAbsoluteHp ltr fighter={c} />
+              </div>
+              <button
+                className="text-right text-xs font-normal text-black opacity-60 inline-block"
+                onClick={() => {
+                  setCurrentObservationId(c.wildlife.observationId)
+                  mapSetCenter(c.wildlife)
+                }}
+              >
+                <div>
+                  <span>Caught&nbsp;</span>
+                  <Away
+                    location={c.wildlife}
+                    className="text-xs font-normal text-black inline-block"
+                  />
+                </div>
+                <div className="">
+                  <TimeAgo date={c.createdAt} addSuffix={true} />
+                </div>
+              </button>
             </div>
-            <div className="">
-              <TimeAgo date={c.createdAt} addSuffix={true} />
-            </div>
-          </button>
-        </div>
+          </>
+        )}
 
-        <DividerHeading>Types, Ability, Nature</DividerHeading>
-        <div className="flex flex-row gap-2">
+        {!tiny && <DividerHeading>Types, Ability, Nature</DividerHeading>}
+        <div className="flex flex-row gap-2 flex-wrap">
           <FighterTypeBadges
             fighter={c}
             showTypes
-            showAbility
-            showNature
+            showAbility={!tiny}
+            showNature={!tiny}
             size={"big"}
             className="flex-1"
           />
         </div>
 
-        <DividerHeading>Moves</DividerHeading>
+        {!tiny && <DividerHeading>Moves</DividerHeading>}
         <FighterMoves fighter={c} />
 
-        <DividerHeading>Stats</DividerHeading>
-        <FighterStatsChart fighter={c} />
+        {!tiny && (
+          <>
+            <DividerHeading>Stats</DividerHeading>
+            <FighterStatsChart fighter={c} />
+          </>
+        )}
       </div>
     </>
   )

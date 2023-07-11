@@ -43,7 +43,12 @@ export const TypeBadge = ({
             <icon.icon className={cn("h-3 w-3", size === "big" && "h-4 w-4")} />
           </div>
         )}
-        <div className={cn("flex-1", size === "big" && "text-center")}>
+        <div
+          className={cn(
+            "flex-1 whitespace-nowrap",
+            size === "big" && "text-center"
+          )}
+        >
           {content}
         </div>
       </div>
