@@ -120,17 +120,20 @@ export const catchRouter = createTRPCRouter({
         },
       })
 
-      map(catchIdsMaxPerTeam, async (catchId, index) => {
-        await ctx.prisma.catch.updateMany({
-          where: {
-            playerId: ctx.player.id,
-            id: catchId,
-          },
-          data: {
-            battleOrderPosition: index + 1,
-          },
+      await Promise.all(
+        map(catchIdsMaxPerTeam, async (catchId, index) => {
+          await ctx.prisma.catch.updateMany({
+            where: {
+              playerId: ctx.player.id,
+              id: catchId,
+            },
+            data: {
+              battleOrderPosition: index + 1,
+            },
+          })
         })
-      })
+      )
+      return true
     }),
 
   catch: wildlifeProcedure.mutation(async ({ ctx }) => {
