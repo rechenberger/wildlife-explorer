@@ -95,6 +95,8 @@ model Catch {
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
+    metadata Json @default("{}")
+
     name String?
 
     playerId String

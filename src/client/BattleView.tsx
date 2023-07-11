@@ -52,7 +52,6 @@ export const BattleView = ({
       },
       {
         enabled: !!playerId,
-        refetchInterval: 1000,
       }
     )
 
@@ -118,7 +117,7 @@ export const BattleView = ({
   }
 
   if (pvpStatus.status === "INVITING" && !pvpStatus.allReady) {
-    return <BattleViewPvp battleId={battleId} pvpStatus={pvpStatus} />
+    return <BattleViewPvp battleId={battleId} />
   }
 
   const { battleStatus, status } = data

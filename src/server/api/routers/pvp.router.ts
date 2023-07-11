@@ -50,6 +50,7 @@ export const pvpRouter = createTRPCRouter({
     .input(
       z.object({
         battleId: z.string(),
+        isReady: z.boolean(),
       })
     )
     .mutation(async ({ ctx, input }) => {
@@ -86,6 +87,13 @@ export const pvpRouter = createTRPCRouter({
         })
       }
 
+      if (input.isReady && ctx.player.metadata?.activeBattleId) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "You are already in a battle",
+        })
+      }
+
       await ctx.prisma.player.update({
         where: {
           id: ctx.player.id,
@@ -93,10 +101,14 @@ export const pvpRouter = createTRPCRouter({
         data: {
           metadata: {
             ...ctx.player.metadata,
-            activeBattleId: battle.id,
+            activeBattleId: input.isReady ? battle.id : null,
           },
         },
       })
+
+      if (!input.isReady) {
+        return false
+      }
 
       const otherPlayer = battle.battleParticipants
         .flatMap((bp) => (bp.player ? [bp.player] : []))
@@ -172,19 +184,25 @@ export const pvpRouter = createTRPCRouter({
         },
       })
 
-      if (ctx.player.metadata?.activeBattleId === input.battleId) {
-        await ctx.prisma.player.update({
-          where: {
-            id: ctx.player.id,
-          },
-          data: {
-            metadata: {
-              ...ctx.player.metadata,
-              activeBattleId: null,
-            },
-          },
+      await Promise.all(
+        battle.battleParticipants.map(async (bp) => {
+          if (!bp.player) return
+          const metadata = PlayerMetadata.parse(bp.player.metadata)
+          if (metadata?.activeBattleId === input.battleId) {
+            await ctx.prisma.player.update({
+              where: {
+                id: bp.player.id,
+              },
+              data: {
+                metadata: {
+                  ...metadata,
+                  activeBattleId: null,
+                },
+              },
+            })
+          }
         })
-      }
+      )
     }),
 
   getStatus: playerProcedure
