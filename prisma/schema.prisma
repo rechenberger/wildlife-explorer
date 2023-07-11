@@ -95,6 +95,8 @@ model Catch {
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
+    name String?
+
     playerId String
     player   Player @relation(fields: [playerId], references: [id], onDelete: Cascade)
 
@@ -146,7 +148,7 @@ model Battle {
 }
 
 enum BattleStatus {
-    // PENDING
+    INVITING
     IN_PROGRESS
     FINISHED
     CANCELLED

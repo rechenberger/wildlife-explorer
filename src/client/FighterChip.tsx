@@ -10,6 +10,7 @@ import { useGetWildlifeName } from "./useGetWildlifeName"
 export type FighterForChip = {
   fighter: WildlifeFighterPlus
   wildlife: Wildlife & { metadata: WildlifeMetadata }
+  name?: string | null
 }
 
 export const FighterChip = ({
@@ -29,6 +30,7 @@ export const FighterChip = ({
   const hpFull = hp >= hpMax
   const fainted = hp <= 0
   const getName = useGetWildlifeName()
+  const name = fighter.name || getName(fighter.wildlife)
   return (
     <>
       <div
@@ -68,13 +70,13 @@ export const FighterChip = ({
           <div className="flex items-baseline gap-1">
             <div
               className="truncate text-xs font-bold"
-              title={`${getName(fighter.wildlife)} ${
+              title={`${name} ${
                 DEV_MODE
                   ? `(${fighter.fighter.species} ${fighter.fighter.level} ${fighter.fighter.gender})`
                   : ""
               }`}
             >
-              {getName(fighter.wildlife)}
+              {name}
             </div>
             {/* {SHOW_FIGHTER_NAME && (
               <div

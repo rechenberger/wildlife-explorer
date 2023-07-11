@@ -10,6 +10,9 @@ export const socialRouter = createTRPCRouter({
       //     not: input.playerId,
       //   },
       // },
+      orderBy: {
+        updatedAt: "desc",
+      },
       include: {
         _count: {
           select: {
