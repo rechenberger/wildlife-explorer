@@ -69,7 +69,13 @@ export const BattleViewPvp = ({
           icon={runIcon}
           content={"Cancel"}
           size="big"
-          onClick={() => {}}
+          onClick={() => {
+            if (!playerId) return
+            cancelInvite({
+              battleId,
+              playerId,
+            })
+          }}
         />
       </div>
     </div>
