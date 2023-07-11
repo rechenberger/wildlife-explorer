@@ -2,6 +2,7 @@ import NiceModal from "@ebay/nice-modal-react"
 import { atom } from "jotai"
 import { find } from "lodash-es"
 import { Swords } from "lucide-react"
+import { useEffect } from "react"
 import { ENABLE_BATTLE_VIEW } from "~/config"
 import { type LatLng } from "~/server/schema/LatLng"
 import { api } from "~/utils/api"
@@ -19,10 +20,18 @@ export const BattleViewButton = () => {
     },
     {
       enabled: !!playerId,
+      refetchInterval: 2000,
     }
   )
-  const activeBattle = find(battles, (b) => b.status === "IN_PROGRESS")
-  const pvpInviteBattle = find(battles, (b) => b.status === "INVITING")
+  const activeBattleId = find(battles, (b) => b.status === "IN_PROGRESS")?.id
+  const pvpInviteBattleId = find(battles, (b) => b.status === "INVITING")?.id
+
+  useEffect(() => {
+    if (!pvpInviteBattleId) return
+    NiceModal.show(BattleViewModal, {
+      battleId: pvpInviteBattleId,
+    })
+  }, [activeBattleId, pvpInviteBattleId])
 
   if (!ENABLE_BATTLE_VIEW) return null
 
@@ -33,18 +42,18 @@ export const BattleViewButton = () => {
           className={cn("relative rounded-xl bg-black p-2 text-white")}
           onClick={async () => {
             NiceModal.show(BattleViewModal, {
-              battleId: activeBattle?.id ?? undefined,
+              battleId: activeBattleId ?? pvpInviteBattleId ?? undefined,
             })
           }}
         >
           <Swords size={32} />
-          {!!activeBattle && (
+          {!!activeBattleId && (
             <>
               <div className="absolute -right-1 -top-1 h-3 w-3 rounded-full bg-red-500" />
               <div className="absolute -right-1 -top-1 h-3 w-3 animate-ping rounded-full bg-red-500" />
             </>
           )}
-          {!!pvpInviteBattle && (
+          {!!pvpInviteBattleId && (
             <>
               <div className="absolute -right-1 -top-1 h-3 w-3 rounded-full bg-yellow-500" />
               <div className="absolute -right-1 -top-1 h-3 w-3 animate-ping rounded-full bg-yellow-500" />
