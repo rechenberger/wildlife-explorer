@@ -103,8 +103,8 @@ model Catch {
     playerId String
     player   Player @relation("CatchPlayer", fields: [playerId], references: [id], onDelete: Cascade)
 
-    originalPlayerId String?
-    originalPlayer   Player? @relation("CatchOriginalPlayer", fields: [originalPlayerId], references: [id], onDelete: Cascade)
+    originalPlayerId String
+    originalPlayer   Player @relation("CatchOriginalPlayer", fields: [originalPlayerId], references: [id], onDelete: Cascade)
 
     wildlifeId String
     wildlife   Wildlife @relation(fields: [wildlifeId], references: [id], onDelete: Cascade)
