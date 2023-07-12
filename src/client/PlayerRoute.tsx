@@ -22,22 +22,22 @@ export const PlayerRoute = ({
   player: Player
   isMe?: boolean
 }) => {
-  const result = useMemo(
+  const timing = useMemo(
     () =>
       player?.metadata?.navigation
-        ? calcTimingLegs(player?.metadata?.navigation)
+        ? calcTimingLegs(player.metadata.navigation)
         : null,
     [player?.metadata?.navigation]
   )
   const playerLocation = useAtomValue(playerLocationAtom)
   const otherPlayerLocation = useAtomValue(otherPlayersLocationAtom)
   const points = useMemo(() => {
-    if (!result) return []
+    if (!timing) return []
     let points = filter(
-      result.timingLegs,
+      timing.timingLegs,
       (leg) => leg.startingAtTimestamp > Date.now()
     ).map((leg) => leg.from)
-    const lastPoint = last(result.timingLegs)?.to
+    const lastPoint = last(timing.timingLegs)?.to
     if (!lastPoint) return []
     if (isMe) {
       points = [playerLocation, ...points]
@@ -49,7 +49,7 @@ export const PlayerRoute = ({
     }
     points = [...points, lastPoint]
     return points
-  }, [isMe, otherPlayerLocation, player.id, playerLocation, result])
+  }, [isMe, otherPlayerLocation, player.id, playerLocation, timing])
 
   const geoJson = useMemo(
     () =>
@@ -66,7 +66,7 @@ export const PlayerRoute = ({
     [points]
   )
 
-  if (!result) return null
+  if (!timing) return null
 
   const id = `route-${player.id}`
 
