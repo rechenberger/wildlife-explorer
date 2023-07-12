@@ -113,7 +113,6 @@ export const pvpRouter = createTRPCRouter({
       const otherPlayer = battle.battleParticipants
         .flatMap((bp) => (bp.player ? [bp.player] : []))
         .filter((p) => !!p && p.id !== ctx.player.id)
-        .map((p) => ({ ...p, metadata: PlayerMetadata.parse(p.metadata) }))
 
       const allReady = otherPlayer.every(
         (p) => p.metadata?.activeBattleId === battle.id

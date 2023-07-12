@@ -102,7 +102,7 @@ export const navigationRouter = createTRPCRouter({
         where: { id: ctx.player.id },
         data: {
           metadata: {
-            ...PlayerMetadata.parse(ctx.player.metadata),
+            ...ctx.player.metadata,
             navigation,
           } satisfies PlayerMetadata,
         },

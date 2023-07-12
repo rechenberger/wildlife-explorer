@@ -1,12 +1,7 @@
-import { type Player } from "@prisma/client"
+import { type Player } from "../db"
 import { calcPlayerCurrentLocation } from "../lib/calcTimingLegs"
-import { PlayerMetadata } from "./PlayerMetadata"
 
-export const parsePlayer = (playerRaw: Player) => {
-  let player = {
-    ...playerRaw,
-    metadata: PlayerMetadata.parse(playerRaw.metadata ?? {}),
-  }
+export const parsePlayer = (player: Player) => {
   const currentLocation = calcPlayerCurrentLocation({ player })
   if (currentLocation) {
     player = {

@@ -15,14 +15,13 @@ import { simulateBattle } from "~/server/lib/battle/simulateBattle"
 import { respawnWildlife } from "~/server/lib/respawnWildlife"
 import { LevelingRate, type CatchMetadata } from "~/server/schema/CatchMetdata"
 import { type PlayerMetadata } from "~/server/schema/PlayerMetadata"
-import { WildlifeMetadata } from "~/server/schema/WildlifeMetadata"
 import { createSeed } from "~/utils/seed"
 import { playerProcedure } from "../middleware/playerProcedure"
 import { wildlifeProcedure } from "../middleware/wildlifeProcedure"
 
 export const catchRouter = createTRPCRouter({
   getMyCatches: playerProcedure.query(async ({ ctx }) => {
-    const catchesRaw = await ctx.prisma.catch.findMany({
+    const catches = await ctx.prisma.catch.findMany({
       where: {
         playerId: ctx.player.id,
       },
@@ -41,13 +40,6 @@ export const catchRouter = createTRPCRouter({
         },
       ],
     })
-    const catches = catchesRaw.map((c) => ({
-      ...c,
-      wildlife: {
-        ...c.wildlife,
-        metadata: WildlifeMetadata.parse(c.wildlife.metadata),
-      },
-    }))
 
     const catchesWithFighter = await Promise.all(
       catches.map(async (c) => {
