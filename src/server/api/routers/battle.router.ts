@@ -195,6 +195,7 @@ export const battleRouter = createTRPCRouter({
           choice: input.choice,
         },
         battleInput: battleBefore?.metadata?.battleInput,
+        battleJson: battleBefore?.metadata?.battleJson,
       })
       console.time("update")
       const winner = battleReport.winner
