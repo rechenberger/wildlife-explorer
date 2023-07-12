@@ -13,7 +13,7 @@ import {
 import { api } from "~/utils/api"
 import { Away } from "./Away"
 import { BattleViewModal } from "./BattleViewModal"
-import { FighterChip } from "./FighterChip"
+import { FighterChipByWildlife } from "./FighterChipByWildlife"
 import { TimeAgo } from "./TimeAgo"
 import { useWildlife } from "./WildlifeMarkers"
 import { cn } from "./cn"
@@ -52,16 +52,6 @@ export const CurrentObservation = () => {
     })
 
   const getName = useGetWildlifeName()
-
-  const { data: fighter } = api.wildlife.getFighter.useQuery(
-    {
-      playerId: playerId!,
-      wildlifeId: w?.id!,
-    },
-    {
-      enabled: !!w && !!playerId,
-    }
-  )
 
   if (!w) return null
 
@@ -177,18 +167,9 @@ export const CurrentObservation = () => {
             </Link>
           )}
           <div className="flex-1" />
-          {fighter && (
-            <div className="max-w-[50%]">
-              <FighterChip
-                fighter={{
-                  fighter: fighter.fighter,
-                  wildlife: w,
-                }}
-                showAbsoluteHp={false}
-                ltr={false}
-              />
-            </div>
-          )}
+          <div className="max-w-[50%]">
+            <FighterChipByWildlife w={w} showAbsoluteHp={false} ltr={false} />
+          </div>
         </div>
         <div className="flex flex-row flex-wrap items-center justify-center gap-2">
           {location && (
