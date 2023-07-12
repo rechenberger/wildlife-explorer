@@ -39,7 +39,7 @@ export type BattleReportSide = z.infer<typeof BattleReportSide>
 
 export const BattleReport = z.object({
   winner: z.string().optional(),
-  inputLog: z.array(z.string()),
+  // inputLog: z.array(z.string()),
   outputLog: z.array(z.string()),
   version: z.number(),
   sides: z.array(BattleReportSide),

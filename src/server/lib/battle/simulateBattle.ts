@@ -221,7 +221,7 @@ export const simulateBattle = async ({
 
     return {
       winner: battle.winner,
-      inputLog: battle.inputLog,
+      // inputLog: battle.inputLog,
 
       // TODO: this assumes that we are always viewing as p1
       outputLog: extractChannelMessages(battle.log.join("\n"), [1])[1],
