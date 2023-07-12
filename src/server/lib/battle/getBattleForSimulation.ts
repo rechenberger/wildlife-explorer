@@ -13,19 +13,36 @@ export const getBattleForSimulation = async ({
     where: {
       id: battleId,
     },
-    include: {
+    select: {
+      id: true,
+      metadata: true,
+      status: true, // TODO: remove
       battleParticipants: {
-        include: {
+        select: {
+          id: true,
           player: {
-            include: {
+            select: {
+              id: true,
+              name: true,
+              metadata: true, // TODO: remove
               catches: {
                 where: {
                   battleOrderPosition: {
                     not: null,
                   },
                 },
-                include: {
-                  wildlife: true,
+                select: {
+                  id: true,
+                  seed: true,
+                  name: true,
+                  wildlife: {
+                    select: {
+                      id: true,
+                      metadata: true,
+                      observationId: true, // TODO: remove
+                      respawnsAt: true, // TODO: remove
+                    },
+                  },
                 },
                 take: playerPartyLimit,
                 orderBy: {
@@ -34,7 +51,14 @@ export const getBattleForSimulation = async ({
               },
             },
           },
-          wildlife: true,
+          wildlife: {
+            select: {
+              id: true,
+              metadata: true,
+              observationId: true,
+              respawnsAt: true,
+            },
+          },
         },
         orderBy: {
           id: "asc",

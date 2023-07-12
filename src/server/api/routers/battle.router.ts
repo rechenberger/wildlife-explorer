@@ -208,7 +208,7 @@ export const battleRouter = createTRPCRouter({
           participants,
           (p) =>
             p.player?.name === winner ||
-            (!!p.wildlifeId && winner == "Wildlife")
+            (!!p.wildlife?.id && winner == "Wildlife")
         )?.id
         await Promise.all(
           map(battleDb.battleParticipants, async (p) => {
@@ -231,10 +231,10 @@ export const battleRouter = createTRPCRouter({
                   : undefined,
               },
             })
-            if (p.wildlifeId) {
+            if (p.wildlife?.id) {
               await respawnWildlife({
                 prisma: ctx.prisma,
-                wildlifeId: p.wildlifeId,
+                wildlifeId: p.wildlife.id,
               })
             }
           })

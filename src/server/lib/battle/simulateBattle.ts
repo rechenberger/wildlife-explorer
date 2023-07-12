@@ -36,10 +36,10 @@ export const simulateBattle = async ({
 
   const playerParticipations = battleDb.battleParticipants.flatMap(
     (bp, participantIdx) =>
-      bp.playerId
+      bp.player?.id
         ? [
             {
-              playerId: bp.playerId,
+              playerId: bp.player.id,
               participantIdx,
             },
           ]
@@ -132,7 +132,7 @@ export const simulateBattle = async ({
   if (choice) {
     const participantIdx = findIndex(
       battleDb.battleParticipants,
-      (p) => p.playerId === choice.playerId
+      (p) => p.player?.id === choice.playerId
     )
     if (participantIdx === -1) {
       // SECURITY
