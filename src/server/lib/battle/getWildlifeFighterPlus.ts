@@ -136,6 +136,11 @@ export const WildlifeFighterPlus = z.object({
   }),
   isActive: z.boolean(),
   justFainted: z.boolean(),
-  lastMove: z.any(),
+  lastMove: z
+    .object({
+      name: z.string(),
+      totalDamage: z.number().or(z.literal(false)).nullish(),
+    })
+    .nullish(),
 })
 export type WildlifeFighterPlus = z.infer<typeof WildlifeFighterPlus>
