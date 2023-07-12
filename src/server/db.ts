@@ -2,7 +2,7 @@ import { PrismaClient, type Player } from "@prisma/client"
 import { env } from "~/env.mjs"
 import { BattleMetadata } from "./schema/BattleMetadata"
 import { BattleParticipationMetadata } from "./schema/BattleParticipationMetadata"
-import { CatchMetadata } from "./schema/CatchMetdata"
+import { CatchMetadata } from "./schema/CatchMetadata"
 import { PlayerMetadata } from "./schema/PlayerMetadata"
 import { WildlifeMetadata } from "./schema/WildlifeMetadata"
 
