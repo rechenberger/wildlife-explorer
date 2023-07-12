@@ -1,6 +1,7 @@
 import { Dex, type PokemonSet } from "@pkmn/dex"
 import { Battle, toID, type Pokemon } from "@pkmn/sim"
 import { first } from "lodash-es"
+import { z } from "zod"
 import {
   getWildlifeFighter,
   type GetWildlifeFighterOptions,
@@ -96,11 +97,38 @@ export const transformWildlifeFighterPlus = ({
     gender: p.gender,
     nature: pokemonSet.nature,
     stats,
-  }
+  } satisfies WildlifeFighterPlus
 
   return fighterPlus
 }
 
-export type WildlifeFighterPlus = Awaited<
-  ReturnType<typeof transformWildlifeFighterPlus>
->
+export const WildlifeFighterPlus = z.object({
+  hp: z.number(),
+  hpMax: z.number(),
+  types: z.array(z.string()),
+  status: z.string(),
+  moves: z.array(
+    z.object({
+      name: z.string(),
+      status: z.any(),
+      definition: z.any(),
+      effectiveness: z.any(),
+      immunity: z.any(),
+    })
+  ),
+  ability: z.any(),
+  species: z.string(),
+  speciesDefinition: z.any(),
+  level: z.number(),
+  gender: z.string(),
+  nature: z.string(),
+  stats: z.object({
+    hp: z.number(),
+    atk: z.number(),
+    def: z.number(),
+    spa: z.number(),
+    spd: z.number(),
+    spe: z.number(),
+  }),
+})
+export type WildlifeFighterPlus = z.infer<typeof WildlifeFighterPlus>
