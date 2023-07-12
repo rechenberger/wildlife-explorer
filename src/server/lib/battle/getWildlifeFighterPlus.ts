@@ -103,7 +103,7 @@ export const transformWildlifeFighterPlus = ({
     // statusState: p.statusState,
   } satisfies WildlifeFighterPlus
 
-  return fighterPlus
+  return WildlifeFighterPlus.parse(fighterPlus)
 }
 
 export const WildlifeFighterPlusMove = z.object({
