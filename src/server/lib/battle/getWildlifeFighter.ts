@@ -1,5 +1,4 @@
 import { Dex, type PokemonSet, type Species } from "@pkmn/dex"
-import { type Wildlife } from "@prisma/client"
 import { filter, map, orderBy, take } from "lodash-es"
 import { MAX_MOVES_PER_FIGHTER } from "~/config"
 import { type WildlifeMetadata } from "~/server/schema/WildlifeMetadata"
@@ -7,7 +6,12 @@ import { rngInt, rngItem, rngItemWithWeights } from "~/utils/seed"
 import { taxonMappingByAncestors } from "./taxonMappingByAncestors"
 
 export type GetWildlifeFighterOptions = {
-  wildlife: Wildlife & { metadata: WildlifeMetadata }
+  wildlife: {
+    metadata: Pick<
+      WildlifeMetadata,
+      "taxonAncestorIds" | "taxonCommonName" | "taxonName"
+    >
+  }
   seed: string
   idx?: number
 }

@@ -37,7 +37,7 @@ export const wildlifeRouter = createTRPCRouter({
     }),
 
   nearMe: playerProcedure.query(async ({ ctx }) => {
-    console.time("nearMe")
+    // console.time("nearMe")
     const bbox = calculateBoundingBox({
       center: ctx.player,
       radiusInKm: RADIUS_IN_KM_SEE_WILDLIFE,
@@ -81,7 +81,7 @@ export const wildlifeRouter = createTRPCRouter({
       }
     })
     wildlife = filter(wildlife, (w) => !w.metadata.observationIsDead)
-    console.timeEnd("nearMe")
+    // console.timeEnd("nearMe")
     return wildlife
   }),
 

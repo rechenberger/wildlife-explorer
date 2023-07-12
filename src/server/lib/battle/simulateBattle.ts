@@ -6,10 +6,18 @@ import {
   type SideID,
 } from "@pkmn/sim"
 import { findIndex, first, map } from "lodash-es"
-import { MAX_FIGHTERS_PER_TEAM } from "~/config"
+import {
+  BATTLE_INPUT_VERSION,
+  BATTLE_REPORT_VERSION,
+  MAX_FIGHTERS_PER_TEAM,
+} from "~/config"
 import { type MyPrismaClient } from "~/server/db"
 import { createSeed, rngInt } from "~/utils/seed"
-import { getBattleForSimulation } from "./getBattleForSimulation"
+import { BattleReport, type BattleReportSide } from "./BattleReport"
+import {
+  getBattleForSimulation,
+  type BattleInput,
+} from "./getBattleForSimulation"
 import { getWildlifeFighter } from "./getWildlifeFighter"
 import { transformWildlifeFighterPlus } from "./getWildlifeFighterPlus"
 
@@ -17,6 +25,8 @@ export const simulateBattle = async ({
   prisma,
   battleId,
   choice,
+  battleInput,
+  battleJson,
 }: {
   prisma: MyPrismaClient
   battleId: string
@@ -24,21 +34,26 @@ export const simulateBattle = async ({
     playerId: string
     choice: string
   }
+  battleInput?: BattleInput
+  battleJson?: any
 }) => {
-  console.time("getBattleForSimulation")
-  const battleDb = await getBattleForSimulation({
-    prisma,
-    battleId,
-    playerPartyLimit: MAX_FIGHTERS_PER_TEAM,
-  })
-  console.timeEnd("getBattleForSimulation")
+  if (!battleInput || battleInput.version !== BATTLE_INPUT_VERSION) {
+    console.time("getBattleForSimulation")
+    battleInput = await getBattleForSimulation({
+      prisma,
+      battleId,
+      playerPartyLimit: MAX_FIGHTERS_PER_TEAM,
+    })
+    console.timeEnd("getBattleForSimulation")
+  }
+  if (!battleInput) throw new Error("No battleInput")
 
-  const playerChoices = battleDb.battleParticipants.flatMap(
+  const playerParticipations = battleInput.battleParticipants.flatMap(
     (bp, participantIdx) =>
-      bp.playerId
+      bp.player?.id
         ? [
             {
-              playerId: bp.playerId,
+              playerId: bp.player.id,
               participantIdx,
             },
           ]
@@ -46,8 +61,8 @@ export const simulateBattle = async ({
   )
 
   console.time("simulateBattle")
+
   // INIT BATTLE
-  const battleJson = battleDb.metadata.battleJson
   let battle: Battle
   if (battleJson) {
     battle = Battle.fromJSON(battleJson)
@@ -61,7 +76,7 @@ export const simulateBattle = async ({
 
   // BUILD TEAMS
   const teams = await Promise.all(
-    map(battleDb.battleParticipants, async (battleParticipant, idx) => {
+    map(battleInput.battleParticipants, async (battleParticipant, idx) => {
       if (idx > 4) throw new Error("Too many participants!")
       const sideId = `p${idx + 1}` as SideID
       const name =
@@ -71,7 +86,10 @@ export const simulateBattle = async ({
 
       let team: {
         fighter: PokemonSet
-        wildlife: NonNullable<typeof battleParticipant.wildlife>
+        wildlife: Omit<
+          NonNullable<typeof battleParticipant.wildlife>,
+          "observationId" | "respawnsAt"
+        >
         catch?: NonNullable<typeof battleParticipant.player>["catches"][number]
       }[] = []
 
@@ -130,8 +148,8 @@ export const simulateBattle = async ({
   // CHOICE
   if (choice) {
     const participantIdx = findIndex(
-      battleDb.battleParticipants,
-      (p) => p.playerId === choice.playerId
+      battleInput.battleParticipants,
+      (p) => p.player?.id === choice.playerId
     )
     if (participantIdx === -1) {
       // SECURITY
@@ -145,7 +163,7 @@ export const simulateBattle = async ({
     }
 
     const allPlayerChoicesDone = () =>
-      playerChoices.every((pc) => {
+      playerParticipations.every((pc) => {
         const sideId = `p${pc.participantIdx + 1}` as SideID
         return battle[sideId]!.isChoiceDone()
       })
@@ -178,55 +196,57 @@ export const simulateBattle = async ({
     }
   }
 
-  // BATTLE STATUS
-  const battleStatus = () => {
+  // BATTLE REPORT
+  const makeBattleReport = () => {
+    const battlePlayerChoices = playerParticipations.map((p) => {
+      const sideId = `p${p.participantIdx + 1}` as SideID
+      const isChoiceDone = battle[sideId]!.isChoiceDone()
+      return {
+        ...p,
+        isChoiceDone,
+      }
+    })
+    const sides = battle.sides.map((side, sideIdx) => {
+      const team = teams[sideIdx]!
+      const fighters = side.pokemon.map((p) => {
+        const idxInTeam = parseInt(p.name[1]!) - 1
+        const fighter = team.team[idxInTeam]
+
+        const foe = first(p.foes())
+        const foeTypes = foe?.types
+
+        const fighterPlus = transformWildlifeFighterPlus({
+          pokemon: p,
+          pokemonSet: fighter!.fighter,
+          foeTypes,
+        })
+
+        return {
+          fighter: fighterPlus,
+          name: fighter?.catch?.name,
+          catch: fighter?.catch,
+          wildlife: fighter!.wildlife,
+        }
+      })
+      return {
+        name: team.name,
+        fighters,
+        player: team.player,
+        isWinner: battle.winner === side.name,
+      } satisfies BattleReportSide
+    })
+
     return {
       winner: battle.winner,
-      inputLog: battle.inputLog,
+      // inputLog: battle.inputLog,
 
       // TODO: this assumes that we are always viewing as p1
       outputLog: extractChannelMessages(battle.log.join("\n"), [1])[1],
+      battlePlayerChoices,
 
-      sides: battle.sides.map((side, sideIdx) => {
-        const team = teams[sideIdx]!
-        const fighters = side.pokemon.map((p) => {
-          const idxInTeam = parseInt(p.name[1]!) - 1
-          const fighter = team.team[idxInTeam]
-
-          // const justFainted =
-          //   side.faintedThisTurn === p || side.faintedLastTurn === p
-          const justFainted = side.faintedThisTurn === p
-
-          const foe = first(p.foes())
-          const foeTypes = foe?.types
-
-          const fighterPlus = transformWildlifeFighterPlus({
-            pokemon: p,
-            pokemonSet: fighter!.fighter,
-            foeTypes,
-          })
-
-          return {
-            ...fighter!,
-            fighter: {
-              ...fighterPlus,
-              statusState: p.statusState,
-              isActive: p.isActive,
-              justFainted,
-              lastMove: p.lastMove,
-              lastDamage: p.lastDamage,
-            },
-            name: fighter?.catch?.name,
-          }
-        })
-        return {
-          name: team.name,
-          fighters,
-          player: team.player,
-          isWinner: battle.winner === side.name,
-        }
-      }),
-    }
+      sides,
+      version: BATTLE_REPORT_VERSION,
+    } satisfies BattleReport
   }
 
   // console.log(battle.log)
@@ -235,20 +255,16 @@ export const simulateBattle = async ({
   // const type = Dex.types.get("Fire")
   // const water = Dex.types.get("Water")
   // console.log(Dex.types.all())
-
+  const battleReport = makeBattleReport()
+  // console.log(battleReport)
   const result = {
-    battleStatus: battleStatus(),
+    battleReport: BattleReport.parse(battleReport),
     battleJson: battle.toJSON(),
-    battleDb,
-    playerChoices: playerChoices.map((pc) => {
-      const sideId = `p${pc.participantIdx + 1}` as SideID
-      const isChoiceDone = battle[sideId]!.isChoiceDone()
-      return {
-        ...pc,
-        isChoiceDone,
-      }
-    }),
+    battleInput,
   }
   console.timeEnd("simulateBattle")
   return result
 }
+
+export type BattleResult = Awaited<ReturnType<typeof simulateBattle>>
+export type BattleJson = BattleResult["battleJson"]

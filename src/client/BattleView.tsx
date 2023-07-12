@@ -32,7 +32,6 @@ import { usePlayer } from "./usePlayer"
 const BIG_INACTIVE_FIGHTER = false
 const SHOW_ENEMY_MOVES = false
 const SHOW_INACTIVE_MOVES = true
-const SHOW_FIGHTER_NAME = false
 const SHOW_FIGHTER_TYPES = true
 const SHOW_ABILITY = false
 const SHOW_NATURE = false
@@ -62,22 +61,25 @@ export const BattleView = ({
       }
     )
 
-  const { data, isFetching: battleLoading } =
-    api.battle.getBattleStatus.useQuery(
-      {
-        battleId,
-        playerId: playerId!,
-      },
-      {
-        enabled: !!playerId,
-        // onSuccess: (data) => {
-        //   console.log(data)
-        // },
-        refetchInterval: pvpStatus?.isPvp ? 1000 : undefined,
-      }
-    )
+  const {
+    data,
+    isFetching: battleLoading,
+    error,
+  } = api.battle.getBattleStatus.useQuery(
+    {
+      battleId,
+      playerId: playerId!,
+    },
+    {
+      enabled: !!playerId,
+      // onSuccess: (data) => {
+      //   console.log(data)
+      // },
+      refetchInterval: pvpStatus?.isPvp ? 1000 : undefined,
+    }
+  )
 
-  const battleLogAsHtml = parseBattleLog(data?.battleStatus.outputLog, true)
+  const battleLogAsHtml = parseBattleLog(data?.battleReport.outputLog, true)
 
   const trpc = api.useContext()
   const { mutate: makeChoice, isLoading: choiceLoading } =
@@ -115,10 +117,10 @@ export const BattleView = ({
     logRef.current.scrollTop = logRef.current.scrollHeight
   }, [battleLogAsHtml, showBattleLog])
 
-  if (!data || !pvpStatus) {
+  if (!data || !pvpStatus || error) {
     return (
       <div className="flex items-center justify-center py-48 text-center text-sm opacity-60">
-        Loading...
+        {error ? error.message : "Loading..."}
       </div>
     )
   }
@@ -127,7 +129,7 @@ export const BattleView = ({
     return <BattleViewPvp battleId={battleId} />
   }
 
-  const { battleStatus, status } = data
+  const { battleReport, status } = data
 
   const battleIsActive = status === "IN_PROGRESS"
 
@@ -136,7 +138,7 @@ export const BattleView = ({
 
     // Find un-caught wildlife
     const wildlifeId = find(
-      flatMap(battleStatus.sides, (s) => s.fighters),
+      flatMap(battleReport.sides, (s) => s.fighters),
       (f) => !f.catch
     )?.wildlife.id
 
@@ -147,7 +149,7 @@ export const BattleView = ({
     doCatch({ wildlifeId })
   }
 
-  const sides = orderBy(battleStatus?.sides, (s) =>
+  const sides = orderBy(battleReport?.sides, (s) =>
     s.player?.id === playerId ? 0 : 1
   )
 
@@ -192,7 +194,7 @@ export const BattleView = ({
             const isMySide = side.player?.id === playerId
             const isMainSide = sideIdx === 0
             const isChoiceDone = find(
-              data.playerChoices,
+              data.battleReport.battlePlayerChoices,
               (pc) => pc.playerId === side.player?.id
             )?.isChoiceDone
             const isWinner = side.isWinner

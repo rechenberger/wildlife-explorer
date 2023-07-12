@@ -1,6 +1,7 @@
 import { TRPCError } from "@trpc/server"
 import { find, map } from "lodash-es"
 import { z } from "zod"
+import { BATTLE_REPORT_VERSION } from "~/config"
 import { createTRPCRouter } from "~/server/api/trpc"
 import { simulateBattle } from "~/server/lib/battle/simulateBattle"
 import { respawnWildlife } from "~/server/lib/respawnWildlife"
@@ -120,14 +121,51 @@ export const battleRouter = createTRPCRouter({
       })
     )
     .query(async ({ ctx, input }) => {
-      const { battleStatus, battleDb, playerChoices } = await simulateBattle({
+      console.time("getBattleFast")
+      const battle = await ctx.prisma.battle.findUnique({
+        where: {
+          id: input.battleId,
+        },
+        select: {
+          id: true,
+          status: true,
+          metadata: true,
+        },
+      })
+      console.timeEnd("getBattleFast")
+      if (!battle) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Battle not found",
+        })
+      }
+      if (
+        battle.status !== "IN_PROGRESS" &&
+        battle.metadata.battleReport?.version !== BATTLE_REPORT_VERSION
+      ) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Battle report is outdated and cannot be viewed anymore",
+        })
+      }
+
+      if (battle?.metadata.battleReport) {
+        const battleReport = battle.metadata.battleReport
+        if (battleReport.version === BATTLE_REPORT_VERSION) {
+          return {
+            status: battle.status,
+            battleReport,
+          }
+        }
+      }
+
+      const { battleReport } = await simulateBattle({
         prisma: ctx.prisma,
         battleId: input.battleId,
       })
       return {
-        battleStatus,
-        status: battleDb.status,
-        playerChoices,
+        battleReport,
+        status: battle.status,
       }
     }),
 
@@ -149,25 +187,29 @@ export const battleRouter = createTRPCRouter({
     .input(
       z.object({
         battleId: z.string(),
-        // moveNo: z.number().min(1).max(MAX_MOVES_PER_FIGHTER),
         choice: z.string(),
       })
     )
     .mutation(async ({ ctx, input }) => {
-      // let inputLog = battle.metadata.inputLog ?? []
-      // inputLog = [...inputLog, `>${participantId} ${input.choice}`]
+      const battleBefore = await ctx.prisma.battle.findUnique({
+        where: {
+          id: input.battleId,
+        },
+      })
 
-      const { battleJson, battleDb, battleStatus } = await simulateBattle({
+      const { battleJson, battleReport, battleInput } = await simulateBattle({
         prisma: ctx.prisma,
         battleId: input.battleId,
         choice: {
           playerId: ctx.player.id,
           choice: input.choice,
         },
+        battleInput: battleBefore?.metadata?.battleInput,
+        battleJson: battleBefore?.metadata?.battleJson,
       })
       console.time("update")
-      const winner = battleStatus.winner
-      console.log("winner", winner)
+      const winner = battleReport.winner
+      // console.log("winner", winner)
       await ctx.prisma.battle.update({
         where: {
           id: input.battleId,
@@ -175,20 +217,34 @@ export const battleRouter = createTRPCRouter({
         data: {
           status: winner ? "FINISHED" : "IN_PROGRESS",
           metadata: {
-            ...battleDb.metadata,
             battleJson,
+            battleReport: battleReport,
+            battleInput: battleInput as any,
           } satisfies BattleMetadata,
         },
       })
 
       // END OF BATTLE
       if (!!winner) {
+        const battleDb = await ctx.prisma.battle.findUniqueOrThrow({
+          where: {
+            id: input.battleId,
+          },
+          include: {
+            battleParticipants: {
+              include: {
+                player: true,
+                wildlife: true,
+              },
+            },
+          },
+        })
         const participants = battleDb.battleParticipants
         const winnerParticipantId = find(
           participants,
           (p) =>
             p.player?.name === winner ||
-            (!!p.wildlifeId && winner == "Wildlife")
+            (!!p.wildlife?.id && winner == "Wildlife")
         )?.id
         await Promise.all(
           map(battleDb.battleParticipants, async (p) => {
@@ -211,10 +267,10 @@ export const battleRouter = createTRPCRouter({
                   : undefined,
               },
             })
-            if (p.wildlifeId) {
+            if (p.wildlife?.id) {
               await respawnWildlife({
                 prisma: ctx.prisma,
-                wildlifeId: p.wildlifeId,
+                wildlifeId: p.wildlife.id,
               })
             }
           })
