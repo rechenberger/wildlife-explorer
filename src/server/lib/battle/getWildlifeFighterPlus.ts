@@ -108,7 +108,12 @@ export const transformWildlifeFighterPlus = ({
 
 export const WildlifeFighterPlusMove = z.object({
   name: z.string(),
-  status: z.any(),
+  status: z
+    .object({
+      pp: z.number(),
+      maxpp: z.number(),
+    })
+    .nullish(),
   definition: z.any(),
   effectiveness: z.number().nullish(),
   immunity: z.boolean().nullish(),
