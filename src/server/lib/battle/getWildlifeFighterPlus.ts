@@ -58,7 +58,7 @@ export const transformWildlifeFighterPlus = ({
       definition,
       effectiveness,
       immunity,
-    }
+    } satisfies WildlifeFighterPlusMove
   })
 
   let stats = {
@@ -106,20 +106,21 @@ export const transformWildlifeFighterPlus = ({
   return fighterPlus
 }
 
+export const WildlifeFighterPlusMove = z.object({
+  name: z.string(),
+  status: z.any(),
+  definition: z.any(),
+  effectiveness: z.number().nullish(),
+  immunity: z.boolean().nullish(),
+})
+export type WildlifeFighterPlusMove = z.infer<typeof WildlifeFighterPlusMove>
+
 export const WildlifeFighterPlus = z.object({
   hp: z.number(),
   hpMax: z.number(),
   types: z.array(z.string()),
   status: z.string(),
-  moves: z.array(
-    z.object({
-      name: z.string(),
-      status: z.any(),
-      definition: z.any(),
-      effectiveness: z.number().nullish(),
-      immunity: z.boolean().nullish(),
-    })
-  ),
+  moves: z.array(WildlifeFighterPlusMove),
   ability: z.any(),
   species: z.string(),
   speciesNum: z.number(),
