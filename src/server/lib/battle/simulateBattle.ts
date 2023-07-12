@@ -34,7 +34,7 @@ export const simulateBattle = async ({
   })
   console.timeEnd("getBattleForSimulation")
 
-  const playerChoices = battleDb.battleParticipants.flatMap(
+  const playerParticipations = battleDb.battleParticipants.flatMap(
     (bp, participantIdx) =>
       bp.playerId
         ? [
@@ -146,7 +146,7 @@ export const simulateBattle = async ({
     }
 
     const allPlayerChoicesDone = () =>
-      playerChoices.every((pc) => {
+      playerParticipations.every((pc) => {
         const sideId = `p${pc.participantIdx + 1}` as SideID
         return battle[sideId]!.isChoiceDone()
       })
@@ -181,11 +181,11 @@ export const simulateBattle = async ({
 
   // BATTLE REPORT
   const makeBattleReport = () => {
-    const battlePlayerChoices = playerChoices.map((pc) => {
-      const sideId = `p${pc.participantIdx + 1}` as SideID
+    const battlePlayerChoices = playerParticipations.map((p) => {
+      const sideId = `p${p.participantIdx + 1}` as SideID
       const isChoiceDone = battle[sideId]!.isChoiceDone()
       return {
-        ...pc,
+        ...p,
         isChoiceDone,
       }
     })
