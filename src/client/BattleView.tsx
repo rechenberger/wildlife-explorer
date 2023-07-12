@@ -327,14 +327,14 @@ export const BattleView = ({
                                       />
                                     )}
                                   </>
-                                ) : (
+                                ) : pvpStatus.status === "FINISHED" ? (
                                   <>
                                     <TypeBadge
                                       icon={isWinner ? winnerIcon : loserIcon}
                                       content={isWinner ? "Won" : "Defeated"}
                                     />
                                   </>
-                                )}
+                                ) : null}
                               </div>
                             </div>
                             {/* <div className="hidden flex-1 md:flex" /> */}
