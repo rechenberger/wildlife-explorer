@@ -32,7 +32,6 @@ import { usePlayer } from "./usePlayer"
 const BIG_INACTIVE_FIGHTER = false
 const SHOW_ENEMY_MOVES = false
 const SHOW_INACTIVE_MOVES = true
-const SHOW_FIGHTER_NAME = false
 const SHOW_FIGHTER_TYPES = true
 const SHOW_ABILITY = false
 const SHOW_NATURE = false

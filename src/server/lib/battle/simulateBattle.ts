@@ -178,7 +178,7 @@ export const simulateBattle = async ({
     }
   }
 
-  // BATTLE STATUS
+  // BATTLE REPORT
   const makeBattleReport = () => {
     const battlePlayerChoices = playerChoices.map((pc) => {
       const sideId = `p${pc.participantIdx + 1}` as SideID
@@ -208,7 +208,6 @@ export const simulateBattle = async ({
         })
 
         return {
-          ...fighter!,
           fighter: {
             ...fighterPlus,
             statusState: p.statusState,
@@ -218,6 +217,8 @@ export const simulateBattle = async ({
             lastDamage: p.lastDamage,
           },
           name: fighter?.catch?.name,
+          catch: fighter?.catch,
+          wildlife: fighter!.wildlife,
         }
       })
       return {
