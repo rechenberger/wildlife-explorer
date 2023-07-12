@@ -181,7 +181,7 @@ export const battleRouter = createTRPCRouter({
       })
     )
     .mutation(async ({ ctx, input }) => {
-      const { battleJson, battleReport } = await simulateBattle({
+      const { battleJson, battleReport, battleInput } = await simulateBattle({
         prisma: ctx.prisma,
         battleId: input.battleId,
         choice: {
@@ -201,6 +201,7 @@ export const battleRouter = createTRPCRouter({
           metadata: {
             battleJson,
             battleReport: battleReport as any,
+            battleInput: battleInput as any,
           } satisfies BattleMetadata,
         },
       })

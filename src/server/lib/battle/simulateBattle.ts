@@ -246,6 +246,7 @@ export const simulateBattle = async ({
   const result = {
     battleReport: BattleReport.parse(battleReport),
     battleJson: battle.toJSON(),
+    battleInput,
   }
   console.timeEnd("simulateBattle")
   return result

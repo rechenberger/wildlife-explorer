@@ -175,6 +175,7 @@ export const catchRouter = createTRPCRouter({
       },
     })
 
+    // TODO: can be read from battle report in battle metadata
     const battleId = ctx.wildlifeBattleId
     const battle = battleId
       ? await simulateBattle({
