@@ -72,7 +72,10 @@ export const simulateBattle = async ({
 
       let team: {
         fighter: PokemonSet
-        wildlife: NonNullable<typeof battleParticipant.wildlife>
+        wildlife: Omit<
+          NonNullable<typeof battleParticipant.wildlife>,
+          "observationId" | "respawnsAt"
+        >
         catch?: NonNullable<typeof battleParticipant.player>["catches"][number]
       }[] = []
 
