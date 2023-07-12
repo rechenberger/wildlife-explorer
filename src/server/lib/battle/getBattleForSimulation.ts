@@ -2,6 +2,12 @@ import { type MyPrismaClient } from "~/server/db"
 import { WildlifeMetadata } from "~/server/schema/WildlifeMetadata"
 import { BattleReportWildlifeMetadata } from "./BattleReport"
 
+const BattleSimulationWildlifeMetadata = BattleReportWildlifeMetadata.merge(
+  WildlifeMetadata.pick({
+    taxonAncestorIds: true,
+  })
+)
+
 export const getBattleForSimulation = async ({
   prisma,
   battleId,
@@ -39,8 +45,8 @@ export const getBattleForSimulation = async ({
                     select: {
                       id: true,
                       metadata: true,
-                      observationId: true, // TODO: remove
-                      respawnsAt: true, // TODO: remove
+                      observationId: true,
+                      respawnsAt: true,
                     },
                   },
                 },
@@ -74,11 +80,23 @@ export const getBattleForSimulation = async ({
         ? {
             ...bp.wildlife,
             // This is for optimizing the size of metadata:
-            metadata: BattleReportWildlifeMetadata.merge(
-              WildlifeMetadata.pick({
-                taxonAncestorIds: true,
-              })
-            ).parse(bp.wildlife.metadata),
+            metadata: BattleSimulationWildlifeMetadata.parse(
+              bp.wildlife.metadata
+            ),
+          }
+        : null,
+      player: bp.player
+        ? {
+            ...bp.player,
+            catches: bp.player.catches.map((c) => ({
+              ...c,
+              wildlife: {
+                ...c.wildlife,
+                metadata: BattleSimulationWildlifeMetadata.parse(
+                  c.wildlife.metadata
+                ),
+              },
+            })),
           }
         : null,
     })),
