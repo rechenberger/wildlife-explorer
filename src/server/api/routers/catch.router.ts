@@ -252,7 +252,7 @@ export const catchRouter = createTRPCRouter({
     })
 
     const speciesName = wildlifeFighterPlus.species
-    const speciesNum = wildlifeFighterPlus.speciesDefinition.num
+    const speciesNum = wildlifeFighterPlus.speciesNum
     const level = wildlifeFighterPlus.level
     const levelingRate = LevelingRate.parse(
       PokemonLevelingRate[speciesNum]?.levelingRate
