@@ -1,5 +1,5 @@
-import { PlayerPayload, PrismaClient } from "@prisma/client"
-import { Types } from "@prisma/client/runtime"
+import { PrismaClient, type PlayerPayload } from "@prisma/client"
+import { type Types } from "@prisma/client/runtime"
 import { env } from "~/env.mjs"
 import { BattleMetadata } from "./schema/BattleMetadata"
 import { BattleParticipationMetadata } from "./schema/BattleParticipationMetadata"
