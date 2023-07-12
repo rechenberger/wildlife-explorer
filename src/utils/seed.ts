@@ -11,7 +11,7 @@ export const createSeed = ({
   const seed = `${observationId}-${
     typeof respawnsAt === "string" ? respawnsAt : respawnsAt.toISOString()
   }`
-  console.log("createSeed", seed)
+  // console.log("createSeed", seed)
   return seed
 }
 
