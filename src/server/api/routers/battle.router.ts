@@ -139,6 +139,16 @@ export const battleRouter = createTRPCRouter({
           message: "Battle not found",
         })
       }
+      if (
+        battle.status !== "IN_PROGRESS" &&
+        battle.metadata.battleReport?.version !== BATTLE_REPORT_VERSION
+      ) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Battle report is outdated and cannot be viewed anymore",
+        })
+      }
+
       if (battle?.metadata.battleReport) {
         const battleReport = battle.metadata.battleReport
         if (battleReport.version === BATTLE_REPORT_VERSION) {
