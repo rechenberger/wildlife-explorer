@@ -61,20 +61,23 @@ export const BattleView = ({
       }
     )
 
-  const { data, isFetching: battleLoading } =
-    api.battle.getBattleStatus.useQuery(
-      {
-        battleId,
-        playerId: playerId!,
-      },
-      {
-        enabled: !!playerId,
-        // onSuccess: (data) => {
-        //   console.log(data)
-        // },
-        refetchInterval: pvpStatus?.isPvp ? 1000 : undefined,
-      }
-    )
+  const {
+    data,
+    isFetching: battleLoading,
+    error,
+  } = api.battle.getBattleStatus.useQuery(
+    {
+      battleId,
+      playerId: playerId!,
+    },
+    {
+      enabled: !!playerId,
+      // onSuccess: (data) => {
+      //   console.log(data)
+      // },
+      refetchInterval: pvpStatus?.isPvp ? 1000 : undefined,
+    }
+  )
 
   const battleLogAsHtml = parseBattleLog(data?.battleReport.outputLog, true)
 
@@ -114,10 +117,10 @@ export const BattleView = ({
     logRef.current.scrollTop = logRef.current.scrollHeight
   }, [battleLogAsHtml, showBattleLog])
 
-  if (!data || !pvpStatus) {
+  if (!data || !pvpStatus || error) {
     return (
       <div className="flex items-center justify-center py-48 text-center text-sm opacity-60">
-        Loading...
+        {error ? error.message : "Loading..."}
       </div>
     )
   }

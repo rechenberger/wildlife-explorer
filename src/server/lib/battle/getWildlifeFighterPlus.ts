@@ -1,6 +1,7 @@
 import { Dex, type PokemonSet } from "@pkmn/dex"
 import { Battle, toID, type Pokemon } from "@pkmn/sim"
 import { first } from "lodash-es"
+import { z } from "zod"
 import {
   getWildlifeFighter,
   type GetWildlifeFighterOptions,
@@ -57,7 +58,7 @@ export const transformWildlifeFighterPlus = ({
       definition,
       effectiveness,
       immunity,
-    }
+    } satisfies WildlifeFighterPlusMove
   })
 
   let stats = {
@@ -91,16 +92,72 @@ export const transformWildlifeFighterPlus = ({
     moves,
     ability: Dex.abilities.get(p.ability),
     species: p.species.name,
-    speciesDefinition: p.species,
+    speciesNum: p.species.num,
     level: p.level,
     gender: p.gender,
     nature: pokemonSet.nature,
     stats,
-  }
+    isActive: p.isActive,
+    justFainted: p.side.faintedThisTurn === p,
+    lastMove: p.lastMove,
+    // statusState: p.statusState,
+  } satisfies WildlifeFighterPlus
 
-  return fighterPlus
+  return WildlifeFighterPlus.parse(fighterPlus)
 }
 
-export type WildlifeFighterPlus = Awaited<
-  ReturnType<typeof transformWildlifeFighterPlus>
->
+export const WildlifeFighterPlusMove = z.object({
+  name: z.string(),
+  status: z
+    .object({
+      pp: z.number(),
+      maxpp: z.number(),
+      // TODO: disabled ???
+    })
+    .nullish(),
+  definition: z.object({
+    name: z.string(),
+    type: z.string(),
+    category: z.string(), // TODO: show in UI
+    desc: z.string(),
+    basePower: z.number().nullish(),
+    accuracy: z.number().or(z.literal(true)),
+  }),
+  effectiveness: z.number().nullish(),
+  immunity: z.boolean().nullish(),
+})
+export type WildlifeFighterPlusMove = z.infer<typeof WildlifeFighterPlusMove>
+
+export const WildlifeFighterPlus = z.object({
+  hp: z.number(),
+  hpMax: z.number(),
+  types: z.array(z.string()),
+  status: z.string(),
+  moves: z.array(WildlifeFighterPlusMove),
+  ability: z.object({
+    name: z.string(),
+    desc: z.string(),
+  }),
+  species: z.string(),
+  speciesNum: z.number(),
+  level: z.number(),
+  gender: z.string(),
+  nature: z.string(),
+  stats: z.object({
+    hp: z.number(),
+    atk: z.number(),
+    def: z.number(),
+    spa: z.number(),
+    spd: z.number(),
+    spe: z.number(),
+  }),
+  isActive: z.boolean(),
+  justFainted: z.boolean(),
+  lastMove: z
+    .object({
+      name: z.string(),
+      totalDamage: z.number().or(z.literal(false)).nullish(),
+    })
+    .nullish(),
+})
+export type WildlifeFighterPlus = z.infer<typeof WildlifeFighterPlus>
