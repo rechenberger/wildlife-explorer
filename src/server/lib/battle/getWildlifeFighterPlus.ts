@@ -97,6 +97,10 @@ export const transformWildlifeFighterPlus = ({
     gender: p.gender,
     nature: pokemonSet.nature,
     stats,
+    isActive: p.isActive,
+    justFainted: p.side.faintedThisTurn === p,
+    lastMove: p.lastMove,
+    // statusState: p.statusState,
   } satisfies WildlifeFighterPlus
 
   return fighterPlus
@@ -130,5 +134,8 @@ export const WildlifeFighterPlus = z.object({
     spd: z.number(),
     spe: z.number(),
   }),
+  isActive: z.boolean(),
+  justFainted: z.boolean(),
+  lastMove: z.any(),
 })
 export type WildlifeFighterPlus = z.infer<typeof WildlifeFighterPlus>

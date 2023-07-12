@@ -195,10 +195,6 @@ export const simulateBattle = async ({
         const idxInTeam = parseInt(p.name[1]!) - 1
         const fighter = team.team[idxInTeam]
 
-        // const justFainted =
-        //   side.faintedThisTurn === p || side.faintedLastTurn === p
-        const justFainted = side.faintedThisTurn === p
-
         const foe = first(p.foes())
         const foeTypes = foe?.types
 
@@ -209,14 +205,7 @@ export const simulateBattle = async ({
         })
 
         return {
-          fighter: {
-            ...fighterPlus,
-            statusState: p.statusState,
-            isActive: p.isActive,
-            justFainted,
-            lastMove: p.lastMove,
-            lastDamage: p.lastDamage,
-          },
+          fighter: fighterPlus,
           name: fighter?.catch?.name,
           catch: fighter?.catch,
           wildlife: fighter!.wildlife,

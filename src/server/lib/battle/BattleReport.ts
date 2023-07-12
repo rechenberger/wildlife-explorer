@@ -12,21 +12,7 @@ export const BattleReport = z.object({
       name: z.string(),
       fighters: z.array(
         z.object({
-          // fighter: z.object({
-          //   isActive: z.boolean(),
-          //   lastMove: z.any(), // TODO:
-          //   justFainted: z.boolean(),
-          //   hp: z.number(),
-          //   hpMax: z.number(),
-          // }),
-          fighter: z.any().transform(
-            (v) =>
-              v as WildlifeFighterPlus & {
-                isActive: boolean
-                lastMove: any
-                justFainted: boolean
-              }
-          ),
+          fighter: WildlifeFighterPlus,
           name: z.string(),
           // catch: z.object({
           //   id: z.string(),
