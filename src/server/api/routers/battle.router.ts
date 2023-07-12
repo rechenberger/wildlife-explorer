@@ -120,15 +120,13 @@ export const battleRouter = createTRPCRouter({
       })
     )
     .query(async ({ ctx, input }) => {
-      const { battleReport, battleDb, battlePlayerChoices } =
-        await simulateBattle({
-          prisma: ctx.prisma,
-          battleId: input.battleId,
-        })
+      const { battleReport, battleDb } = await simulateBattle({
+        prisma: ctx.prisma,
+        battleId: input.battleId,
+      })
       return {
         battleReport,
         status: battleDb.status,
-        battlePlayerChoices,
       }
     }),
 
@@ -150,14 +148,10 @@ export const battleRouter = createTRPCRouter({
     .input(
       z.object({
         battleId: z.string(),
-        // moveNo: z.number().min(1).max(MAX_MOVES_PER_FIGHTER),
         choice: z.string(),
       })
     )
     .mutation(async ({ ctx, input }) => {
-      // let inputLog = battle.metadata.inputLog ?? []
-      // inputLog = [...inputLog, `>${participantId} ${input.choice}`]
-
       const { battleJson, battleDb, battleReport } = await simulateBattle({
         prisma: ctx.prisma,
         battleId: input.battleId,

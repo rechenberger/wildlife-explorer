@@ -192,7 +192,7 @@ export const BattleView = ({
             const isMySide = side.player?.id === playerId
             const isMainSide = sideIdx === 0
             const isChoiceDone = find(
-              data.battlePlayerChoices,
+              data.battleReport.battlePlayerChoices,
               (pc) => pc.playerId === side.player?.id
             )?.isChoiceDone
             const isWinner = side.isWinner

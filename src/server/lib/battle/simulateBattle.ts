@@ -180,52 +180,64 @@ export const simulateBattle = async ({
 
   // BATTLE STATUS
   const makeBattleReport = () => {
+    const battlePlayerChoices = playerChoices.map((pc) => {
+      const sideId = `p${pc.participantIdx + 1}` as SideID
+      const isChoiceDone = battle[sideId]!.isChoiceDone()
+      return {
+        ...pc,
+        isChoiceDone,
+      }
+    })
+    const sides = battle.sides.map((side, sideIdx) => {
+      const team = teams[sideIdx]!
+      const fighters = side.pokemon.map((p) => {
+        const idxInTeam = parseInt(p.name[1]!) - 1
+        const fighter = team.team[idxInTeam]
+
+        // const justFainted =
+        //   side.faintedThisTurn === p || side.faintedLastTurn === p
+        const justFainted = side.faintedThisTurn === p
+
+        const foe = first(p.foes())
+        const foeTypes = foe?.types
+
+        const fighterPlus = transformWildlifeFighterPlus({
+          pokemon: p,
+          pokemonSet: fighter!.fighter,
+          foeTypes,
+        })
+
+        return {
+          ...fighter!,
+          fighter: {
+            ...fighterPlus,
+            statusState: p.statusState,
+            isActive: p.isActive,
+            justFainted,
+            lastMove: p.lastMove,
+            lastDamage: p.lastDamage,
+          },
+          name: fighter?.catch?.name,
+        }
+      })
+      return {
+        name: team.name,
+        fighters,
+        player: team.player,
+        isWinner: battle.winner === side.name,
+        battlePlayerChoices,
+      }
+    })
+
     return {
       winner: battle.winner,
       inputLog: battle.inputLog,
 
       // TODO: this assumes that we are always viewing as p1
       outputLog: extractChannelMessages(battle.log.join("\n"), [1])[1],
+      battlePlayerChoices,
 
-      sides: battle.sides.map((side, sideIdx) => {
-        const team = teams[sideIdx]!
-        const fighters = side.pokemon.map((p) => {
-          const idxInTeam = parseInt(p.name[1]!) - 1
-          const fighter = team.team[idxInTeam]
-
-          // const justFainted =
-          //   side.faintedThisTurn === p || side.faintedLastTurn === p
-          const justFainted = side.faintedThisTurn === p
-
-          const foe = first(p.foes())
-          const foeTypes = foe?.types
-
-          const fighterPlus = transformWildlifeFighterPlus({
-            pokemon: p,
-            pokemonSet: fighter!.fighter,
-            foeTypes,
-          })
-
-          return {
-            ...fighter!,
-            fighter: {
-              ...fighterPlus,
-              statusState: p.statusState,
-              isActive: p.isActive,
-              justFainted,
-              lastMove: p.lastMove,
-              lastDamage: p.lastDamage,
-            },
-            name: fighter?.catch?.name,
-          }
-        })
-        return {
-          name: team.name,
-          fighters,
-          player: team.player,
-          isWinner: battle.winner === side.name,
-        }
-      }),
+      sides,
     }
   }
 
@@ -240,14 +252,6 @@ export const simulateBattle = async ({
     battleReport: makeBattleReport(),
     battleJson: battle.toJSON(),
     battleDb,
-    battlePlayerChoices: playerChoices.map((pc) => {
-      const sideId = `p${pc.participantIdx + 1}` as SideID
-      const isChoiceDone = battle[sideId]!.isChoiceDone()
-      return {
-        ...pc,
-        isChoiceDone,
-      }
-    }),
   }
   console.timeEnd("simulateBattle")
   return result
@@ -256,4 +260,3 @@ export const simulateBattle = async ({
 export type BattleResult = Awaited<ReturnType<typeof simulateBattle>>
 export type BattleReport = BattleResult["battleReport"]
 export type BattleJson = BattleResult["battleJson"]
-export type BattlePlayerChoices = BattleResult["battlePlayerChoices"]
