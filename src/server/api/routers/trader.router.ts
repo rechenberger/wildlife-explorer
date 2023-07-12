@@ -1,3 +1,5 @@
+import { TRPCError } from "@trpc/server"
+import { every, some } from "lodash-es"
 import { z } from "zod"
 import { createTRPCRouter } from "~/server/api/trpc"
 import { playerProcedure } from "../middleware/playerProcedure"
@@ -13,14 +15,58 @@ export const tradeRouter = createTRPCRouter({
       //
     }),
 
-  acceptTrade: playerProcedure
+  updateTrade: playerProcedure
     .input(
-      z.object({
-        tradeId: z.string(),
-        accept: z.boolean(),
-      })
+      z.union([
+        z.object({
+          tradeId: z.string(),
+          addCatchId: z.string().optional(),
+          removeCatchId: z.string().optional(),
+        }),
+        z.object({
+          tradeId: z.string(),
+          status: z.enum(["accept", "reject", "cancel"]),
+        }),
+      ])
     )
     .mutation(async ({ ctx, input }) => {
-      //
+      const trade = await ctx.prisma.trade.findUniqueOrThrow({
+        where: { id: input.tradeId },
+        include: { catches: true, players: true },
+      })
+      if (!some(trade.players, { id: ctx.player.id })) {
+        throw new Error("You are not part of this trade")
+      }
+      if (trade.status !== "PENDING") {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: `Trade is ${trade.status}`,
+        })
+      }
+      if ("status" in input) {
+        if (input.status === "cancel") {
+          await ctx.prisma.trade.update({
+            where: { id: input.tradeId },
+            data: { status: "CANCELLED" },
+          })
+        } else {
+          const playerAccept = trade.metadata.playerAccept || {}
+          playerAccept[ctx.player.id] = input.status === "accept" ? true : false
+          const allAccepted = every(
+            trade.players,
+            (player) => !!playerAccept[player.id]
+          )
+          if (allAccepted) {
+            // TODO: trade catches
+
+            await ctx.prisma.trade.update({
+              where: { id: input.tradeId },
+              data: { status: "COMPLETED" },
+            })
+          }
+        }
+      }
+
+      // TODO: add/remove catches
     }),
 })

@@ -191,6 +191,13 @@ model Trade {
 
     metadata    Json
     players     Player[]
-    catched     Catch[]
+    catches     Catch[]
     completedAt DateTime
+    status      TradeStatus
+}
+
+enum TradeStatus {
+    PENDING
+    COMPLETED
+    CANCELLED
 }
