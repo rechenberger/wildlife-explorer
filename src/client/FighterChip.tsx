@@ -9,7 +9,7 @@ import { useGetWildlifeName } from "./useGetWildlifeName"
 
 export type FighterForChip = {
   fighter: WildlifeFighterPlus
-  wildlife: Wildlife & { metadata: WildlifeMetadata }
+  wildlife: Pick<Wildlife, "id"> & { metadata: WildlifeMetadata }
   name?: string | null
 }
 

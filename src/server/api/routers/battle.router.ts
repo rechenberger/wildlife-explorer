@@ -3,10 +3,8 @@ import { find, map } from "lodash-es"
 import { z } from "zod"
 import { BATTLE_REPORT_VERSION } from "~/config"
 import { createTRPCRouter } from "~/server/api/trpc"
-import {
-  BattleReport,
-  simulateBattle,
-} from "~/server/lib/battle/simulateBattle"
+import { BattleReport } from "~/server/lib/battle/BattleReport"
+import { simulateBattle } from "~/server/lib/battle/simulateBattle"
 import { respawnWildlife } from "~/server/lib/respawnWildlife"
 import { type BattleMetadata } from "~/server/schema/BattleMetadata"
 import { type PlayerMetadata } from "~/server/schema/PlayerMetadata"

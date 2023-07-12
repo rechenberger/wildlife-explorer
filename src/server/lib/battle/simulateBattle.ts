@@ -9,6 +9,7 @@ import { findIndex, first, map } from "lodash-es"
 import { BATTLE_REPORT_VERSION, MAX_FIGHTERS_PER_TEAM } from "~/config"
 import { type MyPrismaClient } from "~/server/db"
 import { createSeed, rngInt } from "~/utils/seed"
+import { BattleReport } from "./BattleReport"
 import { getBattleForSimulation } from "./getBattleForSimulation"
 import { getWildlifeFighter } from "./getWildlifeFighter"
 import { transformWildlifeFighterPlus } from "./getWildlifeFighterPlus"
@@ -249,9 +250,10 @@ export const simulateBattle = async ({
   // const type = Dex.types.get("Fire")
   // const water = Dex.types.get("Water")
   // console.log(Dex.types.all())
-
+  const battleReport = makeBattleReport()
+  console.log(battleReport)
   const result = {
-    battleReport: makeBattleReport(),
+    battleReport: BattleReport.parse(battleReport),
     battleJson: battle.toJSON(),
     battleDb,
   }
@@ -260,5 +262,4 @@ export const simulateBattle = async ({
 }
 
 export type BattleResult = Awaited<ReturnType<typeof simulateBattle>>
-export type BattleReport = BattleResult["battleReport"]
 export type BattleJson = BattleResult["battleJson"]
