@@ -68,3 +68,9 @@ export const getBattleForSimulation = async ({
   })
   return battle
 }
+
+// export const BattleInput = z.object({
+//   id: z.string(),
+//   metadata: BattleMetadata,
+//   // ...
+// })
