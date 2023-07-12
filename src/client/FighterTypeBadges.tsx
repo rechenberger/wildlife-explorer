@@ -1,6 +1,6 @@
 import { map } from "lodash-es"
+import { type BattleReportFighter } from "~/server/lib/battle/BattleReport"
 import { replaceByWildlife } from "~/utils/replaceByWildlife"
-import { type FighterForChip } from "./FighterChip"
 import { TypeBadge } from "./TypeBadge"
 import { abilityIcon, getTypeIcon, natureIcon } from "./typeIcons"
 
@@ -12,7 +12,7 @@ export const FighterTypeBadges = ({
   size,
   className,
 }: {
-  fighter: FighterForChip
+  fighter: BattleReportFighter
   showTypes?: boolean
   showAbility?: boolean
   showNature?: boolean

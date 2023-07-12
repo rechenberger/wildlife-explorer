@@ -1,8 +1,8 @@
 import { map } from "lodash-es"
 import { MAX_MOVES_PER_FIGHTER } from "~/config"
+import { type BattleReportFighter } from "~/server/lib/battle/BattleReport"
 import { fillWithNulls } from "~/utils/fillWithNulls"
 import { replaceByWildlife } from "~/utils/replaceByWildlife"
-import { type FighterForChip } from "./FighterChip"
 import { cn } from "./cn"
 import { getTypeIcon } from "./typeIcons"
 
@@ -11,7 +11,7 @@ export const FighterMoves = ({
   disabled: allDisabled,
   onClick,
 }: {
-  fighter: FighterForChip
+  fighter: BattleReportFighter
   disabled?: boolean
   onClick?: (options: { moveIdx: number }) => void
 }) => {

@@ -1,17 +1,9 @@
-import { type Wildlife } from "@prisma/client"
 import Image from "next/image"
 import { DEV_MODE } from "~/config"
-import { type WildlifeFighterPlus } from "~/server/lib/battle/getWildlifeFighterPlus"
-import { type WildlifeMetadata } from "~/server/schema/WildlifeMetadata"
+import { type BattleReportFighter } from "~/server/lib/battle/BattleReport"
 import { cn } from "./cn"
 import { Progress } from "./shadcn/ui/progress"
 import { useGetWildlifeName } from "./useGetWildlifeName"
-
-export type FighterForChip = {
-  fighter: WildlifeFighterPlus
-  wildlife: Pick<Wildlife, "id"> & { metadata: WildlifeMetadata }
-  name?: string | null
-}
 
 export const FighterChip = ({
   fighter,
@@ -20,7 +12,7 @@ export const FighterChip = ({
   grayscale,
   onClick,
 }: {
-  fighter: FighterForChip
+  fighter: BattleReportFighter
   ltr?: boolean
   showAbsoluteHp: boolean
   grayscale?: boolean

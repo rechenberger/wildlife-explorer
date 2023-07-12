@@ -8,9 +8,9 @@ import {
   RadarChart,
   ResponsiveContainer,
 } from "recharts"
-import { type FighterForChip } from "./FighterChip"
+import { type BattleReportFighter } from "~/server/lib/battle/BattleReport"
 
-export const FighterStatsChart: React.FC<{ fighter: FighterForChip }> = ({
+export const FighterStatsChart: React.FC<{ fighter: BattleReportFighter }> = ({
   fighter,
 }) => {
   const data = [
