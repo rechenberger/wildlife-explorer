@@ -24,7 +24,6 @@ import { createTRPCRouter, publicProcedure } from "~/server/api/trpc"
 import { findObservations } from "~/server/inaturalist/findObservations"
 import { getWildlifeFighterPlus } from "~/server/lib/battle/getWildlifeFighterPlus"
 import { calcDistanceInMeter, calculateBoundingBox } from "~/server/lib/latLng"
-import { WildlifeMetadata } from "~/server/schema/WildlifeMetadata"
 import { createSeed } from "~/utils/seed"
 import { playerProcedure } from "../middleware/playerProcedure"
 
@@ -78,7 +77,6 @@ export const wildlifeRouter = createTRPCRouter({
     let wildlife = map(wildlifeRaw, (w) => {
       return {
         ...w,
-        metadata: WildlifeMetadata.parse(w.metadata),
         caughtAt: first(w.catches)?.createdAt,
       }
     })
@@ -165,15 +163,11 @@ export const wildlifeRouter = createTRPCRouter({
   getFighter: playerProcedure
     .input(z.object({ wildlifeId: z.string() }))
     .query(async ({ ctx, input }) => {
-      const wildlifeRaw = await ctx.prisma.wildlife.findUniqueOrThrow({
+      const wildlife = await ctx.prisma.wildlife.findUniqueOrThrow({
         where: {
           id: input.wildlifeId,
         },
       })
-      const wildlife = {
-        ...wildlifeRaw,
-        metadata: WildlifeMetadata.parse(wildlifeRaw.metadata),
-      }
       const fighter = await getWildlifeFighterPlus({
         wildlife,
         seed: createSeed(wildlife),

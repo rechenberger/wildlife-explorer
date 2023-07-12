@@ -5,9 +5,7 @@ import { createTRPCRouter } from "~/server/api/trpc"
 import { simulateBattle } from "~/server/lib/battle/simulateBattle"
 import { respawnWildlife } from "~/server/lib/respawnWildlife"
 import { BattleMetadata } from "~/server/schema/BattleMetadata"
-import { BattleParticipationMetadata } from "~/server/schema/BattleParticipationMetadata"
 import { PlayerMetadata } from "~/server/schema/PlayerMetadata"
-import { WildlifeMetadata } from "~/server/schema/WildlifeMetadata"
 import { devProcedure } from "../middleware/devProcedure"
 import { playerProcedure } from "../middleware/playerProcedure"
 import { wildlifeProcedure } from "../middleware/wildlifeProcedure"
@@ -91,7 +89,7 @@ export const battleRouter = createTRPCRouter({
   }),
 
   getMyBattles: playerProcedure.query(async ({ ctx }) => {
-    const battlesRaw = await ctx.prisma.battle.findMany({
+    const battles = await ctx.prisma.battle.findMany({
       where: {
         battleParticipants: {
           some: {
@@ -112,35 +110,6 @@ export const battleRouter = createTRPCRouter({
       },
       take: 20,
     })
-    const battles = map(battlesRaw, (battle) => ({
-      ...battle,
-      metadata: BattleMetadata.parse(battle.metadata),
-      battleParticipants: map(
-        battle.battleParticipants,
-        (battleParticipant) => ({
-          ...battleParticipant,
-          metadata: BattleParticipationMetadata.parse(
-            battleParticipant.metadata
-          ),
-          player: battleParticipant.player
-            ? {
-                ...battleParticipant.player,
-                metadata: PlayerMetadata.parse(
-                  battleParticipant.player.metadata
-                ),
-              }
-            : null,
-          wildlife: battleParticipant.wildlife
-            ? {
-                ...battleParticipant.wildlife,
-                metadata: WildlifeMetadata.parse(
-                  battleParticipant.wildlife.metadata
-                ),
-              }
-            : null,
-        })
-      ),
-    }))
     return battles
   }),
 
@@ -295,7 +264,7 @@ export const battleRouter = createTRPCRouter({
               },
               data: {
                 metadata: {
-                  ...PlayerMetadata.parse(p.player.metadata),
+                  ...p.player.metadata,
                   activeBattleId: null,
                 } satisfies PlayerMetadata,
               },
