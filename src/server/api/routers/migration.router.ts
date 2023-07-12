@@ -64,9 +64,6 @@ export const migrationRouter = createTRPCRouter({
   }),
   catchOriginalPlayer: devProcedure.mutation(async ({ ctx }) => {
     const catches = await ctx.prisma.catch.findMany({
-      include: {
-        wildlife: true,
-      },
       select: {
         id: true,
         playerId: true,
