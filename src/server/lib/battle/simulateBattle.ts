@@ -27,14 +27,14 @@ export const simulateBattle = async ({
   }
 }) => {
   console.time("getBattleForSimulation")
-  const { battleInput: battleDb, battleJson } = await getBattleForSimulation({
+  const { battleInput, battleJson } = await getBattleForSimulation({
     prisma,
     battleId,
     playerPartyLimit: MAX_FIGHTERS_PER_TEAM,
   })
   console.timeEnd("getBattleForSimulation")
 
-  const playerParticipations = battleDb.battleParticipants.flatMap(
+  const playerParticipations = battleInput.battleParticipants.flatMap(
     (bp, participantIdx) =>
       bp.player?.id
         ? [
@@ -62,7 +62,7 @@ export const simulateBattle = async ({
 
   // BUILD TEAMS
   const teams = await Promise.all(
-    map(battleDb.battleParticipants, async (battleParticipant, idx) => {
+    map(battleInput.battleParticipants, async (battleParticipant, idx) => {
       if (idx > 4) throw new Error("Too many participants!")
       const sideId = `p${idx + 1}` as SideID
       const name =
@@ -134,7 +134,7 @@ export const simulateBattle = async ({
   // CHOICE
   if (choice) {
     const participantIdx = findIndex(
-      battleDb.battleParticipants,
+      battleInput.battleParticipants,
       (p) => p.player?.id === choice.playerId
     )
     if (participantIdx === -1) {
