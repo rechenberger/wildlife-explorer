@@ -86,6 +86,7 @@ model Player {
     scanCooldownAt  DateTime?
     catches         Catch[]   @relation("CatchPlayer")
     originalCatches Catch[]   @relation("CatchOriginalPlayer")
+    trades          Trade[]
 
     @@index([lat, lng])
     @@index([userId])
@@ -112,6 +113,8 @@ model Catch {
     seed String
 
     battleOrderPosition Int?
+
+    trades Trade[]
 
     @@unique([wildlifeId, playerId])
     @@index([playerId, battleOrderPosition])
@@ -179,4 +182,15 @@ model BattleParticipation {
 
     @@index([playerId])
     @@index([wildlifeId])
+}
+
+model Trade {
+    id        String   @id @default(cuid())
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    metadata    Json
+    players     Player[]
+    catched     Catch[]
+    completedAt DateTime
 }
