@@ -71,13 +71,19 @@ export const FighterMoves = ({
                     {effectiveness.symbol}
                   </div>
                 )}
-                <div className="hidden w-5 shrink-0 opacity-60 sm:block">
-                  {move?.definition.accuracy}
-                </div>
-                <div className="hidden w-5 shrink-0 opacity-60 sm:block">
+                <div
+                  className="hidden w-5 shrink-0 opacity-60 sm:block"
+                  title="Power"
+                >
                   {move?.definition.basePower}
                 </div>
-                <div className="w-8 shrink-0 opacity-60">
+                <div
+                  className="hidden w-5 shrink-0 opacity-60 sm:block"
+                  title="Accuracy"
+                >
+                  {move?.definition.accuracy}
+                </div>
+                <div className="w-8 shrink-0 opacity-60" title="Uses Left">
                   {move?.status?.pp}/{move?.status?.maxpp}
                 </div>
               </div>
