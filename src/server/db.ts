@@ -1,4 +1,5 @@
-import { PrismaClient } from "@prisma/client"
+import { PlayerPayload, PrismaClient } from "@prisma/client"
+import { Types } from "@prisma/client/runtime"
 import { env } from "~/env.mjs"
 import { BattleMetadata } from "./schema/BattleMetadata"
 import { BattleParticipationMetadata } from "./schema/BattleParticipationMetadata"
@@ -73,3 +74,6 @@ const globalForPrisma = globalThis as unknown as {
 export const prisma = globalForPrisma.prisma ?? createPrisma()
 
 if (env.NODE_ENV !== "production") globalForPrisma.prisma = prisma
+
+type ExtArgs = PlayerPayload<(typeof prisma)["$extends"]["extArgs"]>
+export type Player = Types.GetResult<ExtArgs, {}, "findUniqueOrThrow">
