@@ -16,7 +16,6 @@ export const getBattleForSimulation = async ({
     select: {
       id: true,
       metadata: true,
-      status: true, // TODO: remove
       battleParticipants: {
         select: {
           id: true,
