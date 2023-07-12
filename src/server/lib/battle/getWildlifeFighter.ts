@@ -6,7 +6,12 @@ import { rngInt, rngItem, rngItemWithWeights } from "~/utils/seed"
 import { taxonMappingByAncestors } from "./taxonMappingByAncestors"
 
 export type GetWildlifeFighterOptions = {
-  wildlife: { metadata: WildlifeMetadata }
+  wildlife: {
+    metadata: Pick<
+      WildlifeMetadata,
+      "taxonAncestorIds" | "taxonCommonName" | "taxonName"
+    >
+  }
   seed: string
   idx?: number
 }
