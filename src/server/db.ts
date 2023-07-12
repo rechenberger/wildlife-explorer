@@ -1,5 +1,4 @@
-import { PrismaClient, type PlayerPayload } from "@prisma/client"
-import { type Types } from "@prisma/client/runtime"
+import { PrismaClient, type Player } from "@prisma/client"
 import { env } from "~/env.mjs"
 import { BattleMetadata } from "./schema/BattleMetadata"
 import { BattleParticipationMetadata } from "./schema/BattleParticipationMetadata"
@@ -75,5 +74,15 @@ export const prisma = globalForPrisma.prisma ?? createPrisma()
 
 if (env.NODE_ENV !== "production") globalForPrisma.prisma = prisma
 
-type ExtArgs = PlayerPayload<(typeof prisma)["$extends"]["extArgs"]>
-export type Player = Types.GetResult<ExtArgs, {}, "findUniqueOrThrow">
+// TODO: find a solution to do this in prisma 5. This is the version of prisma 4:
+// import { type PlayerPayload } from "@prisma/client"
+// import { type Types } from "@prisma/client/runtime"
+// type ExtArgs = PlayerPayload<(typeof prisma)["$extends"]["extArgs"]>
+// export type PlayerWithMetadata = Types.GetResult<
+//   ExtArgs,
+//   {},
+//   "findUniqueOrThrow"
+// >
+export type PlayerWithMetadata = Omit<Player, "metadata"> & {
+  metadata: PlayerMetadata
+}
