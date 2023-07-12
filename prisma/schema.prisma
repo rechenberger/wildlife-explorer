@@ -80,11 +80,12 @@ model Player {
 
     userId               String
     user                 User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
-    catches              Catch[]
     foundWildlife        Wildlife[]
     battleParticipations BattleParticipation[]
 
     scanCooldownAt DateTime?
+    ownedCatches   Catch[]   @relation("CatchCurrentOwner")
+    catchedCatches Catch[]   @relation("CatchOriginalCatcher")
 
     @@index([lat, lng])
     @@index([userId])
@@ -100,7 +101,10 @@ model Catch {
     name String?
 
     playerId String
-    player   Player @relation(fields: [playerId], references: [id], onDelete: Cascade)
+    player   Player @relation("CatchCurrentOwner", fields: [playerId], references: [id], onDelete: Cascade)
+
+    caughtById String?
+    caughtBy   Player? @relation("CatchOriginalCatcher", fields: [caughtById], references: [id], onDelete: Cascade)
 
     wildlifeId String
     wildlife   Wildlife @relation(fields: [wildlifeId], references: [id], onDelete: Cascade)
