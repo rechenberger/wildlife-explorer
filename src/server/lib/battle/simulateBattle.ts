@@ -6,11 +6,18 @@ import {
   type SideID,
 } from "@pkmn/sim"
 import { findIndex, first, map } from "lodash-es"
-import { BATTLE_REPORT_VERSION, MAX_FIGHTERS_PER_TEAM } from "~/config"
+import {
+  BATTLE_INPUT_VERSION,
+  BATTLE_REPORT_VERSION,
+  MAX_FIGHTERS_PER_TEAM,
+} from "~/config"
 import { type MyPrismaClient } from "~/server/db"
 import { createSeed, rngInt } from "~/utils/seed"
 import { BattleReport, type BattleReportSide } from "./BattleReport"
-import { getBattleForSimulation } from "./getBattleForSimulation"
+import {
+  getBattleForSimulation,
+  type BattleInput,
+} from "./getBattleForSimulation"
 import { getWildlifeFighter } from "./getWildlifeFighter"
 import { transformWildlifeFighterPlus } from "./getWildlifeFighterPlus"
 
@@ -18,6 +25,8 @@ export const simulateBattle = async ({
   prisma,
   battleId,
   choice,
+  battleInput,
+  battleJson,
 }: {
   prisma: MyPrismaClient
   battleId: string
@@ -25,14 +34,19 @@ export const simulateBattle = async ({
     playerId: string
     choice: string
   }
+  battleInput?: BattleInput
+  battleJson?: any
 }) => {
-  console.time("getBattleForSimulation")
-  const { battleInput, battleJson } = await getBattleForSimulation({
-    prisma,
-    battleId,
-    playerPartyLimit: MAX_FIGHTERS_PER_TEAM,
-  })
-  console.timeEnd("getBattleForSimulation")
+  if (!battleInput || battleInput.version !== BATTLE_INPUT_VERSION) {
+    console.time("getBattleForSimulation")
+    battleInput = await getBattleForSimulation({
+      prisma,
+      battleId,
+      playerPartyLimit: MAX_FIGHTERS_PER_TEAM,
+    })
+    console.timeEnd("getBattleForSimulation")
+  }
+  if (!battleInput) throw new Error("No battleInput")
 
   const playerParticipations = battleInput.battleParticipants.flatMap(
     (bp, participantIdx) =>

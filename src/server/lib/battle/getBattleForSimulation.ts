@@ -24,7 +24,6 @@ export const getBattleForSimulation = async ({
     },
     select: {
       id: true,
-      metadata: true,
       battleParticipants: {
         select: {
           id: true,
@@ -83,6 +82,7 @@ export const getBattleForSimulation = async ({
             metadata: BattleSimulationWildlifeMetadata.parse(
               bp.wildlife.metadata
             ),
+            respawnsAt: bp.wildlife.respawnsAt?.toISOString(),
           }
         : null,
       player: bp.player
@@ -103,12 +103,7 @@ export const getBattleForSimulation = async ({
   }
   // console.log("battleInput", JSON.stringify(battleInput, null, 2))
 
-  return {
-    battleInput,
-    battleJson: battleRaw.metadata.battleJson,
-  }
+  return battleInput
 }
 
-export type BattleInput = Awaited<
-  ReturnType<typeof getBattleForSimulation>
->["battleInput"]
+export type BattleInput = Awaited<ReturnType<typeof getBattleForSimulation>>

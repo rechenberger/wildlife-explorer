@@ -181,6 +181,12 @@ export const battleRouter = createTRPCRouter({
       })
     )
     .mutation(async ({ ctx, input }) => {
+      const battle = await ctx.prisma.battle.findUnique({
+        where: {
+          id: input.battleId,
+        },
+      })
+
       const { battleJson, battleReport, battleInput } = await simulateBattle({
         prisma: ctx.prisma,
         battleId: input.battleId,
@@ -188,10 +194,11 @@ export const battleRouter = createTRPCRouter({
           playerId: ctx.player.id,
           choice: input.choice,
         },
+        battleInput: battle?.metadata?.battleInput,
       })
       console.time("update")
       const winner = battleReport.winner
-      console.log("winner", winner)
+      // console.log("winner", winner)
       await ctx.prisma.battle.update({
         where: {
           id: input.battleId,
@@ -200,7 +207,7 @@ export const battleRouter = createTRPCRouter({
           status: winner ? "FINISHED" : "IN_PROGRESS",
           metadata: {
             battleJson,
-            battleReport: battleReport as any,
+            battleReport: battleReport,
             battleInput: battleInput as any,
           } satisfies BattleMetadata,
         },

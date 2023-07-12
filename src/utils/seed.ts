@@ -6,9 +6,13 @@ export const createSeed = ({
   respawnsAt,
 }: {
   observationId: number
-  respawnsAt: Date
+  respawnsAt: Date | string
 }) => {
-  return `${observationId}-${respawnsAt.toISOString()}`
+  const seed = `${observationId}-${
+    typeof respawnsAt === "string" ? respawnsAt : respawnsAt.toISOString()
+  }`
+  console.log("createSeed", seed)
+  return seed
 }
 
 type RngSeed = string | (string | number)[]
