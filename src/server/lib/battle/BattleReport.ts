@@ -5,10 +5,11 @@ import { WildlifeFighterPlus } from "./getWildlifeFighterPlus"
 export const BattleReportFighter = z.object({
   fighter: WildlifeFighterPlus,
   name: z.string().nullish(),
-  // catch: z.object({
-  //   id: z.string(),
-  // }),
-  catch: z.any(),
+  catch: z
+    .object({
+      id: z.string(),
+    })
+    .nullish(),
   wildlife: z.object({
     id: z.string(),
     metadata: WildlifeMetadata,
@@ -20,17 +21,19 @@ export type BattleReportFighter = z.infer<typeof BattleReportFighter>
 export const BattleReportSide = z.object({
   name: z.string(),
   fighters: z.array(BattleReportFighter),
-  player: z.object({
-    id: z.string(),
-  }),
+  player: z
+    .object({
+      id: z.string(),
+    })
+    .nullish(),
   isWinner: z.boolean(),
 })
 export type BattleReportSide = z.infer<typeof BattleReportSide>
 
 export const BattleReport = z.object({
   winner: z.string().optional(),
-  inputLog: z.string(),
-  outputLog: z.string(),
+  inputLog: z.array(z.string()),
+  outputLog: z.array(z.string()),
   version: z.number(),
   sides: z.array(BattleReportSide),
   battlePlayerChoices: z.array(

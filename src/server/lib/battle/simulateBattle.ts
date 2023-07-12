@@ -240,7 +240,7 @@ export const simulateBattle = async ({
   // const water = Dex.types.get("Water")
   // console.log(Dex.types.all())
   const battleReport = makeBattleReport()
-  console.log(battleReport)
+  // console.log(battleReport)
   const result = {
     battleReport: BattleReport.parse(battleReport),
     battleJson: battle.toJSON(),

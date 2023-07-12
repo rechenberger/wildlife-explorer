@@ -3,7 +3,6 @@ import { find, map } from "lodash-es"
 import { z } from "zod"
 import { BATTLE_REPORT_VERSION } from "~/config"
 import { createTRPCRouter } from "~/server/api/trpc"
-import { type BattleReport } from "~/server/lib/battle/BattleReport"
 import { simulateBattle } from "~/server/lib/battle/simulateBattle"
 import { respawnWildlife } from "~/server/lib/respawnWildlife"
 import { type BattleMetadata } from "~/server/schema/BattleMetadata"
@@ -122,11 +121,13 @@ export const battleRouter = createTRPCRouter({
       })
     )
     .query(async ({ ctx, input }) => {
+      console.time("getBattleFast")
       const battle = await ctx.prisma.battle.findUnique({
         where: {
           id: input.battleId,
         },
       })
+      console.timeEnd("getBattleFast")
       if (!battle) {
         throw new TRPCError({
           code: "NOT_FOUND",
