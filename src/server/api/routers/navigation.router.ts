@@ -12,7 +12,7 @@ import { createTRPCRouter } from "~/server/api/trpc"
 import { calcTimingLegs } from "~/server/lib/calcTimingLegs"
 import { calcDistanceInMeter } from "~/server/lib/latLng"
 import { LatLng } from "~/server/schema/LatLng"
-import { PlayerMetadata } from "~/server/schema/PlayerMetadata"
+import { type PlayerMetadata } from "~/server/schema/PlayerMetadata"
 import { type PlayerNavigation } from "~/server/schema/PlayerNavigation"
 import { playerProcedure } from "../middleware/playerProcedure"
 
