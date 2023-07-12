@@ -11,7 +11,6 @@ import { PokemonExperienceMap } from "~/data/pokemonLevelExperienceMap"
 import { PokemonLevelingRate } from "~/data/pokemonLevelingRate"
 import { createTRPCRouter } from "~/server/api/trpc"
 import { getWildlifeFighterPlus } from "~/server/lib/battle/getWildlifeFighterPlus"
-import { simulateBattle } from "~/server/lib/battle/simulateBattle"
 import { respawnWildlife } from "~/server/lib/respawnWildlife"
 import { LevelingRate, type CatchMetadata } from "~/server/schema/CatchMetdata"
 import { type PlayerMetadata } from "~/server/schema/PlayerMetadata"
@@ -178,15 +177,19 @@ export const catchRouter = createTRPCRouter({
     // TODO: can be read from battle report in battle metadata
     const battleId = ctx.wildlifeBattleId
     const battle = battleId
-      ? await simulateBattle({
-          prisma: ctx.prisma,
-          battleId,
+      ? await ctx.prisma.battle.findFirstOrThrow({
+          where: {
+            id: battleId,
+          },
+          select: {
+            metadata: true,
+          },
         })
       : null
 
     let goal: number
     if (someCatch) {
-      const status = battle?.battleReport.sides
+      const status = battle?.metadata.battleReport?.sides
         .flatMap((s) => s.fighters)
         ?.find((f) => !f.catch && f.wildlife.id === ctx.wildlife.id)?.fighter
       const hpPercent = status ? status.hp / status.hpMax : 1
@@ -200,6 +203,7 @@ export const catchRouter = createTRPCRouter({
     }
     const luck = Math.random()
     const isLucky = luck >= goal
+    // console.log("goal", goal, luck, isLucky)
 
     // Currently, we respawn wildlife even if the player is not lucky
     // Also the battle always ends after the catch
