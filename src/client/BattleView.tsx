@@ -77,7 +77,7 @@ export const BattleView = ({
       }
     )
 
-  const battleLogAsHtml = parseBattleLog(data?.battleStatus.outputLog, true)
+  const battleLogAsHtml = parseBattleLog(data?.battleReport.outputLog, true)
 
   const trpc = api.useContext()
   const { mutate: makeChoice, isLoading: choiceLoading } =
@@ -127,7 +127,7 @@ export const BattleView = ({
     return <BattleViewPvp battleId={battleId} />
   }
 
-  const { battleStatus, status } = data
+  const { battleReport, status } = data
 
   const battleIsActive = status === "IN_PROGRESS"
 
@@ -136,7 +136,7 @@ export const BattleView = ({
 
     // Find un-caught wildlife
     const wildlifeId = find(
-      flatMap(battleStatus.sides, (s) => s.fighters),
+      flatMap(battleReport.sides, (s) => s.fighters),
       (f) => !f.catch
     )?.wildlife.id
 
@@ -147,7 +147,7 @@ export const BattleView = ({
     doCatch({ wildlifeId })
   }
 
-  const sides = orderBy(battleStatus?.sides, (s) =>
+  const sides = orderBy(battleReport?.sides, (s) =>
     s.player?.id === playerId ? 0 : 1
   )
 
@@ -192,7 +192,7 @@ export const BattleView = ({
             const isMySide = side.player?.id === playerId
             const isMainSide = sideIdx === 0
             const isChoiceDone = find(
-              data.playerChoices,
+              data.battlePlayerChoices,
               (pc) => pc.playerId === side.player?.id
             )?.isChoiceDone
             const isWinner = side.isWinner

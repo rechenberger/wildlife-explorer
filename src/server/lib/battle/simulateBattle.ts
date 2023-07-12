@@ -179,7 +179,7 @@ export const simulateBattle = async ({
   }
 
   // BATTLE STATUS
-  const battleStatus = () => {
+  const makeBattleReport = () => {
     return {
       winner: battle.winner,
       inputLog: battle.inputLog,
@@ -237,10 +237,10 @@ export const simulateBattle = async ({
   // console.log(Dex.types.all())
 
   const result = {
-    battleStatus: battleStatus(),
+    battleReport: makeBattleReport(),
     battleJson: battle.toJSON(),
     battleDb,
-    playerChoices: playerChoices.map((pc) => {
+    battlePlayerChoices: playerChoices.map((pc) => {
       const sideId = `p${pc.participantIdx + 1}` as SideID
       const isChoiceDone = battle[sideId]!.isChoiceDone()
       return {
@@ -252,3 +252,8 @@ export const simulateBattle = async ({
   console.timeEnd("simulateBattle")
   return result
 }
+
+export type BattleResult = Awaited<ReturnType<typeof simulateBattle>>
+export type BattleReport = BattleResult["battleReport"]
+export type BattleJson = BattleResult["battleJson"]
+export type BattlePlayerChoices = BattleResult["battlePlayerChoices"]

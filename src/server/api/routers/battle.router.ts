@@ -120,14 +120,15 @@ export const battleRouter = createTRPCRouter({
       })
     )
     .query(async ({ ctx, input }) => {
-      const { battleStatus, battleDb, playerChoices } = await simulateBattle({
-        prisma: ctx.prisma,
-        battleId: input.battleId,
-      })
+      const { battleReport, battleDb, battlePlayerChoices } =
+        await simulateBattle({
+          prisma: ctx.prisma,
+          battleId: input.battleId,
+        })
       return {
-        battleStatus,
+        battleReport,
         status: battleDb.status,
-        playerChoices,
+        battlePlayerChoices,
       }
     }),
 
@@ -157,7 +158,7 @@ export const battleRouter = createTRPCRouter({
       // let inputLog = battle.metadata.inputLog ?? []
       // inputLog = [...inputLog, `>${participantId} ${input.choice}`]
 
-      const { battleJson, battleDb, battleStatus } = await simulateBattle({
+      const { battleJson, battleDb, battleReport } = await simulateBattle({
         prisma: ctx.prisma,
         battleId: input.battleId,
         choice: {
@@ -166,7 +167,7 @@ export const battleRouter = createTRPCRouter({
         },
       })
       console.time("update")
-      const winner = battleStatus.winner
+      const winner = battleReport.winner
       console.log("winner", winner)
       await ctx.prisma.battle.update({
         where: {
