@@ -112,11 +112,13 @@ export const WildlifeFighterPlusMove = z.object({
     .object({
       pp: z.number(),
       maxpp: z.number(),
+      // TODO: disabled ???
     })
     .nullish(),
   definition: z.object({
     name: z.string(),
     type: z.string(),
+    category: z.string(), // TODO: show in UI
     desc: z.string(),
     basePower: z.number().nullish(),
     accuracy: z.number().or(z.literal(true)),
