@@ -1,3 +1,4 @@
+import { BATTLE_INPUT_VERSION } from "~/config"
 import { type MyPrismaClient } from "~/server/db"
 import { WildlifeMetadata } from "~/server/schema/WildlifeMetadata"
 import { BattleReportWildlifeMetadata } from "./BattleReport"
@@ -71,6 +72,7 @@ export const getBattleForSimulation = async ({
     },
   })
   const battleInput = {
+    version: BATTLE_INPUT_VERSION,
     id: battleRaw.id,
     battleParticipants: battleRaw.battleParticipants.map((bp) => ({
       ...bp,
