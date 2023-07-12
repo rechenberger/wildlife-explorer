@@ -14,8 +14,8 @@ export const calcTimingLegs = ({
 }: {
   geometry: string
   totalDurationInSeconds: number
-  startingAtTimestamp?: number
-  finishingAtTimestamp?: number
+  startingAtTimestamp: number
+  finishingAtTimestamp: number
 }) => {
   const decodedGeometry = polyline.decode(geometry)
 

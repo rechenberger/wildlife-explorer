@@ -32,7 +32,7 @@ export const PlayerMarker = ({
   const markerRef = useRef<mapboxgl.Marker | null>(null)
   const frameRef = useRef<number | undefined>()
 
-  const result = useMemo(() => {
+  const timing = useMemo(() => {
     const navigation = player?.metadata?.navigation
     if (!navigation) return null
     return calcTimingLegs(navigation)
@@ -41,15 +41,14 @@ export const PlayerMarker = ({
   const animateMarker = useCallback(() => {
     if (!markerRef.current) return
 
-    const currentLocation = result?.timingLegs
+    const currentLocation = timing?.timingLegs
       ? calcCurrentLocation({
-          timingLegs: result?.timingLegs,
+          timingLegs: timing?.timingLegs,
         })
       : null
 
     //check if animation should keep going or navigation is finished
-    const isFinished =
-      !!result?.finishingAtTimestamp && result.finishingAtTimestamp < Date.now()
+    const isFinished = !timing || timing.finishingAtTimestamp < Date.now()
     if (isFinished) {
       if (frameRef.current) cancelAnimationFrame(frameRef.current)
       return
@@ -69,7 +68,7 @@ export const PlayerMarker = ({
     }
 
     frameRef.current = requestAnimationFrame(animateMarker)
-  }, [isMe, player.id, result?.timingLegs, setPlayerLocation, store])
+  }, [timing, isMe, setPlayerLocation, store, player.id])
 
   useEffect(() => {
     animateMarker()
