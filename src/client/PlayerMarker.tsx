@@ -57,7 +57,7 @@ export const PlayerMarker = ({
     if (!currentLocation) {
       return
     }
-    console.count(player.id)
+
     markerRef.current.setLngLat(currentLocation)
     if (isMe) {
       setPlayerLocation(currentLocation)
