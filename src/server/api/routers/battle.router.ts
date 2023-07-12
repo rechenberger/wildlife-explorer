@@ -181,7 +181,7 @@ export const battleRouter = createTRPCRouter({
       })
     )
     .mutation(async ({ ctx, input }) => {
-      const battle = await ctx.prisma.battle.findUnique({
+      const battleBefore = await ctx.prisma.battle.findUnique({
         where: {
           id: input.battleId,
         },
@@ -194,7 +194,7 @@ export const battleRouter = createTRPCRouter({
           playerId: ctx.player.id,
           choice: input.choice,
         },
-        battleInput: battle?.metadata?.battleInput,
+        battleInput: battleBefore?.metadata?.battleInput,
       })
       console.time("update")
       const winner = battleReport.winner
