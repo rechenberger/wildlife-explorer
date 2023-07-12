@@ -12,7 +12,12 @@ export const BattleReportFighter = z.object({
     .nullish(),
   wildlife: z.object({
     id: z.string(),
-    metadata: WildlifeMetadata,
+    metadata: WildlifeMetadata.pick({
+      taxonLocaleNames: true,
+      taxonCommonName: true,
+      taxonName: true,
+      taxonImageUrlSquare: true,
+    }),
   }),
 })
 
