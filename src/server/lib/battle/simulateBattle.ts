@@ -9,7 +9,7 @@ import { findIndex, first, map } from "lodash-es"
 import { BATTLE_REPORT_VERSION, MAX_FIGHTERS_PER_TEAM } from "~/config"
 import { type MyPrismaClient } from "~/server/db"
 import { createSeed, rngInt } from "~/utils/seed"
-import { BattleReport } from "./BattleReport"
+import { BattleReport, type BattleReportSide } from "./BattleReport"
 import { getBattleForSimulation } from "./getBattleForSimulation"
 import { getWildlifeFighter } from "./getWildlifeFighter"
 import { transformWildlifeFighterPlus } from "./getWildlifeFighterPlus"
@@ -216,8 +216,7 @@ export const simulateBattle = async ({
         fighters,
         player: team.player,
         isWinner: battle.winner === side.name,
-        battlePlayerChoices,
-      }
+      } satisfies BattleReportSide
     })
 
     return {
@@ -230,7 +229,7 @@ export const simulateBattle = async ({
 
       sides,
       version: BATTLE_REPORT_VERSION,
-    }
+    } satisfies BattleReport
   }
 
   // console.log(battle.log)
