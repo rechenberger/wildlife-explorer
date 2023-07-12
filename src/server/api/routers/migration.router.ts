@@ -62,6 +62,32 @@ export const migrationRouter = createTRPCRouter({
     }
     console.log(`${i} of ${catches.length} done`)
   }),
+  catchOriginalPlayer: devProcedure.mutation(async ({ ctx }) => {
+    const catches = await ctx.prisma.catch.findMany({
+      select: {
+        id: true,
+        playerId: true,
+        originalPlayerId: true,
+      },
+    })
+
+    let i = 0
+    for (const c of catches) {
+      i++
+      if (c.originalPlayerId) continue
+
+      await ctx.prisma.catch.update({
+        where: {
+          id: c.id,
+        },
+        data: {
+          originalPlayerId: c.playerId,
+        },
+      })
+      console.log(`${i} of ${catches.length} done`)
+    }
+    console.log(`${i} of ${catches.length} done`)
+  }),
 
   battleOrder: devProcedure.mutation(async ({ ctx }) => {
     const players = await ctx.prisma.player.findMany({})

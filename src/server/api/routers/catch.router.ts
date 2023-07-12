@@ -271,6 +271,7 @@ export const catchRouter = createTRPCRouter({
     await ctx.prisma.catch.create({
       data: {
         playerId: ctx.player.id,
+        originalPlayerId: ctx.player.id,
         wildlifeId: ctx.wildlife.id,
         seed,
         battleOrderPosition:
