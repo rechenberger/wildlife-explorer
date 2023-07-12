@@ -98,6 +98,13 @@ export const navigationRouter = createTRPCRouter({
       const { timingLegs, totalDistanceInMeter } = calcTimingLegs(navigation)
       navigation.totalDistanceInMeter = totalDistanceInMeter
 
+      if (totalDistanceInMeter <= 1 || totalDurationInSeconds <= 1) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "You are already at your destination",
+        })
+      }
+
       await ctx.prisma.player.update({
         where: { id: ctx.player.id },
         data: {
