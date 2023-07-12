@@ -23,7 +23,6 @@ export const getBattleForSimulation = async ({
             select: {
               id: true,
               name: true,
-              metadata: true, // TODO: remove
               catches: {
                 where: {
                   battleOrderPosition: {

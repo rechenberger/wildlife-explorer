@@ -243,7 +243,6 @@ export const simulateBattle = async ({
   const result = {
     battleReport: BattleReport.parse(battleReport),
     battleJson: battle.toJSON(),
-    battleDb,
   }
   console.timeEnd("simulateBattle")
   return result
