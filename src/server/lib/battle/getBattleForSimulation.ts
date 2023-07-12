@@ -72,8 +72,8 @@ export const getBattleForSimulation = async ({
       },
     },
   })
-  const battle = {
-    ...battleRaw,
+  const battleInput = {
+    id: battleRaw.id,
     battleParticipants: battleRaw.battleParticipants.map((bp) => ({
       ...bp,
       wildlife: bp.wildlife
@@ -101,11 +101,14 @@ export const getBattleForSimulation = async ({
         : null,
     })),
   }
-  return battle
+  // console.log("battleInput", JSON.stringify(battleInput, null, 2))
+
+  return {
+    battleInput,
+    battleJson: battleRaw.metadata.battleJson,
+  }
 }
 
-// export const BattleInput = z.object({
-//   id: z.string(),
-//   metadata: BattleMetadata,
-//   // ...
-// })
+export type BattleInput = Awaited<
+  ReturnType<typeof getBattleForSimulation>
+>["battleInput"]

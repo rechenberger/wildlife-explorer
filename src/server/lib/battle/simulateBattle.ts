@@ -27,7 +27,7 @@ export const simulateBattle = async ({
   }
 }) => {
   console.time("getBattleForSimulation")
-  const battleDb = await getBattleForSimulation({
+  const { battleInput: battleDb, battleJson } = await getBattleForSimulation({
     prisma,
     battleId,
     playerPartyLimit: MAX_FIGHTERS_PER_TEAM,
@@ -47,8 +47,8 @@ export const simulateBattle = async ({
   )
 
   console.time("simulateBattle")
+
   // INIT BATTLE
-  const battleJson = battleDb.metadata.battleJson
   let battle: Battle
   if (battleJson) {
     battle = Battle.fromJSON(battleJson)
