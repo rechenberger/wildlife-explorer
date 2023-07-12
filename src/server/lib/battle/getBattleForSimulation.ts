@@ -1,5 +1,5 @@
-import { type PrismaClient } from "@prisma/client"
 import { map } from "lodash-es"
+import { type MyPrismaClient } from "~/server/db"
 import { BattleMetadata } from "~/server/schema/BattleMetadata"
 import { BattleParticipationMetadata } from "~/server/schema/BattleParticipationMetadata"
 import { PlayerMetadata } from "~/server/schema/PlayerMetadata"
@@ -10,7 +10,7 @@ export const getBattleForSimulation = async ({
   battleId,
   playerPartyLimit,
 }: {
-  prisma: PrismaClient
+  prisma: MyPrismaClient
   battleId: string
   playerPartyLimit: number
 }) => {

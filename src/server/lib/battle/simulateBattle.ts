@@ -5,9 +5,9 @@ import {
   type PokemonSet,
   type SideID,
 } from "@pkmn/sim"
-import { type PrismaClient } from "@prisma/client"
 import { findIndex, first, map } from "lodash-es"
 import { MAX_FIGHTERS_PER_TEAM } from "~/config"
+import { type MyPrismaClient } from "~/server/db"
 import { createSeed, rngInt } from "~/utils/seed"
 import { getBattleForSimulation } from "./getBattleForSimulation"
 import { getWildlifeFighter } from "./getWildlifeFighter"
@@ -18,7 +18,7 @@ export const simulateBattle = async ({
   battleId,
   choice,
 }: {
-  prisma: PrismaClient
+  prisma: MyPrismaClient
   battleId: string
   choice?: {
     playerId: string
