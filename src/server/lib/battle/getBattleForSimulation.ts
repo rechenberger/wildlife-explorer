@@ -1,4 +1,5 @@
 import { type MyPrismaClient } from "~/server/db"
+import { BattleReportWildlifeMetadata } from "./BattleReport"
 
 export const getBattleForSimulation = async ({
   prisma,
@@ -9,7 +10,7 @@ export const getBattleForSimulation = async ({
   battleId: string
   playerPartyLimit: number
 }) => {
-  const battle = await prisma.battle.findUniqueOrThrow({
+  const battleRaw = await prisma.battle.findUniqueOrThrow({
     where: {
       id: battleId,
     },
@@ -64,6 +65,22 @@ export const getBattleForSimulation = async ({
       },
     },
   })
+  const battle = {
+    ...battleRaw,
+    battleParticipants: battleRaw.battleParticipants.map((bp) => ({
+      ...bp,
+      wildlife: bp.wildlife
+        ? {
+            ...bp.wildlife,
+            metadata: {
+              // This is for optimizing the size of metadata:
+              ...BattleReportWildlifeMetadata.parse(bp.wildlife.metadata),
+              taxonAncestorIds: bp.wildlife.metadata.taxonAncestorIds,
+            },
+          }
+        : null,
+    })),
+  }
   return battle
 }
 
