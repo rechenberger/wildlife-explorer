@@ -126,6 +126,11 @@ export const battleRouter = createTRPCRouter({
         where: {
           id: input.battleId,
         },
+        select: {
+          id: true,
+          status: true,
+          metadata: true,
+        },
       })
       console.timeEnd("getBattleFast")
       if (!battle) {

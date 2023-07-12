@@ -99,7 +99,7 @@ export const getBattleForSimulation = async ({
         : null,
     })),
   }
-  console.log("battleInput", JSON.stringify(battleInput, null, 2))
+  // console.log("battleInput", JSON.stringify(battleInput, null, 2))
 
   return {
     battleInput,
