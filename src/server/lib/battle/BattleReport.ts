@@ -2,6 +2,13 @@ import { z } from "zod"
 import { WildlifeMetadata } from "~/server/schema/WildlifeMetadata"
 import { WildlifeFighterPlus } from "./getWildlifeFighterPlus"
 
+export const BattleReportWildlifeMetadata = WildlifeMetadata.pick({
+  taxonLocaleNames: true,
+  taxonCommonName: true,
+  taxonName: true,
+  taxonImageUrlSquare: true,
+})
+
 export const BattleReportFighter = z.object({
   fighter: WildlifeFighterPlus,
   name: z.string().nullish(),
@@ -12,12 +19,7 @@ export const BattleReportFighter = z.object({
     .nullish(),
   wildlife: z.object({
     id: z.string(),
-    metadata: WildlifeMetadata.pick({
-      taxonLocaleNames: true,
-      taxonCommonName: true,
-      taxonName: true,
-      taxonImageUrlSquare: true,
-    }),
+    metadata: BattleReportWildlifeMetadata,
   }),
 })
 
