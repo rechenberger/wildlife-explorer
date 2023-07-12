@@ -121,7 +121,10 @@ export const WildlifeFighterPlus = z.object({
   types: z.array(z.string()),
   status: z.string(),
   moves: z.array(WildlifeFighterPlusMove),
-  ability: z.any(),
+  ability: z.object({
+    name: z.string(),
+    desc: z.string(),
+  }),
   species: z.string(),
   speciesNum: z.number(),
   level: z.number(),
