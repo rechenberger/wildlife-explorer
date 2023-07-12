@@ -3,7 +3,7 @@ import { find, map } from "lodash-es"
 import { z } from "zod"
 import { BATTLE_REPORT_VERSION } from "~/config"
 import { createTRPCRouter } from "~/server/api/trpc"
-import { BattleReport } from "~/server/lib/battle/BattleReport"
+import { type BattleReport } from "~/server/lib/battle/BattleReport"
 import { simulateBattle } from "~/server/lib/battle/simulateBattle"
 import { respawnWildlife } from "~/server/lib/respawnWildlife"
 import { type BattleMetadata } from "~/server/schema/BattleMetadata"
@@ -134,7 +134,7 @@ export const battleRouter = createTRPCRouter({
         })
       }
       if (battle?.metadata.battleReport) {
-        const battleReport = battle.metadata.battleReport as BattleReport
+        const battleReport = battle.metadata.battleReport
         if (battleReport.version === BATTLE_REPORT_VERSION) {
           return {
             status: battle.status,
