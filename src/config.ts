@@ -30,5 +30,5 @@ export const CATCH_RATE_ALWAYS_WIN = 0.2
 export const CATCH_RATE_ALWAYS_LOOSE = 0.2
 export const CATCH_RATE_FIRST_FIGHTER = 1.0
 
-export const BATTLE_REPORT_VERSION = 1
-export const BATTLE_INPUT_VERSION = 2
+export const BATTLE_REPORT_VERSION = 3
+export const BATTLE_INPUT_VERSION = 3
