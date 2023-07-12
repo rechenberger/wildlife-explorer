@@ -1,8 +1,12 @@
 import { TRPCError } from "@trpc/server"
 import { find, map } from "lodash-es"
 import { z } from "zod"
+import { BATTLE_REPORT_VERSION } from "~/config"
 import { createTRPCRouter } from "~/server/api/trpc"
-import { simulateBattle } from "~/server/lib/battle/simulateBattle"
+import {
+  BattleReport,
+  simulateBattle,
+} from "~/server/lib/battle/simulateBattle"
 import { respawnWildlife } from "~/server/lib/respawnWildlife"
 import { type BattleMetadata } from "~/server/schema/BattleMetadata"
 import { type PlayerMetadata } from "~/server/schema/PlayerMetadata"
@@ -120,6 +124,27 @@ export const battleRouter = createTRPCRouter({
       })
     )
     .query(async ({ ctx, input }) => {
+      const battle = await ctx.prisma.battle.findUnique({
+        where: {
+          id: input.battleId,
+        },
+      })
+      if (!battle) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Battle not found",
+        })
+      }
+      if (battle?.metadata.battleReport) {
+        const battleReport = battle.metadata.battleReport as BattleReport
+        if (battleReport.version === BATTLE_REPORT_VERSION) {
+          return {
+            status: battle.status,
+            battleReport,
+          }
+        }
+      }
+
       const { battleReport, battleDb } = await simulateBattle({
         prisma: ctx.prisma,
         battleId: input.battleId,
@@ -172,6 +197,7 @@ export const battleRouter = createTRPCRouter({
           metadata: {
             ...battleDb.metadata,
             battleJson,
+            battleReport: battleReport as any,
           } satisfies BattleMetadata,
         },
       })

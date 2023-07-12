@@ -6,7 +6,7 @@ import {
   type SideID,
 } from "@pkmn/sim"
 import { findIndex, first, map } from "lodash-es"
-import { MAX_FIGHTERS_PER_TEAM } from "~/config"
+import { BATTLE_REPORT_VERSION, MAX_FIGHTERS_PER_TEAM } from "~/config"
 import { type MyPrismaClient } from "~/server/db"
 import { createSeed, rngInt } from "~/utils/seed"
 import { getBattleForSimulation } from "./getBattleForSimulation"
@@ -239,6 +239,7 @@ export const simulateBattle = async ({
       battlePlayerChoices,
 
       sides,
+      version: BATTLE_REPORT_VERSION,
     }
   }
 
