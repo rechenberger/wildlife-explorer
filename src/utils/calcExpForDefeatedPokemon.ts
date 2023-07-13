@@ -72,5 +72,5 @@ export const calcExpForDefeatedPokemon = ({
     p
   console.log({ b, L, Lp, res })
 
-  return res
+  return Math.floor(res)
 }

@@ -7,6 +7,7 @@ import { simulateBattle } from "~/server/lib/battle/simulateBattle"
 import { respawnWildlife } from "~/server/lib/respawnWildlife"
 import { type BattleMetadata } from "~/server/schema/BattleMetadata"
 import { type PlayerMetadata } from "~/server/schema/PlayerMetadata"
+import { calcExpForDefeatedPokemon } from "~/utils/calcExpForDefeatedPokemon"
 import { devProcedure } from "../middleware/devProcedure"
 import { playerProcedure } from "../middleware/playerProcedure"
 import { wildlifeProcedure } from "../middleware/wildlifeProcedure"
@@ -224,6 +225,13 @@ export const battleRouter = createTRPCRouter({
         },
       })
 
+      // map(battleReport.sides, (side) => {
+      //   // console.log("side", side)
+      //   map(side.fighters, (fighter) => {
+      //     console.log("fighter", pick(fighter.fighter, "species"))
+      //   })
+      // })
+
       // END OF BATTLE
       if (!!winner) {
         const battleDb = await ctx.prisma.battle.findUniqueOrThrow({
@@ -240,12 +248,116 @@ export const battleRouter = createTRPCRouter({
           },
         })
         const participants = battleDb.battleParticipants
+
+        const winnerIsWildlife = winner === "Wildlife"
+
         const winnerParticipantId = find(
           participants,
           (p) =>
-            p.player?.name === winner ||
-            (!!p.wildlife?.id && winner == "Wildlife")
+            p.player?.name === winner || (!!p.wildlife?.id && winnerIsWildlife)
         )?.id
+
+        if (winnerIsWildlife) return
+        // player related stuff - not for wildlife
+
+        // const wasPvpFight = every(participants, (p) => !!p.player?.id)
+        // if (wasPvpFight) {
+        //   //no xp for pvp so far
+        //   return
+        // }
+
+        const winnerSide = find(battleReport.sides, (s) => s.isWinner)
+        const looserSide = find(battleReport.sides, (s) => !s.isWinner)
+
+        for await (const looserFighter of looserSide?.fighters || []) {
+          console.log({ looserFighter })
+          if (!looserFighter.fainted) continue
+
+          for await (const winnerFighter of winnerSide?.fighters || []) {
+            if (!winnerFighter.catch?.id || winnerFighter.fainted) continue
+            const winningCatch = await ctx.prisma.catch.findUniqueOrThrow({
+              where: {
+                id: winnerFighter.catch.id,
+              },
+            })
+            const expRes = calcExpForDefeatedPokemon({
+              defeatedFighter: {
+                speciesNum: looserFighter.fighter.speciesNum,
+                level: looserFighter.fighter.level,
+              },
+              receivingFighter: winningCatch.metadata,
+              participatedInBattle: !!winnerFighter.activeTurns,
+              isOriginalOwner:
+                winningCatch.originalPlayerId === winnerSide?.player?.id,
+            })
+            // console.log({
+            //   winnerFighter: winnerFighter,
+            //   expRes,
+            //   newXp: (winningCatch?.metadata?.exp || 0) + expRes,
+            // })
+            await ctx.prisma.catch.update({
+              where: {
+                id: winnerFighter.catch.id,
+              },
+              data: {
+                metadata: {
+                  ...winningCatch.metadata,
+                  exp: (winningCatch?.metadata?.exp || 0) + expRes,
+                },
+              },
+              select: {
+                id: true,
+              },
+            })
+          }
+        }
+
+        // const winnerParticipant = find(
+        //   participants,
+        //   (p) => p?.player?.name === winner
+        // )
+        // const defeatedWildlifeParticipant = find(
+        //   participants,
+        //   (p) => !!p?.wildlife?.id && p.id !== winnerParticipantId
+        // )
+        // const defeatedWildlife = defeatedWildlifeParticipant?.wildlife
+        // if (!defeatedWildlife) return
+
+        // const wildlifeMetadata = WildlifeMetadata.parse(
+        //   defeatedWildlife.metadata
+        // )
+
+        // const wildlifeAsFighter = await getWildlifeFighterPlus({
+        //   wildlife: { metadata: wildlifeMetadata },
+        //   seed: createSeed(defeatedWildlife),
+        // })
+        // console.log({ winnerParticipant })
+
+        // const winnerTeam = await ctx.prisma.catch.findMany({
+        //   where: {
+        //     battleOrderPosition: { not: null },
+        //     playerId: winnerParticipant?.player?.id,
+        //   },
+        // })
+
+        // map(winnerTeam, (winnerFighter) => {
+        //   console.log({
+        //     winnerFighter: winnerFighter.metadata.speciesName,
+        //     defeatedWildlife: wildlifeAsFighter.species,
+        //     xpres: calcExpForDefeatedPokemon({
+        //       defeatedFighter: {
+        //         speciesNum: wildlifeAsFighter.speciesNum,
+        //         level: wildlifeAsFighter.level,
+        //       },
+        //       receivingFighter: winnerFighter.metadata,
+        //       participatedInBattle: true,
+        //       isOriginalOwner:
+        //         winnerFighter.originalPlayerId ===
+        //         winnerParticipant?.player?.id,
+        //     }),
+        //   })
+        // })
+
         await Promise.all(
           map(battleDb.battleParticipants, async (p) => {
             const isWinner = p.id === winnerParticipantId
@@ -267,6 +379,7 @@ export const battleRouter = createTRPCRouter({
                   : undefined,
               },
             })
+
             if (p.wildlife?.id) {
               await respawnWildlife({
                 prisma: ctx.prisma,

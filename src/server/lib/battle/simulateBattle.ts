@@ -13,7 +13,11 @@ import {
 } from "~/config"
 import { type MyPrismaClient } from "~/server/db"
 import { createSeed, rngInt } from "~/utils/seed"
-import { BattleReport, type BattleReportSide } from "./BattleReport"
+import {
+  BattleReport,
+  type BattleReportFighter,
+  type BattleReportSide,
+} from "./BattleReport"
 import {
   getBattleForSimulation,
   type BattleInput,
@@ -210,6 +214,8 @@ export const simulateBattle = async ({
       const team = teams[sideIdx]!
       const fighters = side.pokemon.map((p) => {
         const idxInTeam = parseInt(p.name[1]!) - 1
+        // console.log({ name: p.name, turns: p.activeTurns })
+
         const fighter = team.team[idxInTeam]
 
         const foe = first(p.foes())
@@ -226,7 +232,9 @@ export const simulateBattle = async ({
           name: fighter?.catch?.name,
           catch: fighter?.catch,
           wildlife: fighter!.wildlife,
-        }
+          activeTurns: p.activeTurns,
+          fainted: p.fainted,
+        } satisfies BattleReportFighter
       })
       return {
         name: team.name,
