@@ -1,4 +1,19 @@
-export const PokemonEffortValueYield = {
+export const PokemonEffortValueYield: {
+  [key: string]: {
+    num: number
+    name: string
+    baseExp: number
+    hp: number
+    atk: number
+    def: number
+    spAtk: number
+    spDef: number
+    speed: number
+    totalEvs: number
+    form?: string
+    formName?: string
+  }
+} = {
   "1": {
     num: 1,
     name: "Bulbasaur",
