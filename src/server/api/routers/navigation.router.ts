@@ -12,7 +12,7 @@ import { createTRPCRouter } from "~/server/api/trpc"
 import { calcTimingLegs } from "~/server/lib/calcTimingLegs"
 import { calcDistanceInMeter } from "~/server/lib/latLng"
 import { LatLng } from "~/server/schema/LatLng"
-import { PlayerMetadata } from "~/server/schema/PlayerMetadata"
+import { type PlayerMetadata } from "~/server/schema/PlayerMetadata"
 import { type PlayerNavigation } from "~/server/schema/PlayerNavigation"
 import { playerProcedure } from "../middleware/playerProcedure"
 
@@ -97,6 +97,13 @@ export const navigationRouter = createTRPCRouter({
 
       const { timingLegs, totalDistanceInMeter } = calcTimingLegs(navigation)
       navigation.totalDistanceInMeter = totalDistanceInMeter
+
+      if (totalDistanceInMeter <= 1 || totalDurationInSeconds <= 1) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "You are already at your destination",
+        })
+      }
 
       await ctx.prisma.player.update({
         where: { id: ctx.player.id },

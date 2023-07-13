@@ -3,7 +3,10 @@ import { type WildlifeMetadata } from "~/server/schema/WildlifeMetadata"
 import { useLocale } from "./useLocale"
 
 type WildlifeWithMetadata = {
-  metadata: WildlifeMetadata
+  metadata: Pick<
+    WildlifeMetadata,
+    "taxonLocaleNames" | "taxonCommonName" | "taxonName"
+  >
 }
 
 export const useGetWildlifeName = () => {

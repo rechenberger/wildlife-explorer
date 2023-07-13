@@ -1,4 +1,4 @@
-export const GLOBAL_REALTIME_MULTIPLIER = 20
+export const GLOBAL_REALTIME_MULTIPLIER = 40
 export const DEFAULT_LOCATION = {
   lat: 50.928435947011906,
   lng: 6.930087265110956,
@@ -29,3 +29,6 @@ export const ENABLE_BATTLE_VIEW = true
 export const CATCH_RATE_ALWAYS_WIN = 0.2
 export const CATCH_RATE_ALWAYS_LOOSE = 0.2
 export const CATCH_RATE_FIRST_FIGHTER = 1.0
+
+export const BATTLE_REPORT_VERSION = 3
+export const BATTLE_INPUT_VERSION = 3

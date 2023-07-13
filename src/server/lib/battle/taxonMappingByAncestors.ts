@@ -3,7 +3,7 @@ import { taxonMappingByAI } from "./taxonMappingByAI"
 
 const allMappings = flatMap(taxonMappingByAI, (t) => t.children)
 export const taxonMappingByAncestors = (ancestorIds: number[]) => {
-  for (const ancestorId of reverse(ancestorIds)) {
+  for (const ancestorId of reverse([...ancestorIds])) {
     const mapping = allMappings.find(
       (mapping) => mapping.taxonId === ancestorId
     )

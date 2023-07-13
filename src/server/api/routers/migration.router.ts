@@ -3,7 +3,7 @@ import { PokemonExperienceMap } from "~/data/pokemonLevelExperienceMap"
 import { PokemonLevelingRate } from "~/data/pokemonLevelingRate"
 import { createTRPCRouter } from "~/server/api/trpc"
 import { getWildlifeFighterPlus } from "~/server/lib/battle/getWildlifeFighterPlus"
-import { LevelingRate, type CatchMetadata } from "~/server/schema/CatchMetdata"
+import { LevelingRate, type CatchMetadata } from "~/server/schema/CatchMetadata"
 import { devProcedure } from "../middleware/devProcedure"
 
 export const migrationRouter = createTRPCRouter({
@@ -34,7 +34,7 @@ export const migrationRouter = createTRPCRouter({
       })
 
       const speciesName = wildlifeFighterPlus.species
-      const speciesNum = wildlifeFighterPlus.speciesDefinition.num
+      const speciesNum = wildlifeFighterPlus.speciesNum
       const level = wildlifeFighterPlus.level
       const levelingRate = LevelingRate.parse(
         PokemonLevelingRate[speciesNum]?.levelingRate
