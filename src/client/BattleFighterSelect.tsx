@@ -16,6 +16,7 @@ export const BattleFighterSelect = ({
       <div className="flex flex-col gap-2">
         {fighters.map((fighter, idx) => {
           if (!fighter.catch) return null
+          const canSwitch = !fighter.fainted && !fighter.fighter.isActive
           return (
             <Fragment key={idx}>
               <DividerHeading>Fighter #{idx + 1}</DividerHeading>
@@ -27,10 +28,16 @@ export const BattleFighterSelect = ({
                 fighter={fighter}
                 buttonSlot={
                   <>
-                    <Button>
-                      <ArrowLeftRight className="w-4 h-4 mr-1" />
-                      Go!
-                    </Button>
+                    {fighter.fighter.isActive ? (
+                      <div className="font-bold text-green-500">Active</div>
+                    ) : fighter.fainted ? (
+                      <div className="italic text-red-500">Fainted</div>
+                    ) : (
+                      <Button disabled={!canSwitch}>
+                        <ArrowLeftRight className="w-4 h-4 mr-1" />
+                        Go!
+                      </Button>
+                    )}
                   </>
                 }
               />
