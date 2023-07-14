@@ -22,6 +22,7 @@ export const BattleFighterSelect = ({
                 showWildlife
                 showTypes
                 showMoves
+                fighter={fighter}
               />
             </Fragment>
           )

@@ -1,7 +1,9 @@
 import { useSetAtom } from "jotai"
 import { Edit2 } from "lucide-react"
 import dynamic from "next/dynamic"
+import { useMemo } from "react"
 import { DEV_MODE } from "~/config"
+import { type BattleReportFighter } from "~/server/lib/battle/BattleReport"
 import { api } from "~/utils/api"
 import { calcExpPercentage } from "~/utils/calcExpPercentage"
 import { Away } from "./Away"
@@ -31,6 +33,7 @@ export const CatchDetails = ({
   showMoves,
   showExp,
   showStats,
+  fighter,
 }: {
   catchId: string
   showTitle?: boolean
@@ -42,8 +45,21 @@ export const CatchDetails = ({
   showMoves?: boolean
   showExp?: boolean
   showStats?: boolean
+  fighter?: BattleReportFighter
 }) => {
-  const { myCatch: c } = useMyCatch({ catchId })
+  const { myCatch } = useMyCatch({ catchId })
+
+  const c = useMemo(
+    () =>
+      myCatch
+        ? {
+            ...myCatch,
+            ...fighter,
+            wildlife: myCatch.wildlife,
+          }
+        : null,
+    [fighter, myCatch]
+  )
 
   const getName = useGetWildlifeName()
 
