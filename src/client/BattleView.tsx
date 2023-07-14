@@ -248,51 +248,53 @@ export const BattleView = ({
                         <Fragment
                           key={fighter.catch?.id ?? fighter.wildlife.id}
                         >
-                          <div
-                            className={cn(
-                              "rounded-full border border-dashed border-gray-200 bg-gray-100 px-4 py-1 text-xs text-black/60",
-                              isMainSide
-                                ? "ml-4 self-start rounded-bl-none"
-                                : "mr-4 self-end rounded-tr-none"
-                            )}
-                          >
-                            {isLoading ? (
-                              <>
-                                <div className="-mt-1 flex h-5 animate-pulse justify-center gap-0.5 text-lg font-extrabold">
-                                  <div className="animate-bounce">•</div>
-                                  <div className="animate-bounce delay-75">
-                                    •
+                          {isActive && (
+                            <div
+                              className={cn(
+                                "rounded-full border border-dashed border-gray-200 bg-gray-100 px-4 py-1 text-xs text-black/60",
+                                isMainSide
+                                  ? "ml-4 self-start rounded-bl-none"
+                                  : "mr-4 self-end rounded-tr-none"
+                              )}
+                            >
+                              {isLoading ? (
+                                <>
+                                  <div className="-mt-1 flex h-5 animate-pulse justify-center gap-0.5 text-lg font-extrabold">
+                                    <div className="animate-bounce">•</div>
+                                    <div className="animate-bounce delay-75">
+                                      •
+                                    </div>
+                                    <div className="animate-bounce delay-150">
+                                      •
+                                    </div>
                                   </div>
-                                  <div className="animate-bounce delay-150">
-                                    •
-                                  </div>
-                                </div>
-                              </>
-                            ) : (
-                              <>
-                                <span className="italic text-black">
-                                  {getName(fighter.wildlife)}
-                                </span>{" "}
-                                {lastMove ? (
-                                  <>
-                                    uses{" "}
-                                    <span className="italic text-black">
-                                      {lastMove.name}
-                                    </span>
-                                    , dealing{" "}
-                                    <span className="italic text-black">
-                                      {lastMove.totalDamage || "no"}
-                                    </span>{" "}
-                                    damage
-                                  </>
-                                ) : justFainted ? (
-                                  "fainted"
-                                ) : (
-                                  "enters the battle"
-                                )}
-                              </>
-                            )}
-                          </div>
+                                </>
+                              ) : (
+                                <>
+                                  <span className="italic text-black">
+                                    {getName(fighter.wildlife)}
+                                  </span>{" "}
+                                  {lastMove ? (
+                                    <>
+                                      uses{" "}
+                                      <span className="italic text-black">
+                                        {lastMove.name}
+                                      </span>
+                                      , dealing{" "}
+                                      <span className="italic text-black">
+                                        {lastMove.totalDamage || "no"}
+                                      </span>{" "}
+                                      damage
+                                    </>
+                                  ) : justFainted ? (
+                                    "fainted"
+                                  ) : (
+                                    "enters the battle"
+                                  )}
+                                </>
+                              )}
+                            </div>
+                          )}
                           <div
                             className={cn(
                               "flex items-center gap-2",
