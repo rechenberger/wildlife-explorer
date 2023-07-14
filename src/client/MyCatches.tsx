@@ -7,7 +7,9 @@ import {
   type DragEndEvent,
 } from "@dnd-kit/core"
 import { restrictToFirstScrollableAncestor } from "@dnd-kit/modifiers"
-import { includes, map } from "lodash-es"
+import { includes, map, orderBy } from "lodash-es"
+import { ArrowDown, ArrowUp } from "lucide-react"
+import { useState } from "react"
 import { toast } from "sonner"
 import { z } from "zod"
 import { MAX_FIGHTERS_PER_TEAM } from "~/config"
@@ -17,14 +19,26 @@ import { DividerHeading } from "./DividerHeading"
 import { DraggableCatch } from "./DraggableCatch"
 import { DroppableTeamSlot } from "./DroppableTeamSlot"
 import { cn } from "./cn"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "./shadcn/ui/select"
+import { useGetWildlifeName } from "./useGetWildlifeName"
 import { useMyTeam } from "./useMyTeam"
 import { usePlayer } from "./usePlayer"
 
 export const MyCatches = () => {
   const { playerId } = usePlayer()
 
+  const getName = useGetWildlifeName()
+
   const { myTeam, catchesWithoutTeam, isLoading, isFetching } = useMyTeam()
 
+  const [orderCatchesBy, setOrderCatchesBy] = useState<string>("caughtAt")
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc")
   const trpc = api.useContext()
 
   const { mutate: setMyTeamBattleOrder, isLoading: isMutating } =
@@ -185,6 +199,36 @@ export const MyCatches = () => {
         ))}
       </div>
       <DividerHeading>Your Catches</DividerHeading>
+      <div className="px-2 flex-1 flex items-center gap-2 justify-end">
+        <div
+          className="cursor-pointer"
+          onClick={() => {
+            setSortOrder(sortOrder === "desc" ? "asc" : "desc")
+          }}
+        >
+          {sortOrder === "desc" ? (
+            <ArrowDown className="w-4 h-4" />
+          ) : (
+            <ArrowUp className="w-4 h-4" />
+          )}
+        </div>
+        <div className="w-28">
+          <Select
+            onValueChange={(v) => setOrderCatchesBy(v)}
+            defaultValue={orderCatchesBy}
+          >
+            <SelectTrigger className="p-1 border-0 border-b-2 rounded-none h-8">
+              <SelectValue />
+            </SelectTrigger>
+
+            <SelectContent>
+              <SelectItem value="caughtAt">Caught At</SelectItem>
+              <SelectItem value="level">Level</SelectItem>
+              <SelectItem value="name">Name</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+      </div>
       {!catchesWithoutTeam.length && (
         <div className="flex items-center justify-center py-12 text-center text-sm opacity-60">
           Once you have more than {MAX_FIGHTERS_PER_TEAM} catches. New catches
@@ -193,9 +237,30 @@ export const MyCatches = () => {
       )}
       <DroppableTeamSlot id={-1} accepts={["team"]}>
         <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-2 gap-y-3 p-2">
-          {map(catchesWithoutTeam, (c) => (
-            <DraggableCatch c={c} key={c.id} type="bench" />
-          ))}
+          {map(
+            orderBy(
+              catchesWithoutTeam,
+              [
+                (c) => {
+                  if (orderCatchesBy === "name") {
+                    return c.name || getName(c.wildlife)
+                  }
+                  if (orderCatchesBy === "level") {
+                    return c.metadata.level
+                  }
+                  if (orderCatchesBy === "caughtAt") {
+                    return c.createdAt
+                  }
+                  return c.id
+                },
+                (c) => c.name || getName(c.wildlife),
+              ],
+              [sortOrder, "asc"]
+            ),
+            (c) => (
+              <DraggableCatch c={c} key={c.id} type="bench" />
+            )
+          )}
         </div>
       </DroppableTeamSlot>
     </DndContext>
