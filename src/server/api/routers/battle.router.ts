@@ -258,6 +258,38 @@ export const battleRouter = createTRPCRouter({
             p.player?.name === winner || (!!p.wildlife?.id && winnerIsWildlife)
         )?.id
 
+        await Promise.all(
+          map(battleDb.battleParticipants, async (p) => {
+            const isWinner = p.id === winnerParticipantId
+            await ctx.prisma.battleParticipation.update({
+              where: {
+                id: p.id,
+              },
+              data: {
+                isWinner,
+                player: p.player
+                  ? {
+                      update: {
+                        metadata: {
+                          ...p.player?.metadata,
+                          activeBattleId: null,
+                        },
+                      },
+                    }
+                  : undefined,
+              },
+            })
+
+            if (p.wildlife?.id) {
+              await respawnWildlife({
+                prisma: ctx.prisma,
+                wildlifeId: p.wildlife.id,
+              })
+            }
+          })
+        )
+
+        // GAIN EXP
         const wasPvpFight = every(participants, (p) => !!p.player?.id)
         const gainExp = !winnerIsWildlife && !wasPvpFight
         if (gainExp) {
@@ -313,37 +345,6 @@ export const battleRouter = createTRPCRouter({
             })
           }
         }
-
-        await Promise.all(
-          map(battleDb.battleParticipants, async (p) => {
-            const isWinner = p.id === winnerParticipantId
-            await ctx.prisma.battleParticipation.update({
-              where: {
-                id: p.id,
-              },
-              data: {
-                isWinner,
-                player: p.player
-                  ? {
-                      update: {
-                        metadata: {
-                          ...p.player?.metadata,
-                          activeBattleId: null,
-                        },
-                      },
-                    }
-                  : undefined,
-              },
-            })
-
-            if (p.wildlife?.id) {
-              await respawnWildlife({
-                prisma: ctx.prisma,
-                wildlifeId: p.wildlife.id,
-              })
-            }
-          })
-        )
       }
       console.timeEnd("update")
     }),
