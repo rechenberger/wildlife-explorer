@@ -7,7 +7,8 @@ import { ScrollArea } from "./shadcn/ui/scroll-area"
 
 export const BattleFighterSelectModal = NiceModal.create<{
   fighters: BattleReportFighter[]
-}>(({ fighters }) => {
+  battleId: string
+}>(({ fighters, battleId }) => {
   // Use a hook to manage the modal state
   const modal = useModal()
 
@@ -31,7 +32,7 @@ export const BattleFighterSelectModal = NiceModal.create<{
         }}
       >
         <ScrollArea className="max-h-[calc(100svh-100px)]">
-          <BattleFighterSelect fighters={fighters} />
+          <BattleFighterSelect fighters={fighters} battleId={battleId} />
         </ScrollArea>
       </DialogContent>
     </Dialog>

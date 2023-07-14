@@ -11,13 +11,11 @@ import { atomWithLocalStorage } from "~/utils/atomWithLocalStorage"
 import { BattleFighterSelectButton } from "./BattleFighterSelectButton"
 import { BattleViewPvp } from "./BattleViewPvp"
 import { CatchDetailsModal } from "./CatchDetailsModal"
-import { ExpReportsModal } from "./ExpReportsModal"
 import { FighterChip } from "./FighterChip"
 import { FighterMoves } from "./FighterMoves"
 import { FighterTypeBadges } from "./FighterTypeBadges"
 import { TypeBadge } from "./TypeBadge"
 import { cn } from "./cn"
-import { confetti } from "./confetti"
 import {
   catchIcon,
   leaveIcon,
@@ -28,6 +26,7 @@ import {
 } from "./typeIcons"
 import { useCatch } from "./useCatch"
 import { useGetWildlifeName } from "./useGetWildlifeName"
+import { useMakeChoice } from "./useMakeChoice"
 import { usePlayer } from "./usePlayer"
 
 const BIG_INACTIVE_FIGHTER = false
@@ -81,31 +80,8 @@ export const BattleView = ({
   )
 
   const battleLogAsHtml = parseBattleLog(data?.battleReport.outputLog, true)
-
   const trpc = api.useContext()
-  const { mutate: makeChoice, isLoading: choiceLoading } =
-    api.battle.makeChoice.useMutation({
-      onSuccess: (data) => {
-        trpc.battle.invalidate()
-
-        if (data) {
-          const expReports = data?.expReports
-          if (data?.iAmWinner) {
-            confetti()
-            if (expReports) {
-              NiceModal.show(ExpReportsModal, {
-                expReports,
-              })
-            } else {
-              toast("You win! 🎉")
-            }
-          } else {
-            toast(`${data.winnerName} won the battle!`)
-          }
-        }
-      },
-      onError: (err) => toast.error(err.message),
-    })
+  const { mutate: makeChoice, isLoading: choiceLoading } = useMakeChoice()
   const { mutate: reset } = api.battle.reset.useMutation({
     onSuccess: () => {
       trpc.battle.invalidate()

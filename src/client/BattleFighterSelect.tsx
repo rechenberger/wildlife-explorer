@@ -1,15 +1,23 @@
+import NiceModal from "@ebay/nice-modal-react"
 import { ArrowLeftRight } from "lucide-react"
 import { Fragment } from "react"
 import { type BattleReportFighter } from "~/server/lib/battle/BattleReport"
+import { BattleFighterSelectModal } from "./BattleFighterSelectModal"
 import { CatchDetails } from "./CatchDetails"
 import { DividerHeading } from "./DividerHeading"
 import { Button } from "./shadcn/ui/button"
+import { useMakeChoice } from "./useMakeChoice"
+import { usePlayer } from "./usePlayer"
 
 export const BattleFighterSelect = ({
   fighters,
+  battleId,
 }: {
   fighters: BattleReportFighter[]
+  battleId: string
 }) => {
+  const { playerId } = usePlayer()
+  const { mutate: makeChoice } = useMakeChoice()
   return (
     <>
       <div className="">Select your next Fighter</div>
@@ -33,7 +41,19 @@ export const BattleFighterSelect = ({
                     ) : fighter.fainted ? (
                       <div className="italic text-red-500">Fainted</div>
                     ) : (
-                      <Button disabled={!canSwitch}>
+                      <Button
+                        disabled={!canSwitch}
+                        onClick={() => {
+                          if (!canSwitch) return
+                          if (!playerId) return
+                          makeChoice({
+                            playerId,
+                            battleId,
+                            choice: `switch ${idx + 1}`,
+                          })
+                          NiceModal.hide(BattleFighterSelectModal)
+                        }}
+                      >
                         <ArrowLeftRight className="w-4 h-4 mr-1" />
                         Go!
                       </Button>

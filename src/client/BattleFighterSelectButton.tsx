@@ -55,6 +55,7 @@ export const BattleFighterSelectButton = ({
           if (onClickDisabled) return
           NiceModal.show(BattleFighterSelectModal, {
             fighters: side.fighters,
+            battleId,
           })
         }}
       >
