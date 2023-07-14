@@ -392,8 +392,13 @@ export const BattleView = ({
                       isMainSide ? "flex-row" : "flex-row-reverse"
                     )}
                   >
-                    {side.fighters.length >= 2 && (
-                      <div className="flex flex-1 gap-1 justify-center">
+                    {side.fighters.length >= 1 && (
+                      <div
+                        className={cn(
+                          "flex gap-1 justify-start",
+                          isMainSide ? "flex-row" : "flex-row-reverse"
+                        )}
+                      >
                         {map(
                           fillWithNulls(side.fighters, MAX_FIGHTERS_PER_TEAM),
                           (fighter, fighterIdx) => {
@@ -402,7 +407,7 @@ export const BattleView = ({
                                 <div
                                   key={fighterIdx}
                                   className={cn(
-                                    "relative aspect-square  w-full h-full overflow-hidden rounded-full border-2",
+                                    "relative aspect-square w-4 h-4 overflow-hidden rounded-full border-2",
                                     "border-gray-100 bg-gray-50"
                                   )}
                                 />
@@ -419,6 +424,7 @@ export const BattleView = ({
                             const onClickDisabled =
                               !playerId ||
                               !isMySide ||
+                              !battleIsActive ||
                               activeWildlifeIsMoveTrapped
                             return (
                               <Fragment key={fighterIdx}>
@@ -430,14 +436,14 @@ export const BattleView = ({
                                     !isMySide || activeWildlifeIsMoveTrapped
                                   }
                                   className={cn(
-                                    "relative aspect-square overflow-hidden rounded-full border-2 w-full h-full",
+                                    "relative aspect-square overflow-hidden rounded-full border-2 w-4 h-4",
                                     hpFull
                                       ? "border-green-500"
                                       : dead
                                       ? "border-red-500"
                                       : "border-amber-400",
                                     isMySide
-                                      ? activeWildlifeIsMoveTrapped
+                                      ? onClickDisabled
                                         ? "cursor-not-allowed"
                                         : "cursor-pointer"
                                       : "cursor-default"
