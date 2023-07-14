@@ -9,6 +9,7 @@ import { respawnWildlife } from "~/server/lib/respawnWildlife"
 import { type BattleMetadata } from "~/server/schema/BattleMetadata"
 import { type PlayerMetadata } from "~/server/schema/PlayerMetadata"
 import { calcExpForDefeatedPokemon } from "~/utils/calcExpForDefeatedPokemon"
+import { calcExpPercentage } from "~/utils/calcExpPercentage"
 import { devProcedure } from "../middleware/devProcedure"
 import { playerProcedure } from "../middleware/playerProcedure"
 import { wildlifeProcedure } from "../middleware/wildlifeProcedure"
@@ -339,6 +340,18 @@ export const battleRouter = createTRPCRouter({
                 }) ?? levelBefore
               const levelGained = levelAfter - levelBefore
 
+              const levelingRate = winningCatch.metadata.levelingRate
+              const expPercentageBefore = calcExpPercentage({
+                exp: expBefore,
+                level: levelBefore,
+                levelingRate,
+              })
+              const expPercentageAfter = calcExpPercentage({
+                exp: expAfter,
+                level: levelAfter,
+                levelingRate,
+              })
+
               await ctx.prisma.catch.update({
                 where: {
                   id: winnerFighter.catch.id,
@@ -364,6 +377,8 @@ export const battleRouter = createTRPCRouter({
                 levelBefore,
                 levelAfter,
                 levelGained,
+                expPercentageBefore,
+                expPercentageAfter,
               }
             })
           )
