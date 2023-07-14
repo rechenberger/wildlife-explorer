@@ -29,7 +29,10 @@ export const socialRouter = createTRPCRouter({
       },
     })
 
-    const players = map(playersRaw, parsePlayer)
+    const players = map(playersRaw, (p) => ({
+      ...parsePlayer(p),
+      _count: p._count,
+    }))
 
     return players
   }),
