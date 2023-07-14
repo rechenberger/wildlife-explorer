@@ -55,10 +55,10 @@ export const getWildlifeFighter = async ({
     while (true) {
       const evos = map(species.evos, (e) => Dex.species.get(e))
       const possibleEvo = find(evos, (e) => {
-        if (e.evoType) return false
-        if (e.evoCondition) return false
-        if (e.evoItem) return false
-        if (e.evoMove) return false
+        // if (e.evoType) return false
+        // if (e.evoCondition) return false
+        // if (e.evoItem) return false
+        // if (e.evoMove) return false
 
         if (!e.evoLevel) return false
         if (e.evoLevel > level) return false
@@ -66,6 +66,7 @@ export const getWildlifeFighter = async ({
       })
       if (!possibleEvo) break
       species = possibleEvo
+      speciesName = species.name
     }
   }
 
