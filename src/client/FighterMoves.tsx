@@ -3,6 +3,7 @@ import { Fragment } from "react"
 import { MAX_MOVES_PER_FIGHTER } from "~/config"
 import { type BattleReportFighter } from "~/server/lib/battle/BattleReport"
 import { fillWithNulls } from "~/utils/fillWithNulls"
+import { replaceByWildlife } from "~/utils/replaceByWildlife"
 import { cn } from "./cn"
 import {
   HoverCard,
@@ -87,7 +88,7 @@ export const FighterMoves = ({
                   <HoverCardContent className="w-80 flex flex-col gap-2">
                     <div className="font-bold opacity-80">{move.name}</div>
                     <div className="text-sm opacity-80">
-                      {move.definition.desc}
+                      {replaceByWildlife(move.definition.desc)}
                     </div>
                     <div className="flex flex-row gap-1 text-center text-sm items-center mt-4">
                       <div className="flex-1 flex flex-col gap-1">
