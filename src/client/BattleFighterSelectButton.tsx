@@ -114,7 +114,9 @@ export const BattleFighterSelectButton = ({
             )
           }
         )}
-        <ArrowLeftRight className="w-4 h-4 text-gray-600" />
+        {!onClickDisabled && (
+          <ArrowLeftRight className="w-4 h-4 text-gray-600" />
+        )}
       </div>
     </>
   )
