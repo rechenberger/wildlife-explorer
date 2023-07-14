@@ -7,7 +7,10 @@ import {
   CATCH_RATE_FIRST_FIGHTER,
   MAX_FIGHTERS_PER_TEAM,
 } from "~/config"
-import { PokemonExperienceMap } from "~/data/pokemonLevelExperienceMap"
+import {
+  PokemonExperienceMap,
+  createPokemonExperienceMapId,
+} from "~/data/pokemonLevelExperienceMap"
 import { PokemonLevelingRate } from "~/data/pokemonLevelingRate"
 import { createTRPCRouter } from "~/server/api/trpc"
 import { getWildlifeFighterPlus } from "~/server/lib/battle/getWildlifeFighterPlus"
@@ -263,7 +266,8 @@ export const catchRouter = createTRPCRouter({
       PokemonLevelingRate[speciesNum]?.levelingRate
     )
     const baseExp =
-      PokemonExperienceMap[`${level}-${levelingRate}`]?.requiredExperience
+      PokemonExperienceMap[createPokemonExperienceMapId(wildlifeFighterPlus)]
+        ?.requiredExperience
 
     const catchMetadata = {
       speciesNum,
