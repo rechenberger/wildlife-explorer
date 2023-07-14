@@ -16,6 +16,40 @@ export const migrationRouter = createTRPCRouter({
     return wildlife
   }),
 
+  addMissingExp: devProcedure.mutation(async ({ ctx }) => {
+    const catches = await ctx.prisma.catch.findMany({
+      include: {
+        wildlife: true,
+      },
+    })
+    for await (const catchXX of catches) {
+      const { level, exp, levelingRate } = catchXX.metadata
+      if (exp) continue
+
+      if (!level) throw new Error("no level")
+      if (!levelingRate) throw new Error("no levelingRate")
+
+      const requiredExp = getExpRate({
+        level,
+        levelingRate,
+      })?.requiredExperience
+
+      if (!requiredExp) throw new Error("no exp")
+
+      await ctx.prisma.catch.update({
+        where: {
+          id: catchXX.id,
+        },
+        data: {
+          metadata: {
+            ...catchXX.metadata,
+            exp: requiredExp,
+          },
+        },
+      })
+    }
+  }),
+
   catchMetadata: devProcedure.mutation(async ({ ctx }) => {
     const catches = await ctx.prisma.catch.findMany({
       include: {
