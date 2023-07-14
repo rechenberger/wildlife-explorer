@@ -1,6 +1,7 @@
 import { Dex, type PokemonSet, type Species } from "@pkmn/dex"
 import { filter, map, orderBy, take } from "lodash-es"
 import { MAX_MOVES_PER_FIGHTER } from "~/config"
+import { type CatchMetadata } from "~/server/schema/CatchMetadata"
 import { type WildlifeMetadata } from "~/server/schema/WildlifeMetadata"
 import { rngInt, rngItem, rngItemWithWeights } from "~/utils/seed"
 import { taxonMappingByAncestors } from "./taxonMappingByAncestors"
@@ -12,6 +13,7 @@ export type GetWildlifeFighterOptions = {
       "taxonAncestorIds" | "taxonCommonName" | "taxonName"
     >
   }
+  catchMetaData?: Pick<CatchMetadata, "level">
   seed: string
   idx?: number
 }
@@ -20,15 +22,18 @@ export const getWildlifeFighter = async ({
   wildlife,
   seed,
   idx,
+  catchMetaData,
 }: GetWildlifeFighterOptions) => {
   const mapping = taxonMappingByAncestors(wildlife.metadata.taxonAncestorIds)
   const speciesName = mapping.pokemon
   const species = Dex.species.get(speciesName)
-  const level = rngInt({
-    seed: [seed, "level"],
-    min: 1,
-    max: 20,
-  })
+  const level =
+    catchMetaData?.level ??
+    rngInt({
+      seed: [seed, "level"],
+      min: 1,
+      max: 20,
+    })
 
   const possibleMoves = await getMovesInLearnset(species)
   const moves = take(

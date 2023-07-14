@@ -21,6 +21,8 @@ export const BattleReportFighter = z.object({
     id: z.string(),
     metadata: BattleReportWildlifeMetadata,
   }),
+  activeTurns: z.number().optional(),
+  fainted: z.boolean().optional(),
 })
 
 export type BattleReportFighter = z.infer<typeof BattleReportFighter>

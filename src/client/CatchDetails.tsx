@@ -2,6 +2,7 @@ import { useSetAtom } from "jotai"
 import { Edit2 } from "lucide-react"
 import dynamic from "next/dynamic"
 import { DEV_MODE } from "~/config"
+import { getExpRate } from "~/data/pokemonLevelExperienceMap"
 import { api } from "~/utils/api"
 import { Away } from "./Away"
 import { currentObservationIdAtom } from "./CurrentObservation"
@@ -11,6 +12,7 @@ import { FighterMoves } from "./FighterMoves"
 import { FighterStatsChart } from "./FighterStatsChart"
 import { FighterTypeBadges } from "./FighterTypeBadges"
 import { TimeAgo } from "./TimeAgo"
+import { Progress } from "./shadcn/ui/progress"
 import { useMyCatch } from "./useCatches"
 import { useGetWildlifeName } from "./useGetWildlifeName"
 import { useMapSetCenter } from "./useMapRef"
@@ -46,6 +48,16 @@ export const CatchDetails = ({
         Loading...
       </div>
     )
+
+  const currentXp = c.metadata.exp ?? 0
+  const levelStartingXp = getExpRate(c.metadata)?.requiredExperience ?? 1
+  const requiredXp =
+    getExpRate({ ...c.metadata, level: (c.metadata.level ?? 0) + 1 })
+      ?.requiredExperience ?? 1
+
+  const percentXp = Math.floor(
+    ((currentXp - levelStartingXp) / (requiredXp - levelStartingXp)) * 100
+  )
 
   return (
     <>
@@ -114,6 +126,15 @@ export const CatchDetails = ({
         {!tiny && <DividerHeading>Moves</DividerHeading>}
         <FighterMoves fighter={c} />
 
+        {!tiny && (
+          <>
+            <DividerHeading>Experience</DividerHeading>
+            <div className="flex flex-1 items-center text-xs justify-center">
+              {currentXp} / {requiredXp}
+            </div>
+            <Progress className="w-full" value={percentXp} />
+          </>
+        )}
         {!tiny && (
           <>
             <DividerHeading>Stats</DividerHeading>

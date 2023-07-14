@@ -12,6 +12,7 @@ import { atomWithLocalStorage } from "~/utils/atomWithLocalStorage"
 import { fillWithNulls } from "~/utils/fillWithNulls"
 import { BattleViewPvp } from "./BattleViewPvp"
 import { CatchDetailsModal } from "./CatchDetailsModal"
+import { ExpReportsModal } from "./ExpReportsModal"
 import { FighterChip } from "./FighterChip"
 import { FighterMoves } from "./FighterMoves"
 import { FighterTypeBadges } from "./FighterTypeBadges"
@@ -84,8 +85,15 @@ export const BattleView = ({
   const trpc = api.useContext()
   const { mutate: makeChoice, isLoading: choiceLoading } =
     api.battle.makeChoice.useMutation({
-      onSuccess: () => {
+      onSuccess: (data) => {
         trpc.battle.invalidate()
+
+        const expReports = data?.expReports
+        if (expReports) {
+          NiceModal.show(ExpReportsModal, {
+            expReports,
+          })
+        }
       },
       onError: (err) => toast.error(err.message),
     })

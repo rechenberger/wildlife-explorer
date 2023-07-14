@@ -1,5 +1,5 @@
 import { MAX_FIGHTERS_PER_TEAM } from "~/config"
-import { PokemonExperienceMap } from "~/data/pokemonLevelExperienceMap"
+import { getExpRate } from "~/data/pokemonLevelExperienceMap"
 import { PokemonLevelingRate } from "~/data/pokemonLevelingRate"
 import { createTRPCRouter } from "~/server/api/trpc"
 import { getWildlifeFighterPlus } from "~/server/lib/battle/getWildlifeFighterPlus"
@@ -39,8 +39,10 @@ export const migrationRouter = createTRPCRouter({
       const levelingRate = LevelingRate.parse(
         PokemonLevelingRate[speciesNum]?.levelingRate
       )
-      const baseExp =
-        PokemonExperienceMap[`${level}-${levelingRate}`]?.requiredExperience
+      const baseExp = getExpRate({
+        level,
+        levelingRate,
+      })?.requiredExperience
 
       const catchMetadata = {
         speciesNum,

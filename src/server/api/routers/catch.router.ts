@@ -7,7 +7,7 @@ import {
   CATCH_RATE_FIRST_FIGHTER,
   MAX_FIGHTERS_PER_TEAM,
 } from "~/config"
-import { PokemonExperienceMap } from "~/data/pokemonLevelExperienceMap"
+import { getExpRate } from "~/data/pokemonLevelExperienceMap"
 import { PokemonLevelingRate } from "~/data/pokemonLevelingRate"
 import { createTRPCRouter } from "~/server/api/trpc"
 import { getWildlifeFighterPlus } from "~/server/lib/battle/getWildlifeFighterPlus"
@@ -44,6 +44,7 @@ export const catchRouter = createTRPCRouter({
       catches.map(async (c) => {
         const fighter = await getWildlifeFighterPlus({
           wildlife: c.wildlife,
+          catchMetaData: c.metadata,
           seed: c.seed,
         })
         return {
@@ -262,13 +263,12 @@ export const catchRouter = createTRPCRouter({
     const levelingRate = LevelingRate.parse(
       PokemonLevelingRate[speciesNum]?.levelingRate
     )
-    const baseExp =
-      PokemonExperienceMap[`${level}-${levelingRate}`]?.requiredExperience
+    const exp = getExpRate(wildlifeFighterPlus)?.requiredExperience
 
     const catchMetadata = {
       speciesNum,
       level,
-      exp: baseExp,
+      exp,
       levelingRate,
       speciesName,
     } satisfies CatchMetadata

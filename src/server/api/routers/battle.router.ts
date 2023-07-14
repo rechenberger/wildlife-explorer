@@ -1,12 +1,15 @@
 import { TRPCError } from "@trpc/server"
-import { find, map } from "lodash-es"
+import { every, filter, find, flatMap, map } from "lodash-es"
 import { z } from "zod"
 import { BATTLE_REPORT_VERSION } from "~/config"
+import { getLevelFromExp } from "~/data/pokemonLevelExperienceMap"
 import { createTRPCRouter } from "~/server/api/trpc"
 import { simulateBattle } from "~/server/lib/battle/simulateBattle"
 import { respawnWildlife } from "~/server/lib/respawnWildlife"
 import { type BattleMetadata } from "~/server/schema/BattleMetadata"
 import { type PlayerMetadata } from "~/server/schema/PlayerMetadata"
+import { calcExpForDefeatedPokemon } from "~/utils/calcExpForDefeatedPokemon"
+import { calcExpPercentage } from "~/utils/calcExpPercentage"
 import { devProcedure } from "../middleware/devProcedure"
 import { playerProcedure } from "../middleware/playerProcedure"
 import { wildlifeProcedure } from "../middleware/wildlifeProcedure"
@@ -224,6 +227,13 @@ export const battleRouter = createTRPCRouter({
         },
       })
 
+      // map(battleReport.sides, (side) => {
+      //   // console.log("side", side)
+      //   map(side.fighters, (fighter) => {
+      //     console.log("fighter", pick(fighter.fighter, "species"))
+      //   })
+      // })
+
       // END OF BATTLE
       if (!!winner) {
         const battleDb = await ctx.prisma.battle.findUniqueOrThrow({
@@ -240,12 +250,15 @@ export const battleRouter = createTRPCRouter({
           },
         })
         const participants = battleDb.battleParticipants
+
+        // TODO: get this from battleReport
+        const winnerIsWildlife = winner === "Wildlife"
         const winnerParticipantId = find(
           participants,
           (p) =>
-            p.player?.name === winner ||
-            (!!p.wildlife?.id && winner == "Wildlife")
+            p.player?.name === winner || (!!p.wildlife?.id && winnerIsWildlife)
         )?.id
+
         await Promise.all(
           map(battleDb.battleParticipants, async (p) => {
             const isWinner = p.id === winnerParticipantId
@@ -267,6 +280,7 @@ export const battleRouter = createTRPCRouter({
                   : undefined,
               },
             })
+
             if (p.wildlife?.id) {
               await respawnWildlife({
                 prisma: ctx.prisma,
@@ -275,6 +289,104 @@ export const battleRouter = createTRPCRouter({
             }
           })
         )
+
+        // GAIN EXP
+        const wasPvpFight = every(participants, (p) => !!p.player?.id)
+        const gainExp = !winnerIsWildlife && !wasPvpFight
+        if (gainExp) {
+          // player related stuff - not for wildlife
+
+          const winnerSides = filter(battleReport.sides, (s) => s.isWinner)
+          const winnerFighters = flatMap(winnerSides, (s) => s.fighters)
+          const looserSides = filter(battleReport.sides, (s) => !s.isWinner)
+          const defeatedFighters = flatMap(
+            looserSides,
+            (s) => s.fighters
+          ).filter((f) => f.fainted)
+
+          const expReports = await Promise.all(
+            map(winnerFighters, async (winnerFighter) => {
+              if (!winnerFighter.catch?.id || winnerFighter.fainted) {
+                return {
+                  battleReportFighter: winnerFighter,
+                  fainted: true,
+                }
+              }
+              const winningCatch = await ctx.prisma.catch.findUniqueOrThrow({
+                where: {
+                  id: winnerFighter.catch.id,
+                },
+              })
+
+              let expGained = 0
+
+              for (const looserFighter of defeatedFighters) {
+                expGained += calcExpForDefeatedPokemon({
+                  defeatedFighter: looserFighter.fighter,
+                  receivingFighter: winningCatch.metadata,
+                  participatedInBattle: !!winnerFighter.activeTurns,
+                  isOriginalOwner:
+                    winningCatch.originalPlayerId === winningCatch.playerId,
+                })
+              }
+
+              const expBefore = winningCatch.metadata.exp || 0
+              const levelBefore = winningCatch.metadata.level || 1
+              const expAfter = expBefore + expGained
+              const levelAfter =
+                getLevelFromExp({
+                  ...winningCatch.metadata,
+                  exp: expAfter,
+                }) ?? levelBefore
+              const levelGained = levelAfter - levelBefore
+
+              const levelingRate = winningCatch.metadata.levelingRate
+              const expPercentageBefore = calcExpPercentage({
+                exp: expBefore,
+                level: levelBefore,
+                levelingRate,
+              })
+              const expPercentageAfter = calcExpPercentage({
+                exp: expAfter,
+                level: levelAfter,
+                levelingRate,
+              })
+
+              await ctx.prisma.catch.update({
+                where: {
+                  id: winnerFighter.catch.id,
+                },
+                data: {
+                  metadata: {
+                    ...winningCatch.metadata,
+                    exp: expAfter,
+                    level: levelAfter,
+                  },
+                },
+                select: {
+                  id: true,
+                },
+              })
+
+              return {
+                battleReportFighter: winnerFighter,
+                catchId: winnerFighter.catch.id,
+                expBefore,
+                expGained,
+                expAfter,
+                levelBefore,
+                levelAfter,
+                levelGained,
+                expPercentageBefore,
+                expPercentageAfter,
+              }
+            })
+          )
+
+          return {
+            expReports,
+          }
+        }
       }
       console.timeEnd("update")
     }),
