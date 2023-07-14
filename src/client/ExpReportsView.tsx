@@ -31,8 +31,8 @@ export const ExpReportsView = ({ expReports }: { expReports: ExpReports }) => {
               <>
                 <div
                   className={cn(
-                    "flex flex-col",
-                    !!expReport.levelGained && "animate-pulse"
+                    "flex flex-col"
+                    // !!expReport.levelGained && "animate-pulse"
                   )}
                 >
                   <div className="mt-4">
@@ -45,7 +45,7 @@ export const ExpReportsView = ({ expReports }: { expReports: ExpReports }) => {
                           )}
                         >
                           <ProgressPrimitive.Indicator
-                            className="absolute inset-0 h-full w-full flex-1 bg-green-600 transition-all"
+                            className="absolute inset-0 h-full w-full flex-1 bg-green-600 transition-all animate-pulse"
                             style={{
                               transform: `translateX(-${
                                 100 -
@@ -74,7 +74,7 @@ export const ExpReportsView = ({ expReports }: { expReports: ExpReports }) => {
                       +{expReport.expGained || 0} exp
                     </div>
                     {!!expReport.levelGained && (
-                      <div className="text-green-600 font-bold">
+                      <div className="text-green-600 font-bold animate-pulse">
                         +{expReport.levelGained || 0}{" "}
                         {expReport.levelGained === 1
                           ? "Level-up!"
