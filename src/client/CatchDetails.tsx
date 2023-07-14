@@ -2,10 +2,7 @@ import { useSetAtom } from "jotai"
 import { Edit2 } from "lucide-react"
 import dynamic from "next/dynamic"
 import { DEV_MODE } from "~/config"
-import {
-  PokemonExperienceMap,
-  createPokemonExperienceMapId,
-} from "~/data/pokemonLevelExperienceMap"
+import { getExpRate } from "~/data/pokemonLevelExperienceMap"
 import { api } from "~/utils/api"
 import { Away } from "./Away"
 import { currentObservationIdAtom } from "./CurrentObservation"
@@ -53,20 +50,10 @@ export const CatchDetails = ({
     )
 
   const currentXp = c.metadata.exp ?? 0
-  const levelStartingXp =
-    PokemonExperienceMap[
-      createPokemonExperienceMapId({
-        ...c.metadata,
-        level: c.metadata.level ?? 0,
-      })
-    ]?.requiredExperience ?? 1
+  const levelStartingXp = getExpRate(c.metadata)?.requiredExperience ?? 1
   const requiredXp =
-    PokemonExperienceMap[
-      createPokemonExperienceMapId({
-        ...c.metadata,
-        level: (c.metadata.level ?? 0) + 1,
-      })
-    ]?.requiredExperience ?? 1
+    getExpRate({ ...c.metadata, level: c.metadata.level ?? 0 + 1 })
+      ?.requiredExperience ?? 1
 
   const percentXp = Math.floor(
     ((currentXp - levelStartingXp) / (requiredXp - levelStartingXp)) * 100

@@ -1,10 +1,13 @@
 import { type CatchMetadata } from "~/server/schema/CatchMetadata"
 
-export const createPokemonExperienceMapId = ({
+export const getExpRate = ({
   level,
   levelingRate,
 }: Pick<CatchMetadata, "levelingRate" | "level">) => {
-  return `${level}-${levelingRate}`
+  if (!levelingRate) return undefined
+  if (!level) return undefined
+  const key = `${level}-${levelingRate}`
+  return PokemonExperienceMap[key]
 }
 
 export const PokemonExperienceMap: {
