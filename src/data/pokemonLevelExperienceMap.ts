@@ -7,10 +7,24 @@ export const getExpRate = ({
   if (!levelingRate) return undefined
   if (!level) return undefined
   const key = `${level}-${levelingRate}`
-  return PokemonExperienceMap[key]
+  return pokemonExperienceMap[key]
 }
 
-export const PokemonExperienceMap: {
+export const getLevelFromExp = ({
+  exp,
+  levelingRate,
+}: Pick<CatchMetadata, "levelingRate" | "exp">) => {
+  if (!levelingRate) return undefined
+  if (!exp) return undefined
+  const currentLevelBasedOnExp =
+    (Object.values(pokemonExperienceMap).find(
+      (obj) =>
+        obj.requiredExperience > (exp ?? 0) && obj.levelingRate === levelingRate
+    )?.level || 1) - 1
+  return currentLevelBasedOnExp
+}
+
+const pokemonExperienceMap: {
   [key: string]: {
     level: number
     levelingRate: string

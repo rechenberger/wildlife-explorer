@@ -1,5 +1,5 @@
 import { z } from "zod"
-import { PokemonExperienceMap } from "~/data/pokemonLevelExperienceMap"
+import { getLevelFromExp } from "~/data/pokemonLevelExperienceMap"
 
 export const LevelingRate = z.enum([
   "Medium Fast",
@@ -31,14 +31,7 @@ export const CatchMetadata = z
   })
   .refine((data) => {
     if (data.levelingRate && data.exp) {
-      const currentLevelBasedOnExp =
-        (Object.values(PokemonExperienceMap).find(
-          (obj) =>
-            obj.requiredExperience > (data.exp ?? 0) &&
-            obj.levelingRate === data.levelingRate
-        )?.level || 1) - 1
-
-      data.level = currentLevelBasedOnExp
+      data.level = getLevelFromExp(data)
     }
     return true
   })
