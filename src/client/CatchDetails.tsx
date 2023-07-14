@@ -33,7 +33,9 @@ export const CatchDetails = ({
   showMoves,
   showExp,
   showStats,
+  showCaughtAt,
   fighter,
+  buttonSlot,
 }: {
   catchId: string
   showTitle?: boolean
@@ -45,7 +47,9 @@ export const CatchDetails = ({
   showMoves?: boolean
   showExp?: boolean
   showStats?: boolean
+  showCaughtAt?: boolean
   fighter?: BattleReportFighter
+  buttonSlot?: React.ReactNode
 }) => {
   const { myCatch } = useMyCatch({ catchId })
 
@@ -113,24 +117,27 @@ export const CatchDetails = ({
               <div className="flex-1 max-w-[50%]">
                 <FighterChip showAbsoluteHp ltr fighter={c} />
               </div>
-              <button
-                className="text-right text-xs font-normal text-black opacity-60 inline-block"
-                onClick={() => {
-                  setCurrentObservationId(c.wildlife.observationId)
-                  mapSetCenter(c.wildlife)
-                }}
-              >
-                <div>
-                  <span>Caught&nbsp;</span>
-                  <Away
-                    location={c.wildlife}
-                    className="text-xs font-normal text-black inline-block"
-                  />
-                </div>
-                <div className="">
-                  <TimeAgo date={c.createdAt} addSuffix={true} />
-                </div>
-              </button>
+              {showCaughtAt && (
+                <button
+                  className="text-right text-xs font-normal text-black opacity-60 inline-block"
+                  onClick={() => {
+                    setCurrentObservationId(c.wildlife.observationId)
+                    mapSetCenter(c.wildlife)
+                  }}
+                >
+                  <div>
+                    <span>Caught&nbsp;</span>
+                    <Away
+                      location={c.wildlife}
+                      className="text-xs font-normal text-black inline-block"
+                    />
+                  </div>
+                  <div className="">
+                    <TimeAgo date={c.createdAt} addSuffix={true} />
+                  </div>
+                </button>
+              )}
+              {buttonSlot}
             </div>
           </>
         )}

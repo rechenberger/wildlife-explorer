@@ -40,6 +40,7 @@ export const CatchDetailsModal = NiceModal.create<{ catchId: string }>(
               showMoves
               showExp
               showStats
+              showCaughtAt
             />
           </ScrollArea>
         </DialogContent>
