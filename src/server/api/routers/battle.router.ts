@@ -295,6 +295,7 @@ export const battleRouter = createTRPCRouter({
           return {
             iAmWinner,
             expReports,
+            winnerName: winnerSide.name,
           }
         }
       }

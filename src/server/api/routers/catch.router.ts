@@ -1,5 +1,5 @@
 import { TRPCError } from "@trpc/server"
-import { map, take } from "lodash-es"
+import { find, map, take } from "lodash-es"
 import { z } from "zod"
 import {
   CATCH_RATE_ALWAYS_LOOSE,
@@ -11,6 +11,7 @@ import { getExpRate } from "~/data/pokemonLevelExperienceMap"
 import { PokemonLevelingRate } from "~/data/pokemonLevelingRate"
 import { createTRPCRouter } from "~/server/api/trpc"
 import { getWildlifeFighterPlus } from "~/server/lib/battle/getWildlifeFighterPlus"
+import { grantExp } from "~/server/lib/battle/grantExp"
 import { respawnWildlife } from "~/server/lib/respawnWildlife"
 import { LevelingRate, type CatchMetadata } from "~/server/schema/CatchMetadata"
 import { type PlayerMetadata } from "~/server/schema/PlayerMetadata"
@@ -184,6 +185,12 @@ export const catchRouter = createTRPCRouter({
           },
           select: {
             metadata: true,
+            battleParticipants: {
+              select: {
+                id: true,
+                playerId: true,
+              },
+            },
           },
         })
       : null
@@ -311,8 +318,21 @@ export const catchRouter = createTRPCRouter({
       },
     })
 
-    return {
-      success: true,
+    if (battle && battle.metadata.battleReport) {
+      const winnerParticipationId = find(
+        battle.battleParticipants,
+        (bp) => bp.playerId === ctx.player.id
+      )?.id
+      if (winnerParticipationId) {
+        const { expReports } = await grantExp({
+          battleReport: battle.metadata.battleReport,
+          prisma: ctx.prisma,
+          winnerParticipationId,
+        })
+        return {
+          expReports,
+        }
+      }
     }
   }),
 
