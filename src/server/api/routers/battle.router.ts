@@ -1,3 +1,4 @@
+import { BattleStatus } from "@prisma/client"
 import { TRPCError } from "@trpc/server"
 import { every, filter, find, flatMap, map } from "lodash-es"
 import { z } from "zod"
@@ -142,8 +143,12 @@ export const battleRouter = createTRPCRouter({
           message: "Battle not found",
         })
       }
+      const alwaysAllowedBattleStatus: BattleStatus[] = [
+        BattleStatus.IN_PROGRESS,
+        BattleStatus.INVITING,
+      ]
       if (
-        battle.status !== "IN_PROGRESS" &&
+        !alwaysAllowedBattleStatus.includes(battle.status) &&
         battle.metadata.battleReport?.version !== BATTLE_REPORT_VERSION
       ) {
         throw new TRPCError({
