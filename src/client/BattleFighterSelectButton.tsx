@@ -1,9 +1,11 @@
+import NiceModal from "@ebay/nice-modal-react"
 import { find, map } from "lodash-es"
 import Image from "next/image"
 import { Fragment } from "react"
 import { MAX_FIGHTERS_PER_TEAM } from "~/config"
 import { type BattleReportSide } from "~/server/lib/battle/BattleReport"
 import { fillWithNulls } from "~/utils/fillWithNulls"
+import { BattleFighterSelectModal } from "./BattleFighterSelectModal"
 import { cn } from "./cn"
 import { useGetWildlifeName } from "./useGetWildlifeName"
 import { usePlayer } from "./usePlayer"
@@ -23,14 +25,36 @@ export const BattleFighterSelectButton = ({
 }) => {
   const { playerId } = usePlayer()
   const getName = useGetWildlifeName()
+
+  const activeWildlifeIsMoveTrapped = !!find(
+    side.fighters,
+    (f) => f.fighter.isActive
+  )?.fighter?.trappedInMoves
+
+  const onClickDisabled =
+    !playerId || !isMySide || !battleIsActive || activeWildlifeIsMoveTrapped
+
+  // makeChoice({
+  //   battleId,
+  //   playerId: playerId,
+  //   choice: `switch ${fighterIdx + 1}`,
+  // })
+
   if (side.fighters.length <= 1) return null
   return (
     <>
       <div
         className={cn(
           "flex gap-1 justify-start",
-          isMainSide ? "flex-row" : "flex-row-reverse"
+          isMainSide ? "flex-row" : "flex-row-reverse",
+          !onClickDisabled && "cursor-pointer"
         )}
+        onClick={() => {
+          if (onClickDisabled) return
+          NiceModal.show(BattleFighterSelectModal, {
+            fighters: side.fighters,
+          })
+        }}
       >
         {map(
           fillWithNulls(side.fighters, MAX_FIGHTERS_PER_TEAM),
@@ -50,15 +74,7 @@ export const BattleFighterSelectButton = ({
             const { hp, hpMax } = fighter.fighter
             const hpFull = hp >= hpMax
             const dead = hp <= 0
-            const activeWildlifeIsMoveTrapped = !!find(
-              side.fighters,
-              (f) => f.fighter.isActive
-            )?.fighter?.trappedInMoves
-            const onClickDisabled =
-              !playerId ||
-              !isMySide ||
-              !battleIsActive ||
-              activeWildlifeIsMoveTrapped
+
             return (
               <Fragment key={fighterIdx}>
                 <button
@@ -70,24 +86,9 @@ export const BattleFighterSelectButton = ({
                       ? "border-green-500"
                       : dead
                       ? "border-red-500"
-                      : "border-amber-400",
-                    isMySide
-                      ? onClickDisabled
-                        ? "cursor-not-allowed"
-                        : "cursor-pointer"
-                      : "cursor-default"
+                      : "border-amber-400"
                   )}
-                  onClick={
-                    onClickDisabled
-                      ? undefined
-                      : () => {
-                          // makeChoice({
-                          //   battleId,
-                          //   playerId: playerId,
-                          //   choice: `switch ${fighterIdx + 1}`,
-                          // })
-                        }
-                  }
+                  onClick={onClickDisabled ? undefined : () => {}}
                 >
                   {fighter.wildlife.metadata.taxonImageUrlSquare && (
                     <Image

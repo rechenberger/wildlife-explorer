@@ -5,7 +5,7 @@ import { cn } from "./cn"
 import { Dialog, DialogContent } from "./shadcn/ui/dialog"
 import { ScrollArea } from "./shadcn/ui/scroll-area"
 
-export const BattleViewModal = NiceModal.create<{
+export const BattleFighterSelectModal = NiceModal.create<{
   fighters: BattleReportFighter[]
 }>(({ fighters }) => {
   // Use a hook to manage the modal state
