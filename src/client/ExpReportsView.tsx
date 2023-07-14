@@ -25,7 +25,7 @@ export const ExpReportsView = ({ expReports }: { expReports: ExpReports }) => {
             </div>
             {expReport.fainted ? (
               <>
-                <div className="text-red-500">Fainted</div>
+                <div className="text-red-500 italic text-sm">Fainted</div>
               </>
             ) : (
               <>
@@ -49,8 +49,10 @@ export const ExpReportsView = ({ expReports }: { expReports: ExpReports }) => {
                             style={{
                               transform: `translateX(-${
                                 100 -
-                                (expReport.expPercentageAfter.expPercentage ||
-                                  0)
+                                (expReport.levelGained
+                                  ? 100
+                                  : expReport.expPercentageAfter
+                                      .expPercentage || 0)
                               }%)`,
                             }}
                           />
