@@ -30,7 +30,7 @@ export const BattleFighterSelectModal = NiceModal.create<{
           paddingBottom: "calc(env(safe-area-inset-bottom) + 1.5rem)",
         }}
       >
-        <ScrollArea className="max-h-[calc(100svh-100px)] h-96">
+        <ScrollArea className="max-h-[calc(100svh-100px)]">
           <BattleFighterSelect fighters={fighters} />
         </ScrollArea>
       </DialogContent>
