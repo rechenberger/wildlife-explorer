@@ -2,14 +2,13 @@ import NiceModal from "@ebay/nice-modal-react"
 import { useAtomValue, useSetAtom } from "jotai"
 import { find, flatMap, map, orderBy } from "lodash-es"
 import { Scroll, ScrollText, Undo2 } from "lucide-react"
-import Image from "next/image"
 import { Fragment, useLayoutEffect, useRef } from "react"
 import { toast } from "sonner"
-import { DEV_MODE, MAX_FIGHTERS_PER_TEAM } from "~/config"
+import { DEV_MODE } from "~/config"
 import { parseBattleLog } from "~/server/lib/battle/battleLogParser"
 import { api } from "~/utils/api"
 import { atomWithLocalStorage } from "~/utils/atomWithLocalStorage"
-import { fillWithNulls } from "~/utils/fillWithNulls"
+import { BattleFighterSelectButton } from "./BattleFighterSelectButton"
 import { BattleViewPvp } from "./BattleViewPvp"
 import { CatchDetailsModal } from "./CatchDetailsModal"
 import { ExpReportsModal } from "./ExpReportsModal"
@@ -394,103 +393,13 @@ export const BattleView = ({
                       isMainSide ? "flex-row" : "flex-row-reverse"
                     )}
                   >
-                    {side.fighters.length >= 1 && (
-                      <div
-                        className={cn(
-                          "flex gap-1 justify-start",
-                          isMainSide ? "flex-row" : "flex-row-reverse"
-                        )}
-                      >
-                        {map(
-                          fillWithNulls(side.fighters, MAX_FIGHTERS_PER_TEAM),
-                          (fighter, fighterIdx) => {
-                            if (!fighter) {
-                              return (
-                                <div
-                                  key={fighterIdx}
-                                  className={cn(
-                                    "relative aspect-square w-4 h-4 overflow-hidden rounded-full border-2",
-                                    "border-gray-100 bg-gray-50"
-                                  )}
-                                />
-                              )
-                            }
-
-                            const { hp, hpMax } = fighter.fighter
-                            const hpFull = hp >= hpMax
-                            const dead = hp <= 0
-                            const activeWildlifeIsMoveTrapped = !!find(
-                              side.fighters,
-                              (f) => f.fighter.isActive
-                            )?.fighter?.trappedInMoves
-                            const onClickDisabled =
-                              !playerId ||
-                              !isMySide ||
-                              !battleIsActive ||
-                              activeWildlifeIsMoveTrapped
-                            return (
-                              <Fragment key={fighterIdx}>
-                                <button
-                                  title={
-                                    fighter.name || getName(fighter.wildlife)
-                                  }
-                                  disabled={
-                                    !isMySide || activeWildlifeIsMoveTrapped
-                                  }
-                                  className={cn(
-                                    "relative aspect-square overflow-hidden rounded-full border-2 w-4 h-4",
-                                    hpFull
-                                      ? "border-green-500"
-                                      : dead
-                                      ? "border-red-500"
-                                      : "border-amber-400",
-                                    isMySide
-                                      ? onClickDisabled
-                                        ? "cursor-not-allowed"
-                                        : "cursor-pointer"
-                                      : "cursor-default"
-                                  )}
-                                  onClick={
-                                    onClickDisabled
-                                      ? undefined
-                                      : () => {
-                                          makeChoice({
-                                            battleId,
-                                            playerId: playerId,
-                                            choice: `switch ${fighterIdx + 1}`,
-                                          })
-                                        }
-                                  }
-                                >
-                                  {fighter.wildlife.metadata
-                                    .taxonImageUrlSquare && (
-                                    <Image
-                                      title={
-                                        activeWildlifeIsMoveTrapped
-                                          ? "You can not switch while your active wildlife is locked into its move"
-                                          : undefined
-                                      }
-                                      src={
-                                        fighter.wildlife.metadata
-                                          .taxonImageUrlSquare
-                                      }
-                                      className={cn(
-                                        "w-full object-cover object-center",
-                                        activeWildlifeIsMoveTrapped &&
-                                          "grayscale"
-                                      )}
-                                      alt={"Observation"}
-                                      unoptimized
-                                      fill={true}
-                                    />
-                                  )}
-                                </button>
-                              </Fragment>
-                            )
-                          }
-                        )}
-                      </div>
-                    )}
+                    <BattleFighterSelectButton
+                      side={side}
+                      isMainSide={isMainSide}
+                      isMySide={isMySide}
+                      battleIsActive={battleIsActive}
+                      battleId={battleId}
+                    />
                     {isMySide && (
                       <div
                         className={cn(
