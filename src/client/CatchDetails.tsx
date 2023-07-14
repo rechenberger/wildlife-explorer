@@ -1,3 +1,4 @@
+import NiceModal from "@ebay/nice-modal-react"
 import { useSetAtom } from "jotai"
 import { Edit2 } from "lucide-react"
 import dynamic from "next/dynamic"
@@ -7,6 +8,7 @@ import { type BattleReportFighter } from "~/server/lib/battle/BattleReport"
 import { api } from "~/utils/api"
 import { calcExpPercentage } from "~/utils/calcExpPercentage"
 import { Away } from "./Away"
+import { CatchDetailsModal } from "./CatchDetailsModal"
 import { currentObservationIdAtom } from "./CurrentObservation"
 import { DividerHeading } from "./DividerHeading"
 import { FighterChip } from "./FighterChip"
@@ -115,7 +117,16 @@ export const CatchDetails = ({
             {showDividers && <DividerHeading>Wildlife</DividerHeading>}
             <div className="flex flex-row gap-4 items-center justify-between">
               <div className="flex-1 max-w-[50%]">
-                <FighterChip showAbsoluteHp ltr fighter={c} />
+                <FighterChip
+                  showAbsoluteHp
+                  ltr
+                  fighter={c}
+                  onClick={() => {
+                    NiceModal.show(CatchDetailsModal, {
+                      catchId: c.id,
+                    })
+                  }}
+                />
               </div>
               {showCaughtAt && (
                 <button
