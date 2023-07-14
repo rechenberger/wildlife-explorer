@@ -303,46 +303,68 @@ export const battleRouter = createTRPCRouter({
             (s) => s.fighters
           ).filter((f) => f.fainted)
 
-          for await (const winnerFighter of winnerFighters) {
-            if (!winnerFighter.catch?.id || winnerFighter.fainted) continue
-            const winningCatch = await ctx.prisma.catch.findUniqueOrThrow({
-              where: {
-                id: winnerFighter.catch.id,
-              },
-            })
-
-            let exp = winningCatch.metadata.exp || 0
-
-            for await (const looserFighter of defeatedFighters) {
-              exp += calcExpForDefeatedPokemon({
-                defeatedFighter: looserFighter.fighter,
-                receivingFighter: winningCatch.metadata,
-                participatedInBattle: !!winnerFighter.activeTurns,
-                isOriginalOwner:
-                  winningCatch.originalPlayerId === winningCatch.playerId,
-              })
-            }
-
-            const level = getLevelFromExp({
-              ...winningCatch.metadata,
-              exp,
-            })
-
-            await ctx.prisma.catch.update({
-              where: {
-                id: winnerFighter.catch.id,
-              },
-              data: {
-                metadata: {
-                  ...winningCatch.metadata,
-                  exp,
-                  level,
+          const expReports = await Promise.all(
+            map(winnerFighters, async (winnerFighter) => {
+              if (!winnerFighter.catch?.id || winnerFighter.fainted) return
+              const winningCatch = await ctx.prisma.catch.findUniqueOrThrow({
+                where: {
+                  id: winnerFighter.catch.id,
                 },
-              },
-              select: {
-                id: true,
-              },
+              })
+
+              let expGained = 0
+
+              for (const looserFighter of defeatedFighters) {
+                expGained += calcExpForDefeatedPokemon({
+                  defeatedFighter: looserFighter.fighter,
+                  receivingFighter: winningCatch.metadata,
+                  participatedInBattle: !!winnerFighter.activeTurns,
+                  isOriginalOwner:
+                    winningCatch.originalPlayerId === winningCatch.playerId,
+                })
+              }
+
+              const expBefore = winningCatch.metadata.exp || 0
+              const levelBefore = winningCatch.metadata.level || 1
+              const expAfter = expBefore + expGained
+              const levelAfter =
+                getLevelFromExp({
+                  ...winningCatch.metadata,
+                  exp: expAfter,
+                }) ?? levelBefore
+              const levelGained = levelAfter - levelBefore
+
+              await ctx.prisma.catch.update({
+                where: {
+                  id: winnerFighter.catch.id,
+                },
+                data: {
+                  metadata: {
+                    ...winningCatch.metadata,
+                    exp: expAfter,
+                    level: levelAfter,
+                  },
+                },
+                select: {
+                  id: true,
+                },
+              })
+
+              return {
+                ...winnerFighter,
+                catchId: winnerFighter.catch.id,
+                expBefore,
+                expGained,
+                expAfter,
+                levelBefore,
+                levelAfter,
+                levelGained,
+              }
             })
+          )
+
+          return {
+            expReports,
           }
         }
       }
