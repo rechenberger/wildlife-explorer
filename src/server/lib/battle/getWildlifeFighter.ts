@@ -35,7 +35,7 @@ export const getWildlifeFighter = async ({
   }
 
   const level =
-    catchMetaData?.level ??
+    catchMetaData?.level ||
     rngInt({
       seed: [seed, "level"],
       min: 1,

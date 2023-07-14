@@ -264,6 +264,18 @@ export const catchRouter = createTRPCRouter({
       PokemonLevelingRate[speciesNum]?.levelingRate
     )
     const exp = getExpRate(wildlifeFighterPlus)?.requiredExperience
+    if (!level) {
+      throw new TRPCError({
+        code: "CONFLICT",
+        message: "Wildlife has no level 🤔",
+      })
+    }
+    if (!exp) {
+      throw new TRPCError({
+        code: "CONFLICT",
+        message: "Wildlife has no exp 🤔",
+      })
+    }
 
     const catchMetadata = {
       speciesNum,
