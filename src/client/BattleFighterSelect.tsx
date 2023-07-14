@@ -1,6 +1,7 @@
 import { Fragment } from "react"
 import { type BattleReportFighter } from "~/server/lib/battle/BattleReport"
 import { CatchDetails } from "./CatchDetails"
+import { DividerHeading } from "./DividerHeading"
 
 export const BattleFighterSelect = ({
   fighters,
@@ -15,7 +16,13 @@ export const BattleFighterSelect = ({
           if (!fighter.catch) return null
           return (
             <Fragment key={idx}>
-              <CatchDetails catchId={fighter.catch.id} tiny />
+              <DividerHeading>Fighter #{idx + 1}</DividerHeading>
+              <CatchDetails
+                catchId={fighter.catch.id}
+                showWildlife
+                showTypes
+                showMoves
+              />
             </Fragment>
           )
         })}

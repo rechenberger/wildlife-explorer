@@ -64,7 +64,7 @@ export const DraggableCatch = ({
           </HoverCardTrigger>
           {!isDragging && (
             <HoverCardContent className="w-80">
-              <CatchDetails catchId={c.id} tiny />
+              <CatchDetails catchId={c.id} showTypes showMoves />
             </HoverCardContent>
           )}
         </HoverCard>

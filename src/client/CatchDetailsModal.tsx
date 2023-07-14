@@ -29,7 +29,18 @@ export const CatchDetailsModal = NiceModal.create<{ catchId: string }>(
           }}
         >
           <ScrollArea className="max-h-[calc(100svh-100px)]">
-            <CatchDetails catchId={catchId} />
+            <CatchDetails
+              catchId={catchId}
+              showTitle
+              showDividers
+              showWildlife
+              showTypes
+              showAbility
+              showNature
+              showMoves
+              showExp
+              showStats
+            />
           </ScrollArea>
         </DialogContent>
       </Dialog>

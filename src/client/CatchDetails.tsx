@@ -22,10 +22,26 @@ const JsonViewer = dynamic(() => import("../client/JsonViewer"), { ssr: false })
 
 export const CatchDetails = ({
   catchId,
-  tiny,
+  showTitle,
+  showDividers,
+  showWildlife,
+  showTypes,
+  showAbility,
+  showNature,
+  showMoves,
+  showExp,
+  showStats,
 }: {
   catchId: string
-  tiny?: boolean
+  showTitle?: boolean
+  showDividers?: boolean
+  showWildlife?: boolean
+  showTypes?: boolean
+  showAbility?: boolean
+  showNature?: boolean
+  showMoves?: boolean
+  showExp?: boolean
+  showStats?: boolean
 }) => {
   const { myCatch: c } = useMyCatch({ catchId })
 
@@ -53,7 +69,7 @@ export const CatchDetails = ({
 
   return (
     <>
-      {!tiny && (
+      {showTitle && (
         <div className="flex flex-row gap-2">
           <div>{c.name || getName(c.wildlife)}</div>
           <button
@@ -74,9 +90,9 @@ export const CatchDetails = ({
         </div>
       )}
       <div className="p-2 flex flex-col gap-4">
-        {!tiny && (
+        {showWildlife && (
           <>
-            <DividerHeading>Wildlife</DividerHeading>
+            {showDividers && <DividerHeading>Wildlife</DividerHeading>}
             <div className="flex flex-row gap-4 items-center justify-between">
               <div className="flex-1 max-w-[50%]">
                 <FighterChip showAbsoluteHp ltr fighter={c} />
@@ -103,37 +119,47 @@ export const CatchDetails = ({
           </>
         )}
 
-        {!tiny && <DividerHeading>Types, Ability, Nature</DividerHeading>}
-        <div className="flex flex-row gap-2 flex-wrap">
-          <FighterTypeBadges
-            fighter={c}
-            showTypes
-            showAbility={!tiny}
-            showNature={!tiny}
-            size={"big"}
-            className="flex-1"
-          />
-        </div>
-
-        {!tiny && <DividerHeading>Moves</DividerHeading>}
-        <FighterMoves fighter={c} />
-
-        {!tiny && !!percentage && (
+        {showTypes && (
           <>
-            <DividerHeading>Experience</DividerHeading>
+            {showDividers && (
+              <DividerHeading>Types, Ability, Nature</DividerHeading>
+            )}
+            <div className="flex flex-row gap-2 flex-wrap">
+              <FighterTypeBadges
+                fighter={c}
+                showTypes
+                showAbility={showAbility}
+                showNature={showNature}
+                size={"big"}
+                className="flex-1"
+              />
+            </div>
+          </>
+        )}
+
+        {showMoves && (
+          <>
+            {showDividers && <DividerHeading>Moves</DividerHeading>}
+            <FighterMoves fighter={c} />
+          </>
+        )}
+
+        {showExp && !!percentage && (
+          <>
+            {showDividers && <DividerHeading>Experience</DividerHeading>}
             <div className="flex flex-1 items-center text-xs justify-center">
               {percentage?.expAbsolute} / {percentage?.expNextLevelAbsolute}
             </div>
             <Progress className="w-full" value={percentage?.expPercentage} />
           </>
         )}
-        {!tiny && (
+        {showStats && (
           <>
             <DividerHeading>Stats</DividerHeading>
             <FighterStatsChart fighter={c} />
           </>
         )}
-        {!tiny && DEV_MODE && (
+        {showStats && DEV_MODE && (
           <>
             <DividerHeading>JSON</DividerHeading>
             <JsonViewer value={c} collapsed />
