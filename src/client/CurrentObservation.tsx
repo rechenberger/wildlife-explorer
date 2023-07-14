@@ -90,7 +90,7 @@ export const CurrentObservation = () => {
           {w.metadata.observationCaptive && (
             <div className="flex flex-row items-center gap-1 text-sm font-bold text-red-500">
               <Frown size={16} className="inline-block" />
-              <span>Captive</span>
+              <span>Captive (cannot be caught)</span>
             </div>
           )}
           {onCooldown && (
