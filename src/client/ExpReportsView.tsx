@@ -69,14 +69,16 @@ export const ExpReportsView = ({ expReports }: { expReports: ExpReports }) => {
                         </ProgressPrimitive.Root>
                       )}
                   </div>
-                  <div className="flex flex-row text-sm gap-2">
+                  <div className="flex flex-row text-xs md:text-sm gap-0 whitespace-nowrap flex-wrap">
                     <div className="text-green-600 flex-1">
-                      + {expReport.expGained || 0} exp
+                      +{expReport.expGained || 0} exp
                     </div>
                     {!!expReport.levelGained && (
                       <div className="text-green-600 font-bold">
-                        + {expReport.levelGained || 0}{" "}
-                        {expReport.levelGained === 1 ? "level" : "levels"}
+                        +{expReport.levelGained || 0}{" "}
+                        {expReport.levelGained === 1
+                          ? "Level-up!"
+                          : "Level-ups!"}
                       </div>
                     )}
                   </div>
