@@ -100,10 +100,20 @@ export const battleRouter = createTRPCRouter({
           },
         },
       },
-      include: {
+      select: {
+        id: true,
+        status: true,
+        updatedAt: true,
         battleParticipants: {
-          include: {
-            player: true,
+          select: {
+            id: true,
+            isWinner: true,
+            player: {
+              select: {
+                id: true,
+                name: true,
+              },
+            },
             wildlife: true,
           },
         },
