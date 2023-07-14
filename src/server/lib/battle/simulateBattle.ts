@@ -5,7 +5,7 @@ import {
   type PokemonSet,
   type SideID,
 } from "@pkmn/sim"
-import { findIndex, first, map } from "lodash-es"
+import { findIndex, first, includes, map } from "lodash-es"
 import {
   BATTLE_INPUT_VERSION,
   BATTLE_REPORT_VERSION,
@@ -163,6 +163,49 @@ export const simulateBattle = async ({
     }
     const sideId = `p${participantIdx + 1}` as SideID
 
+    console.log("lol")
+
+    const activePokemon = battle[sideId]?.active[0]
+
+    if (!activePokemon) {
+      throw new Error(`No active pokemon for ${sideId}`)
+    }
+
+    const moveRequestData = activePokemon.getMoveRequestData()
+
+    if (moveRequestData && moveRequestData.trapped) {
+      //we are trapped in choice
+      const availableMoves = moveRequestData.moves.map((m) => m.id)
+      if (choice.choice.startsWith("move ")) {
+        const moveId = parseInt(choice.choice.split(" ")[1]!) - 1
+        const triedMove = activePokemon.moves[moveId]
+
+        if (!includes(availableMoves, triedMove)) {
+          throw new Error(
+            `Invalid moveeee: ${triedMove}. Possible is only: ${availableMoves.join(
+              ", "
+            )}`
+          )
+        } else {
+          const indexOfTriedMoveInAvailableMoves = findIndex(
+            availableMoves,
+            (m) => m === triedMove
+          )
+          console.log({
+            availableMoves,
+            triedMove,
+            indexOfTriedMoveInAvailableMoves,
+            choice: choice.choice,
+          })
+
+          choice.choice = `move ${
+            findIndex(availableMoves, (m) => m === triedMove) + 1
+          }`
+        }
+      }
+    }
+    console.log({ asdf: choice.choice })
+
     const success = battle.choose(sideId, choice.choice)
     if (!success) {
       throw new Error(`Invalid choice: "${choice.choice}"`)
@@ -267,6 +310,10 @@ export const simulateBattle = async ({
   // console.log(Dex.types.all())
   const battleReport = makeBattleReport()
   // console.log(battleReport)
+  console.log({
+    xy1: battle.p1.active[0]?.getMoveRequestData()?.trapped,
+    xy2: battle.p1.active[0]?.getMoveRequestData()?.moves,
+  })
   const result = {
     battleReport: BattleReport.parse(battleReport),
     battleJson: battle.toJSON(),

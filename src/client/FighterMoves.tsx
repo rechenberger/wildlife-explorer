@@ -1,4 +1,4 @@
-import { map } from "lodash-es"
+import { map, some } from "lodash-es"
 import { Fragment } from "react"
 import { MAX_MOVES_PER_FIGHTER } from "~/config"
 import { type BattleReportFighter } from "~/server/lib/battle/BattleReport"
@@ -27,7 +27,15 @@ export const FighterMoves = ({
       <div className="grid flex-1 grid-cols-1 gap-1">
         {map(fillWithNulls(moves, MAX_MOVES_PER_FIGHTER), (move, moveIdx) => {
           // console.log(move)
-          const disabled = !move || allDisabled
+
+          const disabled =
+            !move ||
+            allDisabled ||
+            (!!fighter.fighter.trappedInMoves &&
+              !some(
+                fighter.fighter.trappedInMoves,
+                (trappedMove) => trappedMove.id === move.id
+              ))
           const typeIcon = move?.definition.type
             ? getTypeIcon(move?.definition.type)
             : null
