@@ -263,7 +263,7 @@ export const battleRouter = createTRPCRouter({
         if (gainExp) {
           // player related stuff - not for wildlife
 
-          const winnerSides = filter(battleReport.sides, (s) => !s.isWinner)
+          const winnerSides = filter(battleReport.sides, (s) => s.isWinner)
           const winnerFighters = flatMap(winnerSides, (s) => s.fighters)
           const looserSides = filter(battleReport.sides, (s) => !s.isWinner)
           const defeatedFighters = flatMap(
