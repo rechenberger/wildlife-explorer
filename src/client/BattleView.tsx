@@ -393,7 +393,7 @@ export const BattleView = ({
                     )}
                   >
                     {side.fighters.length >= 2 && (
-                      <div className="flex flex-1 gap-1 justify-center">
+                      <div className="flex flex-1 gap-1 justify-center mr-2">
                         {map(
                           fillWithNulls(side.fighters, MAX_FIGHTERS_PER_TEAM),
                           (fighter, fighterIdx) => {
@@ -438,7 +438,7 @@ export const BattleView = ({
                                       : "border-amber-400",
                                     isMySide
                                       ? activeWildlifeIsMoveTrapped
-                                        ? "cursor-not-allowed grayscale"
+                                        ? "cursor-not-allowed"
                                         : "cursor-pointer"
                                       : "cursor-default"
                                   )}
@@ -466,7 +466,11 @@ export const BattleView = ({
                                         fighter.wildlife.metadata
                                           .taxonImageUrlSquare
                                       }
-                                      className="w-full object-cover object-center"
+                                      className={cn(
+                                        "w-full object-cover object-center",
+                                        activeWildlifeIsMoveTrapped &&
+                                          "grayscale"
+                                      )}
                                       alt={"Observation"}
                                       unoptimized
                                       fill={true}
