@@ -31,8 +31,8 @@ export const BattleFighterSelect = ({
               <CatchDetails
                 catchId={fighter.catch.id}
                 showWildlife
-                showTypes
-                showMoves
+                showTypes={!fighter.fainted}
+                showMoves={!fighter.fainted}
                 fighter={fighter}
                 buttonSlot={
                   <>
