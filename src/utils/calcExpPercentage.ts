@@ -24,11 +24,12 @@ export const calcExpPercentage = ({
       levelingRate,
     })?.requiredExperience ?? 1
 
-  const expPercentage = Math.floor(
+  let expPercentage = Math.floor(
     ((exp - expThisLevelAbsolute) /
       (expNextLevelAbsolute - expThisLevelAbsolute)) *
       100
   )
+  expPercentage = Math.max(Math.min(100, expPercentage), 0)
 
   return {
     expPercentage,
