@@ -89,7 +89,7 @@ export const transformWildlifeFighterPlus = ({
         level: p.level,
         sideName: p.side.name,
       },
-      error
+      (error as any)?.message || error
     )
   }
 
