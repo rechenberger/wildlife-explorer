@@ -126,7 +126,12 @@ export const FighterMove = ({
           </button>
         </HoverCardTrigger>
         {move && (
-          <HoverCardContent className="w-80 flex flex-col gap-2">
+          <HoverCardContent
+            className={cn(
+              "w-80 flex flex-col gap-2",
+              !!onClick && "hidden md:block"
+            )}
+          >
             <div className="font-bold opacity-80">{move.name}</div>
             <div className="text-sm opacity-80">
               {replaceByWildlife(move.definition.desc)}

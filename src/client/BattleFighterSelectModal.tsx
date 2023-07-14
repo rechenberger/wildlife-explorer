@@ -30,6 +30,7 @@ export const BattleFighterSelectModal = NiceModal.create<{
         style={{
           paddingBottom: "calc(env(safe-area-inset-bottom) + 1.5rem)",
         }}
+        onOpenAutoFocus={(event) => event.preventDefault()}
       >
         <ScrollArea className="max-h-[calc(100svh-100px)]">
           <BattleFighterSelect fighters={fighters} battleId={battleId} />
