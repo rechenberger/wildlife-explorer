@@ -202,6 +202,18 @@ export const battleRouter = createTRPCRouter({
           id: input.battleId,
         },
       })
+      if (!battleBefore) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Battle not found",
+        })
+      }
+      if (battleBefore.status !== "IN_PROGRESS") {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Battle not active",
+        })
+      }
 
       const { battleJson, battleReport, battleInput } = await simulateBattle({
         prisma: ctx.prisma,
