@@ -2,8 +2,8 @@ import { useSetAtom } from "jotai"
 import { Edit2 } from "lucide-react"
 import dynamic from "next/dynamic"
 import { DEV_MODE } from "~/config"
-import { getExpRate } from "~/data/pokemonLevelExperienceMap"
 import { api } from "~/utils/api"
+import { calcExpPercentage } from "~/utils/calcExpPercentage"
 import { Away } from "./Away"
 import { currentObservationIdAtom } from "./CurrentObservation"
 import { DividerHeading } from "./DividerHeading"
@@ -49,15 +49,7 @@ export const CatchDetails = ({
       </div>
     )
 
-  const currentXp = c.metadata.exp ?? 0
-  const levelStartingXp = getExpRate(c.metadata)?.requiredExperience ?? 1
-  const requiredXp =
-    getExpRate({ ...c.metadata, level: (c.metadata.level ?? 0) + 1 })
-      ?.requiredExperience ?? 1
-
-  const percentXp = Math.floor(
-    ((currentXp - levelStartingXp) / (requiredXp - levelStartingXp)) * 100
-  )
+  const percentage = calcExpPercentage(c.metadata)
 
   return (
     <>
@@ -126,13 +118,13 @@ export const CatchDetails = ({
         {!tiny && <DividerHeading>Moves</DividerHeading>}
         <FighterMoves fighter={c} />
 
-        {!tiny && (
+        {!tiny && !!percentage && (
           <>
             <DividerHeading>Experience</DividerHeading>
             <div className="flex flex-1 items-center text-xs justify-center">
-              {currentXp} / {requiredXp}
+              {percentage?.expAbsolute} / {percentage?.expNextLevelAbsolute}
             </div>
-            <Progress className="w-full" value={percentXp} />
+            <Progress className="w-full" value={percentage?.expPercentage} />
           </>
         )}
         {!tiny && (

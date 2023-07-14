@@ -6,12 +6,13 @@ export const calcExpPercentage = ({
   level,
   levelingRate,
 }: {
-  exp: number
-  level: number | undefined | null
-  levelingRate: LevelingRate | undefined | null
+  exp?: number | undefined | null
+  level?: number | undefined | null
+  levelingRate?: LevelingRate | undefined | null
 }) => {
   if (!level) return null
   if (!levelingRate) return null
+  if (!exp) return null
   const expThisLevelAbsolute =
     getExpRate({
       level,
