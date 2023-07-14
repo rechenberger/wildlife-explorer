@@ -147,6 +147,7 @@ export const simulateBattle = async ({
         name,
         team,
         player: battleParticipant.player,
+        participationId: battleParticipant.id,
       }
     })
   )
@@ -243,6 +244,7 @@ export const simulateBattle = async ({
         fighters,
         player: team.player,
         isWinner: battle.winner === side.name,
+        participationId: team.participationId,
       } satisfies BattleReportSide
     })
 

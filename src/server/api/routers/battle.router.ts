@@ -216,14 +216,15 @@ export const battleRouter = createTRPCRouter({
         battleJson: battleBefore?.metadata?.battleJson,
       })
       console.time("update")
-      const winner = battleReport.winner
-      // console.log("winner", winner)
+
+      const winnerSide = find(battleReport.sides, (side) => side.isWinner)
+
       await ctx.prisma.battle.update({
         where: {
           id: input.battleId,
         },
         data: {
-          status: winner ? "FINISHED" : "IN_PROGRESS",
+          status: !!winnerSide ? "FINISHED" : "IN_PROGRESS",
           metadata: {
             battleJson,
             battleReport: battleReport,
@@ -240,7 +241,7 @@ export const battleRouter = createTRPCRouter({
       // })
 
       // END OF BATTLE
-      if (!!winner) {
+      if (!!winnerSide) {
         const battleDb = await ctx.prisma.battle.findUniqueOrThrow({
           where: {
             id: input.battleId,
@@ -254,19 +255,10 @@ export const battleRouter = createTRPCRouter({
             },
           },
         })
-        const participants = battleDb.battleParticipants
-
-        // TODO: get this from battleReport
-        const winnerIsWildlife = winner === "Wildlife"
-        const winnerParticipantId = find(
-          participants,
-          (p) =>
-            p.player?.name === winner || (!!p.wildlife?.id && winnerIsWildlife)
-        )?.id
 
         await Promise.all(
           map(battleDb.battleParticipants, async (p) => {
-            const isWinner = p.id === winnerParticipantId
+            const isWinner = p.id === winnerSide.participationId
             await ctx.prisma.battleParticipation.update({
               where: {
                 id: p.id,
@@ -296,8 +288,11 @@ export const battleRouter = createTRPCRouter({
         )
 
         // GAIN EXP
-        const wasPvpFight = every(participants, (p) => !!p.player?.id)
-        const gainExp = !winnerIsWildlife && !wasPvpFight
+        const wasPvpFight = every(
+          battleDb.battleParticipants,
+          (p) => !!p.player?.id
+        )
+        const gainExp = !wasPvpFight
         if (gainExp) {
           // player related stuff - not for wildlife
 
@@ -388,8 +383,11 @@ export const battleRouter = createTRPCRouter({
             })
           )
 
-          return {
-            expReports,
+          const iAmWinner = winnerSide.player?.id === ctx.player.id
+          if (iAmWinner) {
+            return {
+              expReports,
+            }
           }
         }
       }
