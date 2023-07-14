@@ -25,8 +25,15 @@ export const getWildlifeFighter = async ({
   catchMetaData,
 }: GetWildlifeFighterOptions) => {
   const mapping = taxonMappingByAncestors(wildlife.metadata.taxonAncestorIds)
-  const speciesName = mapping.pokemon
-  const species = Dex.species.get(speciesName)
+  let speciesName = mapping.pokemon
+  let species = Dex.species.get(speciesName)
+
+  // Everything starts at lowest evolution
+  while (species.prevo) {
+    species = Dex.species.get(species.prevo)
+    speciesName = species.name
+  }
+
   const level =
     catchMetaData?.level ??
     rngInt({
