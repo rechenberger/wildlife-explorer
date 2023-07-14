@@ -361,12 +361,12 @@ export const BattleView = ({
                                     !battleIsActive ||
                                     !!isChoiceDone
                                   }
-                                  onClick={({ moveIdx }) => {
+                                  onClick={({ moveId }) => {
                                     if (!playerId) return
                                     makeChoice({
                                       battleId,
                                       playerId: playerId,
-                                      choice: `move ${moveIdx + 1}`,
+                                      choice: `move ${moveId}`,
                                     })
                                   }}
                                 />

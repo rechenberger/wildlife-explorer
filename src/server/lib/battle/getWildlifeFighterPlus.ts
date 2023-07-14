@@ -58,6 +58,7 @@ export const transformWildlifeFighterPlus = ({
       definition,
       effectiveness,
       immunity,
+      id: data?.id,
     } satisfies WildlifeFighterPlusMove
   })
 
@@ -94,6 +95,8 @@ export const transformWildlifeFighterPlus = ({
     )
   }
 
+  const moveRequestData = p.getMoveRequestData()
+
   const fighterPlus = {
     hp: p.hp,
     hpMax: p.maxhp,
@@ -110,6 +113,9 @@ export const transformWildlifeFighterPlus = ({
     isActive: p.isActive,
     justFainted: p.side.faintedThisTurn === p,
     lastMove: p.lastMove,
+    trappedInMoves: moveRequestData?.trapped
+      ? moveRequestData.moves
+      : undefined,
     // statusState: p.statusState,
   } satisfies WildlifeFighterPlus
 
@@ -118,6 +124,7 @@ export const transformWildlifeFighterPlus = ({
 
 export const WildlifeFighterPlusMove = z.object({
   name: z.string(),
+  id: z.string().optional(),
   status: z
     .object({
       pp: z.number(),
@@ -168,6 +175,14 @@ export const WildlifeFighterPlus = z.object({
       name: z.string(),
       totalDamage: z.number().or(z.literal(false)).nullish(),
     })
+    .nullish(),
+  trappedInMoves: z
+    .array(
+      z.object({
+        id: z.string(),
+        move: z.string(),
+      })
+    )
     .nullish(),
 })
 export type WildlifeFighterPlus = z.infer<typeof WildlifeFighterPlus>
