@@ -47,6 +47,7 @@ export const getBattleForSimulation = async ({
                       metadata: true,
                     },
                   },
+                  metadata: true,
                 },
                 take: playerPartyLimit,
                 orderBy: {

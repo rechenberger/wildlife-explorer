@@ -47,6 +47,7 @@ export const catchRouter = createTRPCRouter({
       catches.map(async (c) => {
         const fighter = await getWildlifeFighterPlus({
           wildlife: c.wildlife,
+          catchMetaData: c.metadata,
           seed: c.seed,
         })
         return {

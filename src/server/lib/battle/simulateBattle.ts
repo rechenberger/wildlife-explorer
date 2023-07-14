@@ -104,6 +104,7 @@ export const simulateBattle = async ({
               fighter: await getWildlifeFighter({
                 wildlife: c.wildlife,
                 seed: c.seed,
+                catchMetaData: c.metadata,
                 idx,
               }),
               wildlife: c.wildlife,
