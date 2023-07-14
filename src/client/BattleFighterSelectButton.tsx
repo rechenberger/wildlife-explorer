@@ -1,5 +1,6 @@
 import NiceModal from "@ebay/nice-modal-react"
 import { find, map } from "lodash-es"
+import { ArrowLeftRight } from "lucide-react"
 import Image from "next/image"
 import { Fragment } from "react"
 import { MAX_FIGHTERS_PER_TEAM } from "~/config"
@@ -45,9 +46,10 @@ export const BattleFighterSelectButton = ({
     <>
       <div
         className={cn(
-          "flex gap-1 justify-start",
+          "flex gap-1 justify-start items-center",
           isMainSide ? "flex-row" : "flex-row-reverse",
-          !onClickDisabled && "cursor-pointer"
+          "rounded px-2 py-1 -mx-2",
+          !onClickDisabled && "cursor-pointer hover:bg-gray-100 "
         )}
         onClick={() => {
           if (onClickDisabled) return
@@ -64,7 +66,7 @@ export const BattleFighterSelectButton = ({
                 <div
                   key={fighterIdx}
                   className={cn(
-                    "relative aspect-square w-4 h-4 overflow-hidden rounded-full border-2",
+                    "relative aspect-square w-5 h-5 overflow-hidden rounded-full border-2",
                     "border-gray-100 bg-gray-50"
                   )}
                 />
@@ -81,7 +83,7 @@ export const BattleFighterSelectButton = ({
                   title={fighter.name || getName(fighter.wildlife)}
                   disabled={!isMySide || activeWildlifeIsMoveTrapped}
                   className={cn(
-                    "relative aspect-square overflow-hidden rounded-full border-2 w-4 h-4",
+                    "relative aspect-square overflow-hidden rounded-full border-2 w-5 h-5",
                     hpFull
                       ? "border-green-500"
                       : dead
@@ -112,6 +114,7 @@ export const BattleFighterSelectButton = ({
             )
           }
         )}
+        <ArrowLeftRight className="w-4 h-4 text-gray-600" />
       </div>
     </>
   )
