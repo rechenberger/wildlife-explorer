@@ -106,6 +106,7 @@ export const simulateBattle = async ({
                 seed: c.seed,
                 catchMetaData: c.metadata,
                 idx,
+                name: c.name,
               }),
               wildlife: c.wildlife,
               catch: c,

@@ -16,6 +16,7 @@ export type GetWildlifeFighterOptions = {
   catchMetaData?: Pick<CatchMetadata, "level">
   seed: string
   idx?: number
+  name?: string | null
 }
 
 export const getWildlifeFighter = async ({
@@ -23,6 +24,7 @@ export const getWildlifeFighter = async ({
   seed,
   idx,
   catchMetaData,
+  name: givenName,
 }: GetWildlifeFighterOptions) => {
   const mapping = taxonMappingByAncestors(wildlife.metadata.taxonAncestorIds)
   let speciesName = mapping.pokemon
@@ -74,7 +76,9 @@ export const getWildlifeFighter = async ({
 
   // TODO: locale
   const name = `${typeof idx === "number" ? `#${idx + 1}: ` : ""}${
-    wildlife.metadata.taxonCommonName ?? wildlife.metadata.taxonName
+    givenName ??
+    wildlife.metadata.taxonCommonName ??
+    wildlife.metadata.taxonName
   }`
 
   const ivs = {
