@@ -1,5 +1,5 @@
 import { map, some } from "lodash-es"
-import { Fragment } from "react"
+import { Fragment, useState } from "react"
 import { MAX_MOVES_PER_FIGHTER } from "~/config"
 import { type BattleReportFighter } from "~/server/lib/battle/BattleReport"
 import { fillWithNulls } from "~/utils/fillWithNulls"
@@ -64,9 +64,15 @@ export const FighterMove = ({
     ? getTypeIcon(move?.definition.type)
     : null
   const effectiveness = readableEffectiveness((move as any) ?? {})
+
+  const [isTooltipOpen, setIsTooltipOpen] = useState(false)
+
   return (
     <Fragment>
-      <HoverCard>
+      <HoverCard
+        open={isTooltipOpen}
+        onOpenChange={(open) => setIsTooltipOpen(open)}
+      >
         <HoverCardTrigger asChild>
           <button
             className={cn(
@@ -77,11 +83,15 @@ export const FighterMove = ({
               "ring-inset hover:ring",
               typeIcon?.ringFull
             )}
-            disabled={disabled}
+            // disabled={disabled}
             onClick={() => {
-              if (!onClick) return
-              if (!move?.id) return
-              onClick({ moveId: move.id })
+              if (onClick) {
+                if (disabled) return
+                if (!move?.id) return
+                onClick({ moveId: move.id })
+              } else {
+                setIsTooltipOpen((prev) => !prev)
+              }
             }}
           >
             {typeIcon && (
