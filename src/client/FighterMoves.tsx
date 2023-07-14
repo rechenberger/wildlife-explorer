@@ -76,7 +76,7 @@ export const FighterMoves = ({
                         {move?.name || "-"}
                       </div>
                       {!!effectiveness && (
-                        <div className="hidden w-2 shrink-0 opacity-60 sm:block">
+                        <div className="w-2 shrink-0 opacity-60">
                           {effectiveness.symbol}
                         </div>
                       )}
