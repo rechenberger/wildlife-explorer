@@ -80,8 +80,17 @@ export const transformWildlifeFighterPlus = ({
     }
   } catch (error) {
     // Happens on Moorschneehuhn (Torchic 18 M) with ability blaze
-    console.error(p)
-    console.error("ERROR Getting stats:", error)
+    console.error(
+      "ERROR Getting stats:",
+      {
+        name: p.name,
+        speciesName: p.species.name,
+        ability: p.ability,
+        level: p.level,
+        sideName: p.side.name,
+      },
+      error
+    )
   }
 
   const fighterPlus = {
