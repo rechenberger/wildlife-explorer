@@ -61,7 +61,7 @@ export const FighterChip = ({
         <div className={cn("flex-1 overflow-hidden py-1 select-none")}>
           <div className="flex items-baseline gap-1">
             <div
-              className="truncate text-xs font-bold"
+              className="truncate text-xs font-bold flex-1"
               title={`${name} ${
                 DEV_MODE
                   ? `(${fighter.fighter.species} ${fighter.fighter.level} ${fighter.fighter.gender})`
@@ -69,6 +69,17 @@ export const FighterChip = ({
               }`}
             >
               {name}
+            </div>
+            <div
+              className={cn(
+                "shrink-0 text-xs font-bold",
+                fighter.fighter.gender === "M"
+                  ? "text-blue-600"
+                  : "text-pink-600"
+              )}
+              title={fighter.fighter.gender === "M" ? "Male" : "Female"}
+            >
+              {fighter.fighter.gender === "M" ? "♂" : "♀"}
             </div>
             {/* {SHOW_FIGHTER_NAME && (
               <div
