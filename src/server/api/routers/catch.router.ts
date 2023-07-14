@@ -214,28 +214,6 @@ export const catchRouter = createTRPCRouter({
       wildlifeId: ctx.wildlife.id,
     })
 
-    if (battle) {
-      await ctx.prisma.battle.update({
-        where: {
-          id: battleId,
-        },
-        data: {
-          status: "CANCELLED",
-        },
-      })
-      await ctx.prisma.player.update({
-        where: {
-          id: ctx.player.id,
-        },
-        data: {
-          metadata: {
-            ...ctx.player.metadata,
-            activeBattleId: null,
-          } satisfies PlayerMetadata,
-        },
-      })
-    }
-
     if (!isLucky) {
       throw new TRPCError({
         code: "BAD_REQUEST",
@@ -263,7 +241,31 @@ export const catchRouter = createTRPCRouter({
     const levelingRate = LevelingRate.parse(
       PokemonLevelingRate[speciesNum]?.levelingRate
     )
-    const exp = getExpRate({ level, levelingRate })?.requiredExperience
+    if (!levelingRate) {
+      console.error(
+        `No leveling rate for Species Name:${speciesName} Num:${speciesNum}`
+      )
+      throw new TRPCError({
+        code: "CONFLICT",
+        message: "Wildlife has no leveling rate 🤔",
+      })
+    }
+    const exp = getExpRate({
+      level,
+      levelingRate,
+    })?.requiredExperience
+    if (!level) {
+      throw new TRPCError({
+        code: "CONFLICT",
+        message: "Wildlife has no level 🤔",
+      })
+    }
+    if (!exp) {
+      throw new TRPCError({
+        code: "CONFLICT",
+        message: "Wildlife has no exp 🤔",
+      })
+    }
 
     const catchMetadata = {
       speciesNum,
@@ -286,6 +288,28 @@ export const catchRouter = createTRPCRouter({
         metadata: catchMetadata,
       },
     })
+
+    if (battle) {
+      await ctx.prisma.battle.update({
+        where: {
+          id: battleId,
+        },
+        data: {
+          status: "CANCELLED",
+        },
+      })
+      await ctx.prisma.player.update({
+        where: {
+          id: ctx.player.id,
+        },
+        data: {
+          metadata: {
+            ...ctx.player.metadata,
+            activeBattleId: null,
+          } satisfies PlayerMetadata,
+        },
+      })
+    }
 
     return {
       success: true,
