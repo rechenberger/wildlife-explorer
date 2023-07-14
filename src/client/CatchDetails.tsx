@@ -52,6 +52,26 @@ export const CatchDetails = ({
       </div>
     )
 
+  const currentXp = c.metadata.exp ?? 0
+  const levelStartingXp =
+    PokemonExperienceMap[
+      createPokemonExperienceMapId({
+        ...c.metadata,
+        level: c.metadata.level ?? 0,
+      })
+    ]?.requiredExperience ?? 1
+  const requiredXp =
+    PokemonExperienceMap[
+      createPokemonExperienceMapId({
+        ...c.metadata,
+        level: (c.metadata.level ?? 0) + 1,
+      })
+    ]?.requiredExperience ?? 1
+
+  const percentXp = Math.floor(
+    ((currentXp - levelStartingXp) / (requiredXp - levelStartingXp)) * 100
+  )
+
   return (
     <>
       {!tiny && (
@@ -121,28 +141,16 @@ export const CatchDetails = ({
 
         {!tiny && (
           <>
+            <DividerHeading>Experience</DividerHeading>
+            <div className="flex flex-1 items-center text-xs justify-center">
+              {currentXp} / {requiredXp}
+            </div>
+            <Progress className="w-full" value={percentXp} />
+          </>
+        )}
+        {!tiny && (
+          <>
             <DividerHeading>Stats</DividerHeading>
-            {c.metadata.exp} /{" "}
-            {
-              PokemonExperienceMap[
-                createPokemonExperienceMapId({
-                  ...c.metadata,
-                  level: (c.metadata.level ?? 0) + 1,
-                })
-              ]?.requiredExperience
-            }
-            <Progress
-              className="w-full"
-              value={
-                (c.metadata.exp ?? 0) /
-                (PokemonExperienceMap[
-                  createPokemonExperienceMapId({
-                    ...c.metadata,
-                    level: (c.metadata.level ?? 0) + 1,
-                  })
-                ]?.requiredExperience ?? 1)
-              }
-            />
             <FighterStatsChart fighter={c} />
           </>
         )}
