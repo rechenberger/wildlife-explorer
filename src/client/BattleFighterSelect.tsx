@@ -1,13 +1,14 @@
 import NiceModal from "@ebay/nice-modal-react"
+import { orderBy } from "lodash-es"
 import { ArrowLeftRight } from "lucide-react"
 import { Fragment } from "react"
 import { type BattleReportFighter } from "~/server/lib/battle/BattleReport"
 import { BattleFighterSelectModal } from "./BattleFighterSelectModal"
 import { CatchDetails } from "./CatchDetails"
-import { DividerHeading } from "./DividerHeading"
 import { Button } from "./shadcn/ui/button"
 import { useMakeChoice } from "./useMakeChoice"
 import { usePlayer } from "./usePlayer"
+import { DividerHeading } from "./DividerHeading"
 
 export const BattleFighterSelect = ({
   fighters,
@@ -18,11 +19,19 @@ export const BattleFighterSelect = ({
 }) => {
   const { playerId } = usePlayer()
   const { mutate: makeChoice } = useMakeChoice()
+  const fightersOrdered = orderBy(
+    fighters.map((fighter, idx) => ({
+      fighter,
+      idx,
+    })),
+    [({ fighter }) => (fighter.fainted ? 1 : 0)],
+    ["asc"]
+  )
   return (
     <>
       <div className="">Select your next Fighter</div>
       <div className="flex flex-col gap-2">
-        {fighters.map((fighter, idx) => {
+        {fightersOrdered.map(({ fighter, idx }) => {
           if (!fighter.catch) return null
           const canSwitch = !fighter.fainted && !fighter.fighter.isActive
           return (
