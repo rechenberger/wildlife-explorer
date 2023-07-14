@@ -19,7 +19,7 @@ export const FighterMoves = ({
 }: {
   fighter: BattleReportFighter
   disabled?: boolean
-  onClick?: (options: { moveIdx: number }) => void
+  onClick?: (options: { moveId: string }) => void
 }) => {
   const moves = fighter.fighter.moves
   return (
@@ -56,9 +56,9 @@ export const FighterMoves = ({
                     )}
                     disabled={disabled}
                     onClick={() => {
-                      if (!move) return
                       if (!onClick) return
-                      onClick({ moveIdx })
+                      if (!move?.id) return
+                      onClick({ moveId: move.id })
                     }}
                   >
                     {typeIcon && (
