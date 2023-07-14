@@ -66,7 +66,7 @@ export const BattleFighterSelectButton = ({
                 <div
                   key={fighterIdx}
                   className={cn(
-                    "relative aspect-square w-5 h-5 overflow-hidden rounded-full border-2",
+                    "relative aspect-square w-5 md:w-6 h-5 md:h-6 overflow-hidden rounded-full border-2",
                     "border-gray-100 bg-gray-50"
                   )}
                 />
@@ -83,7 +83,7 @@ export const BattleFighterSelectButton = ({
                   title={fighter.name || getName(fighter.wildlife)}
                   disabled={!isMySide || activeWildlifeIsMoveTrapped}
                   className={cn(
-                    "relative aspect-square overflow-hidden rounded-full border-2 w-5 h-5",
+                    "relative aspect-square overflow-hidden rounded-full border-2 w-5 md:w-6 h-5 md:h-6",
                     hpFull
                       ? "border-green-500"
                       : dead
