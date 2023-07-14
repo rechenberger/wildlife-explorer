@@ -388,12 +388,12 @@ export const BattleView = ({
                   </div>
                   <div
                     className={cn(
-                      "flex w-full items-center gap-1",
+                      "flex w-full items-center gap-3",
                       isMainSide ? "flex-row" : "flex-row-reverse"
                     )}
                   >
                     {side.fighters.length >= 2 && (
-                      <div className="flex flex-1 gap-1 justify-center mr-2">
+                      <div className="flex flex-1 gap-1 justify-center">
                         {map(
                           fillWithNulls(side.fighters, MAX_FIGHTERS_PER_TEAM),
                           (fighter, fighterIdx) => {
@@ -402,7 +402,7 @@ export const BattleView = ({
                                 <div
                                   key={fighterIdx}
                                   className={cn(
-                                    "relative aspect-square h-4 w-4 overflow-hidden rounded-full border-2",
+                                    "relative aspect-square  w-full h-full overflow-hidden rounded-full border-2",
                                     "border-gray-100 bg-gray-50"
                                   )}
                                 />
