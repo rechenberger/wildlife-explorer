@@ -45,7 +45,7 @@ export const BattleViewPvp = ({ battleId }: { battleId: string }) => {
   })
 
   return (
-    <div className="flex flex-col justify-center text-center gap-4">
+    <div className="flex flex-col justify-center text-center gap-4 pt-12">
       <Swords className="w-8 h-8 self-center" />
       <div>PvP Battle</div>
 
