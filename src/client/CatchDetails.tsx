@@ -2,6 +2,10 @@ import { useSetAtom } from "jotai"
 import { Edit2 } from "lucide-react"
 import dynamic from "next/dynamic"
 import { DEV_MODE } from "~/config"
+import {
+  PokemonExperienceMap,
+  createPokemonExperienceMapId,
+} from "~/data/pokemonLevelExperienceMap"
 import { api } from "~/utils/api"
 import { Away } from "./Away"
 import { currentObservationIdAtom } from "./CurrentObservation"
@@ -11,6 +15,7 @@ import { FighterMoves } from "./FighterMoves"
 import { FighterStatsChart } from "./FighterStatsChart"
 import { FighterTypeBadges } from "./FighterTypeBadges"
 import { TimeAgo } from "./TimeAgo"
+import { Progress } from "./shadcn/ui/progress"
 import { useMyCatch } from "./useCatches"
 import { useGetWildlifeName } from "./useGetWildlifeName"
 import { useMapSetCenter } from "./useMapRef"
@@ -117,6 +122,27 @@ export const CatchDetails = ({
         {!tiny && (
           <>
             <DividerHeading>Stats</DividerHeading>
+            {c.metadata.exp} /{" "}
+            {
+              PokemonExperienceMap[
+                createPokemonExperienceMapId({
+                  ...c.metadata,
+                  level: (c.metadata.level ?? 0) + 1,
+                })
+              ]?.requiredExperience
+            }
+            <Progress
+              className="w-full"
+              value={
+                (c.metadata.exp ?? 0) /
+                (PokemonExperienceMap[
+                  createPokemonExperienceMapId({
+                    ...c.metadata,
+                    level: (c.metadata.level ?? 0) + 1,
+                  })
+                ]?.requiredExperience ?? 1)
+              }
+            />
             <FighterStatsChart fighter={c} />
           </>
         )}
