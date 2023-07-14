@@ -52,7 +52,7 @@ export const CatchDetails = ({
   const currentXp = c.metadata.exp ?? 0
   const levelStartingXp = getExpRate(c.metadata)?.requiredExperience ?? 1
   const requiredXp =
-    getExpRate({ ...c.metadata, level: c.metadata.level ?? 0 + 1 })
+    getExpRate({ ...c.metadata, level: (c.metadata.level ?? 0) + 1 })
       ?.requiredExperience ?? 1
 
   const percentXp = Math.floor(
