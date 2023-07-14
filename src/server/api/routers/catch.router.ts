@@ -263,7 +263,7 @@ export const catchRouter = createTRPCRouter({
     const levelingRate = LevelingRate.parse(
       PokemonLevelingRate[speciesNum]?.levelingRate
     )
-    const exp = getExpRate(wildlifeFighterPlus)?.requiredExperience
+    const exp = getExpRate({ level, levelingRate })?.requiredExperience
 
     const catchMetadata = {
       speciesNum,

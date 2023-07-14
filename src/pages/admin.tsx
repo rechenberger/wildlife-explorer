@@ -41,6 +41,7 @@ export default function Page() {
   // const battleOrder = api.migration.battleOrder.useMutation()
   // const catchMetadata = api.migration.catchMetadata.useMutation()
   const catchOriginalPlayer = api.migration.catchOriginalPlayer.useMutation()
+  const addMissingExp = api.migration.addMissingExp.useMutation()
   const taxonDev = api.taxon.dev.useMutation()
   return (
     <MainLayout>
@@ -50,6 +51,7 @@ export default function Page() {
         <MigrationButton {...battleOrder} label="battleOrder" /> */}
         <MigrationButton {...taxonDev} label="taxonDev" />
         <MigrationButton {...catchOriginalPlayer} label="catchOriginalPlayer" />
+        <MigrationButton {...addMissingExp} label="addMissingExp" />
         {/* <MigrationButton {...catchMetadata} label="catchMetadata" /> */}
       </div>
     </MainLayout>
