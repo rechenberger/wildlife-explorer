@@ -301,14 +301,17 @@ export const BattleView = ({
                                 ltr={isMySide}
                                 showAbsoluteHp={isMySide}
                                 grayscale={!isActive && !justFainted}
-                                onClick={() => {
-                                  const catchId = fighter.catch?.id
-                                  if (!catchId) return
-                                  if (!isMySide) return
-                                  NiceModal.show(CatchDetailsModal, {
-                                    catchId,
-                                  })
-                                }}
+                                onClick={
+                                  isMySide && !!fighter.catch?.id
+                                    ? () => {
+                                        const catchId = fighter.catch?.id
+                                        if (!catchId) return
+                                        NiceModal.show(CatchDetailsModal, {
+                                          catchId,
+                                        })
+                                      }
+                                    : undefined
+                                }
                               />
                               <div
                                 className={cn(
