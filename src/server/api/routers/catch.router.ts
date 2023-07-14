@@ -214,6 +214,28 @@ export const catchRouter = createTRPCRouter({
       wildlifeId: ctx.wildlife.id,
     })
 
+    if (battle) {
+      await ctx.prisma.battle.update({
+        where: {
+          id: battleId,
+        },
+        data: {
+          status: "CANCELLED",
+        },
+      })
+      await ctx.prisma.player.update({
+        where: {
+          id: ctx.player.id,
+        },
+        data: {
+          metadata: {
+            ...ctx.player.metadata,
+            activeBattleId: null,
+          } satisfies PlayerMetadata,
+        },
+      })
+    }
+
     if (!isLucky) {
       throw new TRPCError({
         code: "BAD_REQUEST",
@@ -288,28 +310,6 @@ export const catchRouter = createTRPCRouter({
         metadata: catchMetadata,
       },
     })
-
-    if (battle) {
-      await ctx.prisma.battle.update({
-        where: {
-          id: battleId,
-        },
-        data: {
-          status: "CANCELLED",
-        },
-      })
-      await ctx.prisma.player.update({
-        where: {
-          id: ctx.player.id,
-        },
-        data: {
-          metadata: {
-            ...ctx.player.metadata,
-            activeBattleId: null,
-          } satisfies PlayerMetadata,
-        },
-      })
-    }
 
     return {
       success: true,
