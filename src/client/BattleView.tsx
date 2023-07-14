@@ -31,10 +31,10 @@ import { useGetWildlifeName } from "./useGetWildlifeName"
 import { usePlayer } from "./usePlayer"
 
 const BIG_INACTIVE_FIGHTER = false
-const SHOW_ENEMY_MOVES = false
+const SHOW_ENEMY_MOVES = DEV_MODE
 const SHOW_INACTIVE_MOVES = true
 const SHOW_FIGHTER_TYPES = true
-const SHOW_ABILITY = false
+const SHOW_ABILITY = DEV_MODE
 const SHOW_NATURE = false
 
 export const showBattleLogAtom = atomWithLocalStorage("showBattleLog", false)

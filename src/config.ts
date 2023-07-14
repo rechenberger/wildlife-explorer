@@ -25,6 +25,8 @@ export const MIN_METER_ACCURACY_SHOW_INACCURATE = 200
 export const MAX_FIGHTERS_PER_TEAM = 6
 export const MAX_MOVES_PER_FIGHTER = 4
 
+export const USE_LATEST_GEN = true
+
 export const ENABLE_BATTLE_VIEW = true
 
 export const CATCH_RATE_ALWAYS_WIN = 0.2

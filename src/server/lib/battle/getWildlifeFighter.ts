@@ -1,6 +1,6 @@
 import { Dex, type PokemonSet, type Species } from "@pkmn/dex"
-import { filter, map, orderBy, take } from "lodash-es"
-import { MAX_MOVES_PER_FIGHTER } from "~/config"
+import { filter, map, max, min, orderBy, take } from "lodash-es"
+import { MAX_MOVES_PER_FIGHTER, USE_LATEST_GEN } from "~/config"
 import { type CatchMetadata } from "~/server/schema/CatchMetadata"
 import { type WildlifeMetadata } from "~/server/schema/WildlifeMetadata"
 import { rngInt, rngItem, rngItemWithWeights } from "~/utils/seed"
@@ -143,26 +143,38 @@ async function getMovesInLearnset(species: Species) {
     move: string
     level: number
     method: "level"
+    gen: number
   }[] = []
   const learnset = await Dex.learnsets.get(species.name)
-  const gen = Math.max(species.gen, 3).toString()
+
+  // console.log(species)
+  // console.log(learnset)
+  // const gen = Math.max(species.gen, 3).toString()
 
   for (const move in learnset.learnset) {
     const learnMethods = learnset.learnset[move]!
 
     for (const method of learnMethods) {
-      if (method.startsWith(gen) && method[1] === "L") {
-        const isLevelThingy = method[1] === "L"
+      const isLevelThingy = method[1] === "L"
+      if (isLevelThingy) {
+        const gen = parseInt(method[0]!)
         const level = parseInt(method.substring(2))
         if (isLevelThingy) {
           moves.push({
             move,
             level,
             method: "level",
+            gen,
           })
         }
       }
     }
   }
-  return moves
+
+  const possibleGens = map(moves, (m) => m.gen)
+  const latestGen = USE_LATEST_GEN ? max(possibleGens) : min(possibleGens)
+
+  const latestMoves = filter(moves, (m) => !!latestGen && m.gen === latestGen)
+
+  return latestMoves
 }
