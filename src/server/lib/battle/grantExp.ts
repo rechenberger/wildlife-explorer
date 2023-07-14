@@ -16,18 +16,24 @@ export const grantExp = async ({
   winnerParticipationId: string
   onlyFaintedGiveExp: boolean
 }) => {
+  // console.log("winnerParticipationId", winnerParticipationId)
   const winnerSides = filter(
     battleReport.sides,
     (s) => s.participationId === winnerParticipationId
   )
+  // console.log("winnerSides", winnerSides)
   const winnerFighters = flatMap(winnerSides, (s) => s.fighters)
+  // console.log("winnerFighters", winnerFighters)
+
   const looserSides = filter(
     battleReport.sides,
-    (s) => s.participationId === winnerParticipationId
+    (s) => s.participationId !== winnerParticipationId
   )
+  // console.log("looserSides", looserSides)
   const defeatedFighters = flatMap(looserSides, (s) => s.fighters).filter((f) =>
     onlyFaintedGiveExp ? f.fainted : true
   )
+  // console.log("defeatedFighters", defeatedFighters)
 
   const expReports = await Promise.all(
     map(winnerFighters, async (winnerFighter) => {
