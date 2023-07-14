@@ -305,7 +305,12 @@ export const battleRouter = createTRPCRouter({
 
           const expReports = await Promise.all(
             map(winnerFighters, async (winnerFighter) => {
-              if (!winnerFighter.catch?.id || winnerFighter.fainted) return
+              if (!winnerFighter.catch?.id || winnerFighter.fainted) {
+                return {
+                  battleReportFighter: winnerFighter,
+                  fainted: true,
+                }
+              }
               const winningCatch = await ctx.prisma.catch.findUniqueOrThrow({
                 where: {
                   id: winnerFighter.catch.id,
@@ -351,7 +356,7 @@ export const battleRouter = createTRPCRouter({
               })
 
               return {
-                ...winnerFighter,
+                battleReportFighter: winnerFighter,
                 catchId: winnerFighter.catch.id,
                 expBefore,
                 expGained,
