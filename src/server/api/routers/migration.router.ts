@@ -34,6 +34,8 @@ export const migrationRouter = createTRPCRouter({
         levelingRate,
       })?.requiredExperience
 
+      if (!requiredExp) throw new Error("no exp")
+
       await ctx.prisma.catch.update({
         where: {
           id: catchXX.id,
