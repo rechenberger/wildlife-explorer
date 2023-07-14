@@ -285,7 +285,7 @@ export const battleRouter = createTRPCRouter({
           (p) => !!p.player?.id
         )
         const gainExp = !wasPvpFight
-        if (gainExp) {
+        if (gainExp && winnerSide.participationId) {
           const { expReports } = await grantExp({
             prisma: ctx.prisma,
             battleReport,
