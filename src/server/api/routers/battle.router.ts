@@ -91,6 +91,25 @@ export const battleRouter = createTRPCRouter({
     return battle
   }),
 
+  getMyLatestParticipation: playerProcedure.query(async ({ ctx }) => {
+    return await ctx.prisma.battleParticipation.findFirst({
+      where: {
+        playerId: ctx.player.id,
+      },
+      select: {
+        battle: {
+          select: {
+            id: true,
+            status: true,
+          },
+        },
+      },
+      orderBy: {
+        id: "desc",
+      },
+    })
+  }),
+
   getMyBattles: playerProcedure.query(async ({ ctx }) => {
     const battles = await ctx.prisma.battle.findMany({
       where: {

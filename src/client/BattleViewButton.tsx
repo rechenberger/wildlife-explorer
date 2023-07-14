@@ -1,6 +1,5 @@
 import NiceModal from "@ebay/nice-modal-react"
 import { atom } from "jotai"
-import { find } from "lodash-es"
 import { Swords } from "lucide-react"
 import { useEffect } from "react"
 import { ENABLE_BATTLE_VIEW } from "~/config"
@@ -14,17 +13,25 @@ export const scanningLocationAtom = atom<LatLng | null>(null)
 
 export const BattleViewButton = () => {
   const { playerId } = usePlayer()
-  const { data: battles } = api.battle.getMyBattles.useQuery(
-    {
-      playerId: playerId!,
-    },
-    {
-      enabled: !!playerId,
-      refetchInterval: 2000,
-    }
-  )
-  const activeBattleId = find(battles, (b) => b.status === "IN_PROGRESS")?.id
-  const pvpInviteBattleId = find(battles, (b) => b.status === "INVITING")?.id
+  const { data: latestParticipation } =
+    api.battle.getMyLatestParticipation.useQuery(
+      {
+        playerId: playerId!,
+      },
+      {
+        enabled: !!playerId,
+        refetchInterval: 2000,
+      }
+    )
+
+  const activeBattleId =
+    latestParticipation?.battle?.status === "IN_PROGRESS"
+      ? latestParticipation?.battle?.id
+      : undefined
+  const pvpInviteBattleId =
+    latestParticipation?.battle?.status === "INVITING"
+      ? latestParticipation?.battle?.id
+      : undefined
 
   useEffect(() => {
     if (!pvpInviteBattleId) return
