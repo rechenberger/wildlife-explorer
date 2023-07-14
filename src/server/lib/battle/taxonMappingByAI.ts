@@ -1,6 +1,14 @@
 // FROM: https://teampilot.ai/team/tristan/chat/cljtv2rui000dmu08cl5ik9gb
 
-export const taxonMappingByAI = [
+export const taxonMappingByAI: {
+  ancestorId: number
+  children: {
+    taxonId: number
+    name: string
+    pokemon: string
+    count: number
+  }[]
+}[] = [
   {
     ancestorId: 1,
     children: [
