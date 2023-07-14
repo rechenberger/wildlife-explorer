@@ -270,7 +270,7 @@ export const battleRouter = createTRPCRouter({
         const looserSide = find(battleReport.sides, (s) => !s.isWinner)
 
         for await (const looserFighter of looserSide?.fighters || []) {
-          console.log({ looserFighter })
+          // console.log({ looserFighter })
           if (!looserFighter.fainted) continue
 
           for await (const winnerFighter of winnerSide?.fighters || []) {
