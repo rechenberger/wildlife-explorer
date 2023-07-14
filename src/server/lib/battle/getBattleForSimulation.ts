@@ -7,6 +7,7 @@ import { BattleReportWildlifeMetadata } from "./BattleReport"
 const BattleSimulationWildlifeMetadata = BattleReportWildlifeMetadata.merge(
   WildlifeMetadata.pick({
     taxonAncestorIds: true,
+    observationCaptive: true,
   })
 )
 

@@ -10,7 +10,10 @@ export type GetWildlifeFighterOptions = {
   wildlife: {
     metadata: Pick<
       WildlifeMetadata,
-      "taxonAncestorIds" | "taxonCommonName" | "taxonName"
+      | "taxonAncestorIds"
+      | "taxonCommonName"
+      | "taxonName"
+      | "observationCaptive"
     >
   }
   catchMetaData?: Pick<CatchMetadata, "level">
@@ -36,12 +39,15 @@ export const getWildlifeFighter = async ({
     speciesName = species.name
   }
 
+  const minLevel = wildlife.metadata.observationCaptive ? 20 : 1
+  const maxLevel = wildlife.metadata.observationCaptive ? 100 : 20
+
   const level =
     catchMetaData?.level ||
     rngInt({
       seed: [seed, "level"],
-      min: 1,
-      max: 20,
+      min: minLevel,
+      max: maxLevel,
     })
 
   const possibleMoves = await getMovesInLearnset(species)
