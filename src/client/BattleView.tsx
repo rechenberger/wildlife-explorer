@@ -304,6 +304,7 @@ export const BattleView = ({
                                 onClick={() => {
                                   const catchId = fighter.catch?.id
                                   if (!catchId) return
+                                  if (!isMySide) return
                                   NiceModal.show(CatchDetailsModal, {
                                     catchId,
                                   })
