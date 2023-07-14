@@ -1,5 +1,5 @@
 import { Dex, type PokemonSet, type Species } from "@pkmn/dex"
-import { filter, map, max, min, orderBy, take } from "lodash-es"
+import { filter, find, map, max, min, orderBy, take } from "lodash-es"
 import { MAX_MOVES_PER_FIGHTER, USE_LATEST_GEN } from "~/config"
 import { type CatchMetadata } from "~/server/schema/CatchMetadata"
 import { type WildlifeMetadata } from "~/server/schema/WildlifeMetadata"
@@ -49,6 +49,25 @@ export const getWildlifeFighter = async ({
       min: minLevel,
       max: maxLevel,
     })
+
+  const canEvolveByLevel = wildlife.metadata.observationCaptive
+  if (canEvolveByLevel) {
+    while (true) {
+      const evos = map(species.evos, (e) => Dex.species.get(e))
+      const possibleEvo = find(evos, (e) => {
+        if (e.evoType) return false
+        if (e.evoCondition) return false
+        if (e.evoItem) return false
+        if (e.evoMove) return false
+
+        if (!e.evoLevel) return false
+        if (e.evoLevel > level) return false
+        return true
+      })
+      if (!possibleEvo) break
+      species = possibleEvo
+    }
+  }
 
   const possibleMoves = await getMovesInLearnset(species)
   const moves = take(
