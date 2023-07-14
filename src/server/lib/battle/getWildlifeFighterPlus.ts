@@ -72,11 +72,11 @@ export const transformWildlifeFighterPlus = ({
   try {
     stats = {
       hp: p.maxhp,
-      atk: p.getStat("atk"),
-      def: p.getStat("def"),
-      spa: p.getStat("spa"),
-      spd: p.getStat("spd"),
-      spe: p.getStat("spe"),
+      atk: p.getStat("atk", true, true),
+      def: p.getStat("def", true, true),
+      spa: p.getStat("spa", true, true),
+      spd: p.getStat("spd", true, true),
+      spe: p.getStat("spe", true, true),
     }
   } catch (error) {
     // Happens on Moorschneehuhn (Torchic 18 M) with ability blaze
@@ -89,7 +89,8 @@ export const transformWildlifeFighterPlus = ({
         level: p.level,
         sideName: p.side.name,
       },
-      (error as any)?.message || error
+      (error as any)?.message || error,
+      error
     )
   }
 
