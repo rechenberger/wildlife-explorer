@@ -1,7 +1,9 @@
+import { ArrowLeftRight } from "lucide-react"
 import { Fragment } from "react"
 import { type BattleReportFighter } from "~/server/lib/battle/BattleReport"
 import { CatchDetails } from "./CatchDetails"
 import { DividerHeading } from "./DividerHeading"
+import { Button } from "./shadcn/ui/button"
 
 export const BattleFighterSelect = ({
   fighters,
@@ -23,6 +25,14 @@ export const BattleFighterSelect = ({
                 showTypes
                 showMoves
                 fighter={fighter}
+                buttonSlot={
+                  <>
+                    <Button>
+                      <ArrowLeftRight className="w-4 h-4 mr-1" />
+                      Go!
+                    </Button>
+                  </>
+                }
               />
             </Fragment>
           )
