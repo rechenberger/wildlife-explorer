@@ -36,6 +36,7 @@ export const BattleReportSide = z.object({
     })
     .nullish(),
   isWinner: z.boolean(),
+  participationId: z.string().nullish(),
 })
 export type BattleReportSide = z.infer<typeof BattleReportSide>
 

@@ -18,6 +18,7 @@ import { FighterMoves } from "./FighterMoves"
 import { FighterTypeBadges } from "./FighterTypeBadges"
 import { TypeBadge } from "./TypeBadge"
 import { cn } from "./cn"
+import { confetti } from "./confetti"
 import {
   catchIcon,
   leaveIcon,
@@ -88,11 +89,20 @@ export const BattleView = ({
       onSuccess: (data) => {
         trpc.battle.invalidate()
 
-        const expReports = data?.expReports
-        if (expReports) {
-          NiceModal.show(ExpReportsModal, {
-            expReports,
-          })
+        if (data) {
+          const expReports = data?.expReports
+          if (data?.iAmWinner) {
+            confetti()
+            if (expReports) {
+              NiceModal.show(ExpReportsModal, {
+                expReports,
+              })
+            } else {
+              toast("You win! 🎉")
+            }
+          } else {
+            toast(`${data.winnerName} won the battle!`)
+          }
         }
       },
       onError: (err) => toast.error(err.message),
