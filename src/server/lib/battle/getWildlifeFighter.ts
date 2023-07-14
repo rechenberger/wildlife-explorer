@@ -28,13 +28,12 @@ export const getWildlifeFighter = async ({
   const speciesName = mapping.pokemon
   const species = Dex.species.get(speciesName)
   const level =
-    catchMetaData && catchMetaData.level
-      ? catchMetaData.level
-      : rngInt({
-          seed: [seed, "level"],
-          min: 1,
-          max: 20,
-        })
+    catchMetaData?.level ??
+    rngInt({
+      seed: [seed, "level"],
+      min: 1,
+      max: 20,
+    })
 
   const possibleMoves = await getMovesInLearnset(species)
   const moves = take(

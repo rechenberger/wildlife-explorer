@@ -2,6 +2,7 @@ import { TRPCError } from "@trpc/server"
 import { find, map } from "lodash-es"
 import { z } from "zod"
 import { BATTLE_REPORT_VERSION } from "~/config"
+import { getLevelFromExp } from "~/data/pokemonLevelExperienceMap"
 import { createTRPCRouter } from "~/server/api/trpc"
 import { simulateBattle } from "~/server/lib/battle/simulateBattle"
 import { respawnWildlife } from "~/server/lib/respawnWildlife"
@@ -295,6 +296,12 @@ export const battleRouter = createTRPCRouter({
             //   expRes,
             //   newXp: (winningCatch?.metadata?.exp || 0) + expRes,
             // })
+            const exp = (winningCatch?.metadata?.exp || 0) + expRes
+            const level = getLevelFromExp({
+              ...winningCatch.metadata,
+              exp,
+            })
+
             await ctx.prisma.catch.update({
               where: {
                 id: winnerFighter.catch.id,
@@ -302,7 +309,8 @@ export const battleRouter = createTRPCRouter({
               data: {
                 metadata: {
                   ...winningCatch.metadata,
-                  exp: (winningCatch?.metadata?.exp || 0) + expRes,
+                  exp,
+                  level,
                 },
               },
               select: {
