@@ -9,10 +9,12 @@ export const grantExp = async ({
   battleReport,
   prisma,
   winnerParticipationId,
+  onlyFaintedGiveExp,
 }: {
   battleReport: BattleReport
   prisma: MyPrismaClient
   winnerParticipationId: string
+  onlyFaintedGiveExp: boolean
 }) => {
   const winnerSides = filter(
     battleReport.sides,
@@ -23,8 +25,8 @@ export const grantExp = async ({
     battleReport.sides,
     (s) => s.participationId === winnerParticipationId
   )
-  const defeatedFighters = flatMap(looserSides, (s) => s.fighters).filter(
-    (f) => f.fainted
+  const defeatedFighters = flatMap(looserSides, (s) => s.fighters).filter((f) =>
+    onlyFaintedGiveExp ? f.fainted : true
   )
 
   const expReports = await Promise.all(

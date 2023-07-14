@@ -328,6 +328,7 @@ export const catchRouter = createTRPCRouter({
           battleReport: battle.metadata.battleReport,
           prisma: ctx.prisma,
           winnerParticipationId,
+          onlyFaintedGiveExp: false,
         })
         return {
           expReports,

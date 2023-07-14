@@ -290,6 +290,7 @@ export const battleRouter = createTRPCRouter({
             prisma: ctx.prisma,
             battleReport,
             winnerParticipationId: winnerSide.participationId,
+            onlyFaintedGiveExp: true,
           })
           const iAmWinner = winnerSide.player?.id === ctx.player.id
           return {
