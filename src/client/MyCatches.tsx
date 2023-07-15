@@ -7,13 +7,15 @@ import {
   type DragEndEvent,
 } from "@dnd-kit/core"
 import { restrictToFirstScrollableAncestor } from "@dnd-kit/modifiers"
+import { useAtom } from "jotai"
 import { includes, map, orderBy } from "lodash-es"
-import { ArrowDown, ArrowUp } from "lucide-react"
-import { useState } from "react"
+import { SortDesc } from "lucide-react"
+import { useMemo } from "react"
 import { toast } from "sonner"
 import { z } from "zod"
 import { MAX_FIGHTERS_PER_TEAM } from "~/config"
 import { api } from "~/utils/api"
+import { atomWithLocalStorage } from "~/utils/atomWithLocalStorage"
 import { fillWithNulls } from "~/utils/fillWithNulls"
 import { DividerHeading } from "./DividerHeading"
 import { DraggableCatch } from "./DraggableCatch"
@@ -30,6 +32,36 @@ import { useGetWildlifeName } from "./useGetWildlifeName"
 import { useMyTeam } from "./useMyTeam"
 import { usePlayer } from "./usePlayer"
 
+const orderOptions = [
+  {
+    label: "Latest Caught",
+    by: "caughtAt",
+    direction: "desc",
+  },
+  {
+    label: "Oldest Caught",
+    by: "caughtAt",
+    direction: "asc",
+  },
+  {
+    label: "Highest Level",
+    by: "level",
+    direction: "desc",
+  },
+  {
+    label: "Lowest Level",
+    by: "level",
+    direction: "asc",
+  },
+  {
+    label: "A-Z",
+    by: "name",
+    direction: "asc",
+  },
+] as const
+
+const orderIdxAtom = atomWithLocalStorage<number>("catchOverview-orderIdx", 0)
+
 export const MyCatches = () => {
   const { playerId } = usePlayer()
 
@@ -37,8 +69,6 @@ export const MyCatches = () => {
 
   const { myTeam, catchesWithoutTeam, isLoading, isFetching } = useMyTeam()
 
-  const [orderCatchesBy, setOrderCatchesBy] = useState<string>("caughtAt")
-  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc")
   const trpc = api.useContext()
 
   const { mutate: setMyTeamBattleOrder, isLoading: isMutating } =
@@ -157,6 +187,32 @@ export const MyCatches = () => {
     })
   )
 
+  const [orderIdx, setOrderIdx] = useAtom(orderIdxAtom)
+  const order = orderOptions[orderIdx] || orderOptions[0]!
+  const ordered = useMemo(
+    () =>
+      orderBy(
+        catchesWithoutTeam,
+        [
+          (c) => {
+            if (order.by === "name") {
+              return c.name || getName(c.wildlife)
+            }
+            if (order.by === "level") {
+              return c.metadata.level
+            }
+            if (order.by === "caughtAt") {
+              return c.createdAt
+            }
+            return c.id
+          },
+          (c) => c.name || getName(c.wildlife),
+        ],
+        [order.direction, "asc"]
+      ),
+    [catchesWithoutTeam, getName, order.by, order.direction]
+  )
+
   if (isLoading) {
     return (
       <div className="flex items-center justify-center py-12 text-center text-sm opacity-60">
@@ -172,26 +228,6 @@ export const MyCatches = () => {
       </div>
     )
   }
-
-  const ordered = orderBy(
-    catchesWithoutTeam,
-    [
-      (c) => {
-        if (orderCatchesBy === "name") {
-          return c.name || getName(c.wildlife)
-        }
-        if (orderCatchesBy === "level") {
-          return c.metadata.level
-        }
-        if (orderCatchesBy === "caughtAt") {
-          return c.createdAt
-        }
-        return c.id
-      },
-      (c) => c.name || getName(c.wildlife),
-    ],
-    [sortOrder, "asc"]
-  )
 
   return (
     <DndContext
@@ -219,32 +255,24 @@ export const MyCatches = () => {
         ))}
       </div>
       <DividerHeading>Your Catches</DividerHeading>
-      <div className="px-2 flex-1 flex items-center gap-2 justify-end">
-        <div
-          className="cursor-pointer"
-          onClick={() => {
-            setSortOrder(sortOrder === "desc" ? "asc" : "desc")
-          }}
-        >
-          {sortOrder === "desc" ? (
-            <ArrowDown className="w-4 h-4" />
-          ) : (
-            <ArrowUp className="w-4 h-4" />
-          )}
-        </div>
-        <div className="w-28">
+      <div className="px-4 flex-1 flex items-center gap-2 justify-end">
+        <div className="flex-1" />
+        <div>
           <Select
-            onValueChange={(v) => setOrderCatchesBy(v)}
-            defaultValue={orderCatchesBy}
+            onValueChange={(v) => setOrderIdx(parseInt(v))}
+            defaultValue={orderIdx.toString()}
           >
-            <SelectTrigger className="p-1 border-0 border-b-2 rounded-none h-8">
+            <SelectTrigger className="flex flex-row gap-1 text-sm">
+              <SortDesc className="w-4 h-4 opacity-60" />
               <SelectValue />
             </SelectTrigger>
 
             <SelectContent>
-              <SelectItem value="caughtAt">Caught At</SelectItem>
-              <SelectItem value="level">Level</SelectItem>
-              <SelectItem value="name">Name</SelectItem>
+              {orderOptions.map((o, idx) => (
+                <SelectItem key={idx} value={idx.toString()}>
+                  {o.label}
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
         </div>
