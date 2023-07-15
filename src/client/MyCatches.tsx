@@ -21,6 +21,7 @@ import { DividerHeading } from "./DividerHeading"
 import { DraggableCatch } from "./DraggableCatch"
 import { DroppableTeamSlot } from "./DroppableTeamSlot"
 import { cn } from "./cn"
+import { Input } from "./shadcn/ui/input"
 import {
   Select,
   SelectContent,
@@ -61,6 +62,7 @@ const orderOptions = [
 ] as const
 
 const orderIdxAtom = atomWithLocalStorage<number>("catchOverview-orderIdx", 0)
+const searchAtom = atomWithLocalStorage<string>("catchOverview-search", "")
 
 export const MyCatches = () => {
   const { playerId } = usePlayer()
@@ -213,6 +215,33 @@ export const MyCatches = () => {
     [catchesWithoutTeam, getName, order.by, order.direction]
   )
 
+  const [search, setSearch] = useAtom(searchAtom)
+  const searched = useMemo(
+    () =>
+      ordered.filter((c) => {
+        if (!search) return true
+        const fields = [
+          c.name,
+          c.metadata.level?.toString(),
+          c.wildlife.metadata.taxonName,
+          c.wildlife.metadata.taxonCommonName,
+          c.wildlife.metadata.taxonLocaleNames?.["de"],
+          c.wildlife.metadata.taxonLocaleNames?.["en"],
+          c.fighter.ability,
+          c.fighter.nature,
+          c.fighter.species,
+          c.fighter.speciesNum,
+          ...c.fighter.types,
+          ...c.fighter.moves.map((m) => m.name),
+        ]
+        const searchWords = search.toLowerCase().split(" ")
+        return searchWords.every((word) =>
+          fields.some((field) => field?.toString().toLowerCase().includes(word))
+        )
+      }),
+    [ordered, search]
+  )
+
   if (isLoading) {
     return (
       <div className="flex items-center justify-center py-12 text-center text-sm opacity-60">
@@ -255,14 +284,20 @@ export const MyCatches = () => {
         ))}
       </div>
       <DividerHeading>Your Catches</DividerHeading>
-      <div className="px-4 flex-1 flex items-center gap-2 justify-end">
+      <div className="pt-1 pl-2 pr-4 flex-1 flex items-center gap-2 justify-end">
+        <Input
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder="Search"
+          className="rounded-full max-w-xs"
+        />
         <div className="flex-1" />
         <div>
           <Select
             onValueChange={(v) => setOrderIdx(parseInt(v))}
             defaultValue={orderIdx.toString()}
           >
-            <SelectTrigger className="flex flex-row gap-1 text-sm">
+            <SelectTrigger className="flex flex-row gap-1 text-xs">
               <SortDesc className="w-4 h-4 opacity-60" />
               <SelectValue />
             </SelectTrigger>
@@ -285,7 +320,7 @@ export const MyCatches = () => {
       )}
       <DroppableTeamSlot id={-1} accepts={["team"]}>
         <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-2 gap-y-3 p-2">
-          {map(ordered, (c) => (
+          {map(searched, (c) => (
             <DraggableCatch c={c} key={c.id} type="bench" />
           ))}
         </div>
