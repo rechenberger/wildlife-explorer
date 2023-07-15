@@ -173,6 +173,26 @@ export const MyCatches = () => {
     )
   }
 
+  const ordered = orderBy(
+    catchesWithoutTeam,
+    [
+      (c) => {
+        if (orderCatchesBy === "name") {
+          return c.name || getName(c.wildlife)
+        }
+        if (orderCatchesBy === "level") {
+          return c.metadata.level
+        }
+        if (orderCatchesBy === "caughtAt") {
+          return c.createdAt
+        }
+        return c.id
+      },
+      (c) => c.name || getName(c.wildlife),
+    ],
+    [sortOrder, "asc"]
+  )
+
   return (
     <DndContext
       onDragEnd={handleDragEnd}
@@ -237,30 +257,9 @@ export const MyCatches = () => {
       )}
       <DroppableTeamSlot id={-1} accepts={["team"]}>
         <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-2 gap-y-3 p-2">
-          {map(
-            orderBy(
-              catchesWithoutTeam,
-              [
-                (c) => {
-                  if (orderCatchesBy === "name") {
-                    return c.name || getName(c.wildlife)
-                  }
-                  if (orderCatchesBy === "level") {
-                    return c.metadata.level
-                  }
-                  if (orderCatchesBy === "caughtAt") {
-                    return c.createdAt
-                  }
-                  return c.id
-                },
-                (c) => c.name || getName(c.wildlife),
-              ],
-              [sortOrder, "asc"]
-            ),
-            (c) => (
-              <DraggableCatch c={c} key={c.id} type="bench" />
-            )
-          )}
+          {map(ordered, (c) => (
+            <DraggableCatch c={c} key={c.id} type="bench" />
+          ))}
         </div>
       </DroppableTeamSlot>
     </DndContext>
