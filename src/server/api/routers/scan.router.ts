@@ -16,7 +16,7 @@ export const scanRouter = createTRPCRouter({
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const [cooldownResult, placesResult, wildlifeResult] = await Promise.all([
+    const [cooldown, places, wildlife] = await Promise.all([
       ctx.prisma.player.update({
         where: {
           id: ctx.player.id,
@@ -43,6 +43,6 @@ export const scanRouter = createTRPCRouter({
       }),
     ])
 
-    return wildlifeResult
+    return { places, wildlife }
   }),
 })

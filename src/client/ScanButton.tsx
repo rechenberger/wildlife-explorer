@@ -65,7 +65,7 @@ export const ScanButton = () => {
               toast.promise(promise, {
                 loading: "Scanning...",
                 success: (result) =>
-                  `Scan complete! ${result.countFound} new Observations.`,
+                  `Scan complete! ${result.wildlife.countFound} new Observations. ${result.places.countFound} new Places.`,
                 error: "Scan failed.",
               })
               await promise

@@ -66,10 +66,11 @@ export const scanWildlife = async ({
     wildlifes.push(...chunkResult)
   }
 
+  const minCreatedAt = subSeconds(now, 10)
   const countAll = wildlifes.length
   const countFound = filter(
     wildlifes,
-    (w) => w.foundById === playerId && w.createdAt >= subSeconds(now, 10)
+    (w) => w.foundById === playerId && w.createdAt >= minCreatedAt
   ).length
 
   return {

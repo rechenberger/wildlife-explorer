@@ -1,4 +1,6 @@
-import { chunk, map } from "lodash-es"
+import { type Place } from "@prisma/client"
+import { subSeconds } from "date-fns"
+import { chunk, filter, map } from "lodash-es"
 import { DEFAULT_DB_CHUNK_SIZE } from "~/config"
 import { type MyPrismaClient } from "../db"
 import { type LatLng } from "../schema/LatLng"
@@ -14,11 +16,12 @@ export const scanPlaces = async ({
   prisma: MyPrismaClient
   playerId: string
 }) => {
-  const places = await findPlaces({ location })
+  const placesRaw = await findPlaces({ location })
 
-  const chunks = chunk(places, DEFAULT_DB_CHUNK_SIZE)
+  const places: Place[] = []
+  const chunks = chunk(placesRaw, DEFAULT_DB_CHUNK_SIZE)
   for (const chunk of chunks) {
-    await Promise.all(
+    const chunkResult = await Promise.all(
       map(chunk, async (p) => {
         const data = {
           googlePlaceId: p.googlePlaceId,
@@ -39,5 +42,18 @@ export const scanPlaces = async ({
         })
       })
     )
+    places.push(...chunkResult)
+  }
+
+  const minCreatedAt = subSeconds(new Date(), 10)
+  const countAll = places.length
+  const countFound = filter(
+    places,
+    (p) => p.foundById === playerId && p.createdAt >= minCreatedAt
+  ).length
+
+  return {
+    countAll,
+    countFound,
   }
 }
