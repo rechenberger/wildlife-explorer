@@ -6,6 +6,7 @@ import {
   WildlifeFighterPlusMove,
   getWildlifeFighterPlusMove,
 } from "./WildlifeFighterPlusMove"
+import { applyFighterStats } from "./applyFighterStats"
 import {
   getWildlifeFighter,
   type GetWildlifeFighterOptions,
@@ -29,6 +30,7 @@ export const getWildlifeFighterPlus = async (
   if (!p) {
     throw new Error("Could not build FighterPlus")
   }
+  applyFighterStats({ p, catchMetadata: options.metadata })
 
   return transformWildlifeFighterPlus({
     pokemonSet: fighter,

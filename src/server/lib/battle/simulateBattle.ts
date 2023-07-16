@@ -18,6 +18,7 @@ import {
   type BattleReportFighter,
   type BattleReportSide,
 } from "./BattleReport"
+import { applyFighterStats } from "./applyFighterStats"
 import {
   getBattleForSimulation,
   type BattleInput,
@@ -136,6 +137,9 @@ export const simulateBattle = async ({
         battle.setPlayer(sideId, {
           name,
           team: team.map((t) => t.fighter),
+        })
+        battle.getSide(sideId).pokemon.forEach((p) => {
+          applyFighterStats({ p })
         })
       }
 
