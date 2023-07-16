@@ -1,5 +1,7 @@
+import { findIndex } from "lodash-es"
 import { z } from "zod"
 import { createTRPCRouter } from "~/server/api/trpc"
+import { getWildlifeFighterPlusMove } from "~/server/lib/battle/WildlifeFighterPlusMove"
 import { getMovesInLearnset } from "~/server/lib/battle/getWildlifeFighter"
 import { getWildlifeFighterPlus } from "~/server/lib/battle/getWildlifeFighterPlus"
 import { playerProcedure } from "../middleware/playerProcedure"
@@ -23,6 +25,22 @@ export const moveRouter = createTRPCRouter({
       })
       const fighter = await getWildlifeFighterPlus(c)
       const learnsetMoves = await getMovesInLearnset(fighter.species)
-      // const x = await
+      const allMoves = learnsetMoves.map((move) => {
+        const movePlus = getWildlifeFighterPlusMove({
+          move: move.move,
+        })
+        const activeIdx = findIndex(fighter.moves, (m) => m.id === movePlus.id)
+        const learnAtLevel = move.level
+        const learned = fighter.level >= learnAtLevel
+
+        return {
+          ...movePlus,
+          activeIdx,
+          learnAtLevel,
+          learned,
+        }
+      })
+
+      return allMoves
     }),
 })
