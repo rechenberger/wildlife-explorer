@@ -110,7 +110,7 @@ export const WildlifeMarker = ({ w }: { w: Wildlife }) => {
         {/* <div className="absolute -bottom-4 line-clamp-1 hidden whitespace-nowrap rounded-full bg-amber-400 p-1 text-[4px] font-bold leading-none text-white shadow md:group-hover:flex">
                 {getName(w)}
               </div> */}
-        <div className="absolute -bottom-10 line-clamp-1 hidden overflow-visible p-1 text-[4px] font-bold leading-none shadow md:group-hover:flex scale-[40%] text-black w-56 flex-col">
+        <div className="absolute -bottom-10 line-clamp-1 hidden overflow-visible p-1 text-[4px] font-bold leading-none md:group-hover:flex scale-[40%] text-black w-56 flex-col">
           <FighterChipByWildlife
             w={w}
             showAbsoluteHp={false}
