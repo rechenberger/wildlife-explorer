@@ -12,7 +12,9 @@ import { groupBy, map } from "lodash-es"
 import dynamic from "next/dynamic"
 import { Fragment, useMemo, type PropsWithChildren } from "react"
 import { toast } from "sonner"
+import { MAX_MOVES_PER_FIGHTER } from "~/config"
 import { api } from "~/utils/api"
+import { fillWithNulls } from "~/utils/fillWithNulls"
 import { CatchDetails } from "./CatchDetails"
 import { DividerHeading } from "./DividerHeading"
 import { FighterMove, type FighterMoveProps } from "./FighterMoves"
@@ -51,7 +53,7 @@ export const MoveSwapper = ({ catchId }: { catchId: string }) => {
     oldMoveId,
   }: {
     newMoveId: string
-    oldMoveId: string
+    oldMoveId?: string
   }) => {
     if (!playerId) return
     toast.promise(
@@ -99,7 +101,10 @@ export const MoveSwapper = ({ catchId }: { catchId: string }) => {
           const newMoveId = e.active.id.toString()
           const oldMoveId = e.over?.id.toString()
           if (!newMoveId || !oldMoveId) return
-          swapInMove({ newMoveId, oldMoveId })
+          swapInMove({
+            newMoveId,
+            oldMoveId: oldMoveId === "empty" ? undefined : oldMoveId,
+          })
         }}
         sensors={sensors}
         modifiers={[restrictToFirstScrollableAncestor]}
@@ -107,15 +112,22 @@ export const MoveSwapper = ({ catchId }: { catchId: string }) => {
         <>
           <DividerHeading>Active Moves</DividerHeading>
           <div className="grid flex-1 grid-cols-1 gap-1">
-            {map(active, (move) => {
-              return (
-                <Fragment key={move.id}>
-                  <DroppableMoveSlot id={move.id}>
-                    <DraggableMove fighter={c} move={move} />
-                  </DroppableMoveSlot>
-                </Fragment>
-              )
-            })}
+            {map(
+              fillWithNulls(active || [], MAX_MOVES_PER_FIGHTER),
+              (move, idx) => {
+                return (
+                  <Fragment key={move?.id || idx}>
+                    <DroppableMoveSlot id={move?.id || "empty"}>
+                      {move ? (
+                        <DraggableMove fighter={c} move={move} />
+                      ) : (
+                        <FighterMove fighter={c} move={null} />
+                      )}
+                    </DroppableMoveSlot>
+                  </Fragment>
+                )
+              }
+            )}
           </div>
         </>
         {!!learned?.length && (
