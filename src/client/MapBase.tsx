@@ -6,6 +6,7 @@ import { DEFAULT_LOCATION } from "~/config"
 import { env } from "~/env.mjs"
 import { MapRefProvider } from "./useMapRef"
 import { useNavigation } from "./useNavigation"
+import { useSettingsMapStyle } from "./useSettingsMapStyle"
 
 export const mapStateAtom = atom({
   lat: DEFAULT_LOCATION.lat,
@@ -52,9 +53,7 @@ export const MapBase = ({
 
   const ref = useRef<MapRef | null>(null)
 
-  // useEffect(() => {
-  //   ref.current?.setCenter()
-  // })
+  const { mapStyle } = useSettingsMapStyle()
 
   return (
     <>
@@ -71,13 +70,7 @@ export const MapBase = ({
         projection={"globe" as any}
         logoPosition="top-right"
         attributionControl={false}
-        // mapStyle="mapbox://styles/mapbox/streets-v9"
-        // mapStyle="mapbox://styles/mapbox/dark-v10"
-        // mapStyle="mapbox://styles/mapbox/outdoors-v12"
-        // mapStyle="mapbox://styles/mapbox/satellite-v9"
-        mapStyle="mapbox://styles/mapbox/satellite-streets-v12"
-        // mapStyle="mapbox://styles/rechenberger/cljkelien006n01o429b9440e"
-        // mapStyle="mapbox://styles/rechenberger/cljklaom7007001r5hfwlcrfu"
+        mapStyle={mapStyle.mapboxUrl}
         mapboxAccessToken={env.NEXT_PUBLIC_MAPBOX_TOKEN}
         onMove={(e) => {
           setMapStateDebounced({

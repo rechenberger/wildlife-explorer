@@ -1,6 +1,7 @@
 import { BattleViewButton } from "./BattleViewButton"
 import { MyCatchesButton } from "./MyCatchesButton"
 import { ScanButton } from "./ScanButton"
+import { SettingsButton } from "./SettingsButton"
 import { SocialOverviewButton } from "./SocialOverviewButton"
 
 export const MainActionButtons = () => {
@@ -16,6 +17,7 @@ export const MainActionButtons = () => {
         <BattleViewButton />
         <MyCatchesButton />
         <SocialOverviewButton />
+        <SettingsButton />
         {/* <TeleportToCurrentPositionButton /> */}
       </div>
     </>
