@@ -31,7 +31,7 @@ export const CareButton = () => {
         disabled={isLoading}
       >
         <HeartPulse className="w-4 h-4 mr-1" />
-        <span>Care</span>
+        <span>Care for my Team</span>
       </Button>
     </>
   )
