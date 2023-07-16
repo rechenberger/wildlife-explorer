@@ -27,7 +27,7 @@ export const SocialOverview = () => {
     },
   })
 
-  const setMapCenter = useMapFlyTo()
+  const mapFlyTo = useMapFlyTo()
 
   return (
     <>
@@ -55,7 +55,7 @@ export const SocialOverview = () => {
                   className="flex flex-row gap-1 rounded text-xs items-center bg-black text-white px-2 py-0.5 border"
                   onClick={() => {
                     NiceModal.hide(SocialOverviewModal)
-                    setMapCenter(player)
+                    mapFlyTo({ center: player })
                   }}
                 >
                   <Locate className="w-4 h-4" />

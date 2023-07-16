@@ -1,11 +1,12 @@
-import { useAtomValue, useSetAtom } from "jotai"
+import NiceModal from "@ebay/nice-modal-react"
+import { useAtomValue } from "jotai"
 import { Check, Clock } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { useState } from "react"
 import { Marker } from "react-map-gl"
 import { type RouterOutputs } from "~/utils/api"
-import { currentObservationIdAtom } from "./CurrentObservation"
+import { CurrentObservationModal } from "./CurrentObservationModal"
 import { FighterChipByWildlife } from "./FighterChipByWildlife"
 import { cn } from "./cn"
 import { useActiveNavigation } from "./useActiveNavigation"
@@ -14,7 +15,6 @@ import { navigatingToObservationIdAtom, useNavigation } from "./useNavigation"
 type Wildlife = RouterOutputs["wildlife"]["nearMe"][number]
 
 export const WildlifeMarker = ({ w }: { w: Wildlife }) => {
-  const setCurrentObservationId = useSetAtom(currentObservationIdAtom)
   const navigatingtoObservationId = useAtomValue(navigatingToObservationIdAtom)
 
   const { isNavigating } = useActiveNavigation()
@@ -49,18 +49,12 @@ export const WildlifeMarker = ({ w }: { w: Wildlife }) => {
             navigatingtoObservationId === w.observationId &&
             "bg-blue-500"
         )}
-        // onMouseEnter={() => {
-        //   console.log(w)
-        // }}
         onClick={async (e) => {
           e.stopPropagation()
           e.preventDefault()
-          setCurrentObservationId(w.observationId)
-          // if (!w.lat || !w.lng) return
-          // navigate({
-          //   lat: w.lat,
-          //   lng: w.lng,
-          // })
+          NiceModal.show(CurrentObservationModal, {
+            wildlifeId: w.id,
+          })
         }}
         onDoubleClick={(e) => {
           e.stopPropagation()

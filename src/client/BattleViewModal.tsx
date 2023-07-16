@@ -16,6 +16,7 @@ export const BattleViewModal = NiceModal.create<{
   return (
     <Dialog
       open={modal.visible}
+      modal={false}
       onOpenChange={(open) => {
         if (!open) {
           modal.reject()

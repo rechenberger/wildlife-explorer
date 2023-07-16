@@ -1,5 +1,5 @@
 import NiceModal from "@ebay/nice-modal-react"
-import { atom, useAtomValue, useSetAtom } from "jotai"
+import { atom, useAtomValue } from "jotai"
 import { Check, Clock, ExternalLink, Frown, LocateOff, X } from "lucide-react"
 import dynamic from "next/dynamic"
 import Image from "next/image"
@@ -15,7 +15,6 @@ import { Away } from "./Away"
 import { BattleViewModal } from "./BattleViewModal"
 import { FighterChipByWildlife } from "./FighterChipByWildlife"
 import { TimeAgo } from "./TimeAgo"
-import { useWildlife } from "./WildlifeMarkers"
 import { cn } from "./cn"
 import { formatMeters } from "./formatMeters"
 import { useCatch } from "./useCatch"
@@ -27,23 +26,34 @@ const JsonViewer = dynamic(() => import("../client/JsonViewer"), { ssr: false })
 
 export const currentObservationIdAtom = atom<number | null>(null)
 
-export const CurrentObservation = () => {
-  const { wildlife } = useWildlife()
-  const currentObservationId = useAtomValue(currentObservationIdAtom)
-  const setCurrentObservationId = useSetAtom(currentObservationIdAtom)
-
-  const w = wildlife?.find((w) => w.observationId === currentObservationId)
+export const CurrentObservation = ({
+  wildlifeId,
+  close,
+}: {
+  wildlifeId: string
+  close: () => void
+}) => {
+  const { playerId } = usePlayer()
+  const { data } = api.wildlife.getOne.useQuery(
+    {
+      playerId: playerId!,
+      wildlifeId,
+    },
+    {
+      enabled: !!playerId,
+    }
+  )
 
   const navigatingToObservationId = useAtomValue(navigatingToObservationIdAtom)
   const { navigate } = useNavigation()
 
-  const { playerId } = usePlayer()
-  const trpc = api.useContext()
   const { doCatch, isLoading: catching } = useCatch()
+
+  const trpc = api.useContext()
   const { mutateAsync: attackWildlife, isLoading: attacking } =
     api.battle.attackWildlife.useMutation({
       onSuccess: (data) => {
-        setCurrentObservationId(null)
+        close()
         trpc.battle.invalidate()
         NiceModal.show(BattleViewModal, {
           battleId: data.id,
@@ -53,32 +63,19 @@ export const CurrentObservation = () => {
 
   const getName = useGetWildlifeName()
 
-  if (!w) return null
+  if (!data) return null
+
+  const w = data.wildlife
 
   const location = w.lat && w.lng ? { lat: w.lat, lng: w.lng } : null
   const onCooldown = w.respawnsAt > new Date()
 
   return (
     <>
-      <div
-        className="fixed inset-0 z-50 cursor-pointer bg-black/20 md:hidden"
-        onClick={(e) => {
-          e.stopPropagation()
-          setCurrentObservationId(null)
-        }}
-      />
-      <div
-        className="fixed bottom-0 right-0 z-50 flex w-full max-w-md flex-col gap-4 rounded-t-xl bg-white p-4 text-black shadow md:bottom-8 md:right-8 md:rounded-xl"
-        style={{
-          paddingBottom: "calc(env(safe-area-inset-bottom) + 1rem)",
-        }}
-      >
+      <>
         <div className="flex flex-row items-center gap-2">
           <div className="flex-1 truncate text-2xl">{getName(w)}</div>
-          <button
-            className="shrink-0"
-            onClick={() => setCurrentObservationId(null)}
-          >
+          <button className="shrink-0" onClick={() => close()}>
             <X size={16} />
           </button>
         </div>
@@ -220,7 +217,7 @@ export const CurrentObservation = () => {
             </button>
           )}
         </div>
-      </div>
+      </>
     </>
   )
 }
