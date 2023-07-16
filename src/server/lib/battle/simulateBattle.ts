@@ -102,11 +102,8 @@ export const simulateBattle = async ({
           battleParticipant.player?.catches.map(async (c, idx) => {
             return {
               fighter: await getWildlifeFighter({
-                wildlife: c.wildlife,
-                seed: c.seed,
-                catchMetaData: c.metadata,
+                ...c,
                 idx,
-                name: c.name,
               }),
               wildlife: c.wildlife,
               catch: c,
