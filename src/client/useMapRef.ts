@@ -16,7 +16,7 @@ export const useMapSetCenter = () => {
   const ref = useMapRef()
   return ({ lat, lng }: LatLng) => {
     if (ref.current) {
-      ref.current.setCenter({ lat, lng })
+      ref.current.flyTo({ center: { lat, lng } })
     } else {
       console.warn("MapRef not found")
     }
