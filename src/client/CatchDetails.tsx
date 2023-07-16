@@ -19,11 +19,11 @@ import { MoveSwapperModal } from "./MoveSwapperModal"
 import { TimeAgo } from "./TimeAgo"
 import { TypeBadge } from "./TypeBadge"
 import { Progress } from "./shadcn/ui/progress"
-import { editIcon } from "./typeIcons"
 import { useMyCatch } from "./useCatches"
 import { useGetWildlifeName } from "./useGetWildlifeName"
 import { useMapSetCenter } from "./useMapRef"
 import { usePlayer } from "./usePlayer"
+import { swapIcon } from "./typeIcons"
 
 const JsonViewer = dynamic(() => import("../client/JsonViewer"), { ssr: false })
 
@@ -183,7 +183,7 @@ export const CatchDetails = ({
             {canSwapMoves && !player?.metadata?.activeBattleId && (
               <div className="flex flex-row-reverse">
                 <TypeBadge
-                  icon={editIcon}
+                  icon={swapIcon}
                   content={"Swap Moves"}
                   size="big"
                   className="w-1/2"

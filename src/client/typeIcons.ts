@@ -1,6 +1,7 @@
 import {
   Apple,
   ArrowLeft,
+  ArrowLeftRight,
   ArrowRight,
   Award,
   Biohazard,
@@ -254,6 +255,12 @@ export const editIcon = {
   ...defaultIcon,
   name: "Edit",
   icon: Edit2,
+}
+
+export const swapIcon = {
+  ...defaultIcon,
+  name: "Edit",
+  icon: ArrowLeftRight,
 }
 
 export type TypeIcon = {
