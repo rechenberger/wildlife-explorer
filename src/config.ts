@@ -39,3 +39,5 @@ export const BATTLE_INPUT_VERSION = 3
 
 export const SHOW_FUTURE_MOVES = true
 export const CAN_RESET_MOVES = false
+
+export const LOG_SCAN_TIME = true

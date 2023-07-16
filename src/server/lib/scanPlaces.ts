@@ -1,7 +1,7 @@
 import { type Place } from "@prisma/client"
 import { subSeconds } from "date-fns"
 import { chunk, filter, map } from "lodash-es"
-import { DEFAULT_DB_CHUNK_SIZE } from "~/config"
+import { DEFAULT_DB_CHUNK_SIZE, LOG_SCAN_TIME } from "~/config"
 import { type MyPrismaClient } from "../db"
 import { type LatLng } from "../schema/LatLng"
 import { type PlaceMetadata } from "../schema/PlaceMetadata"
@@ -16,7 +16,10 @@ export const scanPlaces = async ({
   prisma: MyPrismaClient
   playerId: string
 }) => {
+  LOG_SCAN_TIME && console.time("scanPlaces")
+  LOG_SCAN_TIME && console.time("findPlaces")
   const placesRaw = await findPlaces({ location })
+  LOG_SCAN_TIME && console.timeEnd("findPlaces")
 
   const places: Place[] = []
   const chunks = chunk(placesRaw, DEFAULT_DB_CHUNK_SIZE)
@@ -51,6 +54,7 @@ export const scanPlaces = async ({
     places,
     (p) => p.foundById === playerId && p.createdAt >= minCreatedAt
   ).length
+  LOG_SCAN_TIME && console.timeEnd("scanPlaces")
 
   return {
     countAll,

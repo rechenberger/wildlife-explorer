@@ -3,6 +3,7 @@ import { subSeconds } from "date-fns"
 import { chunk, filter, flatMap, map, uniqBy } from "lodash-es"
 import {
   DEFAULT_DB_CHUNK_SIZE,
+  LOG_SCAN_TIME,
   RADIUS_IN_KM_SCAN_WILDLIFE_BIG,
   RADIUS_IN_KM_SCAN_WILDLIFE_SMALL,
 } from "~/config"
@@ -19,6 +20,8 @@ export const scanWildlife = async ({
   prisma: MyPrismaClient
   playerId: string
 }) => {
+  LOG_SCAN_TIME && console.time("scanWildlife")
+  LOG_SCAN_TIME && console.time("findObservations")
   const observationsMultiRadius = await Promise.all([
     findObservations({
       lat: location.lat,
@@ -31,6 +34,7 @@ export const scanWildlife = async ({
       radiusInKm: RADIUS_IN_KM_SCAN_WILDLIFE_BIG,
     }),
   ])
+  LOG_SCAN_TIME && console.timeEnd("findObservations")
 
   const observations = uniqBy(
     flatMap(observationsMultiRadius, (o) => o),
@@ -72,6 +76,8 @@ export const scanWildlife = async ({
     wildlifes,
     (w) => w.foundById === playerId && w.createdAt >= minCreatedAt
   ).length
+
+  LOG_SCAN_TIME && console.timeEnd("scanWildlife")
 
   return {
     countAll,
