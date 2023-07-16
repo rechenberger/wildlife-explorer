@@ -30,7 +30,7 @@ export const CareButton = () => {
         }}
         disabled={isLoading}
       >
-        <HeartPulse className="w-4 h-4 mr-1" />
+        <HeartPulse className="w-4 h-4 mr-2" />
         <span>Care for my Team</span>
       </Button>
     </>
