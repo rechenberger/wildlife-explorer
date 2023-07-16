@@ -376,6 +376,13 @@ export const battleRouter = createTRPCRouter({
         },
       })
 
+      if (battle.metadata.battleReport) {
+        await savePostBattleCatchMetadata({
+          battleReport: battle.metadata.battleReport,
+          prisma: ctx.prisma,
+        })
+      }
+
       await Promise.all(
         map(battle.battleParticipants, async (p) => {
           if (p.wildlifeId) {
