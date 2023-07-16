@@ -1,6 +1,7 @@
 import { groupBy, map } from "lodash-es"
 import dynamic from "next/dynamic"
 import { Fragment, useMemo } from "react"
+import { toast } from "sonner"
 import { api } from "~/utils/api"
 import { CatchDetails } from "./CatchDetails"
 import { DividerHeading } from "./DividerHeading"
@@ -25,6 +26,16 @@ export const MoveSwapper = ({ catchId }: { catchId: string }) => {
       return "future"
     })
   }, [allMoves])
+
+  const swapInMove = ({
+    moveId,
+    slotIdx,
+  }: {
+    moveId: string
+    slotIdx: number
+  }) => {
+    toast(`Swapping Move ${moveId} into Slot ${slotIdx + 1}`)
+  }
 
   if (!c || !allMoves)
     return (
