@@ -99,8 +99,12 @@ export const simulateBattle = async ({
       }[] = []
 
       if (!!battleParticipant.player?.catches) {
+        // Dont bring fainted fighters, they suck
+        const nonFainted = battleParticipant.player.catches.filter((c) =>
+          typeof c.metadata.hp === "number" ? c.metadata.hp > 0 : true
+        )
         team = await Promise.all(
-          battleParticipant.player?.catches.map(async (c, idx) => {
+          nonFainted.map(async (c, idx) => {
             return {
               fighter: await getWildlifeFighter({
                 ...c,
