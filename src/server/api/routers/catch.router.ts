@@ -17,6 +17,7 @@ import { respawnWildlife } from "~/server/lib/respawnWildlife"
 import { LevelingRate, type CatchMetadata } from "~/server/schema/CatchMetadata"
 import { type PlayerMetadata } from "~/server/schema/PlayerMetadata"
 import { createSeed } from "~/utils/seed"
+import { careCenterProcedure } from "../middleware/careCenterProcedure"
 import { playerProcedure } from "../middleware/playerProcedure"
 import { wildlifeProcedure } from "../middleware/wildlifeProcedure"
 
@@ -55,44 +56,7 @@ export const catchRouter = createTRPCRouter({
     return catchesWithFighter
   }),
 
-  setBattleOrderPosition: playerProcedure
-    .input(
-      z.object({
-        catchId: z.string(),
-      })
-    )
-    .mutation(async ({ ctx, input }) => {
-      if (ctx.player.metadata?.activeBattleId) {
-        throw new TRPCError({
-          code: "BAD_REQUEST",
-          message: "Cannot change battle order while in a battle",
-        })
-      }
-
-      const maxBattleOrderPositionData = await ctx.prisma.catch.aggregate({
-        where: {
-          playerId: ctx.player.id,
-        },
-        _max: {
-          battleOrderPosition: true,
-        },
-      })
-
-      const maxBattleOrderPosition =
-        maxBattleOrderPositionData._max.battleOrderPosition || 0
-
-      await ctx.prisma.catch.updateMany({
-        where: {
-          playerId: ctx.player.id,
-          id: input.catchId,
-        },
-        data: {
-          battleOrderPosition: maxBattleOrderPosition + 1,
-        },
-      })
-    }),
-
-  setMyTeamBattleOrder: playerProcedure
+  setMyTeamBattleOrder: careCenterProcedure
     .input(z.object({ catchIds: z.array(z.string()) }))
     .mutation(async ({ ctx, input }) => {
       if (ctx.player.metadata?.activeBattleId) {
@@ -374,7 +338,7 @@ export const catchRouter = createTRPCRouter({
       })
     }),
 
-  care: playerProcedure.mutation(async ({ ctx }) => {
+  care: careCenterProcedure.mutation(async ({ ctx }) => {
     const all = await ctx.prisma.catch.findMany({
       where: {
         playerId: ctx.player.id,

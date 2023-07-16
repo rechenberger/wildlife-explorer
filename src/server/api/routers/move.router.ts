@@ -8,6 +8,7 @@ import { getWildlifeFighterPlusMove } from "~/server/lib/battle/WildlifeFighterP
 import { getMovesInLearnset } from "~/server/lib/battle/getWildlifeFighter"
 import { getWildlifeFighterPlus } from "~/server/lib/battle/getWildlifeFighterPlus"
 import { type CatchMetadata } from "~/server/schema/CatchMetadata"
+import { careCenterProcedure } from "../middleware/careCenterProcedure"
 import { playerProcedure } from "../middleware/playerProcedure"
 
 export const moveRouter = createTRPCRouter({
@@ -25,7 +26,8 @@ export const moveRouter = createTRPCRouter({
       })
       return allMoves
     }),
-  swap: playerProcedure
+
+  swap: careCenterProcedure
     .input(
       z.object({
         catchId: z.string(),

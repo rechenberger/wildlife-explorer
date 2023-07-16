@@ -186,8 +186,9 @@ model Place {
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
-    metadata Json
-    type     PlaceType
+    metadata      Json
+    type          PlaceType
+    googlePlaceId String    @unique
 
     lat Float
     lng Float
