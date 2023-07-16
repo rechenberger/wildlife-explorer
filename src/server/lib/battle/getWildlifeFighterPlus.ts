@@ -138,6 +138,7 @@ export const WildlifeFighterPlusMove = z.object({
     desc: z.string(),
     basePower: z.number().nullish(),
     accuracy: z.number().or(z.literal(true)),
+    pp: z.number(),
   }),
   effectiveness: z.number().nullish(),
   immunity: z.boolean().nullish(),

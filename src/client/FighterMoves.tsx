@@ -177,7 +177,8 @@ export const FighterMove = ({
               <div className="flex-1 flex flex-col gap-1">
                 <div className="text-xs font-bold opacity-60">Uses Left</div>
                 <div>
-                  {move?.status?.pp}/{move?.status?.maxpp}
+                  {move?.status?.pp ?? move?.definition?.pp}/
+                  {move?.definition?.pp}
                 </div>
               </div>
             </div>

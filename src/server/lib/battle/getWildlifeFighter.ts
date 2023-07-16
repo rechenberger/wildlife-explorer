@@ -168,7 +168,7 @@ export const getWildlifeFighter = async ({
   return fighter
 }
 
-async function getMovesInLearnset(speciesName: string) {
+export async function getMovesInLearnset(speciesName: string) {
   const species = Dex.species.get(speciesName)
   const moves: {
     move: string
