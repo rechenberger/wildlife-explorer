@@ -4,6 +4,7 @@ import { BattleMetadata } from "./schema/BattleMetadata"
 import { BattleParticipationMetadata } from "./schema/BattleParticipationMetadata"
 import { CatchMetadata } from "./schema/CatchMetadata"
 import { PlayerMetadata } from "./schema/PlayerMetadata"
+import { VenueMetadata } from "./schema/VenueMetadata"
 import { WildlifeMetadata } from "./schema/WildlifeMetadata"
 
 const createPrisma = () => {
@@ -58,6 +59,16 @@ const createPrisma = () => {
           },
           compute: (data) => {
             return BattleParticipationMetadata.parse(data.metadata || {})
+          },
+        },
+      },
+      venue: {
+        metadata: {
+          needs: {
+            metadata: true,
+          },
+          compute: (data) => {
+            return VenueMetadata.parse(data.metadata || {})
           },
         },
       },

@@ -9,6 +9,7 @@ import { playerRouter } from "./routers/player.router"
 import { pvpRouter } from "./routers/pvp.router"
 import { socialRouter } from "./routers/social.router"
 import { taxonRouter } from "./routers/taxon.router"
+import { venueRouter } from "./routers/venue.router"
 import { wildlifeRouter } from "./routers/wildlife.router"
 
 /**
@@ -27,6 +28,7 @@ export const appRouter = createTRPCRouter({
   social: socialRouter,
   pvp: pvpRouter,
   move: moveRouter,
+  venue: venueRouter,
   migration: migrationRouter,
 })
 
