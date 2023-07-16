@@ -402,7 +402,10 @@ export const catchRouter = createTRPCRouter({
           }
         })
 
-        // TODO: HP
+        // HP
+        if (fighter.hp !== fighter.hpMax) {
+          needToSave = true
+        }
         const hp = fighter.hpMax
 
         if (needToSave) {
