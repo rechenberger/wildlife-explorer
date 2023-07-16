@@ -1,6 +1,6 @@
 import { Dex, type PokemonSet } from "@pkmn/dex"
 import { Battle, toID, type Pokemon } from "@pkmn/sim"
-import { first } from "lodash-es"
+import { first, mapValues } from "lodash-es"
 import { z } from "zod"
 import {
   WildlifeFighterPlusMove,
@@ -38,6 +38,15 @@ export const getWildlifeFighterPlus = async (
   })
 }
 
+const ivToLabel = ({ iv }: { iv: number }) => {
+  if (iv === 31) return "Best"
+  if (iv === 30) return "Fantastic"
+  if (iv >= 26) return "Very Good"
+  if (iv >= 16) return "Pretty Good"
+  if (iv >= 1) return "Decent"
+  return "No good"
+}
+
 export const transformWildlifeFighterPlus = ({
   pokemonSet,
   pokemon,
@@ -65,6 +74,7 @@ export const transformWildlifeFighterPlus = ({
     spd: 0,
     spe: 0,
   }
+
   try {
     stats = {
       hp: p.maxhp,
@@ -92,6 +102,7 @@ export const transformWildlifeFighterPlus = ({
 
   const moveRequestData = p.getMoveRequestData()
 
+  const ivLabels = mapValues(pokemonSet.ivs, (iv) => ivToLabel({ iv }))
   const fighterPlus = {
     hp: p.hp,
     hpMax: p.maxhp,
@@ -111,6 +122,7 @@ export const transformWildlifeFighterPlus = ({
     trappedInMoves: moveRequestData?.trapped
       ? moveRequestData.moves
       : undefined,
+    ivLabels,
     // statusState: p.statusState,
   } satisfies WildlifeFighterPlus
 
@@ -140,6 +152,16 @@ export const WildlifeFighterPlus = z.object({
     spd: z.number(),
     spe: z.number(),
   }),
+  ivLabels: z
+    .object({
+      hp: z.string(),
+      atk: z.string(),
+      def: z.string(),
+      spa: z.string(),
+      spd: z.string(),
+      spe: z.string(),
+    })
+    .nullish(),
   isActive: z.boolean(),
   justFainted: z.boolean(),
   lastMove: z

@@ -17,26 +17,32 @@ export const FighterStatsChart: React.FC<{ fighter: BattleReportFighter }> = ({
     {
       subject: "HP",
       A: fighter.fighter.stats.hp,
+      B: fighter.fighter.ivLabels?.hp,
     },
     {
       subject: "Attack",
       A: fighter.fighter.stats.atk,
+      B: fighter.fighter.ivLabels?.atk,
     },
     {
       subject: "Defense",
       A: fighter.fighter.stats.def,
+      B: fighter.fighter.ivLabels?.def,
     },
     {
       subject: "Speed",
       A: fighter.fighter.stats.spe,
+      B: fighter.fighter.ivLabels?.spe,
     },
     {
       subject: "Sp. Def",
       A: fighter.fighter.stats.spd,
+      B: fighter.fighter.ivLabels?.spd,
     },
     {
       subject: "Sp. Atk",
       A: fighter.fighter.stats.spa,
+      B: fighter.fighter.ivLabels?.spa,
     },
   ]
   const size = 400
@@ -45,12 +51,15 @@ export const FighterStatsChart: React.FC<{ fighter: BattleReportFighter }> = ({
     let { x, y, payload, cx, cy } = props
 
     // move labels out
-    const moveOutFactor = 1.2
+    const moveOutFactor = 1.22
     x = (x - cx) * moveOutFactor + cx
     y = (y - cy) * moveOutFactor + cy
 
     return (
-      <g transform={`translate(${x},${y})`}>
+      <g transform={`translate(${x},${y + 8})`}>
+        <text fontSize={12} x={0} y={-20} textAnchor="middle" fill="#666">
+          {data.find((d) => d.subject === payload.value)?.B}
+        </text>
         <text
           x={0}
           y={0}
@@ -61,7 +70,7 @@ export const FighterStatsChart: React.FC<{ fighter: BattleReportFighter }> = ({
         >
           {payload.value}
         </text>
-        <text x={0} y={20} textAnchor="middle" fill="#666">
+        <text x={0} y={18} fontSize={12} textAnchor="middle" fill="#666">
           {data.find((d) => d.subject === payload.value)?.A}
         </text>
       </g>
@@ -74,7 +83,7 @@ export const FighterStatsChart: React.FC<{ fighter: BattleReportFighter }> = ({
         <RadarChart
           cx={"50%"}
           cy={"50%"}
-          outerRadius={"70%"}
+          outerRadius={"65%"}
           width={size}
           height={size}
           data={data}
