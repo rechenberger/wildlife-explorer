@@ -21,7 +21,10 @@ export const CareButton = () => {
           if (!playerId) return
           toast.promise(care({ playerId }), {
             loading: "Caring...",
-            success: "Cared for your team! HP and PP reset.",
+            success: (data) =>
+              data.count
+                ? `Cared for ${data.count}! ❤️ HP and PP reset.`
+                : `Your team is already doing great!`,
             error: (err) => err?.message || "Failed to care",
           })
         }}

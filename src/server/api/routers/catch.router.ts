@@ -383,6 +383,7 @@ export const catchRouter = createTRPCRouter({
         wildlife: true,
       },
     })
+    let count = 0
     await Promise.all(
       map(all, async (c) => {
         const fighter = await getWildlifeFighterPlus(c)
@@ -409,6 +410,7 @@ export const catchRouter = createTRPCRouter({
         const hp = fighter.hpMax
 
         if (needToSave) {
+          count++
           await ctx.prisma.catch.update({
             where: {
               id: c.id,
@@ -424,5 +426,7 @@ export const catchRouter = createTRPCRouter({
         }
       })
     )
+
+    return { count }
   }),
 })
