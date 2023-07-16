@@ -335,10 +335,13 @@ export const battleRouter = createTRPCRouter({
             onlyFaintedGiveExp: true,
           })
           const iAmWinner = winnerSide.player?.id === ctx.player.id
+
+          // Currently not done for PvP. Lets call it game design
           await savePostBattleCatchMetadata({
             battleReport,
             prisma: ctx.prisma,
           })
+
           return {
             iAmWinner,
             expReports,
