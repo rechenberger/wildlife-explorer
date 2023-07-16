@@ -4,15 +4,23 @@ import { Away } from "./Away"
 import { CareButton } from "./CareButton"
 import { TypeBadge } from "./TypeBadge"
 import { navigateIcon, runIcon } from "./typeIcons"
+import { useNavigation } from "./useNavigation"
 import { usePlayer } from "./usePlayer"
 
-export const PlaceView = ({ placeId }: { placeId: string }) => {
+export const PlaceView = ({
+  placeId,
+  close,
+}: {
+  placeId: string
+  close: () => void
+}) => {
   const { playerId } = usePlayer()
   const { data: place } = api.place.getOne.useQuery(
     { playerId: playerId!, placeId },
     { enabled: !!playerId }
   )
-  // const trpc = api.useContext()
+
+  const { navigate } = useNavigation()
 
   if (!place) {
     return (
@@ -39,7 +47,10 @@ export const PlaceView = ({ placeId }: { placeId: string }) => {
           content={"Visit"}
           size="big"
           onClick={() => {
-            // close()
+            navigate({
+              lat: place.lat,
+              lng: place.lng,
+            })
           }}
           className="flex-1"
         />
@@ -48,7 +59,7 @@ export const PlaceView = ({ placeId }: { placeId: string }) => {
           content={"Leave"}
           size="big"
           onClick={() => {
-            // close()
+            close()
           }}
           className="flex-1"
         />

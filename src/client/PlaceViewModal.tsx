@@ -29,7 +29,13 @@ export const PlaceViewModal = NiceModal.create<{ placeId: string }>(
           }}
         >
           <ScrollArea className="max-h-[calc(100svh-100px)]">
-            <PlaceView placeId={placeId} />
+            <PlaceView
+              placeId={placeId}
+              close={() => {
+                modal.reject()
+                modal.remove()
+              }}
+            />
           </ScrollArea>
         </DialogContent>
       </Dialog>
