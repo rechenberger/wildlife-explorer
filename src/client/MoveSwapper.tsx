@@ -19,7 +19,7 @@ export const MoveSwapper = ({ catchId }: { catchId: string }) => {
   )
   const { active, learned, future } = useMemo(() => {
     return groupBy(allMoves, (move) => {
-      if (move.activeIdx) return "active"
+      if (typeof move.activeIdx === "number") return "active"
       if (move.learned) return "learned"
       return "future"
     })
