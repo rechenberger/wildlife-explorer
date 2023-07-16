@@ -1,16 +1,9 @@
-import { type Wildlife } from "@prisma/client"
 import { TRPCError } from "@trpc/server"
-import { addSeconds, subSeconds } from "date-fns"
-import { chunk, filter, flatMap, map, uniqBy } from "lodash-es"
-import {
-  DEFAULT_DB_CHUNK_SIZE,
-  RADIUS_IN_KM_SCAN_WILDLIFE_BIG,
-  RADIUS_IN_KM_SCAN_WILDLIFE_SMALL,
-  SCAN_COOLDOWN_IN_SECONDS,
-} from "~/config"
+import { addSeconds } from "date-fns"
+import { SCAN_COOLDOWN_IN_SECONDS } from "~/config"
 import { createTRPCRouter } from "~/server/api/trpc"
-import { findObservations } from "~/server/inaturalist/findObservations"
 import { scanPlaces } from "~/server/lib/scanPlaces"
+import { scanWildlife } from "~/server/lib/scanWildlife"
 import { playerProcedure } from "../middleware/playerProcedure"
 
 export const scanRouter = createTRPCRouter({
@@ -21,80 +14,35 @@ export const scanRouter = createTRPCRouter({
         message: "Scan is on cooldown",
       })
     }
-    await ctx.prisma.player.update({
-      where: {
-        id: ctx.player.id,
-      },
-      data: {
-        scanCooldownAt: addSeconds(new Date(), SCAN_COOLDOWN_IN_SECONDS),
-      },
-    })
 
-    await scanPlaces({
-      prisma: ctx.prisma,
-      playerId: ctx.player.id,
-      location: {
-        lat: ctx.player.lat,
-        lng: ctx.player.lng,
-      },
-    })
-
-    const observationsMultiRadius = await Promise.all([
-      findObservations({
-        lat: ctx.player.lat,
-        lng: ctx.player.lng,
-        radiusInKm: RADIUS_IN_KM_SCAN_WILDLIFE_SMALL,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const [cooldownResult, placesResult, wildlifeResult] = await Promise.all([
+      ctx.prisma.player.update({
+        where: {
+          id: ctx.player.id,
+        },
+        data: {
+          scanCooldownAt: addSeconds(new Date(), SCAN_COOLDOWN_IN_SECONDS),
+        },
       }),
-      findObservations({
-        lat: ctx.player.lat,
-        lng: ctx.player.lng,
-        radiusInKm: RADIUS_IN_KM_SCAN_WILDLIFE_BIG,
+      scanPlaces({
+        prisma: ctx.prisma,
+        playerId: ctx.player.id,
+        location: {
+          lat: ctx.player.lat,
+          lng: ctx.player.lng,
+        },
+      }),
+      scanWildlife({
+        prisma: ctx.prisma,
+        playerId: ctx.player.id,
+        location: {
+          lat: ctx.player.lat,
+          lng: ctx.player.lng,
+        },
       }),
     ])
 
-    const observations = uniqBy(
-      flatMap(observationsMultiRadius, (o) => o),
-      (o) => o.observationId
-    )
-
-    const now = new Date()
-    const chunks = chunk(observations, DEFAULT_DB_CHUNK_SIZE)
-    const wildlifes: Wildlife[] = []
-    for (const chunk of chunks) {
-      const chunkResult = await Promise.all(
-        map(chunk, async (o) => {
-          const data = {
-            observationId: o.observationId,
-            lat: o.lat,
-            lng: o.lng,
-            metadata: o,
-            taxonId: o.taxonId,
-          }
-          return await ctx.prisma.wildlife.upsert({
-            where: {
-              observationId: o.observationId,
-            },
-            create: {
-              ...data,
-              respawnsAt: new Date(),
-              foundById: ctx.player.id,
-            },
-            update: data,
-          })
-        })
-      )
-      wildlifes.push(...chunkResult)
-    }
-
-    const countAll = wildlifes.length
-    const countFound = filter(
-      wildlifes,
-      (w) => w.foundById === ctx.player.id && w.createdAt >= subSeconds(now, 10)
-    ).length
-
-    return {
-      countAll,
-      countFound,
-    }
+    return wildlifeResult
   }),
 })
