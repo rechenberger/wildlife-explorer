@@ -45,6 +45,7 @@ export const CatchDetailsModal = NiceModal.create<{
             showExp
             showStats
             showCaughtAt
+            canSwapMoves
           />
         </ScrollArea>
       </DialogContent>

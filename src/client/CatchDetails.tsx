@@ -15,12 +15,15 @@ import { FighterChip } from "./FighterChip"
 import { FighterMoves } from "./FighterMoves"
 import { FighterStatsChart } from "./FighterStatsChart"
 import { FighterTypeBadges } from "./FighterTypeBadges"
+import { MoveSwapperModal } from "./MoveSwapperModal"
 import { TimeAgo } from "./TimeAgo"
+import { TypeBadge } from "./TypeBadge"
 import { Progress } from "./shadcn/ui/progress"
 import { useMyCatch } from "./useCatches"
 import { useGetWildlifeName } from "./useGetWildlifeName"
 import { useMapSetCenter } from "./useMapRef"
 import { usePlayer } from "./usePlayer"
+import { swapIcon } from "./typeIcons"
 
 const JsonViewer = dynamic(() => import("../client/JsonViewer"), { ssr: false })
 
@@ -36,6 +39,7 @@ export const CatchDetails = ({
   showExp,
   showStats,
   showCaughtAt,
+  canSwapMoves,
   fighter,
   buttonSlot,
 }: {
@@ -50,6 +54,7 @@ export const CatchDetails = ({
   showExp?: boolean
   showStats?: boolean
   showCaughtAt?: boolean
+  canSwapMoves?: boolean
   fighter?: BattleReportFighter
   buttonSlot?: React.ReactNode
 }) => {
@@ -72,7 +77,7 @@ export const CatchDetails = ({
   const mapSetCenter = useMapSetCenter()
   const setCurrentObservationId = useSetAtom(currentObservationIdAtom)
 
-  const { playerId } = usePlayer()
+  const { playerId, player } = usePlayer()
   const trpc = api.useContext()
   const { mutate: rename } = api.catch.rename.useMutation({
     onSuccess: () => {
@@ -175,6 +180,21 @@ export const CatchDetails = ({
           <>
             {showDividers && <DividerHeading>Moves</DividerHeading>}
             <FighterMoves fighter={c} />
+            {canSwapMoves && !player?.metadata?.activeBattleId && (
+              <div className="flex flex-row-reverse">
+                <TypeBadge
+                  icon={swapIcon}
+                  content={"Swap Moves"}
+                  size="big"
+                  className="w-1/2"
+                  onClick={() => {
+                    NiceModal.show(MoveSwapperModal, {
+                      catchId: c.id,
+                    })
+                  }}
+                />
+              </div>
+            )}
           </>
         )}
 

@@ -41,17 +41,20 @@ export const FighterMoves = ({
     </>
   )
 }
+
+export type FighterMoveProps = {
+  fighter: BattleReportFighter
+  disabled?: boolean
+  onClick?: (options: { moveId: string }) => void
+  move: BattleReportFighter["fighter"]["moves"][number] | null
+}
+
 export const FighterMove = ({
   fighter,
   disabled: allDisabled,
   onClick,
   move,
-}: {
-  fighter: BattleReportFighter
-  disabled?: boolean
-  onClick?: (options: { moveId: string }) => void
-  move: BattleReportFighter["fighter"]["moves"][number] | null
-}) => {
+}: FighterMoveProps) => {
   const disabled =
     !move ||
     allDisabled ||
@@ -120,7 +123,8 @@ export const FighterMove = ({
                 {move?.definition.accuracy}
               </div>
               <div className="w-8 shrink-0 opacity-60">
-                {move?.status?.pp}/{move?.status?.maxpp}
+                {move?.status?.pp ?? move?.definition?.pp}/
+                {move?.definition?.pp}
               </div>
             </div>
           </button>
@@ -177,7 +181,8 @@ export const FighterMove = ({
               <div className="flex-1 flex flex-col gap-1">
                 <div className="text-xs font-bold opacity-60">Uses Left</div>
                 <div>
-                  {move?.status?.pp}/{move?.status?.maxpp}
+                  {move?.status?.pp ?? move?.definition?.pp}/
+                  {move?.definition?.pp}
                 </div>
               </div>
             </div>
