@@ -1,4 +1,4 @@
-import { Dex, toID } from "@pkmn/dex"
+import { Dex } from "@pkmn/dex"
 import { type Pokemon } from "@pkmn/sim"
 import { z } from "zod"
 
@@ -11,9 +11,11 @@ export const getWildlifeFighterPlusMove = ({
   foeTypes?: string[]
   p?: Pokemon
 }) => {
-  const id = toID(move)
+  const definition = Dex.moves.get(move)
+  const id = definition.id.toString()
+
   const status = p ? p.getMoveData(move) : null
-  const definition = Dex.moves.getByID(id)
+
   const moveType = definition.type
   const immunity = foeTypes ? Dex.getImmunity(moveType, foeTypes) : null
   const effectiveness = foeTypes
