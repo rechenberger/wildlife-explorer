@@ -35,7 +35,7 @@ export const MoveSwapper = ({ catchId }: { catchId: string }) => {
 
   return (
     <div className="flex flex-col gap-4">
-      <div>Edit Moves</div>
+      <div>Swap Moves</div>
       <CatchDetails catchId={catchId} showWildlife showDividers />
       <DividerHeading>Active Moves</DividerHeading>
       <div className="grid flex-1 grid-cols-1 gap-1">
