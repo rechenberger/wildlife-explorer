@@ -52,10 +52,13 @@ export const MoveSwapper = ({ catchId }: { catchId: string }) => {
         })}
       </div>
       <DividerHeading>Future Moves</DividerHeading>
-      <div className="grid flex-1 grid-cols-1 gap-1">
+      <div className="grid flex-1 grid-cols-[auto_1fr] gap-1 items-center gap-x-2">
         {map(future, (move) => {
           return (
             <Fragment key={move.id}>
+              <div className="text-gray-500 text-sm">
+                Level {move.learnAtLevel}
+              </div>
               <FighterMove fighter={c} move={move} />
             </Fragment>
           )
