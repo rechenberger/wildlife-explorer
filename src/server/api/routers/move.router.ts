@@ -7,6 +7,7 @@ import { type MyPrismaClient } from "~/server/db"
 import { getWildlifeFighterPlusMove } from "~/server/lib/battle/WildlifeFighterPlusMove"
 import { getMovesInLearnset } from "~/server/lib/battle/getWildlifeFighter"
 import { getWildlifeFighterPlus } from "~/server/lib/battle/getWildlifeFighterPlus"
+import { CatchMetadata } from "~/server/schema/CatchMetadata"
 import { playerProcedure } from "../middleware/playerProcedure"
 
 export const moveRouter = createTRPCRouter({
@@ -90,7 +91,17 @@ export const moveRouter = createTRPCRouter({
         pp: m.status?.pp || m.definition.pp,
       }))
 
-      console.log("moves", moves)
+      await ctx.prisma.catch.update({
+        where: {
+          id: c.id,
+        },
+        data: {
+          metadata: {
+            ...c.metadata,
+            moves,
+          } satisfies CatchMetadata,
+        },
+      })
     }),
 })
 
