@@ -26,7 +26,9 @@ export const PlaceMarker = ({ place }: { place: Place }) => {
           "group relative flex aspect-square h-12 items-center justify-center rounded-full bg-purple-500 p-1 shadow transition-transform md:hover:scale-[3]",
           "cursor-pointer"
         )}
-        onClick={() => {
+        onClick={(e) => {
+          e.stopPropagation()
+          e.preventDefault()
           NiceModal.show(PlaceViewModal, {
             placeId: place.id,
           })

@@ -17,6 +17,7 @@ import { respawnWildlife } from "~/server/lib/respawnWildlife"
 import { LevelingRate, type CatchMetadata } from "~/server/schema/CatchMetadata"
 import { type PlayerMetadata } from "~/server/schema/PlayerMetadata"
 import { createSeed } from "~/utils/seed"
+import { careCenterProcedure } from "../middleware/careCenterProcedure"
 import { playerProcedure } from "../middleware/playerProcedure"
 import { wildlifeProcedure } from "../middleware/wildlifeProcedure"
 
@@ -374,7 +375,7 @@ export const catchRouter = createTRPCRouter({
       })
     }),
 
-  care: playerProcedure.mutation(async ({ ctx }) => {
+  care: careCenterProcedure.mutation(async ({ ctx }) => {
     const all = await ctx.prisma.catch.findMany({
       where: {
         playerId: ctx.player.id,
