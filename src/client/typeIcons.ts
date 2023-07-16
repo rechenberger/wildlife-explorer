@@ -12,6 +12,7 @@ import {
   Clock,
   Droplets,
   Dumbbell,
+  Edit2,
   Flame,
   Frown,
   Gem,
@@ -250,6 +251,14 @@ export const loserIcon = {
   bgFull: "bg-red-500 text-white",
   bgHalf: "bg-red-500/50",
   ringFull: "hover:ring ring-red-500",
+}
+
+export const editIcon = {
+  name: "Edit",
+  icon: Edit2,
+  bgFull: "bg-gray-500 text-white",
+  bgHalf: "bg-gray-500/50",
+  ringFull: "hover:ring ring-gray-500",
 }
 
 export type TypeIcon = {

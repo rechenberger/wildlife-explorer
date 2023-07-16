@@ -15,8 +15,11 @@ import { FighterChip } from "./FighterChip"
 import { FighterMoves } from "./FighterMoves"
 import { FighterStatsChart } from "./FighterStatsChart"
 import { FighterTypeBadges } from "./FighterTypeBadges"
+import { MoveSwapperModal } from "./MoveSwapperModal"
 import { TimeAgo } from "./TimeAgo"
+import { TypeBadge } from "./TypeBadge"
 import { Progress } from "./shadcn/ui/progress"
+import { editIcon } from "./typeIcons"
 import { useMyCatch } from "./useCatches"
 import { useGetWildlifeName } from "./useGetWildlifeName"
 import { useMapSetCenter } from "./useMapRef"
@@ -175,6 +178,19 @@ export const CatchDetails = ({
           <>
             {showDividers && <DividerHeading>Moves</DividerHeading>}
             <FighterMoves fighter={c} />
+            <div className="flex flex-row-reverse">
+              <TypeBadge
+                icon={editIcon}
+                content={"Edit Moves"}
+                size="big"
+                className="w-1/2"
+                onClick={() => {
+                  NiceModal.show(MoveSwapperModal, {
+                    catchId: c.id,
+                  })
+                }}
+              />
+            </div>
           </>
         )}
 
