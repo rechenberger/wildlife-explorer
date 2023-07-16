@@ -42,11 +42,29 @@ export const MoveSwapper = ({ catchId }: { catchId: string }) => {
         })}
       </div>
       <DividerHeading>Learned Moves</DividerHeading>
-      <div className=""></div>
+      <div className="grid flex-1 grid-cols-1 gap-1">
+        {map(learned, (move) => {
+          return (
+            <Fragment key={move.id}>
+              <FighterMove fighter={c} move={move} />
+            </Fragment>
+          )
+        })}
+      </div>
       <DividerHeading>Future Moves</DividerHeading>
-      <div className=""></div>
-      <DividerHeading>JSON</DividerHeading>
-      <JsonViewer value={allMoves} />
+      <div className="grid flex-1 grid-cols-1 gap-1">
+        {map(future, (move) => {
+          return (
+            <Fragment key={move.id}>
+              <FighterMove fighter={c} move={move} />
+            </Fragment>
+          )
+        })}
+      </div>
+      <>
+        <DividerHeading>JSON</DividerHeading>
+        <JsonViewer value={allMoves} collapsed={true} />
+      </>
     </div>
   )
 }
