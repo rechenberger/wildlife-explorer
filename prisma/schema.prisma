@@ -85,7 +85,7 @@ model Player {
     scanCooldownAt  DateTime?
     catches         Catch[]   @relation("CatchPlayer")
     originalCatches Catch[]   @relation("CatchOriginalPlayer")
-    venuesFound     Venue[]
+    placesFound     Place[]
 
     @@index([lat, lng])
     @@index([userId])
@@ -181,13 +181,13 @@ model BattleParticipation {
     @@index([wildlifeId])
 }
 
-model Venue {
+model Place {
     id        String   @id @default(cuid())
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
     metadata Json
-    type     VenueType
+    type     PlaceType
 
     lat Float
     lng Float
@@ -198,6 +198,6 @@ model Venue {
     @@index([lat, lng])
 }
 
-enum VenueType {
+enum PlaceType {
     CARE_CENTER
 }

@@ -5,12 +5,12 @@ import { catchRouter } from "./routers/catch.router"
 import { migrationRouter } from "./routers/migration.router"
 import { moveRouter } from "./routers/move.router"
 import { navigationRouter } from "./routers/navigation.router"
+import { placeRouter } from "./routers/place.router"
 import { playerRouter } from "./routers/player.router"
 import { pvpRouter } from "./routers/pvp.router"
 import { scanRouter } from "./routers/scan.router"
 import { socialRouter } from "./routers/social.router"
 import { taxonRouter } from "./routers/taxon.router"
-import { venueRouter } from "./routers/venue.router"
 import { wildlifeRouter } from "./routers/wildlife.router"
 
 /**
@@ -29,7 +29,7 @@ export const appRouter = createTRPCRouter({
   social: socialRouter,
   pvp: pvpRouter,
   move: moveRouter,
-  venue: venueRouter,
+  place: placeRouter,
   scan: scanRouter,
   migration: migrationRouter,
 })
