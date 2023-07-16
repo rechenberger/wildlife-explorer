@@ -29,7 +29,11 @@ export const moveRouter = createTRPCRouter({
         const movePlus = getWildlifeFighterPlusMove({
           move: move.move,
         })
-        const activeIdx = findIndex(fighter.moves, (m) => m.id === movePlus.id)
+        let activeIdx: number | null = findIndex(
+          fighter.moves,
+          (m) => m.id === movePlus.id
+        )
+        activeIdx = activeIdx === -1 ? null : activeIdx
         const learnAtLevel = move.level
         const learned = fighter.level >= learnAtLevel
 
