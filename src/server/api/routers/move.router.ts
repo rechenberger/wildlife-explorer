@@ -118,6 +118,32 @@ export const moveRouter = createTRPCRouter({
         },
       })
     }),
+
+  reset: playerProcedure
+    .input(
+      z.object({
+        catchId: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const c = await ctx.prisma.catch.findFirstOrThrow({
+        where: {
+          id: input.catchId,
+          playerId: ctx.player.id,
+        },
+      })
+      await ctx.prisma.catch.update({
+        where: {
+          id: c.id,
+        },
+        data: {
+          metadata: {
+            ...c.metadata,
+            moves: null,
+          } satisfies CatchMetadata,
+        },
+      })
+    }),
 })
 
 const getPossibleMoves = async ({

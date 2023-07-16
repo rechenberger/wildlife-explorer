@@ -9,6 +9,7 @@ import {
 } from "@dnd-kit/core"
 import { restrictToFirstScrollableAncestor } from "@dnd-kit/modifiers"
 import { groupBy, map } from "lodash-es"
+import { RotateCcw } from "lucide-react"
 import dynamic from "next/dynamic"
 import { Fragment, useMemo, type PropsWithChildren } from "react"
 import { toast } from "sonner"
@@ -19,6 +20,7 @@ import { CatchDetails } from "./CatchDetails"
 import { DividerHeading } from "./DividerHeading"
 import { FighterMove, type FighterMoveProps } from "./FighterMoves"
 import { cn } from "./cn"
+import { Button } from "./shadcn/ui/button"
 import { useMyCatch } from "./useCatches"
 import { usePlayer } from "./usePlayer"
 
@@ -34,6 +36,12 @@ export const MoveSwapper = ({ catchId }: { catchId: string }) => {
   )
   const trpc = api.useContext()
   const { mutateAsync: swap } = api.move.swap.useMutation({
+    onSuccess: () => {
+      trpc.move.invalidate()
+      trpc.catch.invalidate()
+    },
+  })
+  const { mutate: reset } = api.move.reset.useMutation({
     onSuccess: () => {
       trpc.move.invalidate()
       trpc.catch.invalidate()
@@ -95,7 +103,40 @@ export const MoveSwapper = ({ catchId }: { catchId: string }) => {
   return (
     <div className="flex flex-col gap-4">
       <div>Swap Moves</div>
-      <CatchDetails catchId={catchId} showWildlife showDividers />
+      <CatchDetails
+        catchId={catchId}
+        showWildlife
+        showDividers
+        buttonSlot={
+          <>
+            {c.metadata.moves ? (
+              <Button
+                onClick={() => {
+                  if (!playerId) return
+                  if (
+                    !confirm(
+                      "Are you sure you want to reset all moves to default? The latest learned moves will be active and auto-swapped on when learning new moves. You will still know your learned moves."
+                    )
+                  ) {
+                    return
+                  }
+                  reset({
+                    catchId,
+                    playerId,
+                  })
+                }}
+              >
+                <RotateCcw className="w-4 h-4 mr-1" />
+                <div className="text-xs">Reset Moves</div>
+              </Button>
+            ) : (
+              <div className="text-xs text-gray-400 flex-1">
+                Try dragging a learned move over an active move to swap them.
+              </div>
+            )}
+          </>
+        }
+      />
       <DndContext
         onDragEnd={(e) => {
           const newMoveId = e.active.id.toString()
