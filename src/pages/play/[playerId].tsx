@@ -6,6 +6,7 @@ import { MainLayout } from "~/client/MainLayout"
 import { MapBase } from "~/client/MapBase"
 import { MapControls } from "~/client/MapControls"
 import { OtherPlayers } from "~/client/OtherPlayers"
+import { PlaceMarkers } from "~/client/PlaceMarkers"
 import { PlayerMarker } from "~/client/PlayerMarker"
 import { PlayerRoute } from "~/client/PlayerRoute"
 import { ScanCircle } from "~/client/ScanCircle"
@@ -21,6 +22,7 @@ export default function Page() {
           <ScanCircle />
           <Eta />
           <WildlifeMarkers />
+          <PlaceMarkers />
           <OtherPlayers />
           {player && <PlayerRoute player={player} isMe />}
           {player && <PlayerMarker player={player} isMe />}
