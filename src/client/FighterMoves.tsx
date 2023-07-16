@@ -41,17 +41,20 @@ export const FighterMoves = ({
     </>
   )
 }
+
+export type FighterMoveProps = {
+  fighter: BattleReportFighter
+  disabled?: boolean
+  onClick?: (options: { moveId: string }) => void
+  move: BattleReportFighter["fighter"]["moves"][number] | null
+}
+
 export const FighterMove = ({
   fighter,
   disabled: allDisabled,
   onClick,
   move,
-}: {
-  fighter: BattleReportFighter
-  disabled?: boolean
-  onClick?: (options: { moveId: string }) => void
-  move: BattleReportFighter["fighter"]["moves"][number] | null
-}) => {
+}: FighterMoveProps) => {
   const disabled =
     !move ||
     allDisabled ||

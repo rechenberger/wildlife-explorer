@@ -34,7 +34,7 @@ export const getWildlifeFighterPlusMove = ({
 
 export const WildlifeFighterPlusMove = z.object({
   name: z.string(),
-  id: z.string().optional(),
+  id: z.string().optional(), // TODO: make non-optional
   status: z
     .object({
       pp: z.number(),
