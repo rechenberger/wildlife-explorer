@@ -120,7 +120,8 @@ export const FighterMove = ({
                 {move?.definition.accuracy}
               </div>
               <div className="w-8 shrink-0 opacity-60">
-                {move?.status?.pp}/{move?.status?.maxpp}
+                {move?.status?.pp ?? move?.definition?.pp}/
+                {move?.definition?.pp}
               </div>
             </div>
           </button>

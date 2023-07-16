@@ -128,7 +128,6 @@ export const WildlifeFighterPlusMove = z.object({
   status: z
     .object({
       pp: z.number(),
-      maxpp: z.number(),
     })
     .nullish(),
   definition: z.object({
