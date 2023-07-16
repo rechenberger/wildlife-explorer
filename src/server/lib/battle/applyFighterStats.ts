@@ -12,7 +12,6 @@ export const applyFighterStats = ({
 }) => {
   // Fixing PP
   // @pkmn/sim boosts PP to max, so we need to deduct it back down
-  // FIXME: actually change the maxpp instead of the current pp
   p.moves.forEach((moveId) => {
     const def = Dex.moves.get(moveId)
     const maxpp = def?.pp
@@ -21,6 +20,11 @@ export const applyFighterStats = ({
     if (!status) {
       throw new Error("Move not found with getMoveData")
     }
+
+    // actually change the maxpp instead of the current pp
+    // TODO: check if this works :O
+    status.maxpp = maxpp
+
     const ppStatus = status.pp
     let ppTarget = maxpp
     if (ppFromMetadata) {
