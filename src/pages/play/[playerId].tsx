@@ -1,5 +1,4 @@
 import NiceModal from "@ebay/nice-modal-react"
-import { CurrentObservation } from "~/client/CurrentObservation"
 import { Eta } from "~/client/Eta"
 import { MainActionButtons } from "~/client/MainActionButtons"
 import { MainLayout } from "~/client/MainLayout"
@@ -26,7 +25,6 @@ export default function Page() {
           <OtherPlayers />
           {player && <PlayerRoute player={player} isMe />}
           {player && <PlayerMarker player={player} isMe />}
-          <CurrentObservation />
           {/* {ENABLE_BATTLE_VIEW && <BattleView />} */}
           <MainActionButtons />
           <MapControls />
