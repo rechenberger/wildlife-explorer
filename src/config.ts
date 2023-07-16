@@ -37,3 +37,4 @@ export const BATTLE_REPORT_VERSION = 3
 export const BATTLE_INPUT_VERSION = 3
 
 export const SHOW_FUTURE_MOVES = true
+export const CAN_RESET_MOVES = false
