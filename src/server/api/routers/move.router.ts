@@ -1,3 +1,4 @@
+import { TRPCError } from "@trpc/server"
 import { findIndex, orderBy } from "lodash-es"
 import { z } from "zod"
 import { SHOW_FUTURE_MOVES } from "~/config"
@@ -21,6 +22,34 @@ export const moveRouter = createTRPCRouter({
         catchId: input.catchId,
         playerId: ctx.player.id,
       })
+    }),
+  swap: playerProcedure
+    .input(
+      z.object({
+        catchId: z.string(),
+        slotIdx: z.number(),
+        moveId: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const allMoves = await getPossibleMoves({
+        prisma: ctx.prisma,
+        catchId: input.catchId,
+        playerId: ctx.player.id,
+      })
+      const move = allMoves.find((m) => m.id === input.moveId)
+      if (!move) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Move not found",
+        })
+      }
+      if (!move.learned) {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "Move not learned",
+        })
+      }
     }),
 })
 

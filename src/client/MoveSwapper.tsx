@@ -30,6 +30,14 @@ export const MoveSwapper = ({ catchId }: { catchId: string }) => {
     { playerId: playerId!, catchId },
     { enabled: !!playerId }
   )
+  const trpc = api.useContext()
+  const { mutateAsync: swap } = api.move.swap.useMutation({
+    onSuccess: () => {
+      trpc.move.invalidate()
+      trpc.catch.invalidate()
+    },
+  })
+
   const { active, learned, future } = useMemo(() => {
     return groupBy(allMoves, (move) => {
       if (typeof move.activeIdx === "number") return "active"
@@ -45,7 +53,20 @@ export const MoveSwapper = ({ catchId }: { catchId: string }) => {
     moveId: string
     slotIdx: number
   }) => {
-    toast(`Swapping Move ${moveId} into Slot ${slotIdx + 1}`)
+    if (!playerId) return
+    toast.promise(
+      swap({
+        catchId,
+        moveId,
+        slotIdx,
+        playerId,
+      }),
+      {
+        loading: "Swapping Move...",
+        success: "Move Swapped!",
+        error: (err) => err.message || "Error Swapping Move",
+      }
+    )
   }
 
   const sensors = useSensors(
