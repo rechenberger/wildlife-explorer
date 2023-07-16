@@ -39,6 +39,7 @@ export const CatchDetails = ({
   showExp,
   showStats,
   showCaughtAt,
+  canSwapMoves,
   fighter,
   buttonSlot,
 }: {
@@ -53,6 +54,7 @@ export const CatchDetails = ({
   showExp?: boolean
   showStats?: boolean
   showCaughtAt?: boolean
+  canSwapMoves?: boolean
   fighter?: BattleReportFighter
   buttonSlot?: React.ReactNode
 }) => {
@@ -178,19 +180,21 @@ export const CatchDetails = ({
           <>
             {showDividers && <DividerHeading>Moves</DividerHeading>}
             <FighterMoves fighter={c} />
-            <div className="flex flex-row-reverse">
-              <TypeBadge
-                icon={editIcon}
-                content={"Edit Moves"}
-                size="big"
-                className="w-1/2"
-                onClick={() => {
-                  NiceModal.show(MoveSwapperModal, {
-                    catchId: c.id,
-                  })
-                }}
-              />
-            </div>
+            {canSwapMoves && (
+              <div className="flex flex-row-reverse">
+                <TypeBadge
+                  icon={editIcon}
+                  content={"Swap Moves"}
+                  size="big"
+                  className="w-1/2"
+                  onClick={() => {
+                    NiceModal.show(MoveSwapperModal, {
+                      catchId: c.id,
+                    })
+                  }}
+                />
+              </div>
+            )}
           </>
         )}
 
