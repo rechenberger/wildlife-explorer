@@ -138,8 +138,12 @@ export const simulateBattle = async ({
           name,
           team: team.map((t) => t.fighter),
         })
-        battle.getSide(sideId).pokemon.forEach((p) => {
-          applyFighterStats({ p })
+        battle.getSide(sideId).pokemon.forEach((p, idx) => {
+          const fighter = team[idx]
+          if (!fighter) {
+            throw new Error("Fighter not found in team")
+          }
+          applyFighterStats({ p, catchMetadata: fighter.catch?.metadata })
         })
       }
 
