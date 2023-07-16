@@ -5,6 +5,7 @@ import { z } from "zod"
 import { BATTLE_REPORT_VERSION } from "~/config"
 import { createTRPCRouter } from "~/server/api/trpc"
 import { grantExp } from "~/server/lib/battle/grantExp"
+import { savePostBattleCatchMetadata } from "~/server/lib/battle/savePostBattleCatchMetadata"
 import { simulateBattle } from "~/server/lib/battle/simulateBattle"
 import { respawnWildlife } from "~/server/lib/respawnWildlife"
 import { type BattleMetadata } from "~/server/schema/BattleMetadata"
@@ -339,6 +340,13 @@ export const battleRouter = createTRPCRouter({
             expReports,
             winnerName: winnerSide.name,
           }
+        }
+
+        if (battleDb.metadata.battleReport) {
+          await savePostBattleCatchMetadata({
+            battleReport,
+            prisma: ctx.prisma,
+          })
         }
       }
     }),

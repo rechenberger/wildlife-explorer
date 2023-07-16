@@ -12,6 +12,7 @@ import { PokemonLevelingRate } from "~/data/pokemonLevelingRate"
 import { createTRPCRouter } from "~/server/api/trpc"
 import { getWildlifeFighterPlus } from "~/server/lib/battle/getWildlifeFighterPlus"
 import { grantExp } from "~/server/lib/battle/grantExp"
+import { savePostBattleCatchMetadata } from "~/server/lib/battle/savePostBattleCatchMetadata"
 import { respawnWildlife } from "~/server/lib/respawnWildlife"
 import { LevelingRate, type CatchMetadata } from "~/server/schema/CatchMetadata"
 import { type PlayerMetadata } from "~/server/schema/PlayerMetadata"
@@ -325,6 +326,10 @@ export const catchRouter = createTRPCRouter({
           prisma: ctx.prisma,
           winnerParticipationId,
           onlyFaintedGiveExp: false,
+        })
+        await savePostBattleCatchMetadata({
+          battleReport: battle.metadata.battleReport,
+          prisma: ctx.prisma,
         })
         return {
           expReports,
