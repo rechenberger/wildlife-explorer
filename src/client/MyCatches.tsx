@@ -265,7 +265,7 @@ export const MyCatches = () => {
       sensors={sensors}
       modifiers={[restrictToFirstScrollableAncestor]}
     >
-      <div className="flex flex-row gap-2 px-4 items-center">
+      <div className="flex flex-row gap-2 pl-4 pr-6 items-center">
         <div>Your Catches</div>
         <div className="flex-1" />
         <CareButton />
