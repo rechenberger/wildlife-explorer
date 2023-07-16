@@ -142,9 +142,6 @@ export const MoveSwapper = ({ catchId }: { catchId: string }) => {
 const DraggableMove = (props: FighterMoveProps) => {
   const { attributes, listeners, setNodeRef, transform } = useDraggable({
     id: props.move!.id!,
-    // data: {
-    //   type,
-    // },
   })
 
   const style = transform
@@ -171,25 +168,13 @@ const DraggableMove = (props: FighterMoveProps) => {
 const DroppableMoveSlot = ({
   children,
   id,
-  accepts,
-}: PropsWithChildren<{ id: number; accepts?: string[] }>) => {
-  const { isOver, setNodeRef, active } = useDroppable({
+}: PropsWithChildren<{ id: number }>) => {
+  const { isOver, setNodeRef } = useDroppable({
     id,
-    data: {
-      accepts,
-    },
   })
 
-  const isValidIsOver =
-    isOver && (!accepts || accepts?.includes(active?.data?.current?.type))
   return (
-    <div
-      ref={setNodeRef}
-      className={cn(
-        "-my-1 -ml-2 py-1 pl-2 rounded-3xl",
-        isValidIsOver && "bg-gray-100"
-      )}
-    >
+    <div ref={setNodeRef} className={cn("", isOver && "opacity-10")}>
       {children}
     </div>
   )
