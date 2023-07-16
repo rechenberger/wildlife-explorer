@@ -31,7 +31,9 @@ export const scanPlaces = async ({
           lat: p.lat,
           lng: p.lng,
           type: p.type,
-          metadata: {} satisfies PlaceMetadata,
+          metadata: {
+            name: p.name,
+          } satisfies PlaceMetadata,
         }
         return await prisma.place.upsert({
           where: {
