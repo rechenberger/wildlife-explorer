@@ -66,12 +66,24 @@ export const wildlifeRouter = createTRPCRouter({
     return wildlife
   }),
 
-  getFighter: playerProcedure
+  getOne: playerProcedure
     .input(z.object({ wildlifeId: z.string() }))
     .query(async ({ ctx, input }) => {
       const wildlife = await ctx.prisma.wildlife.findUniqueOrThrow({
         where: {
           id: input.wildlifeId,
+        },
+        include: {
+          catches: {
+            where: {
+              playerId: ctx.player.id,
+            },
+          },
+          foundBy: {
+            select: {
+              name: true,
+            },
+          },
         },
       })
       const fighter = await getWildlifeFighterPlus({
@@ -79,6 +91,12 @@ export const wildlifeRouter = createTRPCRouter({
         seed: createSeed(wildlife),
       })
 
-      return { fighter }
+      return {
+        fighter,
+        wildlife: {
+          ...wildlife,
+          caughtAt: first(wildlife.catches)?.createdAt,
+        },
+      }
     }),
 })

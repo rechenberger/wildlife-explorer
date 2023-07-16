@@ -16,7 +16,7 @@ export const FighterChipByWildlife = ({
   enabled?: boolean
 }) => {
   const { playerId } = usePlayer()
-  const { data: fighter } = api.wildlife.getFighter.useQuery(
+  const { data: fighter } = api.wildlife.getOne.useQuery(
     {
       playerId: playerId!,
       wildlifeId: w.id,
