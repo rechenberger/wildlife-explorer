@@ -9,6 +9,7 @@ import { useMyCatch } from "./useCatches"
 import { usePlayer } from "./usePlayer"
 
 const JsonViewer = dynamic(() => import("../client/JsonViewer"), { ssr: false })
+const SHOW_JSON = false
 
 export const MoveSwapper = ({ catchId }: { catchId: string }) => {
   const { myCatch: c } = useMyCatch({ catchId })
@@ -64,10 +65,12 @@ export const MoveSwapper = ({ catchId }: { catchId: string }) => {
           )
         })}
       </div>
-      <>
-        <DividerHeading>JSON</DividerHeading>
-        <JsonViewer value={allMoves} collapsed={true} />
-      </>
+      {SHOW_JSON && (
+        <>
+          <DividerHeading>JSON</DividerHeading>
+          <JsonViewer value={allMoves} collapsed={true} />
+        </>
+      )}
     </div>
   )
 }
