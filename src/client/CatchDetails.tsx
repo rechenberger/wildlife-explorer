@@ -1,5 +1,4 @@
 import NiceModal from "@ebay/nice-modal-react"
-import { useSetAtom } from "jotai"
 import { Edit2 } from "lucide-react"
 import dynamic from "next/dynamic"
 import { useMemo } from "react"
@@ -9,7 +8,7 @@ import { api } from "~/utils/api"
 import { calcExpPercentage } from "~/utils/calcExpPercentage"
 import { Away } from "./Away"
 import { CatchDetailsModal } from "./CatchDetailsModal"
-import { currentObservationIdAtom } from "./CurrentObservation"
+import { CurrentObservationModal } from "./CurrentObservationModal"
 import { DividerHeading } from "./DividerHeading"
 import { FighterChip } from "./FighterChip"
 import { FighterMoves } from "./FighterMoves"
@@ -75,7 +74,6 @@ export const CatchDetails = ({
   const getName = useGetWildlifeName()
 
   const mapFlyTo = useMapFlyTo()
-  const setCurrentObservationId = useSetAtom(currentObservationIdAtom)
 
   const { playerId, player } = usePlayer()
   const trpc = api.useContext()
@@ -137,7 +135,9 @@ export const CatchDetails = ({
                 <button
                   className="text-right text-xs font-normal text-black opacity-60 inline-block"
                   onClick={() => {
-                    setCurrentObservationId(c.wildlife.observationId)
+                    NiceModal.show(CurrentObservationModal, {
+                      wildlifeId: c.wildlifeId,
+                    })
                     mapFlyTo({ center: c.wildlife })
                   }}
                 >
