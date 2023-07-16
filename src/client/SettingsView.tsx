@@ -1,6 +1,9 @@
 import { map } from "lodash-es"
+import { ArrowLeftRight } from "lucide-react"
+import Link from "next/link"
 import { Fragment } from "react"
 import { cn } from "./cn"
+import { Button } from "./shadcn/ui/button"
 import { Label } from "./shadcn/ui/label"
 import { RadioGroup, RadioGroupItem } from "./shadcn/ui/radio-group"
 import { useSettingsMapStyle } from "./useSettingsMapStyle"
@@ -9,7 +12,7 @@ export const SettingsView = () => {
   const { mapStyleOptions, mapStyleKey, setMapStyleKey } = useSettingsMapStyle()
   return (
     <>
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-8">
         <div>Settings</div>
         <div className="flex flex-col gap-2">
           <div className="text-xs font-bold">Map Style</div>
@@ -29,8 +32,7 @@ export const SettingsView = () => {
                   htmlFor={`mapStyleKey-${option.key}`}
                   className={cn(
                     "flex flex-col rounded-xl overflow-hidden border",
-                    option.key === mapStyleKey &&
-                      "ring ring-purple-500 text-purple-500"
+                    option.key === mapStyleKey && "ring ring-slate-800"
                   )}
                 >
                   {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -50,6 +52,15 @@ export const SettingsView = () => {
               </Fragment>
             ))}
           </RadioGroup>
+        </div>
+        <div className="flex flex-col gap-2">
+          <div className="text-xs font-bold">Character</div>
+          <Link href="/" className="flex flex-col">
+            <Button>
+              <ArrowLeftRight className="w-4 h-4 mr-1" />
+              <div>Switch Character</div>
+            </Button>
+          </Link>
         </div>
       </div>
     </>
