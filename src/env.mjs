@@ -26,6 +26,7 @@ export const env = createEnv({
     DISCORD_CLIENT_SECRET: z.string(),
     GOOGLE_CLIENT_ID: z.string(),
     GOOGLE_CLIENT_SECRET: z.string(),
+    GOOGLE_MAPS_PLACES_API_KEY: z.string().min(1),
   },
 
   /**
@@ -52,6 +53,7 @@ export const env = createEnv({
     NEXT_PUBLIC_MAPBOX_TOKEN: process.env.NEXT_PUBLIC_MAPBOX_TOKEN,
     GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
     GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
+    GOOGLE_MAPS_PLACES_API_KEY: process.env.GOOGLE_MAPS_PLACES_API_KEY,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation.

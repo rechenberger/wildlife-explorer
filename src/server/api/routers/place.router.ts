@@ -1,3 +1,3 @@
 import { createTRPCRouter } from "~/server/api/trpc"
 
-export const venueRouter = createTRPCRouter({})
+export const placeRouter = createTRPCRouter({})

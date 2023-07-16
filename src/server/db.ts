@@ -3,8 +3,8 @@ import { env } from "~/env.mjs"
 import { BattleMetadata } from "./schema/BattleMetadata"
 import { BattleParticipationMetadata } from "./schema/BattleParticipationMetadata"
 import { CatchMetadata } from "./schema/CatchMetadata"
+import { PlaceMetadata } from "./schema/PlaceMetadata"
 import { PlayerMetadata } from "./schema/PlayerMetadata"
-import { VenueMetadata } from "./schema/VenueMetadata"
 import { WildlifeMetadata } from "./schema/WildlifeMetadata"
 
 const createPrisma = () => {
@@ -62,13 +62,13 @@ const createPrisma = () => {
           },
         },
       },
-      venue: {
+      place: {
         metadata: {
           needs: {
             metadata: true,
           },
           compute: (data) => {
-            return VenueMetadata.parse(data.metadata || {})
+            return PlaceMetadata.parse(data.metadata || {})
           },
         },
       },
