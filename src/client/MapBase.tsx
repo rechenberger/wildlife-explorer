@@ -20,15 +20,6 @@ function calculateRadiusFromZoomLevel(zoomLevel: number): number {
   return radiusAtZoom0 / Math.pow(2, zoomLevel)
 }
 
-const latLngFromHash = () => {
-  if (typeof window === "undefined") return null
-  const hash = window.location.hash
-  if (!hash) return null
-  const [lat, lng] = hash.slice(1).split(",")
-  if (!lat || !lng) return null
-  return { lat: parseFloat(lat), lng: parseFloat(lng) }
-}
-
 export const MapBase = ({
   children,
   isOverview,
@@ -49,7 +40,7 @@ export const MapBase = ({
 
   const { navigate } = useNavigation()
 
-  const latLng = latLngFromHash() || DEFAULT_LOCATION
+  const latLng = DEFAULT_LOCATION
 
   const ref = useRef<MapRef | null>(null)
 
@@ -63,8 +54,8 @@ export const MapBase = ({
         initialViewState={{
           latitude: latLng.lat,
           longitude: latLng.lng,
-          pitch: isOverview ? 0 : 45,
-          zoom: isOverview ? 2 : 16,
+          pitch: 0,
+          zoom: 2,
         }}
         style={{ width: "100%", height: "100%" }}
         projection={"globe" as any}
