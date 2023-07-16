@@ -3,18 +3,20 @@ import {
   MouseSensor,
   TouchSensor,
   useDraggable,
+  useDroppable,
   useSensor,
   useSensors,
 } from "@dnd-kit/core"
 import { restrictToFirstScrollableAncestor } from "@dnd-kit/modifiers"
-import { groupBy, map } from "lodash-es"
+import { groupBy, isNaN, map } from "lodash-es"
 import dynamic from "next/dynamic"
-import { Fragment, useMemo } from "react"
+import { Fragment, PropsWithChildren, useMemo } from "react"
 import { toast } from "sonner"
 import { api } from "~/utils/api"
 import { CatchDetails } from "./CatchDetails"
 import { DividerHeading } from "./DividerHeading"
 import { FighterMove, FighterMoveProps } from "./FighterMoves"
+import { cn } from "./cn"
 import { useMyCatch } from "./useCatches"
 import { usePlayer } from "./usePlayer"
 
@@ -72,17 +74,24 @@ export const MoveSwapper = ({ catchId }: { catchId: string }) => {
       <div>Swap Moves</div>
       <CatchDetails catchId={catchId} showWildlife showDividers />
       <DndContext
-        onDragEnd={console.log}
+        onDragEnd={(e) => {
+          const moveId = e.active.id.toString()
+          const slotIdx = parseInt(e.over?.id?.toString() ?? "")
+          if (!moveId || isNaN(slotIdx)) return
+          swapInMove({ moveId, slotIdx })
+        }}
         sensors={sensors}
         modifiers={[restrictToFirstScrollableAncestor]}
       >
         <>
           <DividerHeading>Active Moves</DividerHeading>
           <div className="grid flex-1 grid-cols-1 gap-1">
-            {map(active, (move) => {
+            {map(active, (move, idx) => {
               return (
                 <Fragment key={move.id}>
-                  <DraggableMove fighter={c} move={move} />
+                  <DroppableMoveSlot id={idx}>
+                    <DraggableMove fighter={c} move={move} />
+                  </DroppableMoveSlot>
                 </Fragment>
               )
             })}
@@ -156,5 +165,32 @@ const DraggableMove = (props: FighterMoveProps) => {
         <FighterMove {...props} />
       </div>
     </>
+  )
+}
+
+const DroppableMoveSlot = ({
+  children,
+  id,
+  accepts,
+}: PropsWithChildren<{ id: number; accepts?: string[] }>) => {
+  const { isOver, setNodeRef, active } = useDroppable({
+    id,
+    data: {
+      accepts,
+    },
+  })
+
+  const isValidIsOver =
+    isOver && (!accepts || accepts?.includes(active?.data?.current?.type))
+  return (
+    <div
+      ref={setNodeRef}
+      className={cn(
+        "-my-1 -ml-2 py-1 pl-2 rounded-3xl",
+        isValidIsOver && "bg-gray-100"
+      )}
+    >
+      {children}
+    </div>
   )
 }
