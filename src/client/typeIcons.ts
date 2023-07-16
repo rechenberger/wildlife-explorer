@@ -25,6 +25,7 @@ import {
   Milestone,
   Moon,
   Mountain,
+  Navigation,
   Puzzle,
   Scale,
   Snowflake,
@@ -217,6 +218,12 @@ export const runIcon = {
   ...defaultIcon,
   name: "Run",
   icon: Milestone,
+}
+
+export const navigateIcon = {
+  ...defaultIcon,
+  name: "Navigate",
+  icon: Navigation,
 }
 
 export const readyIcon = {

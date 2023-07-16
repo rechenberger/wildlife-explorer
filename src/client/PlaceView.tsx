@@ -1,8 +1,9 @@
 import { HeartPulse } from "lucide-react"
 import { api } from "~/utils/api"
+import { Away } from "./Away"
 import { CareButton } from "./CareButton"
 import { TypeBadge } from "./TypeBadge"
-import { runIcon } from "./typeIcons"
+import { navigateIcon, runIcon } from "./typeIcons"
 import { usePlayer } from "./usePlayer"
 
 export const PlaceView = ({ placeId }: { placeId: string }) => {
@@ -29,9 +30,19 @@ export const PlaceView = ({ placeId }: { placeId: string }) => {
         {place.metadata.name && (
           <div className="text-sm opacity-60">{place.metadata.name}</div>
         )}
+        <Away location={place} />
       </div>
       <CareButton />
-      <div className="mt-8 flex flex-row justify-end">
+      <div className="mt-8 flex flex-row gap-4 w-56">
+        <TypeBadge
+          icon={navigateIcon}
+          content={"Visit"}
+          size="big"
+          onClick={() => {
+            // close()
+          }}
+          className="flex-1"
+        />
         <TypeBadge
           icon={runIcon}
           content={"Leave"}
@@ -39,6 +50,7 @@ export const PlaceView = ({ placeId }: { placeId: string }) => {
           onClick={() => {
             // close()
           }}
+          className="flex-1"
         />
       </div>
     </div>
