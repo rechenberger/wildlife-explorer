@@ -1,6 +1,6 @@
+import { type FlyToOptions } from "mapbox-gl"
 import { createContext, useContext } from "react"
 import { type MapRef } from "react-map-gl"
-import { type LatLng } from "~/server/schema/LatLng"
 
 const Context = createContext({
   current: null as null | MapRef,
@@ -12,11 +12,11 @@ export const useMapRef = () => {
   return context
 }
 
-export const useMapSetCenter = () => {
+export const useMapFlyTo = () => {
   const ref = useMapRef()
-  return ({ lat, lng }: LatLng) => {
+  return (options: FlyToOptions) => {
     if (ref.current) {
-      ref.current.flyTo({ center: { lat, lng } })
+      ref.current.flyTo(options)
     } else {
       console.warn("MapRef not found")
     }

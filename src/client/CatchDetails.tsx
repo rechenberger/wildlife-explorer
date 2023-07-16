@@ -19,11 +19,11 @@ import { MoveSwapperModal } from "./MoveSwapperModal"
 import { TimeAgo } from "./TimeAgo"
 import { TypeBadge } from "./TypeBadge"
 import { Progress } from "./shadcn/ui/progress"
+import { swapIcon } from "./typeIcons"
 import { useMyCatch } from "./useCatches"
 import { useGetWildlifeName } from "./useGetWildlifeName"
-import { useMapSetCenter } from "./useMapRef"
+import { useMapFlyTo } from "./useMapRef"
 import { usePlayer } from "./usePlayer"
-import { swapIcon } from "./typeIcons"
 
 const JsonViewer = dynamic(() => import("../client/JsonViewer"), { ssr: false })
 
@@ -74,7 +74,7 @@ export const CatchDetails = ({
 
   const getName = useGetWildlifeName()
 
-  const mapSetCenter = useMapSetCenter()
+  const mapFlyTo = useMapFlyTo()
   const setCurrentObservationId = useSetAtom(currentObservationIdAtom)
 
   const { playerId, player } = usePlayer()
@@ -138,7 +138,7 @@ export const CatchDetails = ({
                   className="text-right text-xs font-normal text-black opacity-60 inline-block"
                   onClick={() => {
                     setCurrentObservationId(c.wildlife.observationId)
-                    mapSetCenter(c.wildlife)
+                    mapFlyTo({ center: c.wildlife })
                   }}
                 >
                   <div>

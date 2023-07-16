@@ -7,7 +7,7 @@ import { type LatLng } from "~/server/schema/LatLng"
 import { api } from "~/utils/api"
 import { playerLocationAtom } from "./PlayerMarker"
 import { cn } from "./cn"
-import { useMapSetCenter } from "./useMapRef"
+import { useMapFlyTo } from "./useMapRef"
 import { usePlayer } from "./usePlayer"
 
 export const scanningLocationAtom = atom<LatLng | null>(null)
@@ -42,7 +42,7 @@ export const ScanButton = () => {
     return () => clearInterval(interval)
   }, [player?.scanCooldownAt])
 
-  const mapSetCenter = useMapSetCenter()
+  const mapFlyTo = useMapFlyTo()
 
   return (
     <>
@@ -57,7 +57,7 @@ export const ScanButton = () => {
           onClick={async () => {
             if (!playerId || !player) return
             setScanningLocation(store.get(playerLocationAtom))
-            mapSetCenter(store.get(playerLocationAtom))
+            mapFlyTo({ center: store.get(playerLocationAtom) })
             const promise = scan({
               playerId,
             })

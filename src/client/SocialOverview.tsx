@@ -6,7 +6,7 @@ import { api } from "~/utils/api"
 import { BattleViewModal } from "./BattleViewModal"
 import { SocialOverviewModal } from "./SocialOverviewModal"
 import { TimeAgo } from "./TimeAgo"
-import { useMapSetCenter } from "./useMapRef"
+import { useMapFlyTo } from "./useMapRef"
 import { usePlayer } from "./usePlayer"
 
 export const SocialOverview = () => {
@@ -27,7 +27,7 @@ export const SocialOverview = () => {
     },
   })
 
-  const setMapCenter = useMapSetCenter()
+  const setMapCenter = useMapFlyTo()
 
   return (
     <>
