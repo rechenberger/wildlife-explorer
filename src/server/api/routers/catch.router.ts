@@ -373,4 +373,51 @@ export const catchRouter = createTRPCRouter({
         },
       })
     }),
+
+  care: playerProcedure.mutation(async ({ ctx }) => {
+    const all = await ctx.prisma.catch.findMany({
+      where: {
+        playerId: ctx.player.id,
+      },
+      include: {
+        wildlife: true,
+      },
+    })
+    await Promise.all(
+      map(all, async (c) => {
+        const fighter = await getWildlifeFighterPlus(c)
+        let needToSave = false
+
+        // PP
+        const moves = fighter.moves.map((m) => {
+          if (!m.id) {
+            throw new Error("No move id")
+          }
+          if (m.status?.pp !== m.definition.pp) {
+            needToSave = true
+          }
+          return {
+            id: m.id,
+            pp: m.definition.pp,
+          }
+        })
+
+        // TODO: HP
+
+        if (needToSave) {
+          await ctx.prisma.catch.update({
+            where: {
+              id: c.id,
+            },
+            data: {
+              metadata: {
+                ...c.metadata,
+                moves,
+              } satisfies CatchMetadata,
+            },
+          })
+        }
+      })
+    )
+  }),
 })

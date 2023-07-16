@@ -17,6 +17,7 @@ import { MAX_FIGHTERS_PER_TEAM } from "~/config"
 import { api } from "~/utils/api"
 import { atomWithLocalStorage } from "~/utils/atomWithLocalStorage"
 import { fillWithNulls } from "~/utils/fillWithNulls"
+import { CareButton } from "./CareButton"
 import { DividerHeading } from "./DividerHeading"
 import { DraggableCatch } from "./DraggableCatch"
 import { DroppableTeamSlot } from "./DroppableTeamSlot"
@@ -264,6 +265,11 @@ export const MyCatches = () => {
       sensors={sensors}
       modifiers={[restrictToFirstScrollableAncestor]}
     >
+      <div className="flex flex-row gap-2 px-4 items-center">
+        <div>Your Catches</div>
+        <div className="flex-1" />
+        <CareButton />
+      </div>
       <DividerHeading>Your Team</DividerHeading>
 
       <div
