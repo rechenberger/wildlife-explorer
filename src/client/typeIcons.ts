@@ -1,5 +1,6 @@
 import {
   Apple,
+  ArrowLeft,
   ArrowRight,
   Award,
   Biohazard,
@@ -173,52 +174,48 @@ export const getTypeIcon = (type: string) => {
   return typeIcon || { ...fallbackTypeIcon, name: type }
 }
 
+const defaultIcon = {
+  name: "",
+  icon: ArrowLeft,
+  bgFull: "bg-gray-500 text-white",
+  bgHalf: "bg-gray-200",
+  ringFull: "hover:ring ring-gray-500",
+}
+
 export const abilityIcon = {
+  ...defaultIcon,
   name: "Ability",
   icon: Puzzle,
-  bgFull: "bg-black/40 text-white",
-  bgHalf: "bg-black/20",
-  ringFull: "hover:ring ring-black",
 }
 
 export const natureIcon = {
+  ...defaultIcon,
   name: "Nature",
   icon: Scale,
-  bgFull: "bg-black/40 text-white",
-  bgHalf: "bg-black/20",
-  ringFull: "hover:ring ring-black",
 }
 
 export const itemIcon = {
+  ...defaultIcon,
   name: "Item",
   icon: Apple,
-  bgFull: "bg-black/40 text-white",
-  bgHalf: "bg-black/20",
-  ringFull: "hover:ring ring-black",
 }
 
 export const leaveIcon = {
+  ...defaultIcon,
   name: "Leave",
   icon: ArrowRight,
-  bgFull: "bg-gray-500 text-white",
-  bgHalf: "bg-gray-500/50",
-  ringFull: "hover:ring ring-gray-500",
 }
 
 export const catchIcon = {
+  ...defaultIcon,
   name: "Catch",
   icon: HeartHandshake,
-  bgFull: "bg-gray-500 text-white",
-  bgHalf: "bg-gray-500/50",
-  ringFull: "hover:ring ring-gray-500",
 }
 
 export const runIcon = {
+  ...defaultIcon,
   name: "Run",
   icon: Milestone,
-  bgFull: "bg-gray-500 text-white",
-  bgHalf: "bg-gray-500/50",
-  ringFull: "hover:ring ring-gray-500",
 }
 
 export const readyIcon = {
@@ -254,11 +251,9 @@ export const loserIcon = {
 }
 
 export const editIcon = {
+  ...defaultIcon,
   name: "Edit",
   icon: Edit2,
-  bgFull: "bg-gray-500 text-white",
-  bgHalf: "bg-gray-500/50",
-  ringFull: "hover:ring ring-gray-500",
 }
 
 export type TypeIcon = {
