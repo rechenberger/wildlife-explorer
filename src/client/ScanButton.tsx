@@ -17,7 +17,7 @@ export const ScanButton = () => {
   const setScanningLocation = useSetAtom(scanningLocationAtom)
   const trpc = api.useContext()
   const store = useStore()
-  const { mutateAsync: scan, isLoading } = api.wildlife.scan.useMutation({
+  const { mutateAsync: scan, isLoading } = api.scan.scan.useMutation({
     onSuccess: () => {
       trpc.wildlife.invalidate()
     },
