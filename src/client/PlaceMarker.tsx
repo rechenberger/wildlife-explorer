@@ -1,6 +1,8 @@
+import NiceModal from "@ebay/nice-modal-react"
 import { HeartPulse } from "lucide-react"
 import { Marker } from "react-map-gl"
 import { type RouterOutputs } from "~/utils/api"
+import { PlaceViewModal } from "./PlaceViewModal"
 import { cn } from "./cn"
 import { useNavigation } from "./useNavigation"
 
@@ -21,8 +23,14 @@ export const PlaceMarker = ({ place }: { place: Place }) => {
     >
       <div
         className={cn(
-          "group relative flex aspect-square h-12 items-center justify-center rounded-full bg-purple-500 p-1 shadow transition-transform md:hover:scale-[3]"
+          "group relative flex aspect-square h-12 items-center justify-center rounded-full bg-purple-500 p-1 shadow transition-transform md:hover:scale-[3]",
+          "cursor-pointer"
         )}
+        onClick={() => {
+          NiceModal.show(PlaceViewModal, {
+            placeId: place.id,
+          })
+        }}
         onDoubleClick={(e) => {
           e.stopPropagation()
           e.preventDefault()

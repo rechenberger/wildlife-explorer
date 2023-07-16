@@ -1,3 +1,4 @@
+import { z } from "zod"
 import { RADIUS_IN_KM_SEE_PLACES } from "~/config"
 import { createTRPCRouter } from "~/server/api/trpc"
 import { calculateBoundingBox } from "~/server/lib/latLng"
@@ -25,4 +26,19 @@ export const placeRouter = createTRPCRouter({
     })
     return places
   }),
+
+  getOne: playerProcedure
+    .input(
+      z.object({
+        placeId: z.string(),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const place = await ctx.prisma.place.findUniqueOrThrow({
+        where: {
+          id: input.placeId,
+        },
+      })
+      return place
+    }),
 })
