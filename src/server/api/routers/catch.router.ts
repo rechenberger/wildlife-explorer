@@ -11,7 +11,8 @@ import { getExpRate } from "~/data/pokemonLevelExperienceMap"
 import { PokemonLevelingRate } from "~/data/pokemonLevelingRate"
 import { createTRPCRouter } from "~/server/api/trpc"
 import { getWildlifeFighterPlus } from "~/server/lib/battle/getWildlifeFighterPlus"
-import { grantExp } from "~/server/lib/battle/grantExp"
+import { grantExp, type ExpReports } from "~/server/lib/battle/grantExp"
+import { savePostBattleCatchMetadata } from "~/server/lib/battle/savePostBattleCatchMetadata"
 import { respawnWildlife } from "~/server/lib/respawnWildlife"
 import { LevelingRate, type CatchMetadata } from "~/server/schema/CatchMetadata"
 import { type PlayerMetadata } from "~/server/schema/PlayerMetadata"
@@ -240,6 +241,15 @@ export const catchRouter = createTRPCRouter({
     }
 
     if (!isLucky) {
+      // Catch metadata
+      if (battle?.metadata.battleReport) {
+        await savePostBattleCatchMetadata({
+          battleReport: battle.metadata.battleReport,
+          prisma: ctx.prisma,
+        })
+      }
+
+      // Failed catch
       throw new TRPCError({
         code: "BAD_REQUEST",
         message: "Wildlife escaped 💨",
@@ -292,6 +302,7 @@ export const catchRouter = createTRPCRouter({
       })
     }
 
+    // Create new catch
     const catchMetadata = {
       speciesNum,
       level,
@@ -299,7 +310,6 @@ export const catchRouter = createTRPCRouter({
       levelingRate,
       speciesName,
     } satisfies CatchMetadata
-
     await ctx.prisma.catch.create({
       data: {
         playerId: ctx.player.id,
@@ -314,22 +324,34 @@ export const catchRouter = createTRPCRouter({
       },
     })
 
+    // EXP
+    let expReports: ExpReports | null = null
     if (battle && battle.metadata.battleReport) {
       const winnerParticipationId = find(
         battle.battleParticipants,
         (bp) => bp.playerId === ctx.player.id
       )?.id
       if (winnerParticipationId) {
-        const { expReports } = await grantExp({
+        const result = await grantExp({
           battleReport: battle.metadata.battleReport,
           prisma: ctx.prisma,
           winnerParticipationId,
           onlyFaintedGiveExp: false,
         })
-        return {
-          expReports,
-        }
+        expReports = result.expReports
       }
+    }
+
+    // Catch metadata for battle participants
+    if (battle && battle.metadata.battleReport) {
+      await savePostBattleCatchMetadata({
+        battleReport: battle.metadata.battleReport,
+        prisma: ctx.prisma,
+      })
+    }
+
+    return {
+      expReports,
     }
   }),
 
@@ -351,4 +373,53 @@ export const catchRouter = createTRPCRouter({
         },
       })
     }),
+
+  care: playerProcedure.mutation(async ({ ctx }) => {
+    const all = await ctx.prisma.catch.findMany({
+      where: {
+        playerId: ctx.player.id,
+      },
+      include: {
+        wildlife: true,
+      },
+    })
+    await Promise.all(
+      map(all, async (c) => {
+        const fighter = await getWildlifeFighterPlus(c)
+        let needToSave = false
+
+        // PP
+        const moves = fighter.moves.map((m) => {
+          if (!m.id) {
+            throw new Error("No move id")
+          }
+          if (m.status?.pp !== m.definition.pp) {
+            needToSave = true
+          }
+          return {
+            id: m.id,
+            pp: m.definition.pp,
+          }
+        })
+
+        // TODO: HP
+        const hp = fighter.hpMax
+
+        if (needToSave) {
+          await ctx.prisma.catch.update({
+            where: {
+              id: c.id,
+            },
+            data: {
+              metadata: {
+                ...c.metadata,
+                moves,
+                hp,
+              } satisfies CatchMetadata,
+            },
+          })
+        }
+      })
+    )
+  }),
 })

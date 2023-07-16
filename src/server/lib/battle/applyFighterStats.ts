@@ -8,11 +8,10 @@ export const applyFighterStats = ({
   catchMetadata,
 }: {
   p: Pokemon
-  catchMetadata?: Pick<CatchMetadata, "moves">
+  catchMetadata?: Pick<CatchMetadata, "moves" | "hp">
 }) => {
   // Fixing PP
   // @pkmn/sim boosts PP to max, so we need to deduct it back down
-  // FIXME: actually change the maxpp instead of the current pp
   p.moves.forEach((moveId) => {
     const def = Dex.moves.get(moveId)
     const maxpp = def?.pp
@@ -21,6 +20,11 @@ export const applyFighterStats = ({
     if (!status) {
       throw new Error("Move not found with getMoveData")
     }
+
+    // actually change the maxpp instead of the current pp
+    // TODO: check if this works :O
+    status.maxpp = maxpp
+
     const ppStatus = status.pp
     let ppTarget = maxpp
     if (ppFromMetadata) {
@@ -41,4 +45,10 @@ export const applyFighterStats = ({
     //   diff,
     // })
   })
+
+  // Setting HP
+  if (typeof catchMetadata?.hp === "number") {
+    p.hp = catchMetadata?.hp
+    p.fainted = p.hp <= 0
+  }
 }

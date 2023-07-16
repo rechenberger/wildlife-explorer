@@ -5,6 +5,7 @@ import { z } from "zod"
 import { BATTLE_REPORT_VERSION } from "~/config"
 import { createTRPCRouter } from "~/server/api/trpc"
 import { grantExp } from "~/server/lib/battle/grantExp"
+import { savePostBattleCatchMetadata } from "~/server/lib/battle/savePostBattleCatchMetadata"
 import { simulateBattle } from "~/server/lib/battle/simulateBattle"
 import { respawnWildlife } from "~/server/lib/respawnWildlife"
 import { type BattleMetadata } from "~/server/schema/BattleMetadata"
@@ -37,7 +38,7 @@ export const battleRouter = createTRPCRouter({
       })
     }
 
-    const caughtWildlife = await ctx.prisma.catch.findFirst({
+    const team = await ctx.prisma.catch.findMany({
       where: {
         playerId: ctx.player.id,
         battleOrderPosition: {
@@ -45,10 +46,22 @@ export const battleRouter = createTRPCRouter({
         },
       },
     })
-    if (!caughtWildlife) {
+    if (!team?.length) {
       throw new TRPCError({
         code: "BAD_REQUEST",
         message: "You need to catch at least one wildlife to battle 😉",
+      })
+    }
+    const fighterWithHp = find(team, (c) => {
+      if (typeof c.metadata?.hp !== "number") {
+        return true
+      }
+      return c.metadata?.hp > 0
+    })
+    if (!fighterWithHp) {
+      throw new TRPCError({
+        code: "BAD_REQUEST",
+        message: "Your whole team is fainted 🤦",
       })
     }
 
@@ -334,6 +347,13 @@ export const battleRouter = createTRPCRouter({
             onlyFaintedGiveExp: true,
           })
           const iAmWinner = winnerSide.player?.id === ctx.player.id
+
+          // Currently not done for PvP. Lets call it game design
+          await savePostBattleCatchMetadata({
+            battleReport,
+            prisma: ctx.prisma,
+          })
+
           return {
             iAmWinner,
             expReports,
@@ -367,6 +387,13 @@ export const battleRouter = createTRPCRouter({
           },
         },
       })
+
+      if (battle.metadata.battleReport) {
+        await savePostBattleCatchMetadata({
+          battleReport: battle.metadata.battleReport,
+          prisma: ctx.prisma,
+        })
+      }
 
       await Promise.all(
         map(battle.battleParticipants, async (p) => {

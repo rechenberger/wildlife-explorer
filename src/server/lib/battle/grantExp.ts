@@ -118,3 +118,5 @@ export const grantExp = async ({
     expReports,
   }
 }
+
+export type ExpReports = Awaited<ReturnType<typeof grantExp>>["expReports"]

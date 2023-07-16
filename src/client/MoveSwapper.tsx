@@ -13,7 +13,7 @@ import { RotateCcw } from "lucide-react"
 import dynamic from "next/dynamic"
 import { Fragment, useMemo, type PropsWithChildren } from "react"
 import { toast } from "sonner"
-import { MAX_MOVES_PER_FIGHTER } from "~/config"
+import { CAN_RESET_MOVES, MAX_MOVES_PER_FIGHTER } from "~/config"
 import { api } from "~/utils/api"
 import { fillWithNulls } from "~/utils/fillWithNulls"
 import { CatchDetails } from "./CatchDetails"
@@ -109,7 +109,7 @@ export const MoveSwapper = ({ catchId }: { catchId: string }) => {
         showDividers
         buttonSlot={
           <>
-            {c.metadata.moves ? (
+            {CAN_RESET_MOVES && c.metadata.moves ? (
               <Button
                 onClick={() => {
                   if (!playerId) return
