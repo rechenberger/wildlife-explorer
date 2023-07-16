@@ -1,8 +1,11 @@
-import { HeartPulse } from "lucide-react"
+import NiceModal from "@ebay/nice-modal-react"
+import { ArrowLeftRight, HeartPulse } from "lucide-react"
 import { api } from "~/utils/api"
 import { Away } from "./Away"
 import { CareButton } from "./CareButton"
+import { MyCatchesModal } from "./MyCatchesModal"
 import { TypeBadge } from "./TypeBadge"
+import { Button } from "./shadcn/ui/button"
 import { navigateIcon, runIcon } from "./typeIcons"
 import { useNavigation } from "./useNavigation"
 import { usePlayer } from "./usePlayer"
@@ -40,7 +43,17 @@ export const PlaceView = ({
         )}
         <Away location={place} />
       </div>
-      <CareButton />
+      <div className="flex flex-col gap-4">
+        <CareButton />
+        <Button
+          onClick={() => {
+            NiceModal.show(MyCatchesModal)
+          }}
+        >
+          <ArrowLeftRight className="w-4 h-4 mr-2" />
+          <span>Manage my Team</span>
+        </Button>
+      </div>
       <div className="mt-8 flex flex-row gap-4 w-56">
         <TypeBadge
           icon={navigateIcon}
