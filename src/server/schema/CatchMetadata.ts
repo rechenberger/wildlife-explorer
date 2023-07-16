@@ -34,5 +34,6 @@ export const CatchMetadata = z.object({
       })
     )
     .nullish(),
+  hp: z.number().nullish(),
 })
 export type CatchMetadata = z.infer<typeof CatchMetadata>

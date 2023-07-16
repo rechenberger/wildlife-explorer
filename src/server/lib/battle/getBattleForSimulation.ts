@@ -14,6 +14,7 @@ const BattleSimulationWildlifeMetadata = BattleReportWildlifeMetadata.merge(
 const BattleSimulationCatchMetadata = CatchMetadata.pick({
   level: true,
   moves: true,
+  hp: true,
 })
 
 export const getBattleForSimulation = async ({

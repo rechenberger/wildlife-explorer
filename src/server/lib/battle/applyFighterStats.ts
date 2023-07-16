@@ -8,7 +8,7 @@ export const applyFighterStats = ({
   catchMetadata,
 }: {
   p: Pokemon
-  catchMetadata?: Pick<CatchMetadata, "moves">
+  catchMetadata?: Pick<CatchMetadata, "moves" | "hp">
 }) => {
   // Fixing PP
   // @pkmn/sim boosts PP to max, so we need to deduct it back down
@@ -45,4 +45,10 @@ export const applyFighterStats = ({
     //   diff,
     // })
   })
+
+  // Setting HP
+  if (typeof catchMetadata?.hp === "number") {
+    p.hp = catchMetadata?.hp
+    p.fainted = p.hp <= 0
+  }
 }

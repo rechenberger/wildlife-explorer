@@ -403,6 +403,7 @@ export const catchRouter = createTRPCRouter({
         })
 
         // TODO: HP
+        const hp = fighter.hpMax
 
         if (needToSave) {
           await ctx.prisma.catch.update({
@@ -413,6 +414,7 @@ export const catchRouter = createTRPCRouter({
               metadata: {
                 ...c.metadata,
                 moves,
+                hp,
               } satisfies CatchMetadata,
             },
           })

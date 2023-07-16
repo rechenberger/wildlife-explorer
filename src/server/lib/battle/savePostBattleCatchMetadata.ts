@@ -27,6 +27,8 @@ export const savePostBattleCatchMetadata = async ({
             }
           })
 
+          const hp = fighter.fighter.hp
+
           const { metadata } = await prisma.catch.findFirstOrThrow({
             where: {
               id: fighter.catch.id,
@@ -44,6 +46,7 @@ export const savePostBattleCatchMetadata = async ({
               metadata: {
                 ...metadata,
                 moves,
+                hp,
               } satisfies CatchMetadata,
             },
           })
