@@ -10,7 +10,7 @@ import {
 } from "~/config"
 import { createTRPCRouter } from "~/server/api/trpc"
 import { findObservations } from "~/server/inaturalist/findObservations"
-import { findPlaces } from "~/server/lib/findPlaces"
+import { scanPlaces } from "~/server/lib/scanPlaces"
 import { playerProcedure } from "../middleware/playerProcedure"
 
 export const scanRouter = createTRPCRouter({
@@ -30,7 +30,9 @@ export const scanRouter = createTRPCRouter({
       },
     })
 
-    const places = await findPlaces({
+    await scanPlaces({
+      prisma: ctx.prisma,
+      playerId: ctx.player.id,
       location: {
         lat: ctx.player.lat,
         lng: ctx.player.lng,

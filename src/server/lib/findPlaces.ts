@@ -1,5 +1,6 @@
 import { Client } from "@googlemaps/google-maps-services-js"
 import { PlaceType } from "@prisma/client"
+import { flatMap } from "lodash-es"
 import { RADIUS_IN_KM_SCAN_PLACES } from "~/config"
 import { env } from "~/env.mjs"
 import { type LatLng } from "../schema/LatLng"
@@ -32,7 +33,19 @@ export const findPlaces = async ({ location }: { location: LatLng }) => {
     }
   })
 
-  console.log(places)
+  const goodPlaces = flatMap(places, (p) => {
+    if (!p.lat || !p.lng || !p.googlePlaceId) {
+      return []
+    }
+    return [
+      {
+        ...p,
+        lat: p.lat!,
+        lng: p.lng!,
+        googlePlaceId: p.googlePlaceId!,
+      },
+    ]
+  })
 
-  return places
+  return goodPlaces
 }
