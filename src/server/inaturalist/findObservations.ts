@@ -18,7 +18,7 @@ export const findObservations = async ({
   const locale = "de"
   // const locale = "en"
   const url = `https://api.inaturalist.org/v1/observations?taxon_id=1&lat=${lat}&lng=${lng}&radius=${radiusInKm}&order=desc&order_by=created_at&per_page=200&locale=${locale}`
-  console.log(url)
+  // console.log(url)
   const response = await fetch(url)
   const data = await response.json()
   const schema = z.object({
@@ -28,7 +28,7 @@ export const findObservations = async ({
     results: z.array(Observation),
   })
   const parsed = schema.parse(data)
-  console.log(parsed.total_results, parsed.results.length)
+  // console.log(parsed.total_results, parsed.results.length)
 
   const wildlifes = parsed.results.flatMap((o) => {
     const lat = o.geojson.coordinates[1]
