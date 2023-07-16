@@ -78,6 +78,9 @@ export const MyCatches = () => {
       onSuccess: () => {
         trpc.catch.getMyCatches.invalidate()
       },
+      onError: (err) => {
+        toast.error(err.message)
+      },
     })
 
   const disabled = isMutating || isFetching
