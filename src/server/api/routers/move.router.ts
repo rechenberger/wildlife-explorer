@@ -1,7 +1,7 @@
 import { TRPCError } from "@trpc/server"
-import { findIndex, orderBy } from "lodash-es"
+import { filter, findIndex, orderBy } from "lodash-es"
 import { z } from "zod"
-import { SHOW_FUTURE_MOVES } from "~/config"
+import { MAX_MOVES_PER_FIGHTER, SHOW_FUTURE_MOVES } from "~/config"
 import { createTRPCRouter } from "~/server/api/trpc"
 import { type MyPrismaClient } from "~/server/db"
 import { getWildlifeFighterPlusMove } from "~/server/lib/battle/WildlifeFighterPlusMove"
@@ -28,8 +28,8 @@ export const moveRouter = createTRPCRouter({
     .input(
       z.object({
         catchId: z.string(),
-        slotIdx: z.number(),
-        moveId: z.string(),
+        oldMoveId: z.string(),
+        newMoveId: z.string(),
       })
     )
     .mutation(async ({ ctx, input }) => {
@@ -38,27 +38,51 @@ export const moveRouter = createTRPCRouter({
         catchId: input.catchId,
         playerId: ctx.player.id,
       })
-      const move = allMoves.find((m) => m.id === input.moveId)
-      if (!move) {
+      if (filter(allMoves, (m) => m.learned).length < MAX_MOVES_PER_FIGHTER) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: `Move Swap will be available after learning your ${
+            MAX_MOVES_PER_FIGHTER + 1
+          }th move`,
+        })
+      }
+
+      const newMove = allMoves.find((m) => m.id === input.newMoveId)
+      if (!newMove) {
         throw new TRPCError({
           code: "NOT_FOUND",
-          message: "Move not found",
+          message: "New move not found",
         })
       }
-      if (!move.learned) {
+      if (!newMove.learned) {
         throw new TRPCError({
           code: "FORBIDDEN",
-          message: "Move not learned",
+          message: "New move not learned",
         })
       }
-      const currentMoves = allMoves.filter((m) => m.activeIdx !== null)
 
-      const swappedIn = move
-      const swappedOut = currentMoves[input.slotIdx]
-      currentMoves[input.slotIdx] = swappedIn
+      const oldMove = allMoves.find((m) => m.id === input.oldMoveId)
+      if (!oldMove) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Old move not found",
+        })
+      }
+      if (oldMove.activeIdx === null) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Old move not active",
+        })
+      }
 
-      if (typeof swappedIn.activeIdx === "number" && swappedOut) {
-        currentMoves[swappedIn.activeIdx] = swappedOut
+      const currentMoves = orderBy(
+        allMoves.filter((m) => m.activeIdx !== null),
+        (m) => m.activeIdx
+      )
+      currentMoves[oldMove.activeIdx] = newMove
+
+      if (typeof newMove.activeIdx === "number") {
+        currentMoves[newMove.activeIdx] = oldMove
       }
 
       const moves = currentMoves.map((m) => ({
@@ -110,7 +134,7 @@ const getPossibleMoves = async ({
     }
   })
 
-  allMoves = orderBy(allMoves, (m) => m.learnAtLevel)
+  allMoves = orderBy(allMoves, [(m) => m.activeIdx, (m) => m.learnAtLevel])
   if (!SHOW_FUTURE_MOVES) {
     allMoves = allMoves.filter((m) => m.learned)
   }

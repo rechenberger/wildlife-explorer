@@ -8,14 +8,14 @@ import {
   useSensors,
 } from "@dnd-kit/core"
 import { restrictToFirstScrollableAncestor } from "@dnd-kit/modifiers"
-import { groupBy, isNaN, map } from "lodash-es"
+import { groupBy, map } from "lodash-es"
 import dynamic from "next/dynamic"
-import { Fragment, PropsWithChildren, useMemo } from "react"
+import { Fragment, useMemo, type PropsWithChildren } from "react"
 import { toast } from "sonner"
 import { api } from "~/utils/api"
 import { CatchDetails } from "./CatchDetails"
 import { DividerHeading } from "./DividerHeading"
-import { FighterMove, FighterMoveProps } from "./FighterMoves"
+import { FighterMove, type FighterMoveProps } from "./FighterMoves"
 import { cn } from "./cn"
 import { useMyCatch } from "./useCatches"
 import { usePlayer } from "./usePlayer"
@@ -47,19 +47,19 @@ export const MoveSwapper = ({ catchId }: { catchId: string }) => {
   }, [allMoves])
 
   const swapInMove = ({
-    moveId,
-    slotIdx,
+    newMoveId,
+    oldMoveId,
   }: {
-    moveId: string
-    slotIdx: number
+    newMoveId: string
+    oldMoveId: string
   }) => {
     if (!playerId) return
     toast.promise(
       swap({
         catchId,
-        moveId,
-        slotIdx,
         playerId,
+        newMoveId,
+        oldMoveId,
       }),
       {
         loading: "Swapping Move...",
@@ -96,10 +96,10 @@ export const MoveSwapper = ({ catchId }: { catchId: string }) => {
       <CatchDetails catchId={catchId} showWildlife showDividers />
       <DndContext
         onDragEnd={(e) => {
-          const moveId = e.active.id.toString()
-          const slotIdx = parseInt(e.over?.id?.toString() ?? "")
-          if (!moveId || isNaN(slotIdx)) return
-          swapInMove({ moveId, slotIdx })
+          const newMoveId = e.active.id.toString()
+          const oldMoveId = e.over?.id.toString()
+          if (!newMoveId || !oldMoveId) return
+          swapInMove({ newMoveId, oldMoveId })
         }}
         sensors={sensors}
         modifiers={[restrictToFirstScrollableAncestor]}
@@ -107,10 +107,10 @@ export const MoveSwapper = ({ catchId }: { catchId: string }) => {
         <>
           <DividerHeading>Active Moves</DividerHeading>
           <div className="grid flex-1 grid-cols-1 gap-1">
-            {map(active, (move, idx) => {
+            {map(active, (move) => {
               return (
                 <Fragment key={move.id}>
-                  <DroppableMoveSlot id={idx}>
+                  <DroppableMoveSlot id={move.id}>
                     <DraggableMove fighter={c} move={move} />
                   </DroppableMoveSlot>
                 </Fragment>
@@ -189,7 +189,7 @@ const DraggableMove = (props: FighterMoveProps) => {
 const DroppableMoveSlot = ({
   children,
   id,
-}: PropsWithChildren<{ id: number }>) => {
+}: PropsWithChildren<{ id: string }>) => {
   const { isOver, setNodeRef } = useDroppable({
     id,
   })
