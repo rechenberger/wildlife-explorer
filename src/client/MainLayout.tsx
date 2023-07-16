@@ -13,7 +13,10 @@ export const MainLayout = ({ children }: { children?: ReactNode }) => {
           name="viewport"
           content="initial-scale=1.0, width=device-width, viewport-fit=cover"
         />
-        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta
+          name="viewport"
+          content="initial-scale=1.0, width=device-width, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
+        />
         <link rel="manifest" href="/manifest.json" />
       </Head>
       <main className="relative flex h-[100svh] w-full flex-col items-center justify-center bg-gradient-to-br  from-cyan-500 to-amber-600 text-white">
