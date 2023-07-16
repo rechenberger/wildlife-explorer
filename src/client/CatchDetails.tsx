@@ -77,7 +77,7 @@ export const CatchDetails = ({
   const mapSetCenter = useMapSetCenter()
   const setCurrentObservationId = useSetAtom(currentObservationIdAtom)
 
-  const { playerId } = usePlayer()
+  const { playerId, player } = usePlayer()
   const trpc = api.useContext()
   const { mutate: rename } = api.catch.rename.useMutation({
     onSuccess: () => {
@@ -180,7 +180,7 @@ export const CatchDetails = ({
           <>
             {showDividers && <DividerHeading>Moves</DividerHeading>}
             <FighterMoves fighter={c} />
-            {canSwapMoves && (
+            {canSwapMoves && !player?.metadata?.activeBattleId && (
               <div className="flex flex-row-reverse">
                 <TypeBadge
                   icon={editIcon}
