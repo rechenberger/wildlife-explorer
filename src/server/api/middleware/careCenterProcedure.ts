@@ -31,6 +31,13 @@ export const careCenterProcedure = playerProcedure.use(
       })
     }
 
+    if (ctx.player.metadata?.activeBattleId) {
+      throw new TRPCError({
+        code: "FORBIDDEN",
+        message: `Wildlife Care Centers cannot be visited while in a battle.`,
+      })
+    }
+
     return next({
       ctx: {
         ...ctx,
