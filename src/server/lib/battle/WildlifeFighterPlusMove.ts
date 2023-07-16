@@ -11,8 +11,9 @@ export const getWildlifeFighterPlusMove = ({
   foeTypes?: string[]
   p?: Pokemon
 }) => {
+  const id = toID(move)
   const status = p ? p.getMoveData(move) : null
-  const definition = Dex.moves.getByID(toID(status?.id))
+  const definition = Dex.moves.getByID(id)
   const moveType = definition.type
   const immunity = foeTypes ? Dex.getImmunity(moveType, foeTypes) : null
   const effectiveness = foeTypes
@@ -20,7 +21,7 @@ export const getWildlifeFighterPlusMove = ({
     : null
 
   return {
-    id: definition?.id,
+    id,
     name: definition?.name || move,
     status,
     definition,
