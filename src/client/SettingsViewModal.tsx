@@ -2,7 +2,6 @@ import NiceModal, { useModal } from "@ebay/nice-modal-react"
 import { SettingsView } from "./SettingsView"
 import { cn } from "./cn"
 import { Dialog, DialogContent } from "./shadcn/ui/dialog"
-import { ScrollArea } from "./shadcn/ui/scroll-area"
 
 export const SettingsViewModal = NiceModal.create<{}>(({}) => {
   // Use a hook to manage the modal state
@@ -27,9 +26,7 @@ export const SettingsViewModal = NiceModal.create<{}>(({}) => {
           paddingBottom: "calc(env(safe-area-inset-bottom) + 1.5rem)",
         }}
       >
-        <ScrollArea className="max-h-96">
-          <SettingsView />
-        </ScrollArea>
+        <SettingsView />
       </DialogContent>
     </Dialog>
   )
