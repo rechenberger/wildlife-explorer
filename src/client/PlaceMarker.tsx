@@ -1,3 +1,4 @@
+import { HeartPulse } from "lucide-react"
 import { Marker } from "react-map-gl"
 import { type RouterOutputs } from "~/utils/api"
 import { cn } from "./cn"
@@ -20,8 +21,7 @@ export const PlaceMarker = ({ place }: { place: Place }) => {
     >
       <div
         className={cn(
-          "group relative flex aspect-square h-12 items-center justify-center rounded-full bg-amber-400 p-1 shadow transition-transform md:hover:scale-[3]",
-          "bg-purple-500"
+          "group relative flex aspect-square h-12 items-center justify-center rounded-full bg-purple-500 p-1 shadow transition-transform md:hover:scale-[3]"
         )}
         onDoubleClick={(e) => {
           e.stopPropagation()
@@ -32,11 +32,12 @@ export const PlaceMarker = ({ place }: { place: Place }) => {
           })
         }}
       >
-        {place.metadata.name && (
-          <div className="absolute -bottom-10 line-clamp-1 hidden overflow-visible p-1 text-[4px] font-bold leading-none shadow md:group-hover:flex scale-[40%] text-black w-56 flex-col">
-            {place.metadata.name}
-          </div>
-        )}
+        <div className="">
+          <HeartPulse className="text-white w-8 h-8" />
+        </div>
+        <div className="absolute -bottom-4 line-clamp-1 hidden whitespace-nowrap rounded-full bg-purple-500 p-1 text-[4px] font-bold leading-none text-white shadow md:group-hover:flex">
+          {place.metadata.name || "Wildlife Care Center"}
+        </div>
       </div>
     </Marker>
   )
