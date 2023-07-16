@@ -1,5 +1,5 @@
 import { TRPCError } from "@trpc/server"
-import { filter, findIndex, orderBy } from "lodash-es"
+import { filter, findIndex, orderBy, uniqBy } from "lodash-es"
 import { z } from "zod"
 import { MAX_MOVES_PER_FIGHTER, SHOW_FUTURE_MOVES } from "~/config"
 import { createTRPCRouter } from "~/server/api/trpc"
@@ -86,10 +86,11 @@ export const moveRouter = createTRPCRouter({
         currentMoves[newMove.activeIdx] = oldMove
       }
 
-      const moves = currentMoves.map((m) => ({
+      let moves = currentMoves.map((m) => ({
         id: m.id,
         pp: m.status?.pp || m.definition.pp,
       }))
+      moves = uniqBy(moves, (m) => m.id)
 
       await ctx.prisma.catch.update({
         where: {
