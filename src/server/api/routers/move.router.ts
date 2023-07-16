@@ -17,11 +17,12 @@ export const moveRouter = createTRPCRouter({
       })
     )
     .query(async ({ ctx, input }) => {
-      return getPossibleMoves({
+      const { allMoves } = await getPossibleMoves({
         prisma: ctx.prisma,
         catchId: input.catchId,
         playerId: ctx.player.id,
       })
+      return allMoves
     }),
   swap: playerProcedure
     .input(
@@ -32,7 +33,7 @@ export const moveRouter = createTRPCRouter({
       })
     )
     .mutation(async ({ ctx, input }) => {
-      const allMoves = await getPossibleMoves({
+      const { allMoves, c } = await getPossibleMoves({
         prisma: ctx.prisma,
         catchId: input.catchId,
         playerId: ctx.player.id,
@@ -50,6 +51,22 @@ export const moveRouter = createTRPCRouter({
           message: "Move not learned",
         })
       }
+      const currentMoves = allMoves.filter((m) => m.activeIdx !== null)
+
+      const swappedIn = move
+      const swappedOut = currentMoves[input.slotIdx]
+      currentMoves[input.slotIdx] = swappedIn
+
+      if (typeof swappedIn.activeIdx === "number" && swappedOut) {
+        currentMoves[swappedIn.activeIdx] = swappedOut
+      }
+
+      const moves = currentMoves.map((m) => ({
+        id: m.id,
+        pp: m.status?.pp || m.definition.pp,
+      }))
+
+      console.log("moves", moves)
     }),
 })
 
@@ -97,5 +114,5 @@ const getPossibleMoves = async ({
   if (!SHOW_FUTURE_MOVES) {
     allMoves = allMoves.filter((m) => m.learned)
   }
-  return allMoves
+  return { allMoves, c }
 }

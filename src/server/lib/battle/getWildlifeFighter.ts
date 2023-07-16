@@ -16,7 +16,7 @@ export type GetWildlifeFighterOptions = {
       | "observationCaptive"
     >
   }
-  metadata?: Pick<CatchMetadata, "level">
+  metadata?: Pick<CatchMetadata, "level" | "moves">
   seed: string
   idx?: number
   name?: string | null
@@ -70,14 +70,20 @@ export const getWildlifeFighter = async ({
     }
   }
 
-  const possibleMoves = await getMovesInLearnset(speciesName)
-  const moves = take(
-    filter(
-      orderBy(possibleMoves, (m) => m.level, "desc"),
-      (m) => m.level <= level
-    ),
-    MAX_MOVES_PER_FIGHTER
-  ).map((m) => m.move)
+  let moves: string[]
+  if (catchMetaData?.moves) {
+    // TODO: pp
+    moves = catchMetaData?.moves?.map((m) => m.id)
+  } else {
+    const possibleMoves = await getMovesInLearnset(speciesName)
+    moves = take(
+      filter(
+        orderBy(possibleMoves, (m) => m.level, "desc"),
+        (m) => m.level <= level
+      ),
+      MAX_MOVES_PER_FIGHTER
+    ).map((m) => m.move)
+  }
 
   const nature = rngItem({
     items: Dex.natures.all(),
