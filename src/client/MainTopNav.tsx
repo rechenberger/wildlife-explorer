@@ -12,7 +12,7 @@ const carterOne = Carter_One({
 export const MainTopNav = () => {
   return (
     <>
-      <div className="fixed inset-x-0 top-0 z-40 flex flex-row px-2 pt-4 md:px-4 md:pt-8">
+      <div className="fixed inset-x-0 top-0 z-40 flex flex-row px-2 pt-4 md:px-4 md:pt-8 pointer-events-none">
         <div className="flex flex-1 flex-row items-center justify-start"></div>
         <BrushStrokeBackground>
           <Link
