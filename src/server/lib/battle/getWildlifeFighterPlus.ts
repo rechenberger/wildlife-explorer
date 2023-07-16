@@ -3,6 +3,10 @@ import { Battle, toID, type Pokemon } from "@pkmn/sim"
 import { first } from "lodash-es"
 import { z } from "zod"
 import {
+  WildlifeFighterPlusMove,
+  getWildlifeFighterPlusMove,
+} from "./WildlifeFighterPlusMove"
+import {
   getWildlifeFighter,
   type GetWildlifeFighterOptions,
 } from "./getWildlifeFighter"
@@ -44,22 +48,11 @@ export const transformWildlifeFighterPlus = ({
   const p = pokemon
 
   const moves = p.moves.map((move) => {
-    const data = p.getMoveData(move)
-    const definition = Dex.moves.getByID(toID(data?.id))
-    const moveType = definition.type
-    const immunity = foeTypes ? Dex.getImmunity(moveType, foeTypes) : null
-    const effectiveness = foeTypes
-      ? Dex.getEffectiveness(moveType, foeTypes)
-      : null
-
-    return {
-      name: data?.move || move,
-      status: data,
-      definition,
-      effectiveness,
-      immunity,
-      id: data?.id,
-    } satisfies WildlifeFighterPlusMove
+    return getWildlifeFighterPlusMove({
+      move,
+      p,
+      foeTypes,
+    })
   })
 
   let stats = {
@@ -121,28 +114,6 @@ export const transformWildlifeFighterPlus = ({
 
   return WildlifeFighterPlus.parse(fighterPlus)
 }
-
-export const WildlifeFighterPlusMove = z.object({
-  name: z.string(),
-  id: z.string().optional(),
-  status: z
-    .object({
-      pp: z.number(),
-    })
-    .nullish(),
-  definition: z.object({
-    name: z.string(),
-    type: z.string(),
-    category: z.string(),
-    desc: z.string(),
-    basePower: z.number().nullish(),
-    accuracy: z.number().or(z.literal(true)),
-    pp: z.number(),
-  }),
-  effectiveness: z.number().nullish(),
-  immunity: z.boolean().nullish(),
-})
-export type WildlifeFighterPlusMove = z.infer<typeof WildlifeFighterPlusMove>
 
 export const WildlifeFighterPlus = z.object({
   hp: z.number(),
