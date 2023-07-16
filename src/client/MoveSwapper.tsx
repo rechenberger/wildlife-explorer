@@ -26,7 +26,12 @@ export const MoveSwapper = ({ catchId }: { catchId: string }) => {
     })
   }, [allMoves])
 
-  if (!c) return null
+  if (!c || !allMoves)
+    return (
+      <div className="flex items-center justify-center py-12 text-center text-sm opacity-60">
+        Loading...
+      </div>
+    )
 
   return (
     <div className="flex flex-col gap-4">
