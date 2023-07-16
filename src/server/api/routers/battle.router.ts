@@ -38,7 +38,7 @@ export const battleRouter = createTRPCRouter({
       })
     }
 
-    const caughtWildlife = await ctx.prisma.catch.findFirst({
+    const team = await ctx.prisma.catch.findMany({
       where: {
         playerId: ctx.player.id,
         battleOrderPosition: {
@@ -46,10 +46,22 @@ export const battleRouter = createTRPCRouter({
         },
       },
     })
-    if (!caughtWildlife) {
+    if (!team?.length) {
       throw new TRPCError({
         code: "BAD_REQUEST",
         message: "You need to catch at least one wildlife to battle 😉",
+      })
+    }
+    const fighterWithHp = find(team, (c) => {
+      if (typeof c.metadata?.hp !== "number") {
+        return true
+      }
+      return c.metadata?.hp > 0
+    })
+    if (!fighterWithHp) {
+      throw new TRPCError({
+        code: "BAD_REQUEST",
+        message: "Your whole team is fainted 🤦",
       })
     }
 
