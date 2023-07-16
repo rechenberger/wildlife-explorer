@@ -1,5 +1,6 @@
 import { findIndex, orderBy } from "lodash-es"
 import { z } from "zod"
+import { SHOW_FUTURE_MOVES } from "~/config"
 import { createTRPCRouter } from "~/server/api/trpc"
 import { getWildlifeFighterPlusMove } from "~/server/lib/battle/WildlifeFighterPlusMove"
 import { getMovesInLearnset } from "~/server/lib/battle/getWildlifeFighter"
@@ -46,7 +47,9 @@ export const moveRouter = createTRPCRouter({
       })
 
       allMoves = orderBy(allMoves, (m) => m.learnAtLevel)
-
+      if (!SHOW_FUTURE_MOVES) {
+        allMoves = allMoves.filter((m) => m.learned)
+      }
       return allMoves
     }),
 })

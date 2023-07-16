@@ -35,3 +35,5 @@ export const CATCH_RATE_FIRST_FIGHTER = 1.0
 
 export const BATTLE_REPORT_VERSION = 3
 export const BATTLE_INPUT_VERSION = 3
+
+export const SHOW_FUTURE_MOVES = true
