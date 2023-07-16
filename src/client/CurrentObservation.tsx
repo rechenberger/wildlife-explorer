@@ -13,7 +13,6 @@ import {
 import { api } from "~/utils/api"
 import { Away } from "./Away"
 import { BattleViewModal } from "./BattleViewModal"
-import { CurrentObservationModal } from "./CurrentObservationModal"
 import { FighterChipByWildlife } from "./FighterChipByWildlife"
 import { TimeAgo } from "./TimeAgo"
 import { cn } from "./cn"
@@ -27,7 +26,13 @@ const JsonViewer = dynamic(() => import("../client/JsonViewer"), { ssr: false })
 
 export const currentObservationIdAtom = atom<number | null>(null)
 
-export const CurrentObservation = ({ wildlifeId }: { wildlifeId: string }) => {
+export const CurrentObservation = ({
+  wildlifeId,
+  close,
+}: {
+  wildlifeId: string
+  close: () => void
+}) => {
   const { playerId } = usePlayer()
   const { data } = api.wildlife.getOne.useQuery(
     {
@@ -48,7 +53,7 @@ export const CurrentObservation = ({ wildlifeId }: { wildlifeId: string }) => {
   const { mutateAsync: attackWildlife, isLoading: attacking } =
     api.battle.attackWildlife.useMutation({
       onSuccess: (data) => {
-        NiceModal.hide(CurrentObservationModal)
+        close()
         trpc.battle.invalidate()
         NiceModal.show(BattleViewModal, {
           battleId: data.id,
@@ -70,10 +75,7 @@ export const CurrentObservation = ({ wildlifeId }: { wildlifeId: string }) => {
       <>
         <div className="flex flex-row items-center gap-2">
           <div className="flex-1 truncate text-2xl">{getName(w)}</div>
-          <button
-            className="shrink-0"
-            onClick={() => NiceModal.hide(CurrentObservationModal)}
-          >
+          <button className="shrink-0" onClick={() => close()}>
             <X size={16} />
           </button>
         </div>

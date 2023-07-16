@@ -28,7 +28,13 @@ export const CurrentObservationModal = NiceModal.create<{
         }}
       >
         {/* <ScrollArea className="max-h-[calc(100svh-100px)] h-96"> */}
-        <CurrentObservation wildlifeId={wildlifeId} />
+        <CurrentObservation
+          wildlifeId={wildlifeId}
+          close={() => {
+            modal.reject()
+            modal.remove()
+          }}
+        />
         {/* </ScrollArea> */}
       </div>
     </Dialog>
