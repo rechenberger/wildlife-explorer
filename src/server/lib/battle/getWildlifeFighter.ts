@@ -16,7 +16,7 @@ export type GetWildlifeFighterOptions = {
       | "observationCaptive"
     >
   }
-  metadata?: Pick<CatchMetadata, "level" | "moves">
+  metadata?: Pick<CatchMetadata, "level" | "moves" | "evs">
   seed: string
   idx?: number
   name?: string | null
@@ -146,7 +146,7 @@ export const getWildlifeFighter = async ({
     }),
   }
 
-  const evs = {
+  const evs = catchMetaData?.evs ?? {
     hp: 0,
     atk: 0,
     def: 0,

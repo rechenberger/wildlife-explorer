@@ -1,6 +1,9 @@
-import { filter, flatMap, map } from "lodash-es"
+import { filter, flatMap, map, sum } from "lodash-es"
+import { MAX_EV_SINGLE_STAT, MAX_EV_TOTAL } from "~/config"
+import { PokemonEffortValueYield } from "~/data/pokemonEffortValueYield"
 import { getLevelFromExp } from "~/data/pokemonLevelExperienceMap"
 import { type MyPrismaClient } from "~/server/db"
+import { type CatchMetadata } from "~/server/schema/CatchMetadata"
 import { calcExpForDefeatedPokemon } from "~/utils/calcExpForDefeatedPokemon"
 import { calcExpPercentage } from "~/utils/calcExpPercentage"
 import { type BattleReport } from "./BattleReport"
@@ -50,6 +53,19 @@ export const grantExp = async ({
       })
 
       let expGained = 0
+      const defaultEvs = {
+        hp: 0,
+        atk: 0,
+        def: 0,
+        spa: 0,
+        spd: 0,
+        spe: 0,
+      } satisfies CatchMetadata["evs"]
+
+      const gainedEvs = { ...defaultEvs }
+      let currentEvs = winningCatch.metadata.evs
+        ? { ...winningCatch.metadata.evs }
+        : { ...defaultEvs }
 
       for (const looserFighter of defeatedFighters) {
         expGained += calcExpForDefeatedPokemon({
@@ -59,6 +75,15 @@ export const grantExp = async ({
           isOriginalOwner:
             winningCatch.originalPlayerId === winningCatch.playerId,
         })
+
+        const earnedEvs =
+          PokemonEffortValueYield[looserFighter.fighter.speciesNum]
+        if (earnedEvs) {
+          for (const key in gainedEvs) {
+            const evKey = key as keyof typeof gainedEvs
+            gainedEvs[evKey] += earnedEvs[evKey]
+          }
+        }
       }
 
       const expBefore = winningCatch.metadata.exp || 0
@@ -83,6 +108,20 @@ export const grantExp = async ({
         levelingRate,
       })
 
+      let currentEvsSum = sum(Object.values(currentEvs))
+
+      for (const [key, value] of Object.entries(gainedEvs)) {
+        const keyTyped = key as keyof typeof gainedEvs
+        if (currentEvsSum >= MAX_EV_TOTAL) break
+        if (currentEvs[keyTyped] >= MAX_EV_SINGLE_STAT) continue
+        const evsToGain = Math.min(
+          MAX_EV_SINGLE_STAT - currentEvs[keyTyped],
+          value
+        )
+        currentEvs[keyTyped] += evsToGain
+        currentEvsSum += evsToGain
+      }
+
       await prisma.catch.update({
         where: {
           id: winnerFighter.catch.id,
@@ -92,7 +131,8 @@ export const grantExp = async ({
             ...winningCatch.metadata,
             exp: expAfter,
             level: levelAfter,
-          },
+            evs: currentEvs,
+          } satisfies CatchMetadata,
         },
         select: {
           id: true,
