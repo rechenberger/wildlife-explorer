@@ -14,7 +14,7 @@ export const PlayerCreationForm = () => {
   const { mutate, isLoading: mutationIsLoading } =
     api.player.createMe.useMutation({
       onSuccess: (player) => {
-        router.push(`/play/${player.id}#${player.lat},${player.lng}`)
+        router.push(`/play/${player.id}`)
       },
       onError: (error) => {
         toast.error(error.message)
