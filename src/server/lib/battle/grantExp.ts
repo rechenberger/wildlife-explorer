@@ -77,11 +77,11 @@ export const grantExp = async ({
 
         const earnedEvs =
           PokemonEffortValueYield[looserFighter.fighter.speciesNum]
-        if (!earnedEvs) continue
-
-        for (const key in gainedEvs) {
-          const evKey = key as keyof typeof gainedEvs
-          gainedEvs[evKey] += earnedEvs[evKey]
+        if (earnedEvs) {
+          for (const key in gainedEvs) {
+            const evKey = key as keyof typeof gainedEvs
+            gainedEvs[evKey] += earnedEvs[evKey]
+          }
         }
       }
 
