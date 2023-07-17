@@ -184,6 +184,7 @@ export const catchRouter = createTRPCRouter({
     await respawnWildlife({
       prisma: ctx.prisma,
       wildlifeId: ctx.wildlife.id,
+      reason: isLucky ? "CATCH_SUCCESS" : "CATCH_FAIL",
     })
 
     if (battle) {

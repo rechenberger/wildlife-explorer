@@ -328,6 +328,7 @@ export const battleRouter = createTRPCRouter({
               await respawnWildlife({
                 prisma: ctx.prisma,
                 wildlifeId: p.wildlife.id,
+                reason: p.isWinner ? "BATTLE_WON" : "FAINTED",
               })
             }
           })
@@ -401,6 +402,7 @@ export const battleRouter = createTRPCRouter({
             await respawnWildlife({
               prisma: ctx.prisma,
               wildlifeId: p.wildlifeId,
+              reason: "PLAYER_RUN",
             })
           }
 
