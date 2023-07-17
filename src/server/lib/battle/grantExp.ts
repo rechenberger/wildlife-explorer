@@ -3,7 +3,7 @@ import { MAX_EV_SINGLE_STAT, MAX_EV_TOTAL } from "~/config"
 import { PokemonEffortValueYield } from "~/data/pokemonEffortValueYield"
 import { getLevelFromExp } from "~/data/pokemonLevelExperienceMap"
 import { type MyPrismaClient } from "~/server/db"
-import { type CatchMetadata } from "~/server/schema/CatchMetadata"
+import { CatchMetadata } from "~/server/schema/CatchMetadata"
 import { calcExpForDefeatedPokemon } from "~/utils/calcExpForDefeatedPokemon"
 import { calcExpPercentage } from "~/utils/calcExpPercentage"
 import { type BattleReport } from "./BattleReport"
@@ -132,7 +132,7 @@ export const grantExp = async ({
             exp: expAfter,
             level: levelAfter,
             evs: currentEvs,
-          },
+          } satisfies CatchMetadata,
         },
         select: {
           id: true,
