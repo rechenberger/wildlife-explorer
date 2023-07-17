@@ -29,7 +29,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./shadcn/ui/select"
-import { useCareCenter } from "./useCareCenter"
 import { useGetWildlifeName } from "./useGetWildlifeName"
 import { useMyTeam } from "./useMyTeam"
 import { usePlayer } from "./usePlayer"
@@ -74,7 +73,7 @@ export const MyCatches = () => {
 
   const trpc = api.useContext()
 
-  const { careCenterIsClose } = useCareCenter()
+  // const { careCenterIsClose } = useCareCenter()
 
   const { mutate: setMyTeamBattleOrder, isLoading: isMutating } =
     api.catch.setMyTeamBattleOrder.useMutation({
@@ -340,7 +339,7 @@ export const MyCatches = () => {
               c={c}
               key={c.id}
               type="bench"
-              grayscale={!careCenterIsClose}
+              // grayscale={!careCenterIsClose}
             />
           ))}
         </div>
