@@ -1,6 +1,6 @@
 import NiceModal from "@ebay/nice-modal-react"
 import { atom, useAtomValue } from "jotai"
-import { Check, Clock, ExternalLink, Frown, LocateOff, X } from "lucide-react"
+import { Check, Clock, ExternalLink, Frown, LocateOff } from "lucide-react"
 import dynamic from "next/dynamic"
 import Image from "next/image"
 import Link from "next/link"
@@ -75,9 +75,9 @@ export const CurrentObservation = ({
       <>
         <div className="flex flex-row items-center gap-2">
           <div className="flex-1 truncate text-2xl">{getName(w)}</div>
-          <button className="shrink-0" onClick={() => close()}>
+          {/* <button className="shrink-0" onClick={() => close()}>
             <X size={16} />
-          </button>
+          </button> */}
         </div>
         <div className="-mt-4 text-xs italic opacity-60">
           Found by {w.foundBy.name} <TimeAgo date={w.createdAt} addSuffix />
