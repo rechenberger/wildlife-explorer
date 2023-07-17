@@ -1,5 +1,5 @@
 import { TRPCError } from "@trpc/server"
-import { find, map, take } from "lodash-es"
+import { every, find, map, take } from "lodash-es"
 import { z } from "zod"
 import {
   CATCH_RATE_ALWAYS_LOOSE,
@@ -17,7 +17,10 @@ import { respawnWildlife } from "~/server/lib/respawnWildlife"
 import { LevelingRate, type CatchMetadata } from "~/server/schema/CatchMetadata"
 import { type PlayerMetadata } from "~/server/schema/PlayerMetadata"
 import { createSeed } from "~/utils/seed"
-import { careCenterProcedure } from "../middleware/careCenterProcedure"
+import {
+  careCenterProcedure,
+  checkForCareCenter,
+} from "../middleware/careCenterProcedure"
 import { playerProcedure } from "../middleware/playerProcedure"
 import { wildlifeProcedure } from "../middleware/wildlifeProcedure"
 
@@ -56,8 +59,10 @@ export const catchRouter = createTRPCRouter({
     return catchesWithFighter
   }),
 
-  setMyTeamBattleOrder: careCenterProcedure
-    .input(z.object({ catchIds: z.array(z.string()) }))
+  setMyTeamBattleOrder: playerProcedure
+    .input(
+      z.object({ catchIds: z.array(z.string()), swapWithinTeam: z.boolean() })
+    )
     .mutation(async ({ ctx, input }) => {
       if (ctx.player.metadata?.activeBattleId) {
         throw new TRPCError({
@@ -66,30 +71,30 @@ export const catchRouter = createTRPCRouter({
         })
       }
 
+      if (input.swapWithinTeam) {
+        const currentTeam = await ctx.prisma.catch.findMany({
+          where: {
+            playerId: ctx.player.id,
+            battleOrderPosition: {
+              not: null,
+            },
+          },
+        })
+        const allInTeam = every(input.catchIds, (id) =>
+          find(currentTeam, { id })
+        )
+        const didNotRemove = input.catchIds.length === currentTeam.length
+        if (!allInTeam || !didNotRemove) {
+          throw new TRPCError({
+            code: "BAD_REQUEST",
+            message: "When swappingWithinTeam all catches must be in the team",
+          })
+        }
+      } else {
+        await checkForCareCenter({ ctx })
+      }
+
       const catchIdsMaxPerTeam = take(input.catchIds, MAX_FIGHTERS_PER_TEAM)
-
-      // await ctx.prisma.catch.updateMany({
-      //   where: {
-      //     playerId: ctx.player.id,
-      //   },
-      //   data: {
-      //     battleOrderPosition: null,
-      //   },
-      // })
-
-      // await Promise.all(
-      //   map(catchIdsMaxPerTeam, async (catchId, index) => {
-      //     await ctx.prisma.catch.updateMany({
-      //       where: {
-      //         playerId: ctx.player.id,
-      //         id: catchId,
-      //       },
-      //       data: {
-      //         battleOrderPosition: index + 1,
-      //       },
-      //     })
-      //   })
-      // )
       await ctx.prisma.$transaction([
         ctx.prisma.catch.updateMany({
           where: {
@@ -111,7 +116,6 @@ export const catchRouter = createTRPCRouter({
           })
         ),
       ])
-      return true
     }),
 
   catch: wildlifeProcedure.mutation(async ({ ctx }) => {

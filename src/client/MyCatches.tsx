@@ -97,6 +97,7 @@ export const MyCatches = () => {
     setMyTeamBattleOrder({
       catchIds: teamWithoutCatchId,
       playerId,
+      swapWithinTeam: false,
     })
   }
   const addToTeamAtPos = ({
@@ -113,6 +114,7 @@ export const MyCatches = () => {
     const currentTeamOrder = myTeam.map((c) => c.id)
 
     let newTeamOrder: string[] = []
+    let swapWithinTeam = false
 
     if (isSwapWithCurrentPosition) {
       const catchIdAtPos = currentTeamOrder[position]
@@ -125,6 +127,7 @@ export const MyCatches = () => {
         newTeamOrder[position] = catchId
 
         if (catchIdIsAlreadyInTeam) {
+          swapWithinTeam = true
           newTeamOrder[currentTeamOrder.indexOf(catchId)] = catchIdAtPos
         }
       }
@@ -142,6 +145,7 @@ export const MyCatches = () => {
     setMyTeamBattleOrder({
       catchIds: newTeamOrder,
       playerId,
+      swapWithinTeam,
     })
   }
 
