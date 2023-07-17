@@ -2,6 +2,7 @@ import { Dex, type PokemonSet } from "@pkmn/dex"
 import { Battle, toID, type Pokemon } from "@pkmn/sim"
 import { first, mapValues } from "lodash-es"
 import { z } from "zod"
+import { SHOW_EXACT_IVS } from "~/config"
 import {
   WildlifeFighterPlusMove,
   getWildlifeFighterPlusMove,
@@ -39,6 +40,7 @@ export const getWildlifeFighterPlus = async (
 }
 
 const ivToLabel = ({ iv }: { iv: number }) => {
+  if (SHOW_EXACT_IVS) return iv.toString()
   if (iv === 31) return "Best"
   if (iv === 30) return "Fantastic"
   if (iv >= 26) return "Very Good"

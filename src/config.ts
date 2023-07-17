@@ -52,3 +52,4 @@ export const SHOW_FUTURE_MOVES = true
 export const CAN_RESET_MOVES = false
 
 export const LOG_SCAN_TIME = true
+export const SHOW_EXACT_IVS = DEV_MODE
