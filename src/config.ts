@@ -53,3 +53,6 @@ export const CAN_RESET_MOVES = false
 
 export const LOG_SCAN_TIME = true
 export const SHOW_EXACT_IVS = DEV_MODE
+
+export const MAX_EV_SINGLE_STAT = 252
+export const MAX_EV_TOTAL = 510

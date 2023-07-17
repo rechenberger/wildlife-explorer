@@ -1,4 +1,5 @@
 import { filter, flatMap, map, sum } from "lodash-es"
+import { MAX_EV_SINGLE_STAT, MAX_EV_TOTAL } from "~/config"
 import { PokemonEffortValueYield } from "~/data/pokemonEffortValueYield"
 import { getLevelFromExp } from "~/data/pokemonLevelExperienceMap"
 import { type MyPrismaClient } from "~/server/db"
@@ -111,9 +112,12 @@ export const grantExp = async ({
 
       for (const [key, value] of Object.entries(gainedEvs)) {
         const keyTyped = key as keyof typeof gainedEvs
-        if (currentEvsSum >= 510) break
-        if (currentEvs[keyTyped] >= 252) continue
-        const evsToGain = Math.min(252 - currentEvs[keyTyped], value)
+        if (currentEvsSum >= MAX_EV_TOTAL) break
+        if (currentEvs[keyTyped] >= MAX_EV_SINGLE_STAT) continue
+        const evsToGain = Math.min(
+          MAX_EV_SINGLE_STAT - currentEvs[keyTyped],
+          value
+        )
         currentEvs[keyTyped] += evsToGain
         currentEvsSum += evsToGain
       }
