@@ -29,6 +29,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./shadcn/ui/select"
+import { useCareCenter } from "./useCareCenter"
 import { useGetWildlifeName } from "./useGetWildlifeName"
 import { useMyTeam } from "./useMyTeam"
 import { usePlayer } from "./usePlayer"
@@ -72,6 +73,8 @@ export const MyCatches = () => {
   const { myTeam, catchesWithoutTeam, isLoading, isFetching } = useMyTeam()
 
   const trpc = api.useContext()
+
+  const { careCenterIsClose } = useCareCenter()
 
   const { mutate: setMyTeamBattleOrder, isLoading: isMutating } =
     api.catch.setMyTeamBattleOrder.useMutation({
@@ -333,7 +336,12 @@ export const MyCatches = () => {
       <DroppableTeamSlot id={-1} accepts={["team"]}>
         <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-2 gap-y-3 p-2">
           {map(searched, (c) => (
-            <DraggableCatch c={c} key={c.id} type="bench" />
+            <DraggableCatch
+              c={c}
+              key={c.id}
+              type="bench"
+              grayscale={!careCenterIsClose}
+            />
           ))}
         </div>
       </DroppableTeamSlot>
