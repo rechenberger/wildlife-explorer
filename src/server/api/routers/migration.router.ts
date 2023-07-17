@@ -1,8 +1,10 @@
+import { flatMap, uniq } from "lodash-es"
 import { MAX_FIGHTERS_PER_TEAM } from "~/config"
 import { getExpRate } from "~/data/pokemonLevelExperienceMap"
 import { PokemonLevelingRate } from "~/data/pokemonLevelingRate"
 import { createTRPCRouter } from "~/server/api/trpc"
 import { getWildlifeFighterPlus } from "~/server/lib/battle/getWildlifeFighterPlus"
+import { taxonMappingByAI } from "~/server/lib/battle/taxonMappingByAI"
 import { LevelingRate, type CatchMetadata } from "~/server/schema/CatchMetadata"
 import { devProcedure } from "../middleware/devProcedure"
 
@@ -156,5 +158,13 @@ export const migrationRouter = createTRPCRouter({
         })
       }
     }
+  }),
+
+  tmp: devProcedure.mutation(async ({ ctx }) => {
+    let allPokemon = flatMap(taxonMappingByAI, (m) => m.children).map(
+      (c) => c.pokemon
+    )
+    allPokemon = uniq(allPokemon)
+    return allPokemon
   }),
 })
