@@ -78,7 +78,7 @@ export const FighterChip = ({
                   : "text-pink-600"
               )}
               title={fighter.fighter.gender === "M" ? "Male" : "Female"}
-              style={{ verticalAlign: "middle" }} // https://teampilot.ai/team/tristan/chat/clk7z6osk0005le08yj6f4cvc
+              style={{ lineHeight: "1" }} // https://teampilot.ai/team/tristan/chat/clk7z6osk0005le08yj6f4cvc
             >
               {fighter.fighter.gender === "M" ? "♂" : "♀"}
             </div>
