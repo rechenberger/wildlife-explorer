@@ -142,7 +142,7 @@ export const CurrentObservation = ({
             <JsonViewer value={w} theme="light" />
           </div>
         )}
-        <div className="flex flex-row items-start justify-center gap-2 h-[44px]">
+        <div className="flex flex-row items-start justify-center gap-2 h-[44px] text-xs">
           {w.metadata.observationUrl && (
             <Link
               href={w.metadata.observationUrl}
