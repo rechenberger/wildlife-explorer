@@ -47,7 +47,7 @@ export const BattleViewButton = () => {
     })
   }, [activeBattleId, pvpInviteBattleId])
 
-  useKeyboardShortcut("b", openBattleView)
+  useKeyboardShortcut("BATTLE", openBattleView)
 
   if (!ENABLE_BATTLE_VIEW) return null
 

@@ -56,3 +56,10 @@ export const SHOW_EXACT_IVS = DEV_MODE
 
 export const MAX_EV_SINGLE_STAT = 252
 export const MAX_EV_TOTAL = 510
+
+export const SHORTCUTS = {
+  SCAN: "s",
+  MY_CATCHES: "m",
+  CARE: "c",
+  BATTLE: "b",
+}

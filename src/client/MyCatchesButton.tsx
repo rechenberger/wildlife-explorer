@@ -11,8 +11,8 @@ export const MyCatchesButton = () => {
   const { careCenterIsClose, nearestCareCenter } = useCareCenter()
   const { care } = useCare()
 
-  useKeyboardShortcut("c", care)
-  useKeyboardShortcut("m", () => NiceModal.show(MyCatchesModal, {}))
+  useKeyboardShortcut("CARE", care)
+  useKeyboardShortcut("MY_CATCHES", () => NiceModal.show(MyCatchesModal, {}))
 
   return (
     <>

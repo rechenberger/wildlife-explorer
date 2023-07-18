@@ -70,7 +70,7 @@ export const ScanButton = () => {
     }
   }
 
-  useKeyboardShortcut("s", doScan)
+  useKeyboardShortcut("SCAN", doScan)
 
   return (
     <>

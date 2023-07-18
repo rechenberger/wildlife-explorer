@@ -1,6 +1,12 @@
 import { useEffect } from "react"
+import { SHORTCUTS } from "~/config"
 
-export const useKeyboardShortcut = (key: string, callback: () => void) => {
+type ShortcutKey = keyof typeof SHORTCUTS
+export const useKeyboardShortcut = (
+  shortcutKey: ShortcutKey,
+  callback: () => void
+) => {
+  const key = SHORTCUTS[shortcutKey]
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
       if (
