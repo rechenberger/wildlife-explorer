@@ -35,6 +35,6 @@ export const calcExpPercentage = ({
   return {
     expPercentage,
     expAbsolute: exp,
-    expNextLevelAbsolute: exp,
+    expNextLevelAbsolute,
   }
 }
