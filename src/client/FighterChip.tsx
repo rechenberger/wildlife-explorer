@@ -72,7 +72,7 @@ export const FighterChip = ({
             </div>
             <div
               className={cn(
-                "shrink-0 text-xs font-bold",
+                "shrink-0 text-xs font-bold flex items-center",
                 fighter.fighter.gender === "M"
                   ? "text-blue-600"
                   : "text-pink-600"
