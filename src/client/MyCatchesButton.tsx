@@ -1,5 +1,6 @@
 import NiceModal from "@ebay/nice-modal-react"
 import { HeartHandshake, HeartPulse } from "lucide-react"
+import { useCare } from "./CareButton"
 import { MyCatchesModal } from "./MyCatchesModal"
 import { PlaceViewModal } from "./PlaceViewModal"
 import { cn } from "./cn"
@@ -7,6 +8,7 @@ import { useCareCenter } from "./useCareCenter"
 
 export const MyCatchesButton = () => {
   const { careCenterIsClose, nearestCareCenter } = useCareCenter()
+  const { care } = useCare()
 
   return (
     <>
@@ -16,11 +18,15 @@ export const MyCatchesButton = () => {
             "relative rounded-xl bg-black p-2 text-white",
             careCenterIsClose && "bg-purple-500"
           )}
-          onClick={async () => {
+          onClick={async (e) => {
             if (careCenterIsClose && nearestCareCenter) {
-              NiceModal.show(PlaceViewModal, {
-                placeId: nearestCareCenter.careCenter.id,
-              })
+              if (e.shiftKey) {
+                care()
+              } else {
+                NiceModal.show(PlaceViewModal, {
+                  placeId: nearestCareCenter.careCenter.id,
+                })
+              }
             } else {
               NiceModal.show(MyCatchesModal, {})
             }
