@@ -5,10 +5,14 @@ import { MyCatchesModal } from "./MyCatchesModal"
 import { PlaceViewModal } from "./PlaceViewModal"
 import { cn } from "./cn"
 import { useCareCenter } from "./useCareCenter"
+import { useKeyboardShortcut } from "./useKeyboardShortcut"
 
 export const MyCatchesButton = () => {
   const { careCenterIsClose, nearestCareCenter } = useCareCenter()
   const { care } = useCare()
+
+  useKeyboardShortcut("c", care)
+  useKeyboardShortcut("m", () => NiceModal.show(MyCatchesModal, {}))
 
   return (
     <>

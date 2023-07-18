@@ -7,6 +7,7 @@ import { type LatLng } from "~/server/schema/LatLng"
 import { api } from "~/utils/api"
 import { playerLocationAtom } from "./PlayerMarker"
 import { cn } from "./cn"
+import { useKeyboardShortcut } from "./useKeyboardShortcut"
 import { useMapFlyTo } from "./useMapRef"
 import { usePlayer } from "./usePlayer"
 
@@ -44,6 +45,33 @@ export const ScanButton = () => {
 
   const mapFlyTo = useMapFlyTo()
 
+  const doScan = async () => {
+    if (!playerId || !player) return
+    setScanningLocation(store.get(playerLocationAtom))
+    mapFlyTo({ center: store.get(playerLocationAtom) })
+    const promise = scan({
+      playerId,
+    })
+    try {
+      toast.promise(promise, {
+        loading: "Scanning...",
+        success: (result) => (
+          <div className="flex flex-col">
+            <div className="font-bold">{`Scan complete!`}</div>
+            <div className="font-normal text-sm">{`${result.wildlife.countFound} new Observations`}</div>
+            <div className="font-normal text-sm">{`${result.places.countFound} new Places`}</div>
+          </div>
+        ),
+        error: "Scan failed.",
+      })
+      await promise
+    } finally {
+      setScanningLocation(null)
+    }
+  }
+
+  useKeyboardShortcut("s", doScan)
+
   return (
     <>
       <div className="flex flex-col items-center gap-1">
@@ -55,28 +83,7 @@ export const ScanButton = () => {
             !!cooldown && "opacity-100"
           )}
           onClick={async () => {
-            if (!playerId || !player) return
-            setScanningLocation(store.get(playerLocationAtom))
-            mapFlyTo({ center: store.get(playerLocationAtom) })
-            const promise = scan({
-              playerId,
-            })
-            try {
-              toast.promise(promise, {
-                loading: "Scanning...",
-                success: (result) => (
-                  <div className="flex flex-col">
-                    <div className="font-bold">{`Scan complete!`}</div>
-                    <div className="font-normal text-sm">{`${result.wildlife.countFound} new Observations`}</div>
-                    <div className="font-normal text-sm">{`${result.places.countFound} new Places`}</div>
-                  </div>
-                ),
-                error: "Scan failed.",
-              })
-              await promise
-            } finally {
-              setScanningLocation(null)
-            }
+            doScan()
           }}
         >
           <Radar size={32} />

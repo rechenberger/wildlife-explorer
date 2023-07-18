@@ -1,12 +1,13 @@
 import NiceModal from "@ebay/nice-modal-react"
 import { atom } from "jotai"
 import { Swords } from "lucide-react"
-import { useEffect } from "react"
+import { useCallback, useEffect } from "react"
 import { ENABLE_BATTLE_VIEW } from "~/config"
 import { type LatLng } from "~/server/schema/LatLng"
 import { api } from "~/utils/api"
 import { BattleViewModal } from "./BattleViewModal"
 import { cn } from "./cn"
+import { useKeyboardShortcut } from "./useKeyboardShortcut"
 import { usePlayer } from "./usePlayer"
 
 export const scanningLocationAtom = atom<LatLng | null>(null)
@@ -40,6 +41,14 @@ export const BattleViewButton = () => {
     })
   }, [activeBattleId, pvpInviteBattleId])
 
+  const openBattleView = useCallback(() => {
+    NiceModal.show(BattleViewModal, {
+      battleId: activeBattleId ?? pvpInviteBattleId ?? undefined,
+    })
+  }, [activeBattleId, pvpInviteBattleId])
+
+  useKeyboardShortcut("b", openBattleView)
+
   if (!ENABLE_BATTLE_VIEW) return null
 
   return (
@@ -48,9 +57,7 @@ export const BattleViewButton = () => {
         <button
           className={cn("relative rounded-xl bg-black p-2 text-white")}
           onClick={async () => {
-            NiceModal.show(BattleViewModal, {
-              battleId: activeBattleId ?? pvpInviteBattleId ?? undefined,
-            })
+            openBattleView()
           }}
         >
           <Swords size={32} />
