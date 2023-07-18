@@ -2,7 +2,7 @@ import NiceModal from "@ebay/nice-modal-react"
 import { useAtomValue, useSetAtom } from "jotai"
 import { find, flatMap, map, orderBy } from "lodash-es"
 import { Scroll, ScrollText, Undo2 } from "lucide-react"
-import { Fragment, useLayoutEffect, useRef } from "react"
+import { Fragment, useCallback, useLayoutEffect, useRef } from "react"
 import { toast } from "sonner"
 import { DEV_MODE } from "~/config"
 import { parseBattleLog } from "~/server/lib/battle/battleLogParser"
@@ -26,6 +26,7 @@ import {
 } from "./typeIcons"
 import { useCatch } from "./useCatch"
 import { useGetWildlifeName } from "./useGetWildlifeName"
+import { useKeyboardShortcut } from "./useKeyboardShortcut"
 import { useMakeChoice } from "./useMakeChoice"
 import { usePlayer } from "./usePlayer"
 
@@ -94,6 +95,29 @@ export const BattleView = ({
       trpc.battle.invalidate()
     },
   })
+
+  const ezChoice = useCallback(
+    (choice: string) => {
+      if (!playerId) return
+      return makeChoice({
+        battleId,
+        playerId: playerId,
+        choice,
+      })
+    },
+    [battleId, makeChoice, playerId]
+  )
+
+  useKeyboardShortcut("MOVE_1", () => ezChoice("move 1"))
+  useKeyboardShortcut("MOVE_2", () => ezChoice("move 2"))
+  useKeyboardShortcut("MOVE_3", () => ezChoice("move 3"))
+  useKeyboardShortcut("MOVE_4", () => ezChoice("move 4"))
+  useKeyboardShortcut("SWITCH_1", () => ezChoice("switch 1"))
+  useKeyboardShortcut("SWITCH_2", () => ezChoice("switch 2"))
+  useKeyboardShortcut("SWITCH_3", () => ezChoice("switch 3"))
+  useKeyboardShortcut("SWITCH_4", () => ezChoice("switch 4"))
+  useKeyboardShortcut("SWITCH_5", () => ezChoice("switch 5"))
+  useKeyboardShortcut("SWITCH_6", () => ezChoice("switch 6"))
 
   const isLoading = pvpStatus?.isPvp
     ? false

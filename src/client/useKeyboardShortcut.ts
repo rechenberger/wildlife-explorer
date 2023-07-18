@@ -6,7 +6,9 @@ export const useKeyboardShortcut = (
   shortcutKey: ShortcutKey,
   callback: () => void
 ) => {
-  const key = SHORTCUTS[shortcutKey]
+  const shortcut = SHORTCUTS[shortcutKey]
+  const code = shortcut.code
+  const shift = "shift" in shortcut && shortcut.shift
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
       if (
@@ -15,7 +17,8 @@ export const useKeyboardShortcut = (
       ) {
         return
       }
-      if (e.key === key) {
+      if (shift && !e.shiftKey) return
+      if (e.code === code) {
         callback()
       }
     }
@@ -23,5 +26,5 @@ export const useKeyboardShortcut = (
     return () => {
       window.removeEventListener("keydown", onKeyDown)
     }
-  }, [callback, key])
+  }, [callback, code, shift])
 }

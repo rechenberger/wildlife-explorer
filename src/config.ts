@@ -58,8 +58,18 @@ export const MAX_EV_SINGLE_STAT = 252
 export const MAX_EV_TOTAL = 510
 
 export const SHORTCUTS = {
-  SCAN: "s",
-  MY_CATCHES: "m",
-  CARE: "c",
-  BATTLE: "b",
+  SCAN: { code: "KeyS" },
+  MY_CATCHES: { code: "KeyM" },
+  CARE: { code: "KeyC" },
+  BATTLE: { code: "KeyB" },
+  MOVE_1: { code: "Digit1" },
+  MOVE_2: { code: "Digit2" },
+  MOVE_3: { code: "Digit3" },
+  MOVE_4: { code: "Digit4" },
+  SWITCH_1: { code: "Digit1", shift: true },
+  SWITCH_2: { code: "Digit2", shift: true },
+  SWITCH_3: { code: "Digit3", shift: true },
+  SWITCH_4: { code: "Digit4", shift: true },
+  SWITCH_5: { code: "Digit5", shift: true },
+  SWITCH_6: { code: "Digit6", shift: true },
 }
