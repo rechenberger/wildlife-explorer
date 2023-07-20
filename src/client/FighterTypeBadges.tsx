@@ -50,11 +50,19 @@ export const FighterTypeBadges = ({
       )}
       {showNature && (
         <TypeBadge
-          title={"Nature"}
           icon={natureIcon}
-          content={fighter.fighter.nature}
+          content={fighter.fighter.nature.name}
           size={size}
           className={className}
+          title={`Nature${
+            fighter.fighter.nature.plus
+              ? " +" + fighter.fighter.nature.plus
+              : ""
+          }${
+            fighter.fighter.nature.minus
+              ? " -" + fighter.fighter.nature.minus
+              : ""
+          }`}
         />
       )}
 
