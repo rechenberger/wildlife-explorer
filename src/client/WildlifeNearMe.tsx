@@ -16,7 +16,7 @@ export const WildlifeNearMe = () => {
   return (
     <>
       <button
-        className="absolute top-8 right-4 text-black z-40 lg:hidden"
+        className="absolute top-8 pt-1 right-4 text-white [text-shadow:_0px_0px_2px_rgb(0_0_0_/_80%)] z-40 lg:hidden"
         onClick={() => setMobileOpen((open) => !open)}
       >
         {mobileOpen ? (
