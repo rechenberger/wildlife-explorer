@@ -2,7 +2,6 @@ import NiceModal from "@ebay/nice-modal-react"
 import { Edit2, ExternalLink } from "lucide-react"
 import dynamic from "next/dynamic"
 import { useMemo } from "react"
-import { toast } from "sonner"
 import { DEV_MODE } from "~/config"
 import { type BattleReportFighter } from "~/server/lib/battle/BattleReport"
 import { api } from "~/utils/api"
@@ -21,6 +20,7 @@ import { TypeBadge } from "./TypeBadge"
 import { Progress } from "./shadcn/ui/progress"
 import { evolveIcon, swapIcon } from "./typeIcons"
 import { useMyCatch } from "./useCatches"
+import { useEvolve } from "./useEvolve"
 import { useGetWildlifeName } from "./useGetWildlifeName"
 import { useMapFlyTo } from "./useMapRef"
 import { usePlayer } from "./usePlayer"
@@ -83,11 +83,7 @@ export const CatchDetails = ({
       trpc.catch.invalidate()
     },
   })
-  const { mutateAsync: evolve } = api.catch.evolve.useMutation({
-    onSuccess: () => {
-      trpc.catch.invalidate()
-    },
-  })
+  const { evolve } = useEvolve()
 
   if (!c)
     return (
@@ -176,13 +172,7 @@ export const CatchDetails = ({
               icon={evolveIcon}
               size="big"
               onClick={() => {
-                if (!playerId) return
-
-                toast.promise(evolve({ playerId, catchId: c.id }), {
-                  loading: `${catchName} is evolving...`,
-                  success: `Your ${catchName} evolved! ✨`,
-                  error: (error) => error.message,
-                })
+                evolve({ catchId: c.id, catchName })
               }}
               className="animate-pulse"
             />
