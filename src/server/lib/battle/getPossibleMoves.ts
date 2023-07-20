@@ -39,7 +39,9 @@ export const getPossibleMovesByCatch = async ({
     seed: string
   }
 }) => {
+  console.log("c", c.metadata?.speciesName)
   const fighter = await getWildlifeFighterPlus(c)
+  console.log("fighter", fighter.species)
   const movesLearnedSaved = map(c.metadata?.movesLearned, (move) => ({
     move,
     level: null,

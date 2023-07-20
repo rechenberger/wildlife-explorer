@@ -85,7 +85,7 @@ export const getWildlifeFighter = async ({
   let species = Dex.species.get(speciesName)
 
   // Wildlife starts at lowest evolution
-  if (!!catchMetaData?.speciesName) {
+  if (!catchMetaData?.speciesName) {
     while (species.prevo) {
       species = Dex.species.get(species.prevo)
       speciesName = species.name

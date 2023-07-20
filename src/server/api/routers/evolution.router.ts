@@ -4,7 +4,10 @@ import { filter } from "lodash-es"
 import { z } from "zod"
 import { createTRPCRouter } from "~/server/api/trpc"
 import { type MyPrismaClient } from "~/server/db"
-import { getPossibleMovesByCatchId } from "~/server/lib/battle/getPossibleMoves"
+import {
+  getPossibleMovesByCatch,
+  getPossibleMovesByCatchId,
+} from "~/server/lib/battle/getPossibleMoves"
 import { getNextPossibleEvoByLevel } from "~/server/lib/battle/getWildlifeFighter"
 import { getWildlifeFighterPlus } from "~/server/lib/battle/getWildlifeFighterPlus"
 import { type CatchMetadata } from "~/server/schema/CatchMetadata"
@@ -31,9 +34,22 @@ export const evolutionRouter = createTRPCRouter({
       })
     }),
 
-  // getPreview: playerProcedure
-  //   .input(z.object({ catchId: z.string() }))
-  //   .query(async ({ ctx, input }) => {}),
+  getPreview: playerProcedure
+    .input(z.object({ catchId: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const { oldMoves, newMoves } = await getNextEvolution({
+        catchId: input.catchId,
+        playerId: ctx.player.id,
+        prisma: ctx.prisma,
+      })
+      const realNewMoves = newMoves.filter(
+        (m) => !oldMoves.find((om) => !!om.learned && om.id === m.id)
+      )
+
+      return {
+        realNewMoves,
+      }
+    }),
 })
 
 const getNextEvolution = async ({
@@ -75,15 +91,16 @@ const getNextEvolution = async ({
     movesLearned: movesLearned,
   } satisfies CatchMetadata
 
-  // const newMoves = getPossibleMovesByCatch({
-  //   c: {
-  //     ...catchToEvolve,
-  //     metadata: evolvedMetadata,
-  //   },
-  // })
+  const { allMoves: newMoves } = await getPossibleMovesByCatch({
+    c: {
+      ...catchToEvolve,
+      metadata: evolvedMetadata,
+    },
+  })
 
   return {
     evolvedMetadata,
     oldMoves,
+    newMoves,
   }
 }
