@@ -31,6 +31,13 @@ export const WildlifeNearMe = () => {
           "top-16 lg:top-0 bottom-20 lg:bottom-0",
           mobileOpen && "flex"
         )}
+        style={
+          mobileOpen
+            ? {
+                bottom: "calc(env(safe-area-inset-bottom) + 5rem)",
+              }
+            : undefined
+        }
       >
         <div className="flex flex-col gap-3 text-black">
           {wildlifeSorted?.map((w) => {
