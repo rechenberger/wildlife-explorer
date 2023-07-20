@@ -1,13 +1,10 @@
 import { TRPCError } from "@trpc/server"
-import { findIndex, map, orderBy, uniqBy } from "lodash-es"
+import { orderBy, uniqBy } from "lodash-es"
 import { z } from "zod"
-import { MAX_FIGHTERS_PER_TEAM, SHOW_FUTURE_MOVES } from "~/config"
+import { MAX_FIGHTERS_PER_TEAM } from "~/config"
 import { createTRPCRouter } from "~/server/api/trpc"
-import { type MyPrismaClient } from "~/server/db"
-import { getWildlifeFighterPlusMove } from "~/server/lib/battle/WildlifeFighterPlusMove"
-import { getMovesInLearnset } from "~/server/lib/battle/getWildlifeFighter"
-import { getWildlifeFighterPlus } from "~/server/lib/battle/getWildlifeFighterPlus"
 import { type CatchMetadata } from "~/server/schema/CatchMetadata"
+import { getPossibleMoves } from "../../lib/battle/getPossibleMoves"
 import { careCenterProcedure } from "../middleware/careCenterProcedure"
 import { playerProcedure } from "../middleware/playerProcedure"
 
@@ -147,58 +144,3 @@ export const moveRouter = createTRPCRouter({
       })
     }),
 })
-
-const getPossibleMoves = async ({
-  prisma,
-  catchId,
-  playerId,
-}: {
-  prisma: MyPrismaClient
-  catchId: string
-  playerId: string
-}) => {
-  const c = await prisma.catch.findFirstOrThrow({
-    where: {
-      id: catchId,
-      playerId,
-    },
-    include: {
-      wildlife: true,
-    },
-  })
-  const fighter = await getWildlifeFighterPlus(c)
-  const movesLearnedSaved = map(c.metadata?.movesLearned, (move) => ({
-    move,
-    level: null,
-  }))
-  let learnsetMoves = await getMovesInLearnset(fighter.species)
-  learnsetMoves = orderBy(learnsetMoves, (m) => m.level)
-
-  let both = [...movesLearnedSaved, ...learnsetMoves]
-  both = uniqBy(both, (m) => m.move)
-
-  let allMoves = both.map((move) => {
-    const movePlus = getWildlifeFighterPlusMove({
-      move: move.move,
-    })
-    let activeIdx: number | null = findIndex(
-      fighter.moves,
-      (m) => m.id === movePlus.id
-    )
-    activeIdx = activeIdx === -1 ? null : activeIdx
-    const learned = move.level ? fighter.level >= move.level : true
-
-    return {
-      ...movePlus,
-      activeIdx,
-      learned,
-      level: move.level,
-    }
-  })
-
-  allMoves = orderBy(allMoves, [(m) => m.activeIdx])
-  if (!SHOW_FUTURE_MOVES) {
-    allMoves = allMoves.filter((m) => m.learned)
-  }
-  return { allMoves, c }
-}
