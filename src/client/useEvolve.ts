@@ -6,7 +6,7 @@ import { usePlayer } from "./usePlayer"
 export const useEvolve = () => {
   const { playerId } = usePlayer()
   const trpc = api.useContext()
-  const { mutateAsync } = api.catch.evolve.useMutation({
+  const { mutateAsync } = api.evolution.evolve.useMutation({
     onSuccess: () => {
       trpc.catch.invalidate()
     },

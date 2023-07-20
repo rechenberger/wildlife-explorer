@@ -2,6 +2,7 @@ import { exampleRouter } from "~/server/api/routers/example.router"
 import { createTRPCRouter } from "~/server/api/trpc"
 import { battleRouter } from "./routers/battle.router"
 import { catchRouter } from "./routers/catch.router"
+import { evolutionRouter } from "./routers/evolution.router"
 import { migrationRouter } from "./routers/migration.router"
 import { moveRouter } from "./routers/move.router"
 import { navigationRouter } from "./routers/navigation.router"
@@ -31,6 +32,7 @@ export const appRouter = createTRPCRouter({
   move: moveRouter,
   place: placeRouter,
   scan: scanRouter,
+  evolution: evolutionRouter,
   migration: migrationRouter,
 })
 
