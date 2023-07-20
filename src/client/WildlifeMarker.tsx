@@ -7,14 +7,15 @@ import { useState } from "react"
 import { Marker } from "react-map-gl"
 import { type RouterOutputs } from "~/utils/api"
 import { CurrentObservationModal } from "./CurrentObservationModal"
-import { FighterChipByWildlife } from "./FighterChipByWildlife"
+import { FighterChip } from "./FighterChip"
 import { cn } from "./cn"
 import { useActiveNavigation } from "./useActiveNavigation"
 import { navigatingToObservationIdAtom, useNavigation } from "./useNavigation"
 
-type Wildlife = RouterOutputs["wildlife"]["nearMe"][number]
+type NearMe = RouterOutputs["wildlife"]["nearMe"][number]
 
-export const WildlifeMarker = ({ w }: { w: Wildlife }) => {
+export const WildlifeMarker = ({ nearMe }: { nearMe: NearMe }) => {
+  const w = nearMe.wildlife
   const navigatingtoObservationId = useAtomValue(navigatingToObservationIdAtom)
 
   const { isNavigating } = useActiveNavigation()
@@ -105,12 +106,7 @@ export const WildlifeMarker = ({ w }: { w: Wildlife }) => {
                 {getName(w)}
               </div> */}
         <div className="absolute -bottom-10 line-clamp-1 hidden overflow-visible p-1 text-[4px] font-bold leading-none md:group-hover:flex scale-[40%] text-black w-56 flex-col">
-          <FighterChipByWildlife
-            w={w}
-            showAbsoluteHp={false}
-            ltr={true}
-            enabled={hovering}
-          />
+          <FighterChip fighter={nearMe} showAbsoluteHp={false} ltr={true} />
         </div>
       </Link>
     </Marker>

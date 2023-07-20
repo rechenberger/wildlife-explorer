@@ -33,7 +33,7 @@ export const WildlifeMarkers = () => {
         </div>
       )}
       {wildlife?.map((w) => {
-        return <WildlifeMarker key={w.id} w={w} />
+        return <WildlifeMarker key={w.wildlife.id} nearMe={w} />
       })}
     </>
   )
