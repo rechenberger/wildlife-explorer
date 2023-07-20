@@ -1,18 +1,37 @@
 import NiceModal from "@ebay/nice-modal-react"
 import { orderBy } from "lodash-es"
-import { useMemo } from "react"
+import { ChevronDown, ChevronUp } from "lucide-react"
+import { useMemo, useState } from "react"
 import { CurrentObservationModal } from "./CurrentObservationModal"
 import { FighterChip } from "./FighterChip"
 import { useWildlife } from "./WildlifeMarkers"
+import { cn } from "./cn"
 
 export const WildlifeNearMe = () => {
   const { wildlife } = useWildlife()
   const wildlifeSorted = useMemo(() => {
     return orderBy(wildlife, (w) => w.fighter.level, "desc")
   }, [wildlife])
+  const [mobileOpen, setMobileOpen] = useState(false)
   return (
     <>
-      <div className="absolute right-0 inset-y-0 p-4 rounded z-40 overflow-auto hidden lg:flex">
+      <button
+        className="absolute top-8 right-4 text-black z-40 lg:hidden"
+        onClick={() => setMobileOpen((open) => !open)}
+      >
+        {mobileOpen ? (
+          <ChevronUp className="w-6 h-6" />
+        ) : (
+          <ChevronDown className="w-6 h-6" />
+        )}
+      </button>
+      <div
+        className={cn(
+          "absolute right-0 p-4 rounded z-40 overflow-auto hidden lg:flex",
+          "top-16 lg:top-0 bottom-20 lg:bottom-0",
+          mobileOpen && "flex"
+        )}
+      >
         <div className="flex flex-col gap-3 text-black">
           {wildlifeSorted?.map((w) => {
             return (
