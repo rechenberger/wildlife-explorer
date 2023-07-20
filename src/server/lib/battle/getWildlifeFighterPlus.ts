@@ -9,6 +9,7 @@ import {
 } from "./WildlifeFighterPlusMove"
 import { applyFighterStats } from "./applyFighterStats"
 import {
+  getHightestPossibleEvoByLevel,
   getWildlifeFighter,
   type GetWildlifeFighterOptions,
 } from "./getWildlifeFighter"
@@ -59,6 +60,13 @@ export const transformWildlifeFighterPlus = ({
   foeTypes?: string[]
 }) => {
   const p = pokemon
+
+  const highestPossibleEvo = getHightestPossibleEvoByLevel({
+    species: Dex.species.get(pokemonSet.species),
+    level: p.level,
+  })
+
+  const canEvolve = !!highestPossibleEvo
 
   const moves = p.moves.map((move) => {
     return getWildlifeFighterPlusMove({
@@ -125,6 +133,7 @@ export const transformWildlifeFighterPlus = ({
       ? moveRequestData.moves
       : undefined,
     ivLabels,
+    canEvolve,
     // statusState: p.statusState,
   } satisfies WildlifeFighterPlus
 
@@ -180,5 +189,6 @@ export const WildlifeFighterPlus = z.object({
       })
     )
     .nullish(),
+  canEvolve: z.boolean(),
 })
 export type WildlifeFighterPlus = z.infer<typeof WildlifeFighterPlus>

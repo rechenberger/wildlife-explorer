@@ -1,4 +1,4 @@
-import { Dex, type PokemonSet } from "@pkmn/dex"
+import { Dex, type PokemonSet, type Species } from "@pkmn/dex"
 import { filter, find, map, max, min, orderBy, take } from "lodash-es"
 import { MAX_MOVES_PER_FIGHTER, USE_LATEST_GEN } from "~/config"
 import { type CatchMetadata } from "~/server/schema/CatchMetadata"
@@ -16,10 +16,37 @@ export type GetWildlifeFighterOptions = {
       | "observationCaptive"
     >
   }
-  metadata?: Pick<CatchMetadata, "level" | "moves" | "evs">
+  metadata?: Pick<CatchMetadata, "level" | "moves" | "evs" | "speciesName">
   seed: string
   idx?: number
   name?: string | null
+}
+
+export const getHightestPossibleEvoByLevel = ({
+  species,
+  level,
+}: {
+  species: Species
+  level: number
+}) => {
+  let highestPossibleEvo = null
+  while (true) {
+    const evos = map(species.evos, (e) => Dex.species.get(e))
+    const possibleEvo = find(evos, (e) => {
+      // if (e.evoType) return false
+      // if (e.evoCondition) return false
+      // if (e.evoItem) return false
+      // if (e.evoMove) return false
+
+      if (!e.evoLevel) return false
+      if (e.evoLevel > level) return false
+      return true
+    })
+    if (!possibleEvo) break
+    species = possibleEvo
+    highestPossibleEvo = possibleEvo
+  }
+  return highestPossibleEvo
 }
 
 export const getWildlifeFighter = async ({
@@ -29,12 +56,16 @@ export const getWildlifeFighter = async ({
   metadata: catchMetaData,
   name: givenName,
 }: GetWildlifeFighterOptions) => {
+  const isCaught = !!catchMetaData
   const mapping = taxonMappingByAncestors(wildlife.metadata.taxonAncestorIds)
-  let speciesName = mapping.pokemon
+  let speciesName =
+    isCaught && !!catchMetaData.speciesName
+      ? catchMetaData.speciesName
+      : mapping.pokemon
   let species = Dex.species.get(speciesName)
 
   // Everything starts at lowest evolution
-  while (species.prevo) {
+  while (!isCaught && species.prevo) {
     species = Dex.species.get(species.prevo)
     speciesName = species.name
   }
@@ -52,20 +83,9 @@ export const getWildlifeFighter = async ({
 
   const canEvolveByLevel = wildlife.metadata.observationCaptive
   if (canEvolveByLevel) {
-    while (true) {
-      const evos = map(species.evos, (e) => Dex.species.get(e))
-      const possibleEvo = find(evos, (e) => {
-        // if (e.evoType) return false
-        // if (e.evoCondition) return false
-        // if (e.evoItem) return false
-        // if (e.evoMove) return false
-
-        if (!e.evoLevel) return false
-        if (e.evoLevel > level) return false
-        return true
-      })
-      if (!possibleEvo) break
-      species = possibleEvo
+    const highestPossibleEvo = getHightestPossibleEvoByLevel({ species, level })
+    if (highestPossibleEvo) {
+      species = highestPossibleEvo
       speciesName = species.name
     }
   }

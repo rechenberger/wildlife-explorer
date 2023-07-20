@@ -29,6 +29,7 @@ import {
   Puzzle,
   Scale,
   Snowflake,
+  Sparkle,
   Sparkles,
   Swords,
   Zap,
@@ -268,6 +269,13 @@ export const swapIcon = {
   ...defaultIcon,
   name: "Edit",
   icon: ArrowLeftRight,
+}
+export const evolveIcon = {
+  ...defaultIcon,
+  bgHalf: "bg-yellow-500/50",
+  bgFull: "bg-yellow-500",
+  name: "Evolve",
+  icon: Sparkle,
 }
 
 export type TypeIcon = {

@@ -2,6 +2,7 @@ import NiceModal from "@ebay/nice-modal-react"
 import { Edit2, ExternalLink } from "lucide-react"
 import dynamic from "next/dynamic"
 import { useMemo } from "react"
+import { toast } from "sonner"
 import { DEV_MODE } from "~/config"
 import { type BattleReportFighter } from "~/server/lib/battle/BattleReport"
 import { api } from "~/utils/api"
@@ -18,7 +19,7 @@ import { MoveSwapperModal } from "./MoveSwapperModal"
 import { TimeAgo } from "./TimeAgo"
 import { TypeBadge } from "./TypeBadge"
 import { Progress } from "./shadcn/ui/progress"
-import { swapIcon } from "./typeIcons"
+import { evolveIcon, swapIcon } from "./typeIcons"
 import { useMyCatch } from "./useCatches"
 import { useGetWildlifeName } from "./useGetWildlifeName"
 import { useMapFlyTo } from "./useMapRef"
@@ -82,6 +83,11 @@ export const CatchDetails = ({
       trpc.catch.invalidate()
     },
   })
+  const { mutateAsync: evolve } = api.catch.evolve.useMutation({
+    onSuccess: () => {
+      trpc.catch.invalidate()
+    },
+  })
 
   if (!c)
     return (
@@ -92,14 +98,15 @@ export const CatchDetails = ({
 
   const percentage = calcExpPercentage(c.metadata)
 
+  const catchName = c.name || getName(c.wildlife)
   return (
     <>
       {showTitle && (
         <div className="flex flex-row gap-2">
-          <div>{c.name || getName(c.wildlife)}</div>
+          <div>{catchName}</div>
           <button
             onClick={() => {
-              const name = prompt("New Name", c.name || getName(c.wildlife))
+              const name = prompt("New Name", catchName)
               if (!playerId) return
               if (name) {
                 rename({
@@ -112,6 +119,21 @@ export const CatchDetails = ({
           >
             <Edit2 className="w-4 h-4" />
           </button>
+          {c.fighter?.canEvolve && (
+            <TypeBadge
+              content="Evolve"
+              icon={evolveIcon}
+              onClick={() => {
+                if (!playerId) return
+
+                toast.promise(evolve({ playerId, catchId: c.id }), {
+                  loading: `${catchName} is evolving...`,
+                  success: `Your ${catchName} evolved! ✨`,
+                  error: (error) => error.message,
+                })
+              }}
+            />
+          )}
         </div>
       )}
       <div className="p-2 flex flex-col gap-4">

@@ -1,5 +1,6 @@
+import { Dex } from "@pkmn/dex"
 import { TRPCError } from "@trpc/server"
-import { every, find, map, take } from "lodash-es"
+import { every, filter, find, map, take } from "lodash-es"
 import { z } from "zod"
 import {
   CATCH_RATE_ALWAYS_LOOSE,
@@ -10,6 +11,10 @@ import {
 import { getExpRate } from "~/data/pokemonLevelExperienceMap"
 import { PokemonLevelingRate } from "~/data/pokemonLevelingRate"
 import { createTRPCRouter } from "~/server/api/trpc"
+import {
+  getHightestPossibleEvoByLevel,
+  getMovesInLearnset,
+} from "~/server/lib/battle/getWildlifeFighter"
 import { getWildlifeFighterPlus } from "~/server/lib/battle/getWildlifeFighterPlus"
 import { grantExp, type ExpReports } from "~/server/lib/battle/grantExp"
 import { savePostBattleCatchMetadata } from "~/server/lib/battle/savePostBattleCatchMetadata"
@@ -398,4 +403,67 @@ export const catchRouter = createTRPCRouter({
 
     return { count }
   }),
+  evolve: playerProcedure
+    .input(z.object({ catchId: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const catchToEvolve = await ctx.prisma.catch.findUniqueOrThrow({
+        where: {
+          id: input.catchId,
+        },
+        include: {
+          wildlife: true,
+        },
+      })
+
+      const fighter = await getWildlifeFighterPlus(catchToEvolve)
+
+      const highestPossibleEvo = getHightestPossibleEvoByLevel({
+        species: Dex.species.get(fighter.species),
+        level: fighter.level,
+      })
+
+      const canEvolve = !!highestPossibleEvo
+      if (!canEvolve) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Wildlife cannot evolve",
+        })
+      }
+
+      const evolvedMetadata = {
+        ...catchToEvolve.metadata,
+        speciesNum: highestPossibleEvo.num,
+        speciesName: highestPossibleEvo.name,
+      } satisfies CatchMetadata
+
+      const fighterEvolved = await getWildlifeFighterPlus({
+        ...catchToEvolve,
+        metadata: evolvedMetadata,
+      })
+
+      const evolvedMoves = await getMovesInLearnset(highestPossibleEvo.name)
+
+      const evolvedMovesInLevelRange = filter(
+        evolvedMoves,
+        (m) => m.level <= fighterEvolved.level
+      )
+
+      const evolvedMoveIds = map(evolvedMovesInLevelRange, (m) => m.move)
+      const fighterMovesWithoutUnknown = filter(
+        catchToEvolve.metadata.moves,
+        (m) => evolvedMoveIds.includes(m.id)
+      )
+
+      await ctx.prisma.catch.update({
+        where: {
+          id: input.catchId,
+        },
+        data: {
+          metadata: {
+            ...evolvedMetadata,
+            moves: fighterMovesWithoutUnknown,
+          } satisfies CatchMetadata,
+        },
+      })
+    }),
 })
