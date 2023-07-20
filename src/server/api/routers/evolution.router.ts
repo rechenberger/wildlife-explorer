@@ -4,8 +4,8 @@ import { filter, map } from "lodash-es"
 import { z } from "zod"
 import { createTRPCRouter } from "~/server/api/trpc"
 import {
-  getHightestPossibleEvoByLevel,
   getMovesInLearnset,
+  getNextPossibleEvoByLevel,
 } from "~/server/lib/battle/getWildlifeFighter"
 import { getWildlifeFighterPlus } from "~/server/lib/battle/getWildlifeFighterPlus"
 import { type CatchMetadata } from "~/server/schema/CatchMetadata"
@@ -26,12 +26,12 @@ export const evolutionRouter = createTRPCRouter({
 
       const fighter = await getWildlifeFighterPlus(catchToEvolve)
 
-      const highestPossibleEvo = getHightestPossibleEvoByLevel({
+      const nextPossibleEvo = getNextPossibleEvoByLevel({
         species: Dex.species.get(fighter.species),
         level: fighter.level,
       })
 
-      const canEvolve = !!highestPossibleEvo
+      const canEvolve = !!nextPossibleEvo
       if (!canEvolve) {
         throw new TRPCError({
           code: "BAD_REQUEST",
@@ -41,8 +41,8 @@ export const evolutionRouter = createTRPCRouter({
 
       const evolvedMetadata = {
         ...catchToEvolve.metadata,
-        speciesNum: highestPossibleEvo.num,
-        speciesName: highestPossibleEvo.name,
+        speciesNum: nextPossibleEvo.num,
+        speciesName: nextPossibleEvo.name,
       } satisfies CatchMetadata
 
       const fighterEvolved = await getWildlifeFighterPlus({
@@ -50,7 +50,7 @@ export const evolutionRouter = createTRPCRouter({
         metadata: evolvedMetadata,
       })
 
-      const evolvedMoves = await getMovesInLearnset(highestPossibleEvo.name)
+      const evolvedMoves = await getMovesInLearnset(nextPossibleEvo.name)
 
       const evolvedMovesInLevelRange = filter(
         evolvedMoves,

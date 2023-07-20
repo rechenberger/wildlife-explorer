@@ -9,7 +9,7 @@ import {
 } from "./WildlifeFighterPlusMove"
 import { applyFighterStats } from "./applyFighterStats"
 import {
-  getHightestPossibleEvoByLevel,
+  getNextPossibleEvoByLevel,
   getWildlifeFighter,
   type GetWildlifeFighterOptions,
 } from "./getWildlifeFighter"
@@ -61,12 +61,12 @@ export const transformWildlifeFighterPlus = ({
 }) => {
   const p = pokemon
 
-  const highestPossibleEvo = getHightestPossibleEvoByLevel({
+  const nextPossibleEvo = getNextPossibleEvoByLevel({
     species: Dex.species.get(pokemonSet.species),
     level: p.level,
   })
 
-  const canEvolve = !!highestPossibleEvo
+  const canEvolve = !!nextPossibleEvo
 
   const moves = p.moves.map((move) => {
     return getWildlifeFighterPlusMove({

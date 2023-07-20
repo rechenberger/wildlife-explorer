@@ -31,22 +31,36 @@ export const getHightestPossibleEvoByLevel = ({
 }) => {
   let highestPossibleEvo = null
   while (true) {
-    const evos = map(species.evos, (e) => Dex.species.get(e))
-    const possibleEvo = find(evos, (e) => {
-      // if (e.evoType) return false
-      // if (e.evoCondition) return false
-      // if (e.evoItem) return false
-      // if (e.evoMove) return false
-
-      if (!e.evoLevel) return false
-      if (e.evoLevel > level) return false
-      return true
+    const possibleEvo = getNextPossibleEvoByLevel({
+      species,
+      level,
     })
     if (!possibleEvo) break
     species = possibleEvo
     highestPossibleEvo = possibleEvo
   }
   return highestPossibleEvo
+}
+
+export const getNextPossibleEvoByLevel = ({
+  species,
+  level,
+}: {
+  species: Species
+  level: number
+}) => {
+  const evos = map(species.evos, (e) => Dex.species.get(e))
+  const possibleEvo = find(evos, (e) => {
+    // if (e.evoType) return false
+    // if (e.evoCondition) return false
+    // if (e.evoItem) return false
+    // if (e.evoMove) return false
+
+    if (!e.evoLevel) return false
+    if (e.evoLevel > level) return false
+    return true
+  })
+  return possibleEvo
 }
 
 export const getWildlifeFighter = async ({
