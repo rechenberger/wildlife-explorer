@@ -13,12 +13,14 @@ export const FighterChip = ({
   showAbsoluteHp,
   grayscale,
   onClick,
+  circleClassName,
 }: {
   fighter: BattleReportFighter
   ltr?: boolean
   showAbsoluteHp: boolean
   grayscale?: boolean
   onClick?: () => void
+  circleClassName?: string
 }) => {
   const { hp, hpMax, status } = fighter.fighter
   const hpFull = hp >= hpMax
@@ -46,7 +48,8 @@ export const FighterChip = ({
               : fainted
               ? "ring-red-500"
               : "ring-amber-400",
-            grayscale && "grayscale"
+            grayscale && "grayscale",
+            circleClassName
           )}
         >
           {fighter.wildlife.metadata.taxonImageUrlSquare && (

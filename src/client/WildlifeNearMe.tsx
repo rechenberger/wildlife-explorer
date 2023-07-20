@@ -10,10 +10,17 @@ import { cn } from "./cn"
 export const WildlifeNearMe = () => {
   const { wildlife } = useWildlife()
   const wildlifeSorted = useMemo(() => {
-    return filter(
-      orderBy(wildlife, (w) => w.fighter.level, "desc"),
-      (w) => !w.wildlife.caughtAt
+    let result = wildlife
+    result = filter(result, (w) => !w.wildlife.caughtAt)
+    result = orderBy(
+      result,
+      [
+        (w) => (w.wildlife.metadata.observationCaptive ? 1 : 0),
+        (w) => w.fighter.level,
+      ],
+      ["desc", "desc"]
     )
+    return result
   }, [wildlife])
   const [mobileOpen, setMobileOpen] = useState(false)
   return (
@@ -58,6 +65,11 @@ export const WildlifeNearMe = () => {
                         wildlifeId: w.wildlife.id,
                       })
                     }}
+                    circleClassName={cn(
+                      w.wildlife.metadata.observationCaptive
+                        ? "ring-orange-700"
+                        : "ring-amber-400"
+                    )}
                   />
                 </div>
               </div>
