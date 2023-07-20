@@ -74,6 +74,7 @@ export const grantExp = async ({
           participatedInBattle: !!winnerFighter.activeTurns,
           isOriginalOwner:
             winningCatch.originalPlayerId === winningCatch.playerId,
+          canEvolve: !!winnerFighter.fighter.canEvolve,
         })
 
         const earnedEvs =
