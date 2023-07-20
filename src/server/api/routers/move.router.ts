@@ -1,5 +1,5 @@
 import { TRPCError } from "@trpc/server"
-import { findIndex, orderBy, uniqBy } from "lodash-es"
+import { findIndex, map, orderBy, uniqBy } from "lodash-es"
 import { z } from "zod"
 import { MAX_FIGHTERS_PER_TEAM, SHOW_FUTURE_MOVES } from "~/config"
 import { createTRPCRouter } from "~/server/api/trpc"
@@ -167,8 +167,17 @@ const getPossibleMoves = async ({
     },
   })
   const fighter = await getWildlifeFighterPlus(c)
-  const learnsetMoves = await getMovesInLearnset(fighter.species)
-  let allMoves = learnsetMoves.map((move) => {
+  const movesLearnedSaved = map(c.metadata?.movesLearned, (move) => ({
+    move,
+    level: null,
+  }))
+  let learnsetMoves = await getMovesInLearnset(fighter.species)
+  learnsetMoves = orderBy(learnsetMoves, (m) => m.level)
+
+  let both = [...movesLearnedSaved, ...learnsetMoves]
+  both = uniqBy(both, (m) => m.move)
+
+  let allMoves = both.map((move) => {
     const movePlus = getWildlifeFighterPlusMove({
       move: move.move,
     })
@@ -177,18 +186,17 @@ const getPossibleMoves = async ({
       (m) => m.id === movePlus.id
     )
     activeIdx = activeIdx === -1 ? null : activeIdx
-    const learnAtLevel = move.level
-    const learned = fighter.level >= learnAtLevel
+    const learned = move.level ? fighter.level >= move.level : true
 
     return {
       ...movePlus,
       activeIdx,
-      learnAtLevel,
       learned,
+      level: move.level,
     }
   })
 
-  allMoves = orderBy(allMoves, [(m) => m.activeIdx, (m) => m.learnAtLevel])
+  allMoves = orderBy(allMoves, [(m) => m.activeIdx])
   if (!SHOW_FUTURE_MOVES) {
     allMoves = allMoves.filter((m) => m.learned)
   }

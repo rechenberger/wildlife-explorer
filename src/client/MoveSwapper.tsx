@@ -194,7 +194,7 @@ export const MoveSwapper = ({ catchId }: { catchId: string }) => {
               return (
                 <Fragment key={move.id}>
                   <div className="text-gray-500 text-sm">
-                    Level {move.learnAtLevel}
+                    {move.level ? `Level ${move.level}` : "?"}
                   </div>
                   <FighterMove fighter={c} move={move} />
                 </Fragment>
