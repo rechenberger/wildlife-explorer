@@ -365,6 +365,7 @@ export const BattleView = ({
                               (isActive || SHOW_INACTIVE_MOVES) && (
                                 <FighterMoves
                                   fighter={fighter}
+                                  hideMobileDetails
                                   disabled={
                                     isLoading ||
                                     !isActive ||

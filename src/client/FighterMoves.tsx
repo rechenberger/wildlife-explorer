@@ -16,10 +16,12 @@ export const FighterMoves = ({
   fighter,
   disabled: allDisabled,
   onClick,
+  hideMobileDetails = false,
 }: {
   fighter: BattleReportFighter
   disabled?: boolean
   onClick?: (options: { moveId: string }) => void
+  hideMobileDetails?: boolean
 }) => {
   const moves = fighter.fighter.moves
   return (
@@ -33,6 +35,7 @@ export const FighterMoves = ({
                 move={move}
                 onClick={onClick}
                 disabled={allDisabled}
+                hideMobileDetails={hideMobileDetails}
               />
             </Fragment>
           )
@@ -47,6 +50,7 @@ export type FighterMoveProps = {
   disabled?: boolean
   onClick?: (options: { moveId: string }) => void
   move: BattleReportFighter["fighter"]["moves"][number] | null
+  hideMobileDetails?: boolean
 }
 
 export const FighterMove = ({
@@ -54,6 +58,7 @@ export const FighterMove = ({
   disabled: allDisabled,
   onClick,
   move,
+  hideMobileDetails = false,
 }: FighterMoveProps) => {
   const disabled =
     !move ||
@@ -116,10 +121,20 @@ export const FighterMove = ({
                   {effectiveness.symbol}
                 </div>
               )}
-              <div className="hidden w-5 shrink-0 opacity-60 sm:block">
+              <div
+                className={cn(
+                  "w-5 shrink-0 opacity-60",
+                  hideMobileDetails && "hidden sm:block"
+                )}
+              >
                 {move?.definition.basePower}
               </div>
-              <div className="hidden w-5 shrink-0 opacity-60 sm:block">
+              <div
+                className={cn(
+                  "w-5 shrink-0 opacity-60",
+                  hideMobileDetails && "hidden sm:block"
+                )}
+              >
                 {move?.definition.accuracy}
               </div>
               <div className="w-8 shrink-0 opacity-60">
