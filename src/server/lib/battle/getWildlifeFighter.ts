@@ -89,7 +89,7 @@ export const getWildlifeFighter = async ({
   }
 
   let moves: string[]
-  if (catchMetaData?.moves) {
+  if (catchMetaData?.moves?.length) {
     // PP are done in applyFighterStats
     moves = catchMetaData?.moves?.map((m) => m.id)
   } else {

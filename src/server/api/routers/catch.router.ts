@@ -454,6 +454,15 @@ export const catchRouter = createTRPCRouter({
         (m) => evolvedMoveIds.includes(m.id)
       )
 
+      let moves = fighterMovesWithoutUnknown
+      if (!moves.length) {
+        // TODO: fill in with latest moves
+        throw new TRPCError({
+          code: "CONFLICT",
+          message: "No moves for evolved wildlife",
+        })
+      }
+
       await ctx.prisma.catch.update({
         where: {
           id: input.catchId,
@@ -461,7 +470,7 @@ export const catchRouter = createTRPCRouter({
         data: {
           metadata: {
             ...evolvedMetadata,
-            moves: fighterMovesWithoutUnknown,
+            moves,
           } satisfies CatchMetadata,
         },
       })
