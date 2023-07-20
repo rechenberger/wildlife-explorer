@@ -189,6 +189,6 @@ export const WildlifeFighterPlus = z.object({
       })
     )
     .nullish(),
-  canEvolve: z.boolean(),
+  canEvolve: z.boolean().nullish(),
 })
 export type WildlifeFighterPlus = z.infer<typeof WildlifeFighterPlus>

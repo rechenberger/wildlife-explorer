@@ -56,23 +56,8 @@ export const getWildlifeFighter = async ({
   metadata: catchMetaData,
   name: givenName,
 }: GetWildlifeFighterOptions) => {
-  const isCaught = !!catchMetaData
-  const mapping = taxonMappingByAncestors(wildlife.metadata.taxonAncestorIds)
-  let speciesName =
-    isCaught && !!catchMetaData.speciesName
-      ? catchMetaData.speciesName
-      : mapping.pokemon
-  let species = Dex.species.get(speciesName)
-
-  // Everything starts at lowest evolution
-  while (!isCaught && species.prevo) {
-    species = Dex.species.get(species.prevo)
-    speciesName = species.name
-  }
-
   const minLevel = wildlife.metadata.observationCaptive ? 20 : 1
   const maxLevel = wildlife.metadata.observationCaptive ? 100 : 20
-
   const level =
     catchMetaData?.level ||
     rngInt({
@@ -81,6 +66,19 @@ export const getWildlifeFighter = async ({
       max: maxLevel,
     })
 
+  const mapping = taxonMappingByAncestors(wildlife.metadata.taxonAncestorIds)
+  let speciesName = catchMetaData?.speciesName ?? mapping.pokemon
+  let species = Dex.species.get(speciesName)
+
+  // Wildlife starts at lowest evolution
+  if (!!catchMetaData?.speciesName) {
+    while (species.prevo) {
+      species = Dex.species.get(species.prevo)
+      speciesName = species.name
+    }
+  }
+
+  // Evolve captives to highest possible evolution
   const canEvolveByLevel = wildlife.metadata.observationCaptive
   if (canEvolveByLevel) {
     const highestPossibleEvo = getHightestPossibleEvoByLevel({ species, level })
@@ -92,7 +90,7 @@ export const getWildlifeFighter = async ({
 
   let moves: string[]
   if (catchMetaData?.moves) {
-    // TODO: pp
+    // PP are done in applyFighterStats
     moves = catchMetaData?.moves?.map((m) => m.id)
   } else {
     const possibleMoves = await getMovesInLearnset(speciesName)
