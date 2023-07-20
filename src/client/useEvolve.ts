@@ -20,6 +20,8 @@ export const useEvolve = () => {
   }) => {
     if (!playerId) return
 
+    if (!confirm(`Are you sure you want to evolve ${catchName}?`)) return
+
     const promise = mutateAsync({ playerId, catchId })
     toast.promise(promise, {
       loading: `${catchName} is evolving...`,
