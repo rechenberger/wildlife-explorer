@@ -4,7 +4,7 @@ import { z } from "zod"
 import { MAX_FIGHTERS_PER_TEAM } from "~/config"
 import { createTRPCRouter } from "~/server/api/trpc"
 import { type CatchMetadata } from "~/server/schema/CatchMetadata"
-import { getPossibleMoves } from "../../lib/battle/getPossibleMoves"
+import { getPossibleMovesByCatchId } from "../../lib/battle/getPossibleMoves"
 import { careCenterProcedure } from "../middleware/careCenterProcedure"
 import { playerProcedure } from "../middleware/playerProcedure"
 
@@ -16,7 +16,7 @@ export const moveRouter = createTRPCRouter({
       })
     )
     .query(async ({ ctx, input }) => {
-      const { allMoves } = await getPossibleMoves({
+      const { allMoves } = await getPossibleMovesByCatchId({
         prisma: ctx.prisma,
         catchId: input.catchId,
         playerId: ctx.player.id,
@@ -33,7 +33,7 @@ export const moveRouter = createTRPCRouter({
       })
     )
     .mutation(async ({ ctx, input }) => {
-      const { allMoves, c } = await getPossibleMoves({
+      const { allMoves, c } = await getPossibleMovesByCatchId({
         prisma: ctx.prisma,
         catchId: input.catchId,
         playerId: ctx.player.id,

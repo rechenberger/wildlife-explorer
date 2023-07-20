@@ -1,11 +1,14 @@
+import { type Wildlife } from "@prisma/client"
 import { findIndex, map, orderBy, uniqBy } from "lodash-es"
 import { SHOW_FUTURE_MOVES } from "~/config"
 import { type MyPrismaClient } from "~/server/db"
+import { type CatchMetadata } from "~/server/schema/CatchMetadata"
+import { type WildlifeMetadata } from "~/server/schema/WildlifeMetadata"
 import { getWildlifeFighterPlusMove } from "./WildlifeFighterPlusMove"
 import { getMovesInLearnset } from "./getWildlifeFighter"
 import { getWildlifeFighterPlus } from "./getWildlifeFighterPlus"
 
-export const getPossibleMoves = async ({
+export const getPossibleMovesByCatchId = async ({
   prisma,
   catchId,
   playerId,
@@ -23,6 +26,19 @@ export const getPossibleMoves = async ({
       wildlife: true,
     },
   })
+  return getPossibleMovesByCatch({ c })
+}
+
+export const getPossibleMovesByCatch = async ({
+  c,
+}: {
+  c: {
+    id: string
+    metadata: CatchMetadata
+    wildlife: Wildlife & { metadata: WildlifeMetadata }
+    seed: string
+  }
+}) => {
   const fighter = await getWildlifeFighterPlus(c)
   const movesLearnedSaved = map(c.metadata?.movesLearned, (move) => ({
     move,
