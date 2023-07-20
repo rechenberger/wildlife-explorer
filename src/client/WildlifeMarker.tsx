@@ -3,7 +3,6 @@ import { useAtomValue } from "jotai"
 import { Check, Clock } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
-import { useState } from "react"
 import { Marker } from "react-map-gl"
 import { type RouterOutputs } from "~/utils/api"
 import { CurrentObservationModal } from "./CurrentObservationModal"
@@ -21,7 +20,7 @@ export const WildlifeMarker = ({ nearMe }: { nearMe: NearMe }) => {
   const { isNavigating } = useActiveNavigation()
   const { navigate } = useNavigation()
 
-  const [hovering, setHovering] = useState(false)
+  // const [hovering, setHovering] = useState(false)
 
   const onCooldown = w.respawnsAt > new Date()
   if (!w.lat || !w.lng) {
@@ -66,12 +65,12 @@ export const WildlifeMarker = ({ nearMe }: { nearMe: NearMe }) => {
             observationId: w.observationId,
           })
         }}
-        onMouseEnter={() => {
-          setHovering(true)
-        }}
-        onMouseLeave={() => {
-          setHovering(false)
-        }}
+        // onMouseEnter={() => {
+        //   setHovering(true)
+        // }}
+        // onMouseLeave={() => {
+        //   setHovering(false)
+        // }}
       >
         {/* <Squirrel size={24} className="animate text-white" /> */}
         {w.metadata.taxonImageUrlSquare && (
