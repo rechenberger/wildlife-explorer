@@ -27,7 +27,7 @@ export const MapControls = () => {
     if (!player) return
     if (initialCenteringRef.current) return
     initialCenteringRef.current = true
-    mapFlyTo({ center: player, zoom: 10, pitch: 45 })
+    mapFlyTo({ center: player, zoom: 14, pitch: 45 })
   }, [mapFlyTo, mapRef, player])
 
   return <></>
