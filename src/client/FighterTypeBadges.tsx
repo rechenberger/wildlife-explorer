@@ -19,6 +19,10 @@ export const FighterTypeBadges = ({
   size?: "small" | "big"
   className?: string
 }) => {
+  const nature = fighter.fighter.nature
+  const natureTooltip = `Nature:${nature.plus ? " +" + nature.plus : ""}${
+    nature.minus ? " -" + nature.minus : ""
+  }${!nature.plus && !nature.minus ? " neutral" : ""}`
   return (
     <>
       {showTypes && (
@@ -54,15 +58,7 @@ export const FighterTypeBadges = ({
           content={fighter.fighter.nature.name}
           size={size}
           className={className}
-          title={`Nature${
-            fighter.fighter.nature.plus
-              ? " +" + fighter.fighter.nature.plus
-              : ""
-          }${
-            fighter.fighter.nature.minus
-              ? " -" + fighter.fighter.nature.minus
-              : ""
-          }`}
+          title={natureTooltip}
         />
       )}
 
