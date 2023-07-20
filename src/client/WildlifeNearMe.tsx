@@ -1,5 +1,5 @@
 import NiceModal from "@ebay/nice-modal-react"
-import { orderBy } from "lodash-es"
+import { filter, orderBy } from "lodash-es"
 import { ChevronDown, ChevronUp } from "lucide-react"
 import { useMemo, useState } from "react"
 import { CurrentObservationModal } from "./CurrentObservationModal"
@@ -10,7 +10,10 @@ import { cn } from "./cn"
 export const WildlifeNearMe = () => {
   const { wildlife } = useWildlife()
   const wildlifeSorted = useMemo(() => {
-    return orderBy(wildlife, (w) => w.fighter.level, "desc")
+    return filter(
+      orderBy(wildlife, (w) => w.fighter.level, "desc"),
+      (w) => !w.wildlife.caughtAt
+    )
   }, [wildlife])
   const [mobileOpen, setMobileOpen] = useState(false)
   return (
@@ -42,8 +45,6 @@ export const WildlifeNearMe = () => {
         <div className="flex flex-col gap-3 text-black">
           {wildlifeSorted?.map((w) => {
             const isRespawning = w.wildlife.respawnsAt > new Date()
-            const isCaught = !!w.wildlife.caughtAt
-            const grayscale = isRespawning || isCaught
             return (
               <div key={w.wildlife.id} className="flex flex-row gap-2">
                 <div className="w-44">
@@ -51,7 +52,7 @@ export const WildlifeNearMe = () => {
                     fighter={w}
                     showAbsoluteHp={false}
                     ltr={false}
-                    grayscale={grayscale}
+                    grayscale={isRespawning}
                     onClick={() => {
                       NiceModal.show(CurrentObservationModal, {
                         wildlifeId: w.wildlife.id,
