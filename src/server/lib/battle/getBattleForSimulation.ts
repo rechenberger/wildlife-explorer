@@ -16,6 +16,7 @@ const BattleSimulationCatchMetadata = CatchMetadata.pick({
   moves: true,
   hp: true,
   evs: true,
+  speciesName: true,
 })
 
 export const getBattleForSimulation = async ({

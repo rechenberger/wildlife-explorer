@@ -1,9 +1,11 @@
+import { Sparkles } from "lucide-react"
 import Image from "next/image"
 import { DEV_MODE } from "~/config"
 import { type BattleReportFighter } from "~/server/lib/battle/BattleReport"
 import { cn } from "./cn"
 import { Progress } from "./shadcn/ui/progress"
 import { useGetWildlifeName } from "./useGetWildlifeName"
+import { usePlayer } from "./usePlayer"
 
 export const FighterChip = ({
   fighter,
@@ -23,6 +25,9 @@ export const FighterChip = ({
   const fainted = hp <= 0
   const getName = useGetWildlifeName()
   const name = fighter.name || getName(fighter.wildlife)
+  const { player } = usePlayer()
+  const canEvolve =
+    fighter.fighter?.canEvolve && !player?.metadata?.activeBattleId
   return (
     <>
       <div
@@ -104,8 +109,16 @@ export const FighterChip = ({
                 {status.toUpperCase()}
               </div>
             )}
-            <div className="truncate opacity-60">
-              Lv. {fighter.fighter.level}
+            <div
+              className={cn(
+                "truncate opacity-60",
+                "flex flex-row gap-0.5 items-center",
+                canEvolve && "text-yellow-600 animate-pulse"
+              )}
+              title={canEvolve ? "Can evolve" : undefined}
+            >
+              <span>Lv. {fighter.fighter.level}</span>
+              {canEvolve && <Sparkles className="w-3 h-3" />}
             </div>
           </div>
         </div>

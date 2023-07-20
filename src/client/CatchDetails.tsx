@@ -18,8 +18,9 @@ import { MoveSwapperModal } from "./MoveSwapperModal"
 import { TimeAgo } from "./TimeAgo"
 import { TypeBadge } from "./TypeBadge"
 import { Progress } from "./shadcn/ui/progress"
-import { swapIcon } from "./typeIcons"
+import { evolveIcon, swapIcon } from "./typeIcons"
 import { useMyCatch } from "./useCatches"
+import { useEvolve } from "./useEvolve"
 import { useGetWildlifeName } from "./useGetWildlifeName"
 import { useMapFlyTo } from "./useMapRef"
 import { usePlayer } from "./usePlayer"
@@ -82,6 +83,7 @@ export const CatchDetails = ({
       trpc.catch.invalidate()
     },
   })
+  const { evolve } = useEvolve()
 
   if (!c)
     return (
@@ -92,14 +94,15 @@ export const CatchDetails = ({
 
   const percentage = calcExpPercentage(c.metadata)
 
+  const catchName = c.name || getName(c.wildlife)
   return (
     <>
       {showTitle && (
         <div className="flex flex-row gap-2">
-          <div>{c.name || getName(c.wildlife)}</div>
+          <div>{catchName}</div>
           <button
             onClick={() => {
-              const name = prompt("New Name", c.name || getName(c.wildlife))
+              const name = prompt("New Name", catchName)
               if (!playerId) return
               if (name) {
                 rename({
@@ -159,6 +162,20 @@ export const CatchDetails = ({
               )}
               {buttonSlot}
             </div>
+          </>
+        )}
+
+        {c.fighter?.canEvolve && !player?.metadata?.activeBattleId && (
+          <>
+            <TypeBadge
+              content="Evolve"
+              icon={evolveIcon}
+              size="big"
+              onClick={() => {
+                evolve({ catchId: c.id, catchName })
+              }}
+              className="animate-pulse"
+            />
           </>
         )}
 
