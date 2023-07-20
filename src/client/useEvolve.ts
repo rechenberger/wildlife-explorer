@@ -9,6 +9,7 @@ export const useEvolve = () => {
   const { mutateAsync } = api.evolution.evolve.useMutation({
     onSuccess: () => {
       trpc.catch.invalidate()
+      trpc.evolution.invalidate()
     },
   })
   const evolve = async ({
