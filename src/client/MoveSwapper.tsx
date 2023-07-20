@@ -216,7 +216,9 @@ export const MoveSwapper = ({ catchId }: { catchId: string }) => {
               return (
                 <Fragment key={move.id}>
                   <div className="text-gray-500 text-sm">
-                    {move.level ? `Level ${move.level}` : "Instant!"}
+                    {move.level && move.level > c.fighter.level
+                      ? `Level ${move.level}`
+                      : "Instant!"}
                   </div>
                   <FighterMove fighter={c} move={move} />
                 </Fragment>
