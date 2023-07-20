@@ -41,6 +41,9 @@ export const WildlifeNearMe = () => {
       >
         <div className="flex flex-col gap-3 text-black">
           {wildlifeSorted?.map((w) => {
+            const isRespawning = w.wildlife.respawnsAt > new Date()
+            const isCaught = !!w.wildlife.caughtAt
+            const grayscale = isRespawning || isCaught
             return (
               <div key={w.wildlife.id} className="flex flex-row gap-2">
                 <div className="w-44">
@@ -48,6 +51,7 @@ export const WildlifeNearMe = () => {
                     fighter={w}
                     showAbsoluteHp={false}
                     ltr={false}
+                    grayscale={grayscale}
                     onClick={() => {
                       NiceModal.show(CurrentObservationModal, {
                         wildlifeId: w.wildlife.id,
