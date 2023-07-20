@@ -119,21 +119,6 @@ export const CatchDetails = ({
           >
             <Edit2 className="w-4 h-4" />
           </button>
-          {c.fighter?.canEvolve && (
-            <TypeBadge
-              content="Evolve"
-              icon={evolveIcon}
-              onClick={() => {
-                if (!playerId) return
-
-                toast.promise(evolve({ playerId, catchId: c.id }), {
-                  loading: `${catchName} is evolving...`,
-                  success: `Your ${catchName} evolved! ✨`,
-                  error: (error) => error.message,
-                })
-              }}
-            />
-          )}
         </div>
       )}
       <div className="p-2 flex flex-col gap-4">
@@ -181,6 +166,26 @@ export const CatchDetails = ({
               )}
               {buttonSlot}
             </div>
+          </>
+        )}
+
+        {c.fighter?.canEvolve && !player?.metadata?.activeBattleId && (
+          <>
+            <TypeBadge
+              content="Evolve"
+              icon={evolveIcon}
+              size="big"
+              onClick={() => {
+                if (!playerId) return
+
+                toast.promise(evolve({ playerId, catchId: c.id }), {
+                  loading: `${catchName} is evolving...`,
+                  success: `Your ${catchName} evolved! ✨`,
+                  error: (error) => error.message,
+                })
+              }}
+              className="animate-pulse"
+            />
           </>
         )}
 

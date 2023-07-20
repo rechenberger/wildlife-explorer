@@ -271,9 +271,9 @@ export const swapIcon = {
   icon: ArrowLeftRight,
 }
 export const evolveIcon = {
-  ...defaultIcon,
   bgHalf: "bg-yellow-500/50",
   bgFull: "bg-yellow-500",
+  ringFull: "hover:ring ring-yellow-500",
   name: "Evolve",
   icon: Sparkle,
 }
