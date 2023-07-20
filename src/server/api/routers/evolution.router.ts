@@ -1,12 +1,10 @@
 import { Dex } from "@pkmn/dex"
 import { TRPCError } from "@trpc/server"
-import { filter, map } from "lodash-es"
+import { filter } from "lodash-es"
 import { z } from "zod"
 import { createTRPCRouter } from "~/server/api/trpc"
-import {
-  getMovesInLearnset,
-  getNextPossibleEvoByLevel,
-} from "~/server/lib/battle/getWildlifeFighter"
+import { getPossibleMovesByCatch } from "~/server/lib/battle/getPossibleMoves"
+import { getNextPossibleEvoByLevel } from "~/server/lib/battle/getWildlifeFighter"
 import { getWildlifeFighterPlus } from "~/server/lib/battle/getWildlifeFighterPlus"
 import { type CatchMetadata } from "~/server/schema/CatchMetadata"
 import { playerProcedure } from "../middleware/playerProcedure"
@@ -39,38 +37,23 @@ export const evolutionRouter = createTRPCRouter({
         })
       }
 
+      const { allMoves: oldMoves } = await getPossibleMovesByCatch({
+        c: catchToEvolve,
+      })
+      const movesLearned = filter(oldMoves, (m) => !!m.learned).map((m) => m.id)
       const evolvedMetadata = {
         ...catchToEvolve.metadata,
         speciesNum: nextPossibleEvo.num,
         speciesName: nextPossibleEvo.name,
+        movesLearned: movesLearned,
       } satisfies CatchMetadata
 
-      const fighterEvolved = await getWildlifeFighterPlus({
-        ...catchToEvolve,
-        metadata: evolvedMetadata,
-      })
-
-      const evolvedMoves = await getMovesInLearnset(nextPossibleEvo.name)
-
-      const evolvedMovesInLevelRange = filter(
-        evolvedMoves,
-        (m) => m.level <= fighterEvolved.level
-      )
-
-      const evolvedMoveIds = map(evolvedMovesInLevelRange, (m) => m.move)
-      const fighterMovesWithoutUnknown = filter(
-        catchToEvolve.metadata.moves,
-        (m) => evolvedMoveIds.includes(m.id)
-      )
-
-      let moves = fighterMovesWithoutUnknown
-      if (!moves.length) {
-        // TODO: fill in with latest moves
-        throw new TRPCError({
-          code: "CONFLICT",
-          message: "No moves for evolved wildlife",
-        })
-      }
+      // const newMoves = getPossibleMovesByCatch({
+      //   c: {
+      //     ...catchToEvolve,
+      //     metadata: evolvedMetadata,
+      //   },
+      // })
 
       await ctx.prisma.catch.update({
         where: {
@@ -79,7 +62,6 @@ export const evolutionRouter = createTRPCRouter({
         data: {
           metadata: {
             ...evolvedMetadata,
-            moves,
           } satisfies CatchMetadata,
         },
       })
