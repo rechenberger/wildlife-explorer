@@ -10,6 +10,7 @@ import { PlayerMarker } from "~/client/PlayerMarker"
 import { PlayerRoute } from "~/client/PlayerRoute"
 import { ScanCircle } from "~/client/ScanCircle"
 import { WildlifeMarkers } from "~/client/WildlifeMarkers"
+import { WildlifeNearMe } from "~/client/WildlifeNearMe"
 import { usePlayer } from "~/client/usePlayer"
 
 export default function Page() {
@@ -28,6 +29,7 @@ export default function Page() {
           {/* {ENABLE_BATTLE_VIEW && <BattleView />} */}
           <MainActionButtons />
           <MapControls />
+          <WildlifeNearMe />
         </NiceModal.Provider>
       </MapBase>
     </MainLayout>
