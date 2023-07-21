@@ -8,16 +8,20 @@ import { type RouterOutputs } from "~/utils/api"
 import { CurrentObservationModal } from "./CurrentObservationModal"
 import { FighterChip } from "./FighterChip"
 import { cn } from "./cn"
-import { useActiveNavigation } from "./useActiveNavigation"
 import { navigatingToObservationIdAtom, useNavigation } from "./useNavigation"
 
 type NearMe = RouterOutputs["wildlife"]["nearMe"][number]
 
-export const WildlifeMarker = ({ nearMe }: { nearMe: NearMe }) => {
+export const WildlifeMarker = ({
+  nearMe,
+  isNavigating,
+}: {
+  nearMe: NearMe
+  isNavigating: boolean
+}) => {
   const w = nearMe.wildlife
   const navigatingtoObservationId = useAtomValue(navigatingToObservationIdAtom)
 
-  const { isNavigating } = useActiveNavigation()
   const { navigate } = useNavigation()
 
   // const [hovering, setHovering] = useState(false)
