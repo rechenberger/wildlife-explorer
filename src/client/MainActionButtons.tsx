@@ -14,7 +14,7 @@ export const MainActionButtons = () => {
           bottom: "calc(env(safe-area-inset-bottom) + 0.25rem)",
         }}
       >
-        <div className="flex flex-col gap-4 w-min">
+        <div className="flex flex-col gap-2 w-min">
           <MainNavigationButton />
           <div className="flex flex-row gap-4 justify-center ">
             <ScanButton />

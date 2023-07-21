@@ -1,4 +1,5 @@
 import { atom, useAtom, useStore } from "jotai"
+import { Navigation } from "lucide-react"
 import { useEffect, useRef } from "react"
 import { playerLocationAtom } from "./PlayerMarker"
 import { Button } from "./shadcn/ui/button"
@@ -15,11 +16,13 @@ export const MainNavigationButton = () => {
   const store = useStore()
   const mapFlyTo = useMapFlyTo()
 
-  useKeyboardShortcut("GOTO_PLAYER", () => {
+  // Goto player
+  const gotoPlayer = () => {
     const playerLocation = store.get(playerLocationAtom)
     mapFlyTo({ center: playerLocation })
     setStickToPlayer(true)
-  })
+  }
+  useKeyboardShortcut("GOTO_PLAYER", gotoPlayer)
 
   // Goto player initially
   const initialCenteringRef = useRef(false)
@@ -36,7 +39,15 @@ export const MainNavigationButton = () => {
 
   return (
     <>
-      <Button className="rounded-full">Navigate</Button>
+      <Button
+        className="rounded-full bg-blue-500 hover:bg-blue-600 gap-1"
+        size="sm"
+        onClick={gotoPlayer}
+      >
+        <Navigation className="w-4 h-4" />
+        <div className="flex-1">Center on Player</div>
+        <div className="w-4 h-4" />
+      </Button>
     </>
   )
 }
