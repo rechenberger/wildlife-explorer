@@ -237,7 +237,7 @@ export const MyCatches = () => {
           c.wildlife.metadata.taxonLocaleNames?.["de"],
           c.wildlife.metadata.taxonLocaleNames?.["en"],
           c.fighter.ability,
-          c.fighter.nature,
+          c.fighter.nature.name,
           c.fighter.species,
           c.fighter.speciesNum,
           ...c.fighter.types,
