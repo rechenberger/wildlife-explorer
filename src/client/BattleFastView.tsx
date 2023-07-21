@@ -2,6 +2,7 @@ import NiceModal from "@ebay/nice-modal-react"
 import { filter, orderBy } from "lodash-es"
 import { Fragment, useMemo } from "react"
 import { BattleViewModal } from "./BattleViewModal"
+import { useCare } from "./CareButton"
 import { CatchDetailsModal } from "./CatchDetailsModal"
 import { FighterChip } from "./FighterChip"
 import { MyCatchesModal } from "./MyCatchesModal"
@@ -10,6 +11,7 @@ import { useWildlife } from "./WildlifeMarkers"
 import { cn } from "./cn"
 import { careIcon, pastIcon, swapIcon } from "./typeIcons"
 import { useAttackWildlife } from "./useAttackWildlife"
+import { useCareCenter } from "./useCareCenter"
 import { useMyTeam } from "./useMyTeam"
 
 export const BattleFastView = () => {
@@ -29,6 +31,9 @@ export const BattleFastView = () => {
     )
     return result
   }, [wildlife])
+
+  const { care, isLoading: careIsLoading } = useCare()
+  const { careCenterIsClose } = useCareCenter()
 
   const { attackWildlife, attackWildlifeLoading } = useAttackWildlife()
 
@@ -105,8 +110,16 @@ export const BattleFastView = () => {
             icon={careIcon}
             content={"Care"}
             size="big"
-            className="flex-1"
-            onClick={() => {}}
+            className={cn(
+              "flex-1",
+              careIsLoading && "opacity-50",
+              !careCenterIsClose && "opacity-0"
+            )}
+            onClick={() => {
+              if (!careCenterIsClose) return
+              if (careIsLoading) return
+              care()
+            }}
           />
           <TypeBadge
             icon={pastIcon}
