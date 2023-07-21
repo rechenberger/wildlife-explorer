@@ -1,10 +1,8 @@
-import NiceModal from "@ebay/nice-modal-react"
 import { atom, useAtomValue } from "jotai"
 import { Check, Clock, ExternalLink, Frown, LocateOff } from "lucide-react"
 import dynamic from "next/dynamic"
 import Image from "next/image"
 import Link from "next/link"
-import { toast } from "sonner"
 import {
   ENABLE_BATTLE_VIEW,
   MIN_METER_ACCURACY_SHOW_INACCURATE,
@@ -12,11 +10,11 @@ import {
 } from "~/config"
 import { api } from "~/utils/api"
 import { Away } from "./Away"
-import { BattleViewModal } from "./BattleViewModal"
 import { FighterChipByWildlife } from "./FighterChipByWildlife"
 import { TimeAgo } from "./TimeAgo"
 import { cn } from "./cn"
 import { formatMeters } from "./formatMeters"
+import { useAttackWildlife } from "./useAttackWildlife"
 import { useCatch } from "./useCatch"
 import { useGetWildlifeName } from "./useGetWildlifeName"
 import { navigatingToObservationIdAtom, useNavigation } from "./useNavigation"
@@ -49,17 +47,7 @@ export const CurrentObservation = ({
 
   const { doCatch, isLoading: catching } = useCatch()
 
-  const trpc = api.useContext()
-  const { mutateAsync: attackWildlife, isLoading: attacking } =
-    api.battle.attackWildlife.useMutation({
-      onSuccess: (data) => {
-        close()
-        trpc.battle.invalidate()
-        NiceModal.show(BattleViewModal, {
-          battleId: data.id,
-        })
-      },
-    })
+  const { attackWildlife, attackWildlifeLoading } = useAttackWildlife()
 
   const getName = useGetWildlifeName()
 
@@ -199,18 +187,11 @@ export const CurrentObservation = ({
             <button
               className={cn(
                 "flex-1 rounded bg-black px-2 py-1 text-sm text-white",
-                attacking && "cursor-progress opacity-50"
+                attackWildlifeLoading && "cursor-progress opacity-50"
               )}
               disabled={catching}
               onClick={async () => {
-                if (!playerId) return
-
-                toast.promise(attackWildlife({ wildlifeId: w.id, playerId }), {
-                  loading: "Starting Battle...",
-                  success: "The Battle is on! 🔥",
-                  error: (err) =>
-                    err.message || "Failed to start battle. Try again.",
-                })
+                attackWildlife({ wildlifeId: w.id })
               }}
             >
               Battle

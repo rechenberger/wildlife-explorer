@@ -2,6 +2,7 @@ import NiceModal from "@ebay/nice-modal-react"
 import { filter, orderBy } from "lodash-es"
 import { ChevronDown, ChevronUp } from "lucide-react"
 import { useMemo, useState } from "react"
+import { SHOW_WILDLIFE_NEAR_ME_LIST_MOBILE } from "~/config"
 import { CurrentObservationModal } from "./CurrentObservationModal"
 import { FighterChip } from "./FighterChip"
 import { useWildlife } from "./WildlifeMarkers"
@@ -25,16 +26,18 @@ export const WildlifeNearMe = () => {
   const [mobileOpen, setMobileOpen] = useState(false)
   return (
     <>
-      <button
-        className="absolute top-8 pt-1 right-4 text-white [text-shadow:_0px_0px_2px_rgb(0_0_0_/_80%)] z-40 lg:hidden"
-        onClick={() => setMobileOpen((open) => !open)}
-      >
-        {mobileOpen ? (
-          <ChevronUp className="w-6 h-6" />
-        ) : (
-          <ChevronDown className="w-6 h-6" />
-        )}
-      </button>
+      {SHOW_WILDLIFE_NEAR_ME_LIST_MOBILE && (
+        <button
+          className="absolute top-8 pt-1 right-4 text-white [text-shadow:_0px_0px_2px_rgb(0_0_0_/_80%)] z-40 lg:hidden"
+          onClick={() => setMobileOpen((open) => !open)}
+        >
+          {mobileOpen ? (
+            <ChevronUp className="w-6 h-6" />
+          ) : (
+            <ChevronDown className="w-6 h-6" />
+          )}
+        </button>
+      )}
       <div
         className={cn(
           "absolute right-0 p-4 rounded z-40 overflow-auto hidden lg:flex",

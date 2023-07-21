@@ -5,6 +5,7 @@ import { useCallback, useEffect } from "react"
 import { ENABLE_BATTLE_VIEW } from "~/config"
 import { type LatLng } from "~/server/schema/LatLng"
 import { api } from "~/utils/api"
+import { BattleFastViewModal } from "./BattleFastViewModal"
 import { BattleViewModal } from "./BattleViewModal"
 import { cn } from "./cn"
 import { useKeyboardShortcut } from "./useKeyboardShortcut"
@@ -42,9 +43,14 @@ export const BattleViewButton = () => {
   }, [activeBattleId, pvpInviteBattleId])
 
   const openBattleView = useCallback(() => {
-    NiceModal.show(BattleViewModal, {
-      battleId: activeBattleId ?? pvpInviteBattleId ?? undefined,
-    })
+    const battleId = activeBattleId ?? pvpInviteBattleId
+    if (battleId) {
+      NiceModal.show(BattleViewModal, {
+        battleId,
+      })
+    } else {
+      NiceModal.show(BattleFastViewModal)
+    }
   }, [activeBattleId, pvpInviteBattleId])
 
   useKeyboardShortcut("BATTLE", openBattleView)
