@@ -29,17 +29,20 @@ export const MainNavigationButton = () => {
   const mapFlyTo = useMapFlyTo()
 
   // Goto player
-  const gotoPlayer = useCallback(() => {
-    const playerLocation = store.get(playerLocationAtom)
-    mapFlyTo({
-      center: playerLocation,
-      zoom: DEFAULT_MAP_ZOOM,
-      pitch: DEFAULT_MAP_PITCH,
-      instant: true,
-    })
-    setStickToPlayer(true)
-  }, [mapFlyTo, setStickToPlayer, store])
-  useKeyboardShortcut("GOTO_PLAYER", gotoPlayer)
+  const gotoPlayer = useCallback(
+    ({ instant }: { instant?: boolean } = {}) => {
+      const playerLocation = store.get(playerLocationAtom)
+      mapFlyTo({
+        center: playerLocation,
+        zoom: DEFAULT_MAP_ZOOM,
+        pitch: DEFAULT_MAP_PITCH,
+        instant,
+      })
+      setStickToPlayer(true)
+    },
+    [mapFlyTo, setStickToPlayer, store]
+  )
+  useKeyboardShortcut("GOTO_PLAYER", () => gotoPlayer())
 
   // Goto player initially
   const initialCenteringRef = useRef(false)
@@ -63,7 +66,7 @@ export const MainNavigationButton = () => {
     if (!distanceAwayFromPlayer) return
     // if (distanceAwayFromPlayer < 1) return
 
-    gotoPlayer()
+    gotoPlayer({ instant: true })
   }, [
     distanceAwayFromPlayer,
     gotoPlayer,
@@ -80,7 +83,7 @@ export const MainNavigationButton = () => {
       <Button
         className="rounded-full bg-blue-500 hover:bg-blue-600 gap-1"
         size="sm"
-        onClick={gotoPlayer}
+        onClick={() => gotoPlayer()}
       >
         <Navigation className="w-4 h-4" />
         <div className="flex-1">Center on Player</div>
