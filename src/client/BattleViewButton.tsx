@@ -43,9 +43,14 @@ export const BattleViewButton = () => {
   }, [activeBattleId, pvpInviteBattleId])
 
   const openBattleView = useCallback(() => {
-    NiceModal.show(BattleViewModal, {
-      battleId: activeBattleId ?? pvpInviteBattleId ?? undefined,
-    })
+    const battleId = activeBattleId ?? pvpInviteBattleId
+    if (battleId) {
+      NiceModal.show(BattleViewModal, {
+        battleId,
+      })
+    } else {
+      NiceModal.show(BattleFastViewModal)
+    }
   }, [activeBattleId, pvpInviteBattleId])
 
   useKeyboardShortcut("BATTLE", openBattleView)
@@ -58,11 +63,7 @@ export const BattleViewButton = () => {
         <button
           className={cn("relative rounded-xl bg-black p-2 text-white")}
           onClick={async () => {
-            if (activeBattleId) {
-              openBattleView()
-            } else {
-              NiceModal.show(BattleFastViewModal)
-            }
+            openBattleView()
           }}
         >
           <Swords size={32} />
