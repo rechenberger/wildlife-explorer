@@ -1,5 +1,5 @@
 import { TypeBadge } from "./TypeBadge"
-import { catchIcon, leaveIcon, swapIcon } from "./typeIcons"
+import { careIcon, leaveIcon, swapIcon } from "./typeIcons"
 
 export const BattleFastView = () => {
   return (
@@ -19,22 +19,25 @@ export const BattleFastView = () => {
         </div>
         <div className="flex flex-row gap-2">
           <TypeBadge
-            icon={catchIcon}
+            icon={careIcon}
             content={"Care"}
             size="big"
             className="flex-1"
+            onClick={() => {}}
           />
           <TypeBadge
             icon={swapIcon}
             content={"Swap"}
             size="big"
             className="flex-1"
+            onClick={() => {}}
           />
           <TypeBadge
             icon={leaveIcon}
             content={"Leave"}
             size="big"
             className="flex-1"
+            onClick={() => {}}
           />
         </div>
       </div>

@@ -20,6 +20,7 @@ import {
   Gem,
   Ghost,
   HeartHandshake,
+  HeartPulse,
   HelpCircle,
   Leaf,
   Milestone,
@@ -213,6 +214,14 @@ export const catchIcon = {
   ...defaultIcon,
   name: "Catch",
   icon: HeartHandshake,
+}
+
+export const careIcon = {
+  name: "Care",
+  icon: HeartPulse,
+  bgFull: "bg-purple-500 text-white",
+  bgHalf: "bg-purple-500/50",
+  ringFull: "hover:ring ring-purple-500",
 }
 
 export const runIcon = {
