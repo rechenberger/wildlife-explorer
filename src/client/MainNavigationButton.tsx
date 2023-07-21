@@ -6,6 +6,7 @@ import { calcDistanceInMeter } from "~/server/lib/latLng"
 import { mapStateAtom } from "./MapBase"
 import { playerLocationAtom } from "./PlayerMarker"
 import { Button } from "./shadcn/ui/button"
+import { useActiveNavigation } from "./useActiveNavigation"
 import { useKeyboardShortcut } from "./useKeyboardShortcut"
 import { useMapFlyTo, useMapRef } from "./useMapRef"
 import { usePlayer } from "./usePlayer"
@@ -54,22 +55,25 @@ export const MainNavigationButton = () => {
     gotoPlayer()
   }, [gotoPlayer, player])
 
-  const distanceAwayFromPlayer = useAtomValue(distanceAwayFromPlayerAtom)
-
+  const finish = player?.metadata?.navigation?.finish
+  const { isNavigating } = useActiveNavigation()
+  const playerLocation = useAtomValue(playerLocationAtom)
   useEffect(() => {
+    if (!finish) return
     if (!stickToPlayer) return
-    if (!distanceAwayFromPlayer) return
-    // if (distanceAwayFromPlayer < 1) return
-
-    gotoPlayer({ instant: true })
-  }, [
-    distanceAwayFromPlayer,
-    gotoPlayer,
-    mapFlyTo,
-    mapRef,
-    player,
-    stickToPlayer,
-  ])
+    if (!mapRef.current) return
+    if (!playerLocation) return
+    if (isNavigating) {
+      mapRef.current.fitBounds([playerLocation, finish], {
+        maxZoom: DEFAULT_MAP_ZOOM,
+        duration: 0,
+        pitch: DEFAULT_MAP_PITCH,
+        padding: 200,
+      })
+    } else {
+      gotoPlayer({ instant: false })
+    }
+  }, [finish, gotoPlayer, isNavigating, mapRef, playerLocation, stickToPlayer])
 
   if (stickToPlayer) return null
 
