@@ -2,8 +2,6 @@ import { atom, useAtom, useStore } from "jotai"
 import { Navigation } from "lucide-react"
 import { useCallback, useEffect, useRef } from "react"
 import { DEFAULT_MAP_PITCH, DEFAULT_MAP_ZOOM } from "~/config"
-import { calcDistanceInMeter } from "~/server/lib/latLng"
-import { mapStateAtom } from "./MapBase"
 import { playerLocationAtom } from "./PlayerMarker"
 import { Button } from "./shadcn/ui/button"
 import { isNavigatingAtom } from "./useActiveNavigation"
@@ -13,15 +11,6 @@ import { useMapFlyTo, useMapRef } from "./useMapRef"
 import { usePlayer } from "./usePlayer"
 
 export const stickToPlayerAtom = atom(true)
-
-const distanceAwayFromPlayerAtom = atom((get) => {
-  const playerLocation = get(playerLocationAtom)
-  const mapState = get(mapStateAtom)
-  if (!playerLocation) return
-  if (!mapState) return
-  const distance = calcDistanceInMeter(playerLocation, mapState)
-  return distance
-})
 
 export const MainNavigationButton = () => {
   const [stickToPlayer, setStickToPlayer] = useAtom(stickToPlayerAtom)
