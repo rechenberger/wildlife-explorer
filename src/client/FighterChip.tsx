@@ -2,6 +2,8 @@ import { Sparkles } from "lucide-react"
 import Image from "next/image"
 import { DEV_MODE } from "~/config"
 import { type BattleReportFighter } from "~/server/lib/battle/BattleReport"
+import { IconFemale } from "./IconFemale"
+import { IconMale } from "./IconMale"
 import { cn } from "./cn"
 import { Progress } from "./shadcn/ui/progress"
 import { useGetWildlifeName } from "./useGetWildlifeName"
@@ -67,7 +69,7 @@ export const FighterChip = ({
           )}
         </div>
         <div className={cn("flex-1 overflow-hidden py-1 select-none")}>
-          <div className="flex items-start gap-1">
+          <div className="flex items-center gap-1">
             <div
               className="truncate text-xs font-bold flex-1"
               title={`${name} ${
@@ -80,7 +82,7 @@ export const FighterChip = ({
             </div>
             <div
               className={cn(
-                "shrink-0 text-xs font-bold flex items-center",
+                "shrink-0 text-xs font-bol",
                 fighter.fighter.gender === "M"
                   ? "text-blue-600"
                   : "text-pink-600"
@@ -88,7 +90,11 @@ export const FighterChip = ({
               title={fighter.fighter.gender === "M" ? "Male" : "Female"}
               style={{ lineHeight: "1" }} // https://teampilot.ai/team/tristan/chat/clk7z6osk0005le08yj6f4cvc
             >
-              {fighter.fighter.gender === "M" ? "♂" : "♀"}
+              {fighter.fighter.gender === "M" ? (
+                <IconMale className="w-2 h-2" />
+              ) : (
+                <IconFemale className="w-2 h-2" />
+              )}
             </div>
             {/* {SHOW_FIGHTER_NAME && (
               <div
