@@ -51,13 +51,8 @@ export const MainNavigationButton = () => {
     if (!player) return
     if (initialCenteringRef.current) return
     initialCenteringRef.current = true
-    mapFlyTo({
-      center: player,
-      zoom: DEFAULT_MAP_ZOOM,
-      pitch: DEFAULT_MAP_PITCH,
-    })
-    setStickToPlayer(true)
-  }, [mapFlyTo, mapRef, player, setStickToPlayer])
+    gotoPlayer()
+  }, [gotoPlayer, player])
 
   const distanceAwayFromPlayer = useAtomValue(distanceAwayFromPlayerAtom)
 
