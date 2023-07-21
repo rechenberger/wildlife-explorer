@@ -20,7 +20,7 @@ export const BattleFastView = () => {
         <div className="flex flex-row gap-2">
           <TypeBadge
             icon={catchIcon}
-            content={"Heal"}
+            content={"Care"}
             size="big"
             className="flex-1"
           />
