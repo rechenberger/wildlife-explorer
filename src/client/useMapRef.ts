@@ -1,5 +1,5 @@
 import { type FlyToOptions } from "mapbox-gl"
-import { createContext, useContext } from "react"
+import { createContext, useCallback, useContext } from "react"
 import { type MapRef } from "react-map-gl"
 
 const Context = createContext({
@@ -14,17 +14,20 @@ export const useMapRef = () => {
 
 export const useMapFlyTo = () => {
   const ref = useMapRef()
-  return (options: FlyToOptions & { instant?: boolean }) => {
-    if (ref.current) {
-      if (options.instant) {
-        if (options.center) ref.current.setCenter(options.center)
-        if (options.zoom) ref.current.setZoom(options.zoom)
-        if (options.pitch) ref.current.setPitch(options.pitch)
+  return useCallback(
+    (options: FlyToOptions & { instant?: boolean }) => {
+      if (ref.current) {
+        if (options.instant) {
+          if (options.center) ref.current.setCenter(options.center)
+          if (options.zoom) ref.current.setZoom(options.zoom)
+          if (options.pitch) ref.current.setPitch(options.pitch)
+        } else {
+          ref.current.flyTo(options)
+        }
       } else {
-        ref.current.flyTo(options)
+        console.warn("MapRef not found")
       }
-    } else {
-      console.warn("MapRef not found")
-    }
-  }
+    },
+    [ref]
+  )
 }
