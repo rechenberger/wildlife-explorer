@@ -12,6 +12,7 @@ export const useMakeChoice = () => {
       trpc.battle.invalidate()
 
       if (data) {
+        trpc.invalidate()
         const expReports = data?.expReports
         if (data?.iAmWinner) {
           confetti()
