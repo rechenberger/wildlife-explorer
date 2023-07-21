@@ -2,7 +2,7 @@ export const DEV_MODE =
   process.env.NODE_ENV === "development" ||
   (typeof localStorage !== "undefined" && !!localStorage.getItem("DEV_MODE"))
 
-export const GLOBAL_REALTIME_MULTIPLIER = DEV_MODE ? 1000 : 100
+export const GLOBAL_REALTIME_MULTIPLIER = DEV_MODE ? 100 : 100
 export const DEFAULT_LOCATION = {
   lat: 50.928435947011906,
   lng: 6.930087265110956,

@@ -1,7 +1,9 @@
-import { atom, useAtom, useStore } from "jotai"
+import { atom, useAtom, useAtomValue, useStore } from "jotai"
 import { Navigation } from "lucide-react"
-import { useEffect, useRef } from "react"
+import { useCallback, useEffect, useRef } from "react"
 import { DEFAULT_MAP_PITCH, DEFAULT_MAP_ZOOM } from "~/config"
+import { calcDistanceInMeter } from "~/server/lib/latLng"
+import { mapStateAtom } from "./MapBase"
 import { playerLocationAtom } from "./PlayerMarker"
 import { Button } from "./shadcn/ui/button"
 import { useKeyboardShortcut } from "./useKeyboardShortcut"
@@ -9,6 +11,15 @@ import { useMapFlyTo, useMapRef } from "./useMapRef"
 import { usePlayer } from "./usePlayer"
 
 export const stickToPlayerAtom = atom(true)
+
+const distanceAwayFromPlayerAtom = atom((get) => {
+  const playerLocation = get(playerLocationAtom)
+  const mapState = get(mapStateAtom)
+  if (!playerLocation) return
+  if (!mapState) return
+  const distance = calcDistanceInMeter(playerLocation, mapState)
+  return distance
+})
 
 export const MainNavigationButton = () => {
   const [stickToPlayer, setStickToPlayer] = useAtom(stickToPlayerAtom)
@@ -18,15 +29,16 @@ export const MainNavigationButton = () => {
   const mapFlyTo = useMapFlyTo()
 
   // Goto player
-  const gotoPlayer = () => {
+  const gotoPlayer = useCallback(() => {
     const playerLocation = store.get(playerLocationAtom)
     mapFlyTo({
       center: playerLocation,
       zoom: DEFAULT_MAP_ZOOM,
       pitch: DEFAULT_MAP_PITCH,
+      instant: true,
     })
     setStickToPlayer(true)
-  }
+  }, [mapFlyTo, setStickToPlayer, store])
   useKeyboardShortcut("GOTO_PLAYER", gotoPlayer)
 
   // Goto player initially
@@ -43,6 +55,23 @@ export const MainNavigationButton = () => {
     })
     setStickToPlayer(true)
   }, [mapFlyTo, mapRef, player, setStickToPlayer])
+
+  const distanceAwayFromPlayer = useAtomValue(distanceAwayFromPlayerAtom)
+
+  useEffect(() => {
+    if (!stickToPlayer) return
+    if (!distanceAwayFromPlayer) return
+    // if (distanceAwayFromPlayer < 1) return
+
+    gotoPlayer()
+  }, [
+    distanceAwayFromPlayer,
+    gotoPlayer,
+    mapFlyTo,
+    mapRef,
+    player,
+    stickToPlayer,
+  ])
 
   if (stickToPlayer) return null
 

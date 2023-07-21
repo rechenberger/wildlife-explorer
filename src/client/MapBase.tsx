@@ -72,7 +72,10 @@ export const MapBase = ({
             radiusInKm: calculateRadiusFromZoomLevel(e.viewState.zoom),
           })
         }}
-        onDragEnd={() => {
+        onZoom={() => {
+          setStickToPlayer(false)
+        }}
+        onDrag={() => {
           setStickToPlayer(false)
         }}
         onClick={(e) => {

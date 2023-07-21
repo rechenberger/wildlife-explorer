@@ -14,9 +14,15 @@ export const useMapRef = () => {
 
 export const useMapFlyTo = () => {
   const ref = useMapRef()
-  return (options: FlyToOptions) => {
+  return (options: FlyToOptions & { instant?: boolean }) => {
     if (ref.current) {
-      ref.current.flyTo(options)
+      if (options.instant) {
+        if (options.center) ref.current.setCenter(options.center)
+        if (options.zoom) ref.current.setZoom(options.zoom)
+        if (options.pitch) ref.current.setPitch(options.pitch)
+      } else {
+        ref.current.flyTo(options)
+      }
     } else {
       console.warn("MapRef not found")
     }
