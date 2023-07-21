@@ -1,9 +1,9 @@
 import NiceModal from "@ebay/nice-modal-react"
 import { filter, orderBy } from "lodash-es"
 import { Fragment, useMemo } from "react"
+import { api } from "~/utils/api"
 import { BattleViewModal } from "./BattleViewModal"
 import { CatchDetailsModal } from "./CatchDetailsModal"
-import { CurrentObservationModal } from "./CurrentObservationModal"
 import { FighterChip } from "./FighterChip"
 import { MyCatchesModal } from "./MyCatchesModal"
 import { TypeBadge } from "./TypeBadge"
@@ -11,6 +11,7 @@ import { useWildlife } from "./WildlifeMarkers"
 import { cn } from "./cn"
 import { careIcon, pastIcon, swapIcon } from "./typeIcons"
 import { useMyTeam } from "./useMyTeam"
+import { usePlayer } from "./usePlayer"
 
 export const BattleFastView = () => {
   const { myTeam } = useMyTeam()
@@ -29,6 +30,19 @@ export const BattleFastView = () => {
     )
     return result
   }, [wildlife])
+
+  const { playerId } = usePlayer()
+  const trpc = api.useContext()
+  const { mutateAsync: attackWildlife } = api.battle.attackWildlife.useMutation(
+    {
+      onSuccess: (data) => {
+        trpc.battle.invalidate()
+        NiceModal.show(BattleViewModal, {
+          battleId: data.id,
+        })
+      },
+    }
+  )
 
   return (
     <>
@@ -72,8 +86,10 @@ export const BattleFastView = () => {
                       ltr={false}
                       grayscale={isRespawning}
                       onClick={() => {
-                        NiceModal.show(CurrentObservationModal, {
+                        if (!playerId) return
+                        attackWildlife({
                           wildlifeId: w.wildlife.id,
+                          playerId,
                         })
                       }}
                       circleClassName={cn(
