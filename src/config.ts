@@ -72,4 +72,5 @@ export const SHORTCUTS = {
   SWITCH_4: { code: "Digit4", shift: true },
   SWITCH_5: { code: "Digit5", shift: true },
   SWITCH_6: { code: "Digit6", shift: true },
+  GOTO_PLAYER: { code: "Space" },
 }

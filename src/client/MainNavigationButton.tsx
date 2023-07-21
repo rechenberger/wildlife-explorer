@@ -2,6 +2,7 @@ import { atom, useAtom, useStore } from "jotai"
 import { useEffect, useRef } from "react"
 import { playerLocationAtom } from "./PlayerMarker"
 import { Button } from "./shadcn/ui/button"
+import { useKeyboardShortcut } from "./useKeyboardShortcut"
 import { useMapFlyTo, useMapRef } from "./useMapRef"
 import { usePlayer } from "./usePlayer"
 
@@ -14,18 +15,11 @@ export const MainNavigationButton = () => {
   const store = useStore()
   const mapFlyTo = useMapFlyTo()
 
-  // Goto player coords when pressing Space
-  useEffect(() => {
-    const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key === " ") {
-        const playerLocation = store.get(playerLocationAtom)
-        mapFlyTo({ center: playerLocation })
-        setStickToPlayer(true)
-      }
-    }
-    window.addEventListener("keydown", onKeyDown)
-    return () => window.removeEventListener("keydown", onKeyDown)
-  }, [mapRef, mapFlyTo, store, setStickToPlayer])
+  useKeyboardShortcut("GOTO_PLAYER", () => {
+    const playerLocation = store.get(playerLocationAtom)
+    mapFlyTo({ center: playerLocation })
+    setStickToPlayer(true)
+  })
 
   // Goto player initially
   const initialCenteringRef = useRef(false)
