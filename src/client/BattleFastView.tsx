@@ -9,8 +9,11 @@ import { TypeBadge } from "./TypeBadge"
 import { useWildlife } from "./WildlifeMarkers"
 import { cn } from "./cn"
 import { careIcon, pastIcon, swapIcon } from "./typeIcons"
+import { useMyTeam } from "./useMyTeam"
 
 export const BattleFastView = () => {
+  const { myTeam } = useMyTeam()
+
   const { wildlife } = useWildlife()
   const wildlifeSorted = useMemo(() => {
     let result = wildlife
@@ -29,13 +32,13 @@ export const BattleFastView = () => {
   return (
     <>
       <div className="flex flex-col pt-6 gap-4 flex-1 ">
-        <div className="flex flex-row flex-1 max-h-[calc(100svh-200px)] max-w-[calc(100svw)] -mx-4 p-1">
+        <div className="flex flex-row flex-1 max-h-96 max-w-[calc(100svw)] -mx-4 p-1">
           <div className="flex-1 flex flex-col gap-1 overflow-hidden">
             <div className="px-3 font-bold text-xs opacity-60 text-left">
               My Team
             </div>
             <div className="flex flex-col gap-3 p-2 text-black flex-1 overflow-auto">
-              {wildlifeSorted?.map((w) => {
+              {myTeam?.map((w) => {
                 const isRespawning = w.wildlife.respawnsAt > new Date()
                 return (
                   <Fragment key={w.wildlife.id}>
