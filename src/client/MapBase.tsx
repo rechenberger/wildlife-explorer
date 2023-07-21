@@ -81,9 +81,9 @@ export const MapBase = ({
         onDragStart={() => {
           setStickToPlayer(false)
         }}
-        onTouchMove={() => {
-          setStickToPlayer(false)
-        }}
+        // onTouchMove={() => {
+        //   setStickToPlayer(false)
+        // }}
         onClick={(e) => {
           if (isOverview) return
           navigate(e.lngLat)
