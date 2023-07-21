@@ -1,7 +1,7 @@
 import { atom, useAtom, useStore } from "jotai"
 import { Navigation } from "lucide-react"
 import { useCallback, useEffect, useRef } from "react"
-import { DEFAULT_LOCATION, DEFAULT_MAP_PITCH, DEFAULT_MAP_ZOOM } from "~/config"
+import { DEFAULT_MAP_PITCH, DEFAULT_MAP_ZOOM } from "~/config"
 import { playerLocationAtom } from "./PlayerMarker"
 import { Button } from "./shadcn/ui/button"
 import { isNavigatingAtom } from "./useActiveNavigation"
@@ -23,15 +23,7 @@ export const MainNavigationButton = () => {
   // Goto player
   const gotoPlayer = useCallback(
     ({ instant }: { instant?: boolean } = {}) => {
-      let center = store.get(playerLocationAtom)
-      if (
-        center.lat === DEFAULT_LOCATION.lat &&
-        center.lng === DEFAULT_LOCATION.lng &&
-        !!player
-      ) {
-        center = player
-      }
-
+      const center = store.get(playerLocationAtom)
       mapFlyTo({
         center,
         zoom: DEFAULT_MAP_ZOOM,
@@ -40,7 +32,7 @@ export const MainNavigationButton = () => {
       })
       setStickToPlayer(true)
     },
-    [mapFlyTo, player, setStickToPlayer, store]
+    [mapFlyTo, setStickToPlayer, store]
   )
   useKeyboardShortcut("GOTO_PLAYER", () => gotoPlayer())
 
@@ -50,8 +42,12 @@ export const MainNavigationButton = () => {
     if (!player) return
     if (initialCenteringRef.current) return
     initialCenteringRef.current = true
-    gotoPlayer()
-  }, [gotoPlayer, player])
+    mapFlyTo({
+      center: player,
+      zoom: DEFAULT_MAP_ZOOM,
+      pitch: DEFAULT_MAP_PITCH,
+    })
+  }, [gotoPlayer, mapFlyTo, player])
 
   const finish = player?.metadata?.navigation?.finish
   useInterval(() => {
