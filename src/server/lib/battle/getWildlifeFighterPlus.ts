@@ -112,6 +112,8 @@ export const transformWildlifeFighterPlus = ({
 
   const moveRequestData = p.getMoveRequestData()
 
+  const nature = Dex.natures.get(pokemonSet.nature)
+
   const ivLabels = mapValues(pokemonSet.ivs, (iv) => ivToLabel({ iv }))
   const fighterPlus = {
     hp: p.hp,
@@ -124,7 +126,7 @@ export const transformWildlifeFighterPlus = ({
     speciesNum: p.species.num,
     level: p.level,
     gender: p.gender,
-    nature: pokemonSet.nature,
+    nature: nature,
     stats,
     isActive: p.isActive,
     justFainted: p.side.faintedThisTurn === p,
@@ -154,7 +156,11 @@ export const WildlifeFighterPlus = z.object({
   speciesNum: z.number(),
   level: z.number(),
   gender: z.string(),
-  nature: z.string(),
+  nature: z.object({
+    name: z.string(),
+    plus: z.string().optional(),
+    minus: z.string().optional(),
+  }),
   stats: z.object({
     hp: z.number(),
     atk: z.number(),
