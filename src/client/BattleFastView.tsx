@@ -2,6 +2,7 @@ import NiceModal from "@ebay/nice-modal-react"
 import { filter, orderBy } from "lodash-es"
 import { Fragment, useMemo } from "react"
 import { BattleViewModal } from "./BattleViewModal"
+import { CatchDetailsModal } from "./CatchDetailsModal"
 import { CurrentObservationModal } from "./CurrentObservationModal"
 import { FighterChip } from "./FighterChip"
 import { MyCatchesModal } from "./MyCatchesModal"
@@ -38,25 +39,18 @@ export const BattleFastView = () => {
               My Team
             </div>
             <div className="flex flex-col gap-3 p-2 text-black flex-1 overflow-auto">
-              {myTeam?.map((w) => {
-                const isRespawning = w.wildlife.respawnsAt > new Date()
+              {myTeam?.map((c) => {
                 return (
-                  <Fragment key={w.wildlife.id}>
+                  <Fragment key={c.wildlife.id}>
                     <FighterChip
-                      fighter={w}
-                      showAbsoluteHp={false}
+                      fighter={c}
+                      showAbsoluteHp={true}
                       ltr={true}
-                      grayscale={isRespawning}
                       onClick={() => {
-                        NiceModal.show(CurrentObservationModal, {
-                          wildlifeId: w.wildlife.id,
+                        NiceModal.show(CatchDetailsModal, {
+                          catchId: c.id,
                         })
                       }}
-                      circleClassName={cn(
-                        w.wildlife.metadata.observationCaptive
-                          ? "ring-orange-700"
-                          : "ring-amber-400"
-                      )}
                     />
                   </Fragment>
                 )
