@@ -43,7 +43,7 @@ export const BattleFastView = () => {
         <div className="flex flex-row flex-1 max-h-96 max-w-[calc(100svw)] -mx-4 p-1">
           <div className="flex-1 flex flex-col gap-1 overflow-hidden">
             <div className="px-3 font-bold text-xs opacity-60 text-left">
-              My Team
+              Your Team
             </div>
             <div className="flex flex-col gap-3 p-2 text-black flex-1 overflow-auto">
               {myTeam?.map((c) => {
