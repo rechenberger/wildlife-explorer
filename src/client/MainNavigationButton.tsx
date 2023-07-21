@@ -1,4 +1,4 @@
-import { atom, useAtom, useAtomValue, useStore } from "jotai"
+import { atom, useAtom, useStore } from "jotai"
 import { Navigation } from "lucide-react"
 import { useCallback, useEffect, useRef } from "react"
 import { DEFAULT_MAP_PITCH, DEFAULT_MAP_ZOOM } from "~/config"
@@ -6,7 +6,8 @@ import { calcDistanceInMeter } from "~/server/lib/latLng"
 import { mapStateAtom } from "./MapBase"
 import { playerLocationAtom } from "./PlayerMarker"
 import { Button } from "./shadcn/ui/button"
-import { useActiveNavigation } from "./useActiveNavigation"
+import { isNavigatingAtom } from "./useActiveNavigation"
+import { useInterval } from "./useInterval"
 import { useKeyboardShortcut } from "./useKeyboardShortcut"
 import { useMapFlyTo, useMapRef } from "./useMapRef"
 import { usePlayer } from "./usePlayer"
@@ -56,24 +57,24 @@ export const MainNavigationButton = () => {
   }, [gotoPlayer, player])
 
   const finish = player?.metadata?.navigation?.finish
-  const { isNavigating } = useActiveNavigation()
-  const playerLocation = useAtomValue(playerLocationAtom)
-  useEffect(() => {
+  useInterval(() => {
     if (!finish) return
     if (!stickToPlayer) return
     if (!mapRef.current) return
+    const playerLocation = store.get(playerLocationAtom)
+    const isNavigating = store.get(isNavigatingAtom)
     if (!playerLocation) return
     if (isNavigating) {
       mapRef.current.fitBounds([playerLocation, finish], {
         maxZoom: DEFAULT_MAP_ZOOM,
-        duration: 0,
+        duration: 100,
         pitch: DEFAULT_MAP_PITCH,
         padding: 200,
       })
     } else {
-      gotoPlayer({ instant: false })
+      // gotoPlayer({ instant: false })
     }
-  }, [finish, gotoPlayer, isNavigating, mapRef, playerLocation, stickToPlayer])
+  }, 100)
 
   if (stickToPlayer) return null
 
