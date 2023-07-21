@@ -77,3 +77,6 @@ export const SHORTCUTS = {
 
 export const DEFAULT_MAP_ZOOM = 15
 export const DEFAULT_MAP_PITCH = 45
+export const STICKY_MAP_INTERVAL_IN_MS = 100
+export const STICKY_MAP_PADDING = 100
+export const STICKY_MAP_PADDING_LG = 200

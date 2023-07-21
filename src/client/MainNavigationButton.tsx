@@ -1,7 +1,13 @@
 import { atom, useAtom, useStore } from "jotai"
 import { Navigation } from "lucide-react"
 import { useCallback, useEffect, useRef } from "react"
-import { DEFAULT_MAP_PITCH, DEFAULT_MAP_ZOOM } from "~/config"
+import {
+  DEFAULT_MAP_PITCH,
+  DEFAULT_MAP_ZOOM,
+  STICKY_MAP_INTERVAL_IN_MS,
+  STICKY_MAP_PADDING,
+  STICKY_MAP_PADDING_LG,
+} from "~/config"
 import { playerLocationAtom } from "./PlayerMarker"
 import { Button } from "./shadcn/ui/button"
 import { isNavigatingAtom } from "./useActiveNavigation"
@@ -60,14 +66,17 @@ export const MainNavigationButton = () => {
     if (isNavigating) {
       mapRef.current.fitBounds([playerLocation, finish], {
         maxZoom: DEFAULT_MAP_ZOOM,
-        duration: 100,
+        duration: STICKY_MAP_INTERVAL_IN_MS,
         pitch: DEFAULT_MAP_PITCH,
-        padding: 200,
+        padding:
+          window.innerWidth >= 1024
+            ? STICKY_MAP_PADDING_LG
+            : STICKY_MAP_PADDING,
       })
     } else {
       // gotoPlayer({ instant: false })
     }
-  }, 100)
+  }, STICKY_MAP_INTERVAL_IN_MS)
 
   if (stickToPlayer) return null
 
