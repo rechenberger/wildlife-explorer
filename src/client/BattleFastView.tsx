@@ -1,11 +1,16 @@
 import NiceModal from "@ebay/nice-modal-react"
+import { useStore } from "jotai"
 import { filter, orderBy } from "lodash-es"
 import { Fragment, useMemo } from "react"
+import { RADIUS_IN_M_CATCH_WILDLIFE } from "~/config"
+import { calcDistanceInMeter } from "~/server/lib/latLng"
 import { BattleViewModal } from "./BattleViewModal"
 import { useCare } from "./CareButton"
 import { CatchDetailsModal } from "./CatchDetailsModal"
+import { CurrentObservationModal } from "./CurrentObservationModal"
 import { FighterChip } from "./FighterChip"
 import { MyCatchesModal } from "./MyCatchesModal"
+import { playerLocationAtom } from "./PlayerMarker"
 import { TypeBadge } from "./TypeBadge"
 import { useWildlife } from "./WildlifeMarkers"
 import { cn } from "./cn"
@@ -36,6 +41,7 @@ export const BattleFastView = () => {
   const { careCenterIsClose } = useCareCenter()
 
   const { attackWildlife, attackWildlifeLoading } = useAttackWildlife()
+  const store = useStore()
 
   return (
     <>
@@ -79,6 +85,17 @@ export const BattleFastView = () => {
                       ltr={false}
                       grayscale={isRespawning}
                       onClick={() => {
+                        const playerLocation = store.get(playerLocationAtom)
+                        const distance = calcDistanceInMeter(
+                          playerLocation,
+                          w.wildlife
+                        )
+                        if (distance > RADIUS_IN_M_CATCH_WILDLIFE) {
+                          NiceModal.show(CurrentObservationModal, {
+                            wildlifeId: w.wildlife.id,
+                          })
+                          return
+                        }
                         if (attackWildlifeLoading) return
                         attackWildlife({
                           wildlifeId: w.wildlife.id,
