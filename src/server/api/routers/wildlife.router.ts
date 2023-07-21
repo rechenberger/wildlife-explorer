@@ -55,7 +55,7 @@ export const wildlifeRouter = createTRPCRouter({
       )
     }
 
-    console.time("nearMe Fighters")
+    // console.time("nearMe Fighters")
     let wildlife = await Promise.all(
       map(wildlifeRaw, async (w) => {
         return {
@@ -70,7 +70,7 @@ export const wildlifeRouter = createTRPCRouter({
         }
       })
     )
-    console.timeEnd("nearMe Fighters")
+    // console.timeEnd("nearMe Fighters")
     wildlife = filter(wildlife, (w) => !w.wildlife.metadata.observationIsDead)
     // console.timeEnd("nearMe")
     return wildlife
