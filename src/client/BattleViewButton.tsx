@@ -5,6 +5,7 @@ import { useCallback, useEffect } from "react"
 import { ENABLE_BATTLE_VIEW } from "~/config"
 import { type LatLng } from "~/server/schema/LatLng"
 import { api } from "~/utils/api"
+import { BattleFastViewModal } from "./BattleFastViewModal"
 import { BattleViewModal } from "./BattleViewModal"
 import { cn } from "./cn"
 import { useKeyboardShortcut } from "./useKeyboardShortcut"
@@ -57,7 +58,11 @@ export const BattleViewButton = () => {
         <button
           className={cn("relative rounded-xl bg-black p-2 text-white")}
           onClick={async () => {
-            openBattleView()
+            if (activeBattleId) {
+              openBattleView()
+            } else {
+              NiceModal.show(BattleFastViewModal)
+            }
           }}
         >
           <Swords size={32} />
