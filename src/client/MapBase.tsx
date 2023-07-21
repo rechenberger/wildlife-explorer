@@ -4,6 +4,7 @@ import { useMemo, useRef, type ReactNode } from "react"
 import { Map, type MapRef } from "react-map-gl"
 import { DEFAULT_LOCATION } from "~/config"
 import { env } from "~/env.mjs"
+import { stickToPlayerAtom } from "./MainNavigationButton"
 import { MapRefProvider } from "./useMapRef"
 import { useNavigation } from "./useNavigation"
 import { useSettingsMapStyle } from "./useSettingsMapStyle"
@@ -28,6 +29,7 @@ export const MapBase = ({
   isOverview?: boolean
 }) => {
   const setMapState = useSetAtom(mapStateAtom)
+  const setStickToPlayer = useSetAtom(stickToPlayerAtom)
 
   const setMapStateDebounced = useMemo(() => {
     return debounce(
@@ -69,6 +71,9 @@ export const MapBase = ({
             lng: e.viewState.longitude,
             radiusInKm: calculateRadiusFromZoomLevel(e.viewState.zoom),
           })
+        }}
+        onDragEnd={() => {
+          setStickToPlayer(false)
         }}
         onClick={(e) => {
           if (isOverview) return

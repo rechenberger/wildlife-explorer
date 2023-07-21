@@ -3,7 +3,6 @@ import { Eta } from "~/client/Eta"
 import { MainActionButtons } from "~/client/MainActionButtons"
 import { MainLayout } from "~/client/MainLayout"
 import { MapBase } from "~/client/MapBase"
-import { MapControls } from "~/client/MapControls"
 import { OtherPlayers } from "~/client/OtherPlayers"
 import { PlaceMarkers } from "~/client/PlaceMarkers"
 import { PlayerMarker } from "~/client/PlayerMarker"
@@ -28,7 +27,6 @@ export default function Page() {
           {player && <PlayerMarker player={player} isMe />}
           {/* {ENABLE_BATTLE_VIEW && <BattleView />} */}
           <MainActionButtons />
-          <MapControls />
           <WildlifeNearMe />
         </NiceModal.Provider>
       </MapBase>
