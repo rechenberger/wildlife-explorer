@@ -1,6 +1,7 @@
 import { atom, useAtom, useStore } from "jotai"
 import { Navigation } from "lucide-react"
 import { useEffect, useRef } from "react"
+import { DEFAULT_MAP_PITCH, DEFAULT_MAP_ZOOM } from "~/config"
 import { playerLocationAtom } from "./PlayerMarker"
 import { Button } from "./shadcn/ui/button"
 import { useKeyboardShortcut } from "./useKeyboardShortcut"
@@ -19,7 +20,11 @@ export const MainNavigationButton = () => {
   // Goto player
   const gotoPlayer = () => {
     const playerLocation = store.get(playerLocationAtom)
-    mapFlyTo({ center: playerLocation })
+    mapFlyTo({
+      center: playerLocation,
+      zoom: DEFAULT_MAP_ZOOM,
+      pitch: DEFAULT_MAP_PITCH,
+    })
     setStickToPlayer(true)
   }
   useKeyboardShortcut("GOTO_PLAYER", gotoPlayer)
@@ -31,7 +36,11 @@ export const MainNavigationButton = () => {
     if (!player) return
     if (initialCenteringRef.current) return
     initialCenteringRef.current = true
-    mapFlyTo({ center: player, zoom: 14, pitch: 45 })
+    mapFlyTo({
+      center: player,
+      zoom: DEFAULT_MAP_ZOOM,
+      pitch: DEFAULT_MAP_PITCH,
+    })
     setStickToPlayer(true)
   }, [mapFlyTo, mapRef, player, setStickToPlayer])
 

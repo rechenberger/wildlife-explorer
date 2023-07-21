@@ -74,3 +74,6 @@ export const SHORTCUTS = {
   SWITCH_6: { code: "Digit6", shift: true },
   GOTO_PLAYER: { code: "Space" },
 }
+
+export const DEFAULT_MAP_ZOOM = 15
+export const DEFAULT_MAP_PITCH = 45
