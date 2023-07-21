@@ -8,6 +8,7 @@ import { type RouterOutputs } from "~/utils/api"
 import { CurrentObservationModal } from "./CurrentObservationModal"
 import { FighterChip } from "./FighterChip"
 import { cn } from "./cn"
+import { useMarkerScaling } from "./useMarkerScaling"
 import { navigatingToObservationIdAtom, useNavigation } from "./useNavigation"
 
 type NearMe = RouterOutputs["wildlife"]["nearMe"][number]
@@ -21,6 +22,8 @@ export const WildlifeMarker = ({
 }) => {
   const w = nearMe.wildlife
   const navigatingtoObservationId = useAtomValue(navigatingToObservationIdAtom)
+
+  const { markerScalingProps } = useMarkerScaling()
 
   const { navigate } = useNavigation()
 
@@ -44,6 +47,7 @@ export const WildlifeMarker = ({
       <Link
         href={w.metadata.observationUrl ?? w.metadata.taxonWikiUrl ?? "#"}
         target="_blank"
+        {...markerScalingProps}
         className={cn(
           "group relative flex aspect-square h-12 items-center justify-center rounded-full bg-amber-400 p-1 shadow transition-transform md:hover:scale-[3]",
           !!w.metadata.observationCaptive && "bg-orange-700",

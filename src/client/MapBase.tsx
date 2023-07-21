@@ -1,8 +1,8 @@
-import { atom, useSetAtom } from "jotai"
+import { atom, useSetAtom, useStore } from "jotai"
 import { debounce } from "lodash-es"
 import { useMemo, useRef, type ReactNode } from "react"
 import { Map, type MapRef } from "react-map-gl"
-import { DEFAULT_LOCATION } from "~/config"
+import { DEFAULT_LOCATION, DEFAULT_MAP_ZOOM } from "~/config"
 import { env } from "~/env.mjs"
 import { stickToPlayerAtom } from "./MainNavigationButton"
 import { MapRefProvider } from "./useMapRef"
@@ -13,7 +13,12 @@ export const mapStateAtom = atom({
   lat: DEFAULT_LOCATION.lat,
   lng: DEFAULT_LOCATION.lng,
   radiusInKm: 0.5,
+  zoom: DEFAULT_MAP_ZOOM,
 })
+export const mapZoomAtom = atom((get) => {
+  return get(mapStateAtom).zoom
+})
+export const mapRadiusInKmAtom = atom(0.5)
 
 function calculateRadiusFromZoomLevel(zoomLevel: number): number {
   const earthCircumferenceKm = 40075.017
@@ -30,10 +35,16 @@ export const MapBase = ({
 }) => {
   const setMapState = useSetAtom(mapStateAtom)
   const setStickToPlayer = useSetAtom(stickToPlayerAtom)
+  const store = useStore()
 
   const setMapStateDebounced = useMemo(() => {
     return debounce(
-      (newState: { lat: number; lng: number; radiusInKm: number }) => {
+      (newState: {
+        lat: number
+        lng: number
+        radiusInKm: number
+        zoom: number
+      }) => {
         setMapState(newState)
       },
       100
@@ -70,6 +81,7 @@ export const MapBase = ({
             lat: e.viewState.latitude,
             lng: e.viewState.longitude,
             radiusInKm: calculateRadiusFromZoomLevel(e.viewState.zoom),
+            zoom: e.viewState.zoom,
           })
         }}
         onMouseDown={() => {
@@ -80,6 +92,12 @@ export const MapBase = ({
         }}
         onDragStart={() => {
           setStickToPlayer(false)
+        }}
+        onZoom={(m) => {
+          store.set(
+            mapRadiusInKmAtom,
+            calculateRadiusFromZoomLevel(m.viewState.zoom)
+          )
         }}
         // onTouchMove={() => {
         //   setStickToPlayer(false)

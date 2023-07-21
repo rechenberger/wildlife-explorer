@@ -4,12 +4,15 @@ import { Marker } from "react-map-gl"
 import { type RouterOutputs } from "~/utils/api"
 import { PlaceViewModal } from "./PlaceViewModal"
 import { cn } from "./cn"
+import { useMarkerScaling } from "./useMarkerScaling"
 import { useNavigation } from "./useNavigation"
 
 type Place = RouterOutputs["place"]["nearMe"][number]
 
 export const PlaceMarker = ({ place }: { place: Place }) => {
   const { navigate } = useNavigation()
+
+  const { markerScalingProps } = useMarkerScaling()
 
   return (
     <Marker
@@ -22,6 +25,7 @@ export const PlaceMarker = ({ place }: { place: Place }) => {
       }}
     >
       <div
+        {...markerScalingProps}
         className={cn(
           "group relative flex aspect-square h-12 items-center justify-center rounded-full bg-purple-500 p-1 shadow transition-transform md:hover:scale-[3]",
           "cursor-pointer"
