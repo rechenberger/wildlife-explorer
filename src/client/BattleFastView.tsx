@@ -1,3 +1,6 @@
+import NiceModal from "@ebay/nice-modal-react"
+import { BattleViewModal } from "./BattleViewModal"
+import { MyCatchesModal } from "./MyCatchesModal"
 import { TypeBadge } from "./TypeBadge"
 import { careIcon, pastIcon, swapIcon } from "./typeIcons"
 
@@ -23,7 +26,9 @@ export const BattleFastView = () => {
             content={"Swap"}
             size="big"
             className="flex-1"
-            onClick={() => {}}
+            onClick={() => {
+              NiceModal.show(MyCatchesModal)
+            }}
           />
           <TypeBadge
             icon={careIcon}
@@ -34,10 +39,12 @@ export const BattleFastView = () => {
           />
           <TypeBadge
             icon={pastIcon}
-            content={"Past Battles"}
+            content={"Recent"}
             size="big"
             className="flex-1"
-            onClick={() => {}}
+            onClick={() => {
+              NiceModal.show(BattleViewModal)
+            }}
           />
         </div>
       </div>
