@@ -46,7 +46,7 @@ export const BattleFastView = () => {
   return (
     <>
       <div className="flex flex-col pt-6 gap-4 flex-1 ">
-        <div className="flex flex-row flex-1 max-h-96 max-w-[calc(100svw)] -mx-4 p-1">
+        <div className="flex flex-row flex-1 max-h-96 p-1 -mx-4">
           <div className="flex-1 flex flex-col gap-1 overflow-hidden">
             <div className="px-3 font-bold text-xs opacity-60 text-left">
               Your Team
