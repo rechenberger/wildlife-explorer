@@ -2,6 +2,7 @@ import { atom, useAtom, useSetAtom } from "jotai"
 import { padStart } from "lodash-es"
 import { ArrowRight } from "lucide-react"
 import Image from "next/image"
+import Link from "next/link"
 import { Fragment, useEffect } from "react"
 import { api, type RouterOutputs } from "~/utils/api"
 import { DividerHeading } from "./DividerHeading"
@@ -116,10 +117,17 @@ const TaxonView = ({ taxon }: { taxon: Taxon }) => {
           />
           {/* <Anchor className={cn("h-4 w-4", !taxon.isAnchor && "opacity-0")} /> */}
         </div>
-        <div className="flex flex-row gap-1 flex-1 py-1 px-2">
+        <Link
+          href={`https://bulbapedia.bulbagarden.net/wiki/${taxon.fighterSpeciesName}_(Pok%C3%A9mon)`}
+          target="_blank"
+          className="flex flex-row gap-1 flex-1 py-1 px-2 hover:underline"
+          onClick={(e) => {
+            e.stopPropagation()
+          }}
+        >
           <div className="font-mono opacity-60">#{numPadded}</div>
           <div>{taxon.fighterSpeciesName}</div>
-        </div>
+        </Link>
         <div className="relative aspect-square h-full rounded-full overflow-hidden">
           <Image src={imgUrl} alt={"Taxon Image"} unoptimized fill={true} />
         </div>
