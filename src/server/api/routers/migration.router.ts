@@ -1,11 +1,11 @@
 import { Dex } from "@pkmn/dex"
-import { chunk, flatMap, uniq } from "lodash-es"
+import { chunk } from "lodash-es"
 import { DEFAULT_DB_CHUNK_SIZE, MAX_FIGHTERS_PER_TEAM } from "~/config"
 import { getExpRate } from "~/data/pokemonLevelExperienceMap"
 import { PokemonLevelingRate } from "~/data/pokemonLevelingRate"
 import { createTRPCRouter } from "~/server/api/trpc"
+import { findTaxon } from "~/server/inaturalist/findTaxon"
 import { getWildlifeFighterPlus } from "~/server/lib/battle/getWildlifeFighterPlus"
-import { taxonMappingByAI } from "~/server/lib/battle/taxonMappingByAI"
 import { taxonMappingByAncestors } from "~/server/lib/battle/taxonMappingByAncestors"
 import { LevelingRate, type CatchMetadata } from "~/server/schema/CatchMetadata"
 import { TaxonMetadata } from "~/server/schema/TaxonMetadata"
@@ -164,11 +164,8 @@ export const migrationRouter = createTRPCRouter({
   }),
 
   tmp: devProcedure.mutation(async ({}) => {
-    let allPokemon = flatMap(taxonMappingByAI, (m) => m.children).map(
-      (c) => c.pokemon
-    )
-    allPokemon = uniq(allPokemon)
-    return allPokemon
+    let t = findTaxon({ taxonId: 3017 })
+    return t
   }),
 
   wildlifeToTaxons: devProcedure.mutation(async ({ ctx }) => {
