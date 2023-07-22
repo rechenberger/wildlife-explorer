@@ -126,9 +126,9 @@ model Wildlife {
     respawnsAt DateTime
     catches    Catch[]
 
-    observationId Int  @unique
+    observationId Int   @unique
     taxonId       Int
-    // taxon         Taxon @relation(fields: [taxonId], references: [id])
+    taxon         Taxon @relation(fields: [taxonId], references: [id])
     metadata      Json
 
     foundById String
@@ -166,7 +166,7 @@ model Taxon {
     foundById String
     foundBy   Player @relation(fields: [foundById], references: [id])
 
-    // wildlife Wildlife[]
+    wildlife Wildlife[]
 }
 
 model Battle {
