@@ -180,6 +180,7 @@ export const migrationRouter = createTRPCRouter({
       select: {
         taxonId: true,
         metadata: true,
+        foundById: true,
       },
     })
 
@@ -193,6 +194,8 @@ export const migrationRouter = createTRPCRouter({
           const fighterSpeciesName = mapping.pokemon
           const fighterSpeciesNum = Dex.species.get(fighterSpeciesName)?.num
           if (!fighterSpeciesNum) throw new Error("no fighterSpeciesNum")
+          const isMainMapping = mapping.taxonId === id
+          const foundById = w.foundById
 
           // await ctx.prisma.taxon.upsert({
           //   where: {
@@ -201,6 +204,12 @@ export const migrationRouter = createTRPCRouter({
           //   create: {
           //     id,
           //     metadata,
+          //     foundById,
+          //     ancestorMapped: {
+          //       create: {
+
+          //       }
+          //     }
           //   },
           //   update: {
           //     metadata,
