@@ -2,7 +2,7 @@ import { Dex } from "@pkmn/dex"
 import { last } from "lodash-es"
 import { type MyPrismaClient } from "../db"
 import { taxonMappingByAncestors } from "../lib/battle/taxonMappingByAncestors"
-import { TaxonMetadata } from "../schema/TaxonMetadata"
+import { type TaxonMetadata } from "../schema/TaxonMetadata"
 import { findTaxon } from "./findTaxon"
 
 export const importTaxon = async ({

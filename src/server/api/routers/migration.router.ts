@@ -194,7 +194,8 @@ export const migrationRouter = createTRPCRouter({
     console.log(`Importing ${wildlife.length}`)
 
     let done = 0
-    const chunks = chunk(wildlife, 1)
+    const chunkSize = 5
+    const chunks = chunk(wildlife, chunkSize)
     for (const chunk of chunks) {
       const doChunk = async () => {
         await Promise.all(
