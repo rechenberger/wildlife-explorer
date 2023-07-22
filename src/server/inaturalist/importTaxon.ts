@@ -1,8 +1,6 @@
-import { Dex } from "@pkmn/dex"
 import { type Taxon } from "@prisma/client"
 import { last } from "lodash-es"
 import { type MyPrismaClient } from "../db"
-import { taxonMappingByAncestors } from "../lib/battle/taxonMappingByAncestors"
 import { type TaxonMetadata } from "../schema/TaxonMetadata"
 import { findTaxon } from "./findTaxon"
 
@@ -58,21 +56,23 @@ export const importTaxon = async ({
     createdAt,
   })
 
-  const mapping = taxonMappingByAncestors([
-    ...metadata.taxonAncestorIds,
-    taxonId,
-  ])
-  const fighterSpeciesName = mapping.pokemon
-  const fighterSpeciesNum = Dex.species.get(fighterSpeciesName)?.num
-  if (!fighterSpeciesNum) throw new Error("no fighterSpeciesNum")
-  const mainMapping = mapping.taxonId
-  const isAnchor = mapping.taxonId === taxonId
-  const anchorId = isAnchor ? null : mainMapping
+  // MAPPING BY AI:
+  // const mapping = taxonMappingByAncestors([
+  //   ...metadata.taxonAncestorIds,
+  //   taxonId,
+  // ])
+  // const fighterSpeciesName = mapping.pokemon
+  // const fighterSpeciesNum = Dex.species.get(fighterSpeciesName)?.num
+  // if (!fighterSpeciesNum) throw new Error("no fighterSpeciesNum")
+  // const mainMapping = mapping.taxonId
+  // const isAnchor = mapping.taxonId === taxonId
+  // const anchorId = isAnchor ? null : mainMapping
 
-  // const fighterSpeciesName = ancestor.fighterSpeciesName
-  // const fighterSpeciesNum = ancestor.fighterSpeciesNum
-  // const isAnchor = false
-  // const anchorId = ancestor.anchorId
+  // MAPPING BY DB:
+  const fighterSpeciesName = ancestor.fighterSpeciesName
+  const fighterSpeciesNum = ancestor.fighterSpeciesNum
+  const isAnchor = false
+  const anchorId = ancestor.anchorId
 
   const foundById = playerId
   return await prisma.taxon.create({
