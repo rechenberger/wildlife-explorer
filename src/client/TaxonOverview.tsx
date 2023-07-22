@@ -79,10 +79,7 @@ const TaxonView = ({ taxon }: { taxon: Taxon }) => {
     " ",
     "0"
   )
-  // const imgUrl = `https://archives.bulbagarden.net/media/upload/thumb/f/fb/0001Bulbasaur.png/500px-0001Bulbasaur.png`
-  // const imgUrl = `https://archives.bulbagarden.net/media/upload/thumb/4/4a/0025Pikachu.png/500px-0025Pikachu.png`
-  // const imgUrl = `https://archives.bulbagarden.net/media/upload/thumb/f/fb/${numPadded}${taxon.fighterSpeciesName}.png/500px-${numPadded}${taxon.fighterSpeciesName}.png`
-  const imgUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${taxon.fighterSpeciesNum}.png`
+  const fighterImgUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${taxon.fighterSpeciesNum}.png`
   return (
     <Fragment>
       <div
@@ -129,7 +126,12 @@ const TaxonView = ({ taxon }: { taxon: Taxon }) => {
           <div className="truncate">{taxon.fighterSpeciesName}</div>
         </Link>
         <div className="relative aspect-square h-full rounded-full overflow-hide shrink-0n">
-          <Image src={imgUrl} alt={"Taxon Image"} unoptimized fill={true} />
+          <Image
+            src={fighterImgUrl}
+            alt={"Fighter Image"}
+            unoptimized
+            fill={true}
+          />
         </div>
       </div>
     </Fragment>
