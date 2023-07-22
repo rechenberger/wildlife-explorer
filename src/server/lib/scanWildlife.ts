@@ -10,6 +10,7 @@ import {
 import { type MyPrismaClient } from "~/server/db"
 import { findObservations } from "~/server/inaturalist/findObservations"
 import { type LatLng } from "~/server/schema/LatLng"
+import { importTaxon } from "../inaturalist/importTaxon"
 import { WildlifeMetadata } from "../schema/WildlifeMetadata"
 
 export const scanWildlife = async ({
@@ -41,6 +42,19 @@ export const scanWildlife = async ({
     flatMap(observationsMultiRadius, (o) => o),
     (o) => o.observationId
   )
+
+  const taxonIds = uniqBy(
+    map(observations, (o) => o.taxonId),
+    (id) => id
+  )
+
+  LOG_SCAN_TIME && console.time("importTaxon")
+  await Promise.all(
+    map(taxonIds, async (taxonId) => {
+      importTaxon({ prisma, taxonId, playerId })
+    })
+  )
+  LOG_SCAN_TIME && console.timeEnd("importTaxon")
 
   const now = new Date()
   const chunks = chunk(observations, DEFAULT_DB_CHUNK_SIZE)

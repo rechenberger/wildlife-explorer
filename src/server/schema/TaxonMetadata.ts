@@ -9,7 +9,7 @@ export const TaxonMetadata = z.object({
   taxonImageAttribution: z.string().nullish(),
   taxonWikiUrl: z.string().nullable(),
   taxonAncestorIds: z.array(z.number()),
-  taxonSearchRank: z.number(),
+  taxonSearchRank: z.number().nullish(),
   taxonRank: z.string(),
   taxonObservationsCount: z.number(),
   taxonName: z.string(),
