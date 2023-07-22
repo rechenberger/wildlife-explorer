@@ -20,7 +20,6 @@ export const TaxonOverview = ({
   taxonId: number
 }) => {
   const [taxonId, setTaxonId] = useAtom(currentTaxonIdAtom)
-  console.log({ taxonId, initialTaxonId })
   useEffect(() => {
     setTaxonId(initialTaxonId)
   }, [initialTaxonId, setTaxonId])
