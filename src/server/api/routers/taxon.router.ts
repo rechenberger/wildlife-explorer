@@ -1,6 +1,6 @@
 import { first } from "lodash-es"
 import { z } from "zod"
-import { NO_OF_ALL_OBSERVATIONS, NO_OF_ALL_TAXONS } from "~/config"
+import { NO_OF_ALL_TAXONS } from "~/config"
 import { createTRPCRouter } from "~/server/api/trpc"
 import { devProcedure } from "../middleware/devProcedure"
 import { playerProcedure } from "../middleware/playerProcedure"
@@ -42,7 +42,13 @@ export const taxonRouter = createTRPCRouter({
     const taxonCountMax = NO_OF_ALL_TAXONS
 
     const wildlifeCount = await ctx.prisma.wildlife.count({})
-    const wildlifeCountMax = NO_OF_ALL_OBSERVATIONS
+    const animals = await ctx.prisma.taxon.findFirstOrThrow({
+      where: { id: 1 },
+      select: {
+        metadata: true,
+      },
+    })
+    const wildlifeCountMax = animals.metadata.taxonObservationsCount
 
     return {
       taxonCount,
