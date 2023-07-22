@@ -46,6 +46,11 @@ export const wildlifeRouter = createTRPCRouter({
             name: true,
           },
         },
+        taxon: {
+          select: {
+            fighterSpeciesName: true,
+          },
+        },
       },
     })
     if (wildlifeRaw.length > MAX_NUMBER_SEE_WILDLIFE) {
@@ -92,6 +97,11 @@ export const wildlifeRouter = createTRPCRouter({
           foundBy: {
             select: {
               name: true,
+            },
+          },
+          taxon: {
+            select: {
+              fighterSpeciesName: true,
             },
           },
         },

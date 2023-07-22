@@ -31,7 +31,15 @@ export const catchRouter = createTRPCRouter({
         playerId: ctx.player.id,
       },
       include: {
-        wildlife: true,
+        wildlife: {
+          include: {
+            taxon: {
+              select: {
+                fighterSpeciesName: true,
+              },
+            },
+          },
+        },
       },
       orderBy: [
         {
@@ -349,7 +357,15 @@ export const catchRouter = createTRPCRouter({
         playerId: ctx.player.id,
       },
       include: {
-        wildlife: true,
+        wildlife: {
+          include: {
+            taxon: {
+              select: {
+                fighterSpeciesName: true,
+              },
+            },
+          },
+        },
       },
     })
     let count = 0

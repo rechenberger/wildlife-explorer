@@ -4,7 +4,6 @@ import { MAX_MOVES_PER_FIGHTER, USE_LATEST_GEN } from "~/config"
 import { type CatchMetadata } from "~/server/schema/CatchMetadata"
 import { type WildlifeMetadata } from "~/server/schema/WildlifeMetadata"
 import { rngInt, rngItem, rngItemWithWeights } from "~/utils/seed"
-import { taxonMappingByAncestors } from "./taxonMappingByAncestors"
 
 export type GetWildlifeFighterOptions = {
   wildlife: {
@@ -15,6 +14,9 @@ export type GetWildlifeFighterOptions = {
       | "taxonName"
       | "observationCaptive"
     >
+    taxon: {
+      fighterSpeciesName: string
+    }
   }
   metadata?: Pick<CatchMetadata, "level" | "moves" | "evs" | "speciesName">
   seed: string
@@ -80,8 +82,9 @@ export const getWildlifeFighter = async ({
       max: maxLevel,
     })
 
-  const mapping = taxonMappingByAncestors(wildlife.metadata.taxonAncestorIds)
-  let speciesName = catchMetaData?.speciesName ?? mapping.pokemon
+  // const mapping = taxonMappingByAncestors(wildlife.metadata.taxonAncestorIds)
+  let speciesName =
+    catchMetaData?.speciesName ?? wildlife.taxon.fighterSpeciesName
   let species = Dex.species.get(speciesName)
 
   // Wildlife starts at lowest evolution

@@ -55,6 +55,11 @@ export const getBattleForSimulation = async ({
                     select: {
                       id: true,
                       metadata: true,
+                      taxon: {
+                        select: {
+                          fighterSpeciesName: true,
+                        },
+                      },
                     },
                   },
                   metadata: true,
@@ -72,6 +77,11 @@ export const getBattleForSimulation = async ({
               metadata: true,
               observationId: true,
               respawnsAt: true,
+              taxon: {
+                select: {
+                  fighterSpeciesName: true,
+                },
+              },
             },
           },
         },

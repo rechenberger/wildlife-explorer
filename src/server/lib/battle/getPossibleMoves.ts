@@ -23,7 +23,15 @@ export const getPossibleMovesByCatchId = async ({
       playerId,
     },
     include: {
-      wildlife: true,
+      wildlife: {
+        include: {
+          taxon: {
+            select: {
+              fighterSpeciesName: true,
+            },
+          },
+        },
+      },
     },
   })
   return getPossibleMovesByCatch({ c })
@@ -35,7 +43,9 @@ export const getPossibleMovesByCatch = async ({
   c: {
     id: string
     metadata: CatchMetadata
-    wildlife: Wildlife & { metadata: WildlifeMetadata }
+    wildlife: Wildlife & { metadata: WildlifeMetadata } & {
+      taxon: { fighterSpeciesName: string }
+    }
     seed: string
   }
 }) => {
