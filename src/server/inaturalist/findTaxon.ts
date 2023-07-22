@@ -3,7 +3,7 @@ import { findTaxons } from "./findTaxons"
 
 // FROM: https://teampilot.ai/team/tristan/chat/56a54c92d436ce3cfb27f8b965562f8c
 
-const BATCH_WINDOW_IN_MS = 2000
+const BATCH_WINDOW_IN_MS = 1000
 const BATCH_MAX_SIZE = 30
 
 let taxonIdsBatch: number[] = []
@@ -18,7 +18,8 @@ const processBatch = async () => {
       if (!taxon) throw new Error(`taxon not found: ${id}`)
       taxonPromises[id]!(taxon)
     })
-  } catch (error) {
+  } catch (error: any) {
+    console.log("error", error?.message || error)
     Object.values(taxonPromises).forEach((reject) => reject(error))
   } finally {
     taxonIdsBatch = []
