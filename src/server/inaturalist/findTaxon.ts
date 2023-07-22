@@ -1,5 +1,5 @@
 import { z } from "zod"
-import { TaxonMetadata } from "../schema/TaxonMetadata"
+import { type TaxonMetadata } from "../schema/TaxonMetadata"
 import { Taxon } from "./schema"
 
 export const findTaxon = async ({ taxonId }: { taxonId: number }) => {
