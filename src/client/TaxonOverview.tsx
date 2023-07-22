@@ -37,7 +37,7 @@ export const TaxonOverview = ({
   if (!data) return null
   return (
     <>
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-2 overflow-hidden">
         <div className="">Taxon Overview</div>
         {!!data?.ancestors.length && (
           <>
