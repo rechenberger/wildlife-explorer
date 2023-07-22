@@ -8,7 +8,12 @@ const BATCH_MAX_SIZE = 30
 
 let taxonIdsBatch: number[] = []
 let timer: NodeJS.Timeout | null = null
-let taxonPromises: { [key: number]: (value: any) => void } = {}
+let taxonPromises: {
+  [key: number]: {
+    resolve: (value: any) => void
+    reject: (error: any) => void
+  }
+} = {}
 
 const processBatch = async () => {
   try {
@@ -16,11 +21,11 @@ const processBatch = async () => {
     taxonIdsBatch.forEach((id) => {
       const taxon = taxons.find((t) => t.taxonId === id)
       if (!taxon) throw new Error(`taxon not found: ${id}`)
-      taxonPromises[id]!(taxon)
+      taxonPromises[id]!.resolve(taxon)
     })
   } catch (error: any) {
     console.log("error", error?.message || error)
-    Object.values(taxonPromises).forEach((reject) => reject(error))
+    Object.values(taxonPromises).forEach(({ reject }) => reject(error))
   } finally {
     taxonIdsBatch = []
     taxonPromises = {}
@@ -32,9 +37,9 @@ const processBatch = async () => {
 }
 
 export const findTaxon = ({ taxonId }: { taxonId: number }) => {
-  return new Promise<TaxonMetadata>((resolve) => {
+  return new Promise<TaxonMetadata>((resolve, reject) => {
     taxonIdsBatch.push(taxonId)
-    taxonPromises[taxonId] = resolve
+    taxonPromises[taxonId] = { resolve, reject }
 
     if (taxonIdsBatch.length >= BATCH_MAX_SIZE) {
       processBatch()
