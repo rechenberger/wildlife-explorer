@@ -13,7 +13,6 @@ export const importTaxon = async ({
   taxonId: number
   playerId: string
 }) => {
-  console.log("importTaxon", taxonId)
   const id = taxonId
   const existing = await prisma.taxon.findUnique({
     where: {
@@ -22,12 +21,19 @@ export const importTaxon = async ({
   })
   if (existing) return
 
+  console.log("importTaxon", taxonId)
   const metadata = await findTaxon({ taxonId })
-  console.log("metadata", metadata)
   const mapping = taxonMappingByAncestors([
     ...metadata.taxonAncestorIds,
     taxonId,
   ])
+
+  let ancestorId = last(metadata.taxonAncestorIds) ?? null
+  if (ancestorId && ancestorId < 2) ancestorId = null
+  if (ancestorId) {
+    await importTaxon({ prisma, taxonId: ancestorId, playerId })
+  }
+
   const fighterSpeciesName = mapping.pokemon
   const fighterSpeciesNum = Dex.species.get(fighterSpeciesName)?.num
   if (!fighterSpeciesNum) throw new Error("no fighterSpeciesNum")
@@ -38,7 +44,6 @@ export const importTaxon = async ({
   }
   const foundById = playerId
   const ancestorMappedId = isMainMapping ? null : mainMapping
-  const ancestorId = last(metadata.taxonAncestorIds) ?? null
   await prisma.taxon.create({
     data: {
       id,
