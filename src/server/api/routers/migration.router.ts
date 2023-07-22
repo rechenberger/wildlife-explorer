@@ -1,11 +1,14 @@
-import { flatMap, uniq } from "lodash-es"
-import { MAX_FIGHTERS_PER_TEAM } from "~/config"
+import { Dex } from "@pkmn/dex"
+import { chunk, flatMap, uniq } from "lodash-es"
+import { DEFAULT_DB_CHUNK_SIZE, MAX_FIGHTERS_PER_TEAM } from "~/config"
 import { getExpRate } from "~/data/pokemonLevelExperienceMap"
 import { PokemonLevelingRate } from "~/data/pokemonLevelingRate"
 import { createTRPCRouter } from "~/server/api/trpc"
 import { getWildlifeFighterPlus } from "~/server/lib/battle/getWildlifeFighterPlus"
 import { taxonMappingByAI } from "~/server/lib/battle/taxonMappingByAI"
+import { taxonMappingByAncestors } from "~/server/lib/battle/taxonMappingByAncestors"
 import { LevelingRate, type CatchMetadata } from "~/server/schema/CatchMetadata"
+import { TaxonMetadata } from "~/server/schema/TaxonMetadata"
 import { devProcedure } from "../middleware/devProcedure"
 
 export const migrationRouter = createTRPCRouter({
@@ -172,12 +175,40 @@ export const migrationRouter = createTRPCRouter({
     const wildlife = await ctx.prisma.wildlife.findMany({
       distinct: ["taxonId"],
       orderBy: {
-        createdAt: "desc",
+        createdAt: "asc",
       },
       select: {
         taxonId: true,
+        metadata: true,
       },
     })
+
+    const chunks = chunk(wildlife, DEFAULT_DB_CHUNK_SIZE)
+    for (const chunk of chunks) {
+      await Promise.all(
+        chunk.map(async (w) => {
+          const id = w.taxonId
+          const metadata = TaxonMetadata.parse(w.metadata)
+          const mapping = taxonMappingByAncestors(metadata.taxonAncestorIds)
+          const fighterSpeciesName = mapping.pokemon
+          const fighterSpeciesNum = Dex.species.get(fighterSpeciesName)?.num
+          if (!fighterSpeciesNum) throw new Error("no fighterSpeciesNum")
+
+          // await ctx.prisma.taxon.upsert({
+          //   where: {
+          //     id,
+          //   },
+          //   create: {
+          //     id,
+          //     metadata,
+          //   },
+          //   update: {
+          //     metadata,
+          //   },
+          // })
+        })
+      )
+    }
 
     return { length: wildlife.length }
   }),
