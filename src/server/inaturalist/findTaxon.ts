@@ -16,7 +16,7 @@ export const findTaxon = async ({ taxonId }: { taxonId: number }) => {
   })
   const parsed = schema.parse(data)
   const taxon = parsed.results[0]
-  if (!taxon) throw new Error("no taxon found")
+  if (!taxon) throw new Error(`taxon ${taxonId} not found`)
 
   const metadata = {
     taxonId: taxon.id,

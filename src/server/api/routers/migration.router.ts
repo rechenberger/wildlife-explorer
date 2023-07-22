@@ -4,7 +4,7 @@ import { DEFAULT_DB_CHUNK_SIZE, MAX_FIGHTERS_PER_TEAM } from "~/config"
 import { getExpRate } from "~/data/pokemonLevelExperienceMap"
 import { PokemonLevelingRate } from "~/data/pokemonLevelingRate"
 import { createTRPCRouter } from "~/server/api/trpc"
-import { findTaxon } from "~/server/inaturalist/findTaxon"
+import { importTaxon } from "~/server/inaturalist/importTaxon"
 import { getWildlifeFighterPlus } from "~/server/lib/battle/getWildlifeFighterPlus"
 import { taxonMappingByAncestors } from "~/server/lib/battle/taxonMappingByAncestors"
 import { LevelingRate, type CatchMetadata } from "~/server/schema/CatchMetadata"
@@ -163,9 +163,12 @@ export const migrationRouter = createTRPCRouter({
     }
   }),
 
-  tmp: devProcedure.mutation(async ({}) => {
-    let t = findTaxon({ taxonId: 3017 })
-    return t
+  tmp: devProcedure.mutation(async ({ ctx }) => {
+    await importTaxon({
+      prisma: ctx.prisma,
+      taxonId: 3017,
+      playerId: "cljle5htl0001cf5du54abpjz",
+    })
   }),
 
   wildlifeToTaxons: devProcedure.mutation(async ({ ctx }) => {
