@@ -9,6 +9,20 @@ export const taxonMappingByAI: {
     count: number
   }[]
 }[] = [
+  // Fix for taxonId 1:
+  {
+    ancestorId: 0,
+    children: [
+      {
+        taxonId: 1,
+        name: "Chordates",
+        pokemon: "Pikachu",
+        count: 0,
+      },
+    ],
+  },
+
+  // Actually by AI:
   {
     ancestorId: 1,
     children: [

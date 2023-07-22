@@ -31,7 +31,10 @@ export const importTaxon = async ({
   ])
 
   let ancestorId = last(metadata.taxonAncestorIds) ?? null
-  if (ancestorId && ancestorId < 2) ancestorId = null
+
+  // 48460 is always the root taxon??
+  if (ancestorId && ancestorId === 48460) ancestorId = null
+
   if (ancestorId) {
     await importTaxon({ prisma, taxonId: ancestorId, playerId, createdAt })
   }
