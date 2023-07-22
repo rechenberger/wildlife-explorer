@@ -67,7 +67,7 @@ export const TypeBadge = ({
           </div>
         </TooltipTrigger>
         <TooltipContent>
-          <div className="min-w-min max-w-[120px]">{title}</div>
+          <div className="min-w-min max-w-[120px] select-none">{title}</div>
         </TooltipContent>
       </Tooltip>
     </TooltipProvider>
