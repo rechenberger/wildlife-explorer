@@ -1,5 +1,6 @@
 import { atom, useAtom, useSetAtom } from "jotai"
 import { ArrowRight } from "lucide-react"
+import Image from "next/image"
 import { Fragment, useEffect } from "react"
 import { api, type RouterOutputs } from "~/utils/api"
 import { DividerHeading } from "./DividerHeading"
@@ -74,19 +75,29 @@ const TaxonView = ({ taxon }: { taxon: Taxon }) => {
   return (
     <Fragment>
       <div
-        className="flex flex-row gap-2 text-xs bg-gray-100 py-1 px-2"
+        className="flex flex-row gap-2 text-xs bg-gray-100 rounded-full cursor-pointer hover:bg-gray-200"
         onClick={() => {
           setTaxonId(taxon.id)
         }}
       >
-        <div className="flex flex-col flex-1">
+        {taxon.metadata.taxonImageUrlSquare && (
+          <div className="relative aspect-square h-full rounded-full overflow-hidden">
+            <Image
+              src={taxon.metadata.taxonImageUrlSquare}
+              alt={"Taxon Image"}
+              unoptimized
+              fill={true}
+            />
+          </div>
+        )}
+        <div className="flex flex-col flex-1 py-1 px-2">
           <div>{getName(taxon)}</div>
           <div>{taxon._count.wildlife}</div>
         </div>
         <div className="flex items-center justify-center">
           <ArrowRight className="h-4 w-4" />
         </div>
-        <div className="flex flex-col flex-1">
+        <div className="flex flex-col flex-1 py-1 px-2">
           <div>#{taxon.fighterSpeciesNum}</div>
           <div>{taxon.fighterSpeciesName}</div>
         </div>
