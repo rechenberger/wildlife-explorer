@@ -1,7 +1,6 @@
-import { Dex } from "@pkmn/dex"
+import { type Taxon } from "@prisma/client"
 import { last } from "lodash-es"
 import { type MyPrismaClient } from "../db"
-import { taxonMappingByAncestors } from "../lib/battle/taxonMappingByAncestors"
 import { type TaxonMetadata } from "../schema/TaxonMetadata"
 import { findTaxon } from "./findTaxon"
 
@@ -15,14 +14,14 @@ export const importTaxon = async ({
   taxonId: number
   playerId: string
   createdAt?: Date
-}) => {
+}): Promise<Taxon & { metadata: TaxonMetadata }> => {
   const id = taxonId
   const existing = await prisma.taxon.findUnique({
     where: {
       id,
     },
   })
-  if (existing) return
+  if (existing) return existing
 
   console.log("importTaxon", taxonId)
   let metadata: TaxonMetadata
@@ -41,31 +40,39 @@ export const importTaxon = async ({
     }
   }
 
-  const mapping = taxonMappingByAncestors([
-    ...metadata.taxonAncestorIds,
-    taxonId,
-  ])
-
   let ancestorId = last(metadata.taxonAncestorIds) ?? null
 
   // 48460 is always the root taxon??
   if (ancestorId && ancestorId === 48460) ancestorId = null
-
-  if (ancestorId) {
-    await importTaxon({ prisma, taxonId: ancestorId, playerId, createdAt })
+  if (!ancestorId) {
+    throw new Error(`no ancestorId for taxonId: ${taxonId}`)
   }
 
-  const fighterSpeciesName = mapping.pokemon
-  const fighterSpeciesNum = Dex.species.get(fighterSpeciesName)?.num
-  if (!fighterSpeciesNum) throw new Error("no fighterSpeciesNum")
-  const mainMapping = mapping.taxonId
-  const isAnchor = mapping.taxonId === taxonId
-  if (!isAnchor) {
-    await importTaxon({ prisma, taxonId: mainMapping, playerId })
-  }
+  const ancestor = await importTaxon({
+    prisma,
+    taxonId: ancestorId,
+    playerId,
+    createdAt,
+  })
+
+  // const mapping = taxonMappingByAncestors([
+  //   ...metadata.taxonAncestorIds,
+  //   taxonId,
+  // ])
+  // const fighterSpeciesName = mapping.pokemon
+  // const fighterSpeciesNum = Dex.species.get(fighterSpeciesName)?.num
+  // if (!fighterSpeciesNum) throw new Error("no fighterSpeciesNum")
+  // const mainMapping = mapping.taxonId
+  // const isAnchor = mapping.taxonId === taxonId
+  const isAnchor = false
+  const fighterSpeciesName = ancestor.fighterSpeciesName
+  const fighterSpeciesNum = ancestor.fighterSpeciesNum
+  // if (!isAnchor) {
+  //   await importTaxon({ prisma, taxonId: mainMapping, playerId })
+  // }
   const foundById = playerId
-  const anchorId = isAnchor ? null : mainMapping
-  await prisma.taxon.create({
+  const anchorId = ancestor.anchorId
+  return await prisma.taxon.create({
     data: {
       id,
       metadata,
