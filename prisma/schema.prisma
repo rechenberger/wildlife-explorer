@@ -127,6 +127,7 @@ model Wildlife {
 
     observationId Int  @unique
     taxonId       Int
+    // taxon         Taxon @relation(fields: [taxonId], references: [id])
     metadata      Json
 
     foundById String
@@ -140,6 +141,27 @@ model Wildlife {
     @@index([lat, lng])
     @@index([taxonId])
     @@index([observationId])
+}
+
+model Taxon {
+    id        Int      @id
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    metadata Json
+
+    fighterSpeciesName String?
+    fighterSpeciesNum  Int?
+
+    ancestorId  Int?
+    ancestor    Taxon?  @relation("TaxonAncestor", fields: [ancestorId], references: [id])
+    descendants Taxon[] @relation("TaxonAncestor")
+
+    ancestorMappedId  Int?
+    ancestorMapped    Taxon?  @relation("TaxonAncestorMapped", fields: [ancestorMappedId], references: [id])
+    descendantsMapped Taxon[] @relation("TaxonAncestorMapped")
+
+    // wildlife Wildlife[]
 }
 
 model Battle {
