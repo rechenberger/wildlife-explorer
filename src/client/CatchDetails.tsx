@@ -1,5 +1,5 @@
 import NiceModal from "@ebay/nice-modal-react"
-import { Edit2, ExternalLink } from "lucide-react"
+import { Edit2, ExternalLink, Network } from "lucide-react"
 import dynamic from "next/dynamic"
 import { useMemo } from "react"
 import { DEV_MODE } from "~/config"
@@ -15,6 +15,7 @@ import { FighterMoves } from "./FighterMoves"
 import { FighterStatsChart } from "./FighterStatsChart"
 import { FighterTypeBadges } from "./FighterTypeBadges"
 import { MoveSwapperModal } from "./MoveSwapperModal"
+import { TaxonOverviewModal } from "./TaxonOverviewModal"
 import { TimeAgo } from "./TimeAgo"
 import { TypeBadge } from "./TypeBadge"
 import { Progress } from "./shadcn/ui/progress"
@@ -121,7 +122,7 @@ export const CatchDetails = ({
         {showWildlife && (
           <>
             {showDividers && <DividerHeading>Wildlife</DividerHeading>}
-            <div className="flex flex-row gap-4 items-center justify-between">
+            <div className="flex flex-row gap-2 items-center justify-between">
               <div className="flex-1 max-w-[50%]">
                 <FighterChip
                   showAbsoluteHp
@@ -134,6 +135,19 @@ export const CatchDetails = ({
                   }}
                 />
               </div>
+              <>
+                <button
+                  className="text-right text-xs font-normal text-black opacity-60 flex flex-col items-center hover:bg-gray-200 rounded-lg p-2"
+                  onClick={() => {
+                    NiceModal.show(TaxonOverviewModal, {
+                      taxonId: c.wildlife.taxonId,
+                    })
+                  }}
+                >
+                  <Network className="w-4 h-4" />
+                  <div>Taxon</div>
+                </button>
+              </>
               {showCaughtAt && (
                 <button
                   className="text-right text-xs font-normal text-black opacity-60 inline-block hover:bg-gray-200 rounded-lg p-2"
