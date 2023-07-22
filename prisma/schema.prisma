@@ -86,6 +86,7 @@ model Player {
     catches         Catch[]   @relation("CatchPlayer")
     originalCatches Catch[]   @relation("CatchOriginalPlayer")
     placesFound     Place[]
+    taxonsFound     Taxon[]
 
     @@index([lat, lng])
     @@index([userId])
@@ -160,6 +161,9 @@ model Taxon {
     ancestorMappedId  Int?
     ancestorMapped    Taxon?  @relation("TaxonAncestorMapped", fields: [ancestorMappedId], references: [id])
     descendantsMapped Taxon[] @relation("TaxonAncestorMapped")
+
+    foundById String
+    foundBy   Player @relation(fields: [foundById], references: [id])
 
     // wildlife Wildlife[]
 }
