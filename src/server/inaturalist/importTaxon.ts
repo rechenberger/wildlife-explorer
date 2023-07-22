@@ -2,6 +2,7 @@ import { Dex } from "@pkmn/dex"
 import { last } from "lodash-es"
 import { type MyPrismaClient } from "../db"
 import { taxonMappingByAncestors } from "../lib/battle/taxonMappingByAncestors"
+import { TaxonMetadata } from "../schema/TaxonMetadata"
 import { findTaxon } from "./findTaxon"
 
 export const importTaxon = async ({
@@ -24,7 +25,22 @@ export const importTaxon = async ({
   if (existing) return
 
   console.log("importTaxon", taxonId)
-  const metadata = await findTaxon({ taxonId })
+  let metadata: TaxonMetadata
+
+  let retries = 0
+  while (true) {
+    try {
+      metadata = await findTaxon({ taxonId })
+      break
+    } catch (e: any) {
+      console.error(e?.message || e)
+      retries++
+      const timeout = Math.min(1000 * 2 ** retries, 1000 * 60 * 5)
+      console.log(`importTaxon: Retry (${retries}) in ${timeout / 1000}s ...`)
+      await new Promise((resolve) => setTimeout(resolve, timeout))
+    }
+  }
+
   const mapping = taxonMappingByAncestors([
     ...metadata.taxonAncestorIds,
     taxonId,
