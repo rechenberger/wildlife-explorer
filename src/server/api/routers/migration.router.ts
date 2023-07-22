@@ -196,17 +196,33 @@ export const migrationRouter = createTRPCRouter({
     let done = 0
     const chunks = chunk(wildlife, 1)
     for (const chunk of chunks) {
-      await Promise.all(
-        chunk.map(async (w) => {
-          await importTaxon({
-            prisma: ctx.prisma,
-            taxonId: w.taxonId,
-            playerId: w.foundById,
-            createdAt: w.createdAt,
+      const doChunk = async () => {
+        await Promise.all(
+          chunk.map(async (w) => {
+            await importTaxon({
+              prisma: ctx.prisma,
+              taxonId: w.taxonId,
+              playerId: w.foundById,
+              createdAt: w.createdAt,
+            })
+            console.log(`${++done} of ${wildlife.length} done`)
           })
-          console.log(`${++done} of ${wildlife.length} done`)
-        })
-      )
+        )
+      }
+      // Retry Logic:
+      let retries = 0
+      while (true) {
+        try {
+          await doChunk()
+          break
+        } catch (e) {
+          console.error(e)
+          retries++
+          const timeout = Math.min(1000 * 2 ** retries, 1000 * 60 * 5)
+          console.log(`Retry (${retries}) in ${timeout / 1000}s ...`)
+          await new Promise((resolve) => setTimeout(resolve, timeout))
+        }
+      }
     }
 
     return { length: wildlife.length }
