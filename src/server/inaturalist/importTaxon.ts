@@ -38,18 +38,19 @@ export const importTaxon = async ({
   const fighterSpeciesNum = Dex.species.get(fighterSpeciesName)?.num
   if (!fighterSpeciesNum) throw new Error("no fighterSpeciesNum")
   const mainMapping = mapping.taxonId
-  const isMainMapping = mapping.taxonId === taxonId
-  if (!isMainMapping) {
+  const isAnchor = mapping.taxonId === taxonId
+  if (!isAnchor) {
     await importTaxon({ prisma, taxonId: mainMapping, playerId })
   }
   const foundById = playerId
-  const ancestorMappedId = isMainMapping ? null : mainMapping
+  const anchorId = isAnchor ? null : mainMapping
   await prisma.taxon.create({
     data: {
       id,
       metadata,
       foundById,
-      ancestorMappedId,
+      isAnchor,
+      anchorId,
       ancestorId,
       fighterSpeciesName,
       fighterSpeciesNum,
