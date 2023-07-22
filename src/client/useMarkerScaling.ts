@@ -1,5 +1,5 @@
 import { useAtomValue } from "jotai"
-import { useState } from "react"
+import { useMemo, useState } from "react"
 import { mapRadiusInKmAtom } from "./MapBase"
 
 export const useMarkerScaling = () => {
@@ -11,13 +11,16 @@ export const useMarkerScaling = () => {
     scale = 3
   }
 
-  const markerScalingProps = {
-    style: {
-      transform: `scale(${scale})`,
-    },
-    onMouseEnter: () => setHovering(true),
-    onMouseLeave: () => setHovering(false),
-  }
+  const markerScalingProps = useMemo(
+    () => ({
+      style: {
+        transform: `scale(${scale})`,
+      },
+      onMouseEnter: () => setHovering(true),
+      onMouseLeave: () => setHovering(false),
+    }),
+    [scale]
+  )
 
   return { markerScalingProps }
 }
