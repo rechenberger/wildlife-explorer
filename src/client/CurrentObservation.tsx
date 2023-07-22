@@ -182,11 +182,10 @@ export const CurrentObservation = ({
                     </Link>
                   </>
                 )}
+                {!!w.metadata.observationLicenseCode &&
+                  !!w.metadata.observationUserName && <br />}
                 {!!w.metadata.observationLicenseCode && (
-                  <>
-                    <br />
-                    {w.metadata.observationLicenseCode}
-                  </>
+                  <>{w.metadata.observationLicenseCode}</>
                 )}
               </div>
             )}
