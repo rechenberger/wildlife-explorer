@@ -74,6 +74,14 @@ export const TaxonOverview = ({
 const TaxonView = ({ taxon }: { taxon: Taxon }) => {
   const getName = useGetWildlifeName()
   const setTaxonId = useSetAtom(currentTaxonIdAtom)
+  const numPadded = padStart(taxon.fighterSpeciesNum.toString(), 4).replaceAll(
+    " ",
+    "0"
+  )
+  // const imgUrl = `https://archives.bulbagarden.net/media/upload/thumb/f/fb/0001Bulbasaur.png/500px-0001Bulbasaur.png`
+  // const imgUrl = `https://archives.bulbagarden.net/media/upload/thumb/4/4a/0025Pikachu.png/500px-0025Pikachu.png`
+  // const imgUrl = `https://archives.bulbagarden.net/media/upload/thumb/f/fb/${numPadded}${taxon.fighterSpeciesName}.png/500px-${numPadded}${taxon.fighterSpeciesName}.png`
+  const imgUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${taxon.fighterSpeciesNum}.png`
   return (
     <Fragment>
       <div
@@ -109,14 +117,11 @@ const TaxonView = ({ taxon }: { taxon: Taxon }) => {
           {/* <Anchor className={cn("h-4 w-4", !taxon.isAnchor && "opacity-0")} /> */}
         </div>
         <div className="flex flex-row gap-1 flex-1 py-1 px-2">
-          <div className="font-mono opacity-60">
-            #
-            {padStart(taxon.fighterSpeciesNum.toString(), 3).replaceAll(
-              " ",
-              "0"
-            )}
-          </div>
+          <div className="font-mono opacity-60">#{numPadded}</div>
           <div>{taxon.fighterSpeciesName}</div>
+        </div>
+        <div className="relative aspect-square h-full rounded-full overflow-hidden">
+          <Image src={imgUrl} alt={"Taxon Image"} unoptimized fill={true} />
         </div>
       </div>
     </Fragment>
