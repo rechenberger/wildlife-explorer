@@ -100,10 +100,17 @@ const TaxonView = ({ taxon }: { taxon: Taxon }) => {
         )}
         <div className="flex flex-col flex-1 py-1 px-2 overflow-hidden">
           <div className="text-sm font-bold truncate">{getName(taxon)}</div>
-          <div className="text-xs opacity-60 truncate">
+          <Link
+            href={`https://www.inaturalist.org/taxa/${taxon.id}`}
+            target="_blank"
+            className="text-xs opacity-60 truncate hover:underline"
+            onClick={(e) => {
+              e.stopPropagation()
+            }}
+          >
             {taxon.metadata.taxonObservationsCount.toLocaleString()}{" "}
             Observations
-          </div>
+          </Link>
         </div>
         <div className="flex flex-row gap-2 items-center justify-center">
           <ArrowRight
