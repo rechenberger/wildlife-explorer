@@ -71,9 +71,7 @@ export const importTaxon = async ({
 
   // const fighterSpeciesName = ancestor.fighterSpeciesName
   // const fighterSpeciesNum = ancestor.fighterSpeciesNum
-  // if (!isAnchor) {
-  //   await importTaxon({ prisma, taxonId: mainMapping, playerId })
-  // }
+  // const isAnchor = false
   // const anchorId = ancestor.anchorId
 
   const foundById = playerId
