@@ -86,13 +86,13 @@ const TaxonView = ({ taxon }: { taxon: Taxon }) => {
   return (
     <Fragment>
       <div
-        className="flex flex-row gap-4 bg-gray-100 rounded-full cursor-pointer hover:bg-gray-200 items-center"
+        className="flex flex-row gap-2 bg-gray-100 rounded-full cursor-pointer hover:bg-gray-200 items-center"
         onClick={() => {
           setTaxonId(taxon.id)
         }}
       >
         {taxon.metadata.taxonImageUrlSquare && (
-          <div className="relative aspect-square h-full rounded-full overflow-hidden">
+          <div className="relative aspect-square h-full rounded-full overflow-hidden shrink-0">
             <Image
               src={taxon.metadata.taxonImageUrlSquare}
               alt={"Taxon Image"}
@@ -101,7 +101,7 @@ const TaxonView = ({ taxon }: { taxon: Taxon }) => {
             />
           </div>
         )}
-        <div className="flex flex-col flex-1 py-1 px-2">
+        <div className="flex flex-col flex-1 py-1 px-2 overflow-hidden">
           <div className="text-sm font-bold truncate">{getName(taxon)}</div>
           <div className="text-xs opacity-60 truncate">
             {taxon.metadata.taxonObservationsCount.toLocaleString()}{" "}
@@ -120,15 +120,15 @@ const TaxonView = ({ taxon }: { taxon: Taxon }) => {
         <Link
           href={`https://bulbapedia.bulbagarden.net/wiki/${taxon.fighterSpeciesName}_(Pok%C3%A9mon)`}
           target="_blank"
-          className="flex flex-row gap-1 flex-1 py-1 px-2 hover:underline"
+          className="flex flex-row gap-1 flex-1 py-1 px-2 hover:underline text-sm overflow-hidden"
           onClick={(e) => {
             e.stopPropagation()
           }}
         >
           <div className="font-mono opacity-60">#{numPadded}</div>
-          <div>{taxon.fighterSpeciesName}</div>
+          <div className="truncate">{taxon.fighterSpeciesName}</div>
         </Link>
-        <div className="relative aspect-square h-full rounded-full overflow-hidden">
+        <div className="relative aspect-square h-full rounded-full overflow-hide shrink-0n">
           <Image src={imgUrl} alt={"Taxon Image"} unoptimized fill={true} />
         </div>
       </div>
