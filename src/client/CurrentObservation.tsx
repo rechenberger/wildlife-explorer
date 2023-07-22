@@ -113,10 +113,11 @@ export const CurrentObservation = ({
               unoptimized
               fill={true}
             />
-            <div className="absolute bottom-0 right-0 bg-white/50 text-black text-xs">
-              {w.metadata.observationLicenseCode} -{" "}
-              {w.metadata.observationImageAttribution}
-            </div>
+            {!!w.metadata.observationImageAttribution && (
+              <div className="absolute bottom-0 right-0 bg-white/50 text-black text-xs">
+                {w.metadata.observationImageAttribution}
+              </div>
+            )}
           </div>
         ) : w.metadata.taxonImageUrlMedium ? (
           <div className="relative -mx-4 aspect-square">
@@ -127,10 +128,11 @@ export const CurrentObservation = ({
               unoptimized
               fill={true}
             />
-            <div className="absolute bottom-0 right-0 bg-white/50 text-black text-xs">
-              {w.metadata.taxonImageLicenseCode} -{" "}
-              {w.metadata.taxonImageAttribution}
-            </div>
+            {!!w.metadata.taxonImageAttribution && (
+              <div className="absolute bottom-0 right-0 bg-white/50 text-black text-xs">
+                {w.metadata.taxonImageAttribution}
+              </div>
+            )}
           </div>
         ) : null}
         {SHOW_OBSERVATION_JSON && (
@@ -139,7 +141,7 @@ export const CurrentObservation = ({
           </div>
         )}
         <div className="flex flex-row items-start justify-center gap-2 h-[44px] text-xs">
-          <div className="flex flex-col">
+          <div className="flex flex-col gap-1">
             <div className="flex flex-row gap-2">
               {w.metadata.observationUrl && (
                 <Link
@@ -162,10 +164,32 @@ export const CurrentObservation = ({
                 </Link>
               )}
             </div>
-            <div>
-              {w.metadata.observationLicenseCode} -{" "}
-              {w.metadata.observationUserName}
-            </div>
+            {(w.metadata.observationLicenseCode ||
+              w.metadata.observationUserName) && (
+              <div className="text-[8px] opacity-60 leading-tight">
+                {!!w.metadata.observationUserName && (
+                  <>
+                    ©{" "}
+                    <Link
+                      href={
+                        w.metadata.observationUserId
+                          ? `https://www.inaturalist.org/people/${w.metadata.observationUserId}`
+                          : `#`
+                      }
+                      target="_blank"
+                    >
+                      {w.metadata.observationUserName}
+                    </Link>
+                  </>
+                )}
+                {!!w.metadata.observationLicenseCode && (
+                  <>
+                    <br />
+                    {w.metadata.observationLicenseCode}
+                  </>
+                )}
+              </div>
+            )}
           </div>
           <div className="flex-1" />
           <div className="max-w-[50%]">
