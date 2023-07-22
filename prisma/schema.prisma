@@ -151,16 +151,17 @@ model Taxon {
 
     metadata Json
 
-    fighterSpeciesName String?
-    fighterSpeciesNum  Int?
+    isAnchor           Boolean
+    fighterSpeciesName String
+    fighterSpeciesNum  Int
 
     ancestorId  Int?
     ancestor    Taxon?  @relation("TaxonAncestor", fields: [ancestorId], references: [id])
     descendants Taxon[] @relation("TaxonAncestor")
 
-    ancestorMappedId  Int?
-    ancestorMapped    Taxon?  @relation("TaxonAncestorMapped", fields: [ancestorMappedId], references: [id])
-    descendantsMapped Taxon[] @relation("TaxonAncestorMapped")
+    anchorId            Int?
+    anchor              Taxon?  @relation("TaxonAncestorAnchor", fields: [anchorId], references: [id])
+    descendantsAnchored Taxon[] @relation("TaxonAncestorAnchor")
 
     foundById String
     foundBy   Player @relation(fields: [foundById], references: [id])
