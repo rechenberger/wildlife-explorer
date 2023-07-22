@@ -51,6 +51,8 @@ export const importTaxon = async ({
       foundById,
       ancestorMappedId,
       ancestorId,
+      fighterSpeciesName,
+      fighterSpeciesNum,
     },
   })
 }
