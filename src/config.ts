@@ -82,4 +82,5 @@ export const STICKY_MAP_PADDING = 100
 export const STICKY_MAP_PADDING_LG = 200
 export const SHOW_WILDLIFE_NEAR_ME_LIST_MOBILE = false
 
-export const NO_OF_ALL_TAXONS = 431880
+export const NO_OF_ALL_TAXONS = 431_880
+export const NO_OF_ALL_OBSERVATIONS = 149_632_539

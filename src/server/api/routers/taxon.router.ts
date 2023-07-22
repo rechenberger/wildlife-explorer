@@ -1,6 +1,6 @@
 import { first } from "lodash-es"
 import { z } from "zod"
-import { NO_OF_ALL_TAXONS } from "~/config"
+import { NO_OF_ALL_OBSERVATIONS, NO_OF_ALL_TAXONS } from "~/config"
 import { createTRPCRouter } from "~/server/api/trpc"
 import { devProcedure } from "../middleware/devProcedure"
 import { playerProcedure } from "../middleware/playerProcedure"
@@ -37,12 +37,24 @@ export const taxonRouter = createTRPCRouter({
     return result
   }),
 
+  globalExplorationProgress: playerProcedure.query(async ({ ctx }) => {
+    const taxonCount = await ctx.prisma.taxon.count({})
+    const taxonCountMax = NO_OF_ALL_TAXONS
+
+    const wildlifeCount = await ctx.prisma.wildlife.count({})
+    const wildlifeCountMax = NO_OF_ALL_OBSERVATIONS
+
+    return {
+      taxonCount,
+      taxonCountMax,
+      wildlifeCount,
+      wildlifeCountMax,
+    }
+  }),
+
   getTree: playerProcedure
     .input(z.object({ taxonId: z.number() }))
     .query(async ({ ctx, input }) => {
-      const taxonCount = await ctx.prisma.taxon.count({})
-      const taxonCountMax = NO_OF_ALL_TAXONS
-
       const taxon = await ctx.prisma.taxon.findUniqueOrThrow({
         where: { id: input.taxonId },
         include: {
@@ -86,8 +98,6 @@ export const taxonRouter = createTRPCRouter({
       )
 
       return {
-        taxonCount,
-        taxonCountMax,
         taxon,
         ancestors,
       }

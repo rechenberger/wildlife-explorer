@@ -34,16 +34,41 @@ export const TaxonOverview = ({
       enabled: !!playerId && !!taxonId,
     }
   )
+  const { data: globalExplorationProgress } =
+    api.taxon.globalExplorationProgress.useQuery(
+      {
+        playerId: playerId!,
+      },
+      {
+        enabled: !!playerId,
+      }
+    )
   if (!data) return null
   return (
     <>
       <div className="flex flex-col gap-2 overflow-hidden">
-        <div className="text-center font-bold text-xs">
-          {data.taxonCount.toLocaleString()} of{" "}
-          {data.taxonCountMax.toLocaleString()} (
-          {Math.floor((100 * data.taxonCount) / data.taxonCountMax)}%) Species
-          found
-        </div>
+        {!!globalExplorationProgress && (
+          <>
+            <div className="text-center font-bold text-xs">
+              {globalExplorationProgress.taxonCount.toLocaleString()} of{" "}
+              {globalExplorationProgress.taxonCountMax.toLocaleString()} (
+              {Math.floor(
+                (100 * globalExplorationProgress.taxonCount) /
+                  globalExplorationProgress.taxonCountMax
+              )}
+              %) Species found
+            </div>
+            <div className="text-center font-bold text-xs">
+              {globalExplorationProgress.wildlifeCount.toLocaleString()} of{" "}
+              {globalExplorationProgress.wildlifeCountMax.toLocaleString()} (
+              {(
+                (100 * globalExplorationProgress.wildlifeCount) /
+                globalExplorationProgress.wildlifeCountMax
+              ).toFixed(2)}
+              %) Observations found
+            </div>
+          </>
+        )}
         {!!data?.ancestors.length && (
           <>
             <DividerHeading>{data?.ancestors.length} Ancestors</DividerHeading>
