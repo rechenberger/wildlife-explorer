@@ -20,6 +20,7 @@ export const TaxonOverview = ({
   taxonId: number
 }) => {
   const [taxonId, setTaxonId] = useAtom(currentTaxonIdAtom)
+  console.log({ taxonId, initialTaxonId })
   useEffect(() => {
     setTaxonId(initialTaxonId)
   }, [initialTaxonId, setTaxonId])
@@ -31,7 +32,7 @@ export const TaxonOverview = ({
       playerId: playerId!,
     },
     {
-      enabled: !!playerId,
+      enabled: !!playerId && !!taxonId,
     }
   )
   if (!data) return null

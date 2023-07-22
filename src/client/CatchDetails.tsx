@@ -15,7 +15,7 @@ import { FighterMoves } from "./FighterMoves"
 import { FighterStatsChart } from "./FighterStatsChart"
 import { FighterTypeBadges } from "./FighterTypeBadges"
 import { MoveSwapperModal } from "./MoveSwapperModal"
-import { TaxonOverview } from "./TaxonOverview"
+import { TaxonOverviewModal } from "./TaxonOverviewModal"
 import { TimeAgo } from "./TimeAgo"
 import { TypeBadge } from "./TypeBadge"
 import { Progress } from "./shadcn/ui/progress"
@@ -139,7 +139,7 @@ export const CatchDetails = ({
                 <button
                   className="text-right text-xs font-normal text-black opacity-60 flex flex-col items-center hover:bg-gray-200 rounded-lg p-2"
                   onClick={() => {
-                    NiceModal.show(TaxonOverview, {
+                    NiceModal.show(TaxonOverviewModal, {
                       taxonId: c.wildlife.taxonId,
                     })
                   }}
