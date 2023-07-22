@@ -8,6 +8,8 @@ export const WildlifeMetadata = z.object({
   taxonImageUrlSquare: z.string().nullable(),
   taxonImageUrlMedium: z.string().nullable(),
   taxonImageUrlSmall: z.string().nullable(),
+  taxonImageLicenseCode: z.string().nullish(),
+  taxonImageAttribution: z.string().nullish(),
   taxonWikiUrl: z.string().nullable(),
   taxonAncestorIds: z.array(z.number()),
   taxonSearchRank: z.number(),
@@ -28,9 +30,13 @@ export const WildlifeMetadata = z.object({
   observationAt: z.string().nullable(),
   observationCaptive: z.boolean(),
   observationUserId: z.number(),
+  observationUserName: z.string().nullish(),
   observationImageUrlSquare: z.string().optional(),
   observationImageUrlMedium: z.string().optional(),
   observationIsDead: z.boolean().nullish(),
+  observationImageLicenseCode: z.string().nullish(),
+  observationImageAttribution: z.string().nullish(),
+  observationLicenseCode: z.string().nullish(),
 })
 
 export type WildlifeMetadata = z.infer<typeof WildlifeMetadata>
