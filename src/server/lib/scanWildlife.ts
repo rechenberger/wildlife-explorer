@@ -10,6 +10,7 @@ import {
 import { type MyPrismaClient } from "~/server/db"
 import { findObservations } from "~/server/inaturalist/findObservations"
 import { type LatLng } from "~/server/schema/LatLng"
+import { WildlifeMetadata } from "../schema/WildlifeMetadata"
 
 export const scanWildlife = async ({
   location,
@@ -51,7 +52,7 @@ export const scanWildlife = async ({
           observationId: o.observationId,
           lat: o.lat,
           lng: o.lng,
-          metadata: o,
+          metadata: WildlifeMetadata.parse(o),
           taxonId: o.taxonId,
         }
         return await prisma.wildlife.upsert({
