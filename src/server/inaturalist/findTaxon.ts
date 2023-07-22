@@ -1,6 +1,8 @@
 import { type TaxonMetadata } from "../schema/TaxonMetadata"
 import { findTaxons } from "./findTaxons"
 
+// FROM: https://teampilot.ai/team/tristan/chat/56a54c92d436ce3cfb27f8b965562f8c
+
 const BATCH_WINDOW_IN_MS = 2000
 const BATCH_MAX_SIZE = 30
 
