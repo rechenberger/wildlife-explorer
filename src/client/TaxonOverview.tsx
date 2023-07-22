@@ -38,7 +38,12 @@ export const TaxonOverview = ({
   return (
     <>
       <div className="flex flex-col gap-2 overflow-hidden">
-        <div className="">Taxon Overview</div>
+        <div className="text-center font-bold text-xs">
+          {data.taxonCount.toLocaleString()} of{" "}
+          {data.taxonCountMax.toLocaleString()} (
+          {Math.floor((100 * data.taxonCount) / data.taxonCountMax)}%) Species
+          found
+        </div>
         {!!data?.ancestors.length && (
           <>
             <DividerHeading>{data?.ancestors.length} Ancestors</DividerHeading>

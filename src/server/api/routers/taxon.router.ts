@@ -1,5 +1,6 @@
 import { first } from "lodash-es"
 import { z } from "zod"
+import { NO_OF_ALL_TAXONS } from "~/config"
 import { createTRPCRouter } from "~/server/api/trpc"
 import { devProcedure } from "../middleware/devProcedure"
 import { playerProcedure } from "../middleware/playerProcedure"
@@ -39,6 +40,9 @@ export const taxonRouter = createTRPCRouter({
   getTree: playerProcedure
     .input(z.object({ taxonId: z.number() }))
     .query(async ({ ctx, input }) => {
+      const taxonCount = await ctx.prisma.taxon.count({})
+      const taxonCountMax = NO_OF_ALL_TAXONS
+
       const taxon = await ctx.prisma.taxon.findUniqueOrThrow({
         where: { id: input.taxonId },
         include: {
@@ -82,6 +86,8 @@ export const taxonRouter = createTRPCRouter({
       )
 
       return {
+        taxonCount,
+        taxonCountMax,
         taxon,
         ancestors,
       }
