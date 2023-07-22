@@ -8,10 +8,12 @@ export const importTaxon = async ({
   prisma,
   taxonId,
   playerId,
+  createdAt,
 }: {
   prisma: MyPrismaClient
   taxonId: number
   playerId: string
+  createdAt?: Date
 }) => {
   const id = taxonId
   const existing = await prisma.taxon.findUnique({
@@ -31,7 +33,7 @@ export const importTaxon = async ({
   let ancestorId = last(metadata.taxonAncestorIds) ?? null
   if (ancestorId && ancestorId < 2) ancestorId = null
   if (ancestorId) {
-    await importTaxon({ prisma, taxonId: ancestorId, playerId })
+    await importTaxon({ prisma, taxonId: ancestorId, playerId, createdAt })
   }
 
   const fighterSpeciesName = mapping.pokemon
@@ -54,6 +56,7 @@ export const importTaxon = async ({
       ancestorId,
       fighterSpeciesName,
       fighterSpeciesNum,
+      createdAt,
     },
   })
 }

@@ -1,14 +1,11 @@
-import { Dex } from "@pkmn/dex"
 import { chunk } from "lodash-es"
-import { DEFAULT_DB_CHUNK_SIZE, MAX_FIGHTERS_PER_TEAM } from "~/config"
+import { MAX_FIGHTERS_PER_TEAM } from "~/config"
 import { getExpRate } from "~/data/pokemonLevelExperienceMap"
 import { PokemonLevelingRate } from "~/data/pokemonLevelingRate"
 import { createTRPCRouter } from "~/server/api/trpc"
 import { importTaxon } from "~/server/inaturalist/importTaxon"
 import { getWildlifeFighterPlus } from "~/server/lib/battle/getWildlifeFighterPlus"
-import { taxonMappingByAncestors } from "~/server/lib/battle/taxonMappingByAncestors"
 import { LevelingRate, type CatchMetadata } from "~/server/schema/CatchMetadata"
-import { TaxonMetadata } from "~/server/schema/TaxonMetadata"
 import { devProcedure } from "../middleware/devProcedure"
 
 export const migrationRouter = createTRPCRouter({
@@ -181,40 +178,22 @@ export const migrationRouter = createTRPCRouter({
         taxonId: true,
         metadata: true,
         foundById: true,
+        createdAt: true,
       },
     })
 
-    const chunks = chunk(wildlife, DEFAULT_DB_CHUNK_SIZE)
+    let done = 0
+    const chunks = chunk(wildlife, 1)
     for (const chunk of chunks) {
       await Promise.all(
         chunk.map(async (w) => {
-          const id = w.taxonId
-          const metadata = TaxonMetadata.parse(w.metadata)
-          const mapping = taxonMappingByAncestors(metadata.taxonAncestorIds)
-          const fighterSpeciesName = mapping.pokemon
-          const fighterSpeciesNum = Dex.species.get(fighterSpeciesName)?.num
-          if (!fighterSpeciesNum) throw new Error("no fighterSpeciesNum")
-          const isMainMapping = mapping.taxonId === id
-          const foundById = w.foundById
-
-          // await ctx.prisma.taxon.upsert({
-          //   where: {
-          //     id,
-          //   },
-          //   create: {
-          //     id,
-          //     metadata,
-          //     foundById,
-          //     ancestorMapped: {
-          //       create: {
-
-          //       }
-          //     }
-          //   },
-          //   update: {
-          //     metadata,
-          //   },
-          // })
+          await importTaxon({
+            prisma: ctx.prisma,
+            taxonId: w.taxonId,
+            playerId: w.foundById,
+            createdAt: w.createdAt,
+          })
+          console.log(`${++done} of ${wildlife.length} done`)
         })
       )
     }
