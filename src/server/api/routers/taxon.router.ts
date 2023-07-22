@@ -62,7 +62,7 @@ export const taxonRouter = createTRPCRouter({
       let ancestorIds = taxon.metadata.taxonAncestorIds
       ancestorIds = ancestorIds.filter((id) => id !== 48460)
 
-      const ancestors = await ctx.prisma.taxon.findMany({
+      let ancestors = await ctx.prisma.taxon.findMany({
         where: {
           id: {
             in: ancestorIds,
@@ -76,6 +76,10 @@ export const taxonRouter = createTRPCRouter({
           },
         },
       })
+
+      ancestors = ancestorIds.map(
+        (id) => ancestors.find((ancestor) => ancestor.id === id)!
+      )
 
       return {
         taxon,
