@@ -1,9 +1,11 @@
 import { atom, useAtom, useSetAtom } from "jotai"
+import { padStart } from "lodash-es"
 import { ArrowRight } from "lucide-react"
 import Image from "next/image"
 import { Fragment, useEffect } from "react"
 import { api, type RouterOutputs } from "~/utils/api"
 import { DividerHeading } from "./DividerHeading"
+import { cn } from "./cn"
 import { useGetWildlifeName } from "./useGetWildlifeName"
 import { usePlayer } from "./usePlayer"
 
@@ -38,7 +40,7 @@ export const TaxonOverview = ({
         <div className="">Taxon Overview</div>
         {!!data?.ancestors.length && (
           <>
-            <DividerHeading>{data?.ancestors.length} ancestors</DividerHeading>
+            <DividerHeading>{data?.ancestors.length} Ancestors</DividerHeading>
             {data?.ancestors.map((taxon) => (
               <Fragment key={taxon.id}>
                 <TaxonView taxon={taxon} />
@@ -75,7 +77,7 @@ const TaxonView = ({ taxon }: { taxon: Taxon }) => {
   return (
     <Fragment>
       <div
-        className="flex flex-row gap-2 text-xs bg-gray-100 rounded-full cursor-pointer hover:bg-gray-200"
+        className="flex flex-row gap-4 bg-gray-100 rounded-full cursor-pointer hover:bg-gray-200 items-center"
         onClick={() => {
           setTaxonId(taxon.id)
         }}
@@ -91,14 +93,29 @@ const TaxonView = ({ taxon }: { taxon: Taxon }) => {
           </div>
         )}
         <div className="flex flex-col flex-1 py-1 px-2">
-          <div>{getName(taxon)}</div>
-          <div>{taxon._count.wildlife}</div>
+          <div className="text-sm font-bold truncate">{getName(taxon)}</div>
+          <div className="text-xs opacity-60 truncate">
+            {taxon.metadata.taxonObservationsCount.toLocaleString()}{" "}
+            Observations
+          </div>
         </div>
-        <div className="flex items-center justify-center">
-          <ArrowRight className="h-4 w-4" />
+        <div className="flex flex-row gap-2 items-center justify-center">
+          <ArrowRight
+            className={cn(
+              "h-4 w-4",
+              taxon.isAnchor ? "text-green-500" : "text-gray-500"
+            )}
+          />
+          {/* <Anchor className={cn("h-4 w-4", !taxon.isAnchor && "opacity-0")} /> */}
         </div>
-        <div className="flex flex-col flex-1 py-1 px-2">
-          <div>#{taxon.fighterSpeciesNum}</div>
+        <div className="flex flex-row gap-1 flex-1 py-1 px-2">
+          <div className="font-mono opacity-60">
+            #
+            {padStart(taxon.fighterSpeciesNum.toString(), 3).replaceAll(
+              " ",
+              "0"
+            )}
+          </div>
           <div>{taxon.fighterSpeciesName}</div>
         </div>
       </div>
