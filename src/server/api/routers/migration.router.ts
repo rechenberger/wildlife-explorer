@@ -1,4 +1,4 @@
-import { chunk } from "lodash-es"
+import { chunk, includes } from "lodash-es"
 import { MAX_FIGHTERS_PER_TEAM } from "~/config"
 import { getExpRate } from "~/data/pokemonLevelExperienceMap"
 import { PokemonLevelingRate } from "~/data/pokemonLevelingRate"
@@ -169,7 +169,7 @@ export const migrationRouter = createTRPCRouter({
   }),
 
   wildlifeToTaxons: devProcedure.mutation(async ({ ctx }) => {
-    const wildlife = await ctx.prisma.wildlife.findMany({
+    let wildlife = await ctx.prisma.wildlife.findMany({
       distinct: ["taxonId"],
       orderBy: {
         createdAt: "asc",
@@ -181,6 +181,17 @@ export const migrationRouter = createTRPCRouter({
         createdAt: true,
       },
     })
+
+    const allTaxons = await ctx.prisma.taxon.findMany({
+      select: {
+        id: true,
+      },
+    })
+    const importedIds = allTaxons.map((t) => t.id)
+
+    wildlife = wildlife.filter((w) => !includes(importedIds, w.taxonId))
+
+    console.log(`Importing ${wildlife.length}`)
 
     let done = 0
     const chunks = chunk(wildlife, 1)
