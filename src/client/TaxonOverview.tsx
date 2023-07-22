@@ -125,7 +125,7 @@ const TaxonView = ({ taxon }: { taxon: Taxon }) => {
           <div className="font-mono opacity-60">#{numPadded}</div>
           <div className="truncate">{taxon.fighterSpeciesName}</div>
         </Link>
-        <div className="relative aspect-square h-full rounded-full overflow-hide shrink-0n">
+        <div className="relative aspect-square h-full rounded-full overflow-hide shrink-0">
           <Image
             src={fighterImgUrl}
             alt={"Fighter Image"}
