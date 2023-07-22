@@ -160,11 +160,25 @@ export const migrationRouter = createTRPCRouter({
     }
   }),
 
-  tmp: devProcedure.mutation(async ({ ctx }) => {
+  tmp: devProcedure.mutation(async ({}) => {
     let allPokemon = flatMap(taxonMappingByAI, (m) => m.children).map(
       (c) => c.pokemon
     )
     allPokemon = uniq(allPokemon)
     return allPokemon
+  }),
+
+  wildlifeToTaxons: devProcedure.mutation(async ({ ctx }) => {
+    const wildlife = await ctx.prisma.wildlife.findMany({
+      distinct: ["taxonId"],
+      orderBy: {
+        createdAt: "desc",
+      },
+      select: {
+        taxonId: true,
+      },
+    })
+
+    return { length: wildlife.length }
   }),
 })
