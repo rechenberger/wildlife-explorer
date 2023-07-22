@@ -194,7 +194,7 @@ export const migrationRouter = createTRPCRouter({
     console.log(`Importing ${wildlife.length}`)
 
     let done = 0
-    const chunkSize = 5
+    const chunkSize = 20
     const chunks = chunk(wildlife, chunkSize)
     for (const chunk of chunks) {
       const doChunk = async () => {
@@ -216,8 +216,8 @@ export const migrationRouter = createTRPCRouter({
         try {
           await doChunk()
           break
-        } catch (e) {
-          console.error(e)
+        } catch (e: any) {
+          console.error(e?.message || e)
           retries++
           const timeout = Math.min(1000 * 2 ** retries, 1000 * 60 * 5)
           console.log(`CHUNK: Retry (${retries}) in ${timeout / 1000}s ...`)
