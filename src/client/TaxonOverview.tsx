@@ -119,7 +119,7 @@ const TaxonView = ({ taxon }: { taxon: Taxon }) => {
         }}
       >
         {taxon.metadata.taxonImageUrlSquare && (
-          <div className="relative aspect-square h-full rounded-full overflow-hidden shrink-0">
+          <div className="relative aspect-square h-full rounded-full overflow-hidden shrink-0 ring-4 ring-white">
             <Image
               src={taxon.metadata.taxonImageUrlSquare}
               alt={"Taxon Image"}
