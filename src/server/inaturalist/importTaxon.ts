@@ -1,6 +1,8 @@
+import { Dex } from "@pkmn/dex"
 import { type Taxon } from "@prisma/client"
 import { last } from "lodash-es"
 import { type MyPrismaClient } from "../db"
+import { taxonMappingByAncestors } from "../lib/battle/taxonMappingByAncestors"
 import { type TaxonMetadata } from "../schema/TaxonMetadata"
 import { findTaxon } from "./findTaxon"
 
@@ -48,6 +50,7 @@ export const importTaxon = async ({
     throw new Error(`no ancestorId for taxonId: ${taxonId}`)
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const ancestor = await importTaxon({
     prisma,
     taxonId: ancestorId,
@@ -55,23 +58,25 @@ export const importTaxon = async ({
     createdAt,
   })
 
-  // const mapping = taxonMappingByAncestors([
-  //   ...metadata.taxonAncestorIds,
-  //   taxonId,
-  // ])
-  // const fighterSpeciesName = mapping.pokemon
-  // const fighterSpeciesNum = Dex.species.get(fighterSpeciesName)?.num
-  // if (!fighterSpeciesNum) throw new Error("no fighterSpeciesNum")
-  // const mainMapping = mapping.taxonId
-  // const isAnchor = mapping.taxonId === taxonId
-  const isAnchor = false
-  const fighterSpeciesName = ancestor.fighterSpeciesName
-  const fighterSpeciesNum = ancestor.fighterSpeciesNum
+  const mapping = taxonMappingByAncestors([
+    ...metadata.taxonAncestorIds,
+    taxonId,
+  ])
+  const fighterSpeciesName = mapping.pokemon
+  const fighterSpeciesNum = Dex.species.get(fighterSpeciesName)?.num
+  if (!fighterSpeciesNum) throw new Error("no fighterSpeciesNum")
+  const mainMapping = mapping.taxonId
+  const isAnchor = mapping.taxonId === taxonId
+  const anchorId = isAnchor ? null : mainMapping
+
+  // const fighterSpeciesName = ancestor.fighterSpeciesName
+  // const fighterSpeciesNum = ancestor.fighterSpeciesNum
   // if (!isAnchor) {
   //   await importTaxon({ prisma, taxonId: mainMapping, playerId })
   // }
+  // const anchorId = ancestor.anchorId
+
   const foundById = playerId
-  const anchorId = ancestor.anchorId
   return await prisma.taxon.create({
     data: {
       id,
