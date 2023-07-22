@@ -6,6 +6,7 @@ import { CatchMetadata } from "./schema/CatchMetadata"
 import { PlaceMetadata } from "./schema/PlaceMetadata"
 import { PlayerMetadata } from "./schema/PlayerMetadata"
 import { WildlifeMetadata } from "./schema/WildlifeMetadata"
+import { TaxonMetadata } from "./schema/TaxonMetadata"
 
 const createPrisma = () => {
   return new PrismaClient({
@@ -69,6 +70,16 @@ const createPrisma = () => {
           },
           compute: (data) => {
             return PlaceMetadata.parse(data.metadata || {})
+          },
+        },
+      },
+      taxon: {
+        metadata: {
+          needs: {
+            metadata: true,
+          },
+          compute: (data) => {
+            return TaxonMetadata.parse(data.metadata || {})
           },
         },
       },
