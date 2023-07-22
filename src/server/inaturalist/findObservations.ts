@@ -54,6 +54,8 @@ export const findObservations = async ({
         taxonImageUrlSquare: o.taxon.default_photo?.square_url ?? null,
         taxonImageUrlMedium: o.taxon.default_photo?.medium_url ?? null,
         taxonImageUrlSmall: o.taxon.default_photo?.url ?? null,
+        taxonImageLicenseCode: o.taxon.default_photo?.license_code ?? null,
+        taxonImageAttribution: o.taxon.default_photo?.attribution ?? null,
         observationUrl: o.uri,
         taxonWikiUrl: o.taxon.wikipedia_url,
 
@@ -74,11 +76,15 @@ export const findObservations = async ({
         observationAt: o.observed_on,
         observationCaptive: o.captive,
         observationUserId: o.user.id,
+        observationUserName: o.user.name,
         observationImageUrlSquare: o.photos[0]?.url,
         observationImageUrlMedium: o.photos[0]?.url.replace(
           "/square.",
           "/medium."
         ),
+        observationImageLicenseCode: o.photos[0]?.license_code ?? null,
+        observationImageAttribution: o.photos[0]?.attribution ?? null,
+        observationLicenseCode: o?.license_code ?? null,
 
         // annotations:
         observationIsDead: deadOrAliveAnnotation ? isDeadAnnotated : null,
