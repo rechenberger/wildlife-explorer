@@ -84,7 +84,7 @@ export const findObservations = async ({
         ),
         observationImageLicenseCode: o.photos[0]?.license_code ?? null,
         observationImageAttribution: o.photos[0]?.attribution ?? null,
-        observationLicenseCode: o.photos[0]?.license_code ?? null,
+        observationLicenseCode: o?.license_code ?? null,
 
         // annotations:
         observationIsDead: deadOrAliveAnnotation ? isDeadAnnotated : null,

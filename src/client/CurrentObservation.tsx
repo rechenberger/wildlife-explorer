@@ -113,6 +113,10 @@ export const CurrentObservation = ({
               unoptimized
               fill={true}
             />
+            <div className="absolute bottom-0 right-0 bg-white/50 text-black text-xs">
+              {w.metadata.observationLicenseCode} -{" "}
+              {w.metadata.observationImageAttribution}
+            </div>
           </div>
         ) : w.metadata.taxonImageUrlMedium ? (
           <div className="relative -mx-4 aspect-square">
@@ -123,6 +127,10 @@ export const CurrentObservation = ({
               unoptimized
               fill={true}
             />
+            <div className="absolute bottom-0 right-0 bg-white/50 text-black text-xs">
+              {w.metadata.taxonImageLicenseCode} -{" "}
+              {w.metadata.taxonImageAttribution}
+            </div>
           </div>
         ) : null}
         {SHOW_OBSERVATION_JSON && (
@@ -131,26 +139,34 @@ export const CurrentObservation = ({
           </div>
         )}
         <div className="flex flex-row items-start justify-center gap-2 h-[44px] text-xs">
-          {w.metadata.observationUrl && (
-            <Link
-              href={w.metadata.observationUrl}
-              target="_blank"
-              className="flex flex-row items-center gap-1 rounded px-1 py-0.5 hover:bg-black/10 shrink-0"
-            >
-              <ExternalLink size={12} />
-              <div>iNaturalist</div>
-            </Link>
-          )}
-          {w.metadata.taxonWikiUrl && (
-            <Link
-              href={w.metadata.taxonWikiUrl}
-              target="_blank"
-              className="flex flex-row items-center gap-1 rounded px-1 py-0.5 hover:bg-black/10 shrink-0"
-            >
-              <ExternalLink size={12} />
-              <div>Wikipedia</div>
-            </Link>
-          )}
+          <div className="flex flex-col">
+            <div className="flex flex-row gap-2">
+              {w.metadata.observationUrl && (
+                <Link
+                  href={w.metadata.observationUrl}
+                  target="_blank"
+                  className="flex flex-row items-center gap-1 rounded px-1 py-0.5 hover:bg-black/10 shrink-0"
+                >
+                  <ExternalLink size={12} />
+                  <div>iNaturalist</div>
+                </Link>
+              )}
+              {w.metadata.taxonWikiUrl && (
+                <Link
+                  href={w.metadata.taxonWikiUrl}
+                  target="_blank"
+                  className="flex flex-row items-center gap-1 rounded px-1 py-0.5 hover:bg-black/10 shrink-0"
+                >
+                  <ExternalLink size={12} />
+                  <div>Wikipedia</div>
+                </Link>
+              )}
+            </div>
+            <div>
+              {w.metadata.observationLicenseCode} -{" "}
+              {w.metadata.observationUserName}
+            </div>
+          </div>
           <div className="flex-1" />
           <div className="max-w-[50%]">
             <FighterChipByWildlife w={w} showAbsoluteHp={false} ltr={false} />
