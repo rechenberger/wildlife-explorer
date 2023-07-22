@@ -46,7 +46,13 @@ export const TaxonOverview = ({
     )
 
   const disabled = isFetching
-  if (!data) return null
+  if (!data) {
+    return (
+      <div className="flex items-center justify-center py-12 text-center text-sm opacity-60">
+        Loading...
+      </div>
+    )
+  }
 
   return (
     <>
