@@ -1,6 +1,6 @@
 import { atom, useAtom, useSetAtom } from "jotai"
 import { padStart } from "lodash-es"
-import { ArrowRight } from "lucide-react"
+import { ArrowRight, Loader2 } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { Fragment, useEffect } from "react"
@@ -25,13 +25,14 @@ export const TaxonOverview = ({
   }, [initialTaxonId, setTaxonId])
 
   const { playerId } = usePlayer()
-  const { data } = api.taxon.getTree.useQuery(
+  const { data, isFetching } = api.taxon.getTree.useQuery(
     {
       taxonId,
       playerId: playerId!,
     },
     {
       enabled: !!playerId && !!taxonId,
+      keepPreviousData: true,
     }
   )
   const { data: globalExplorationProgress } =
@@ -43,10 +44,18 @@ export const TaxonOverview = ({
         enabled: !!playerId,
       }
     )
+
+  const disabled = isFetching
   if (!data) return null
+
   return (
     <>
-      <div className="flex flex-col gap-2 overflow-hidden">
+      <div className="flex flex-col gap-2 overflow-hidden relative">
+        {isFetching && (
+          <div className="absolute left-0 top-0 z-50 animate-spin text-amber-400">
+            <Loader2 />
+          </div>
+        )}
         {!!globalExplorationProgress && (
           <>
             <div className="text-center font-bold text-xs">
@@ -74,7 +83,7 @@ export const TaxonOverview = ({
             <DividerHeading>{data?.ancestors.length} Ancestors</DividerHeading>
             {data?.ancestors.map((taxon) => (
               <Fragment key={taxon.id}>
-                <TaxonView taxon={taxon} />
+                <TaxonView taxon={taxon} disabled={disabled} />
               </Fragment>
             ))}
           </>
@@ -82,7 +91,7 @@ export const TaxonOverview = ({
         <>
           <DividerHeading>Current Taxon</DividerHeading>
           <Fragment>
-            <TaxonView taxon={data?.taxon} />
+            <TaxonView taxon={data?.taxon} disabled={disabled} />
           </Fragment>
         </>
         {!!data?.taxon.descendants.length && (
@@ -92,7 +101,7 @@ export const TaxonOverview = ({
             </DividerHeading>
             {data?.taxon.descendants.map((taxon) => (
               <Fragment key={taxon.id}>
-                <TaxonView taxon={taxon} />
+                <TaxonView taxon={taxon} disabled={disabled} />
               </Fragment>
             ))}
           </>
@@ -102,7 +111,13 @@ export const TaxonOverview = ({
   )
 }
 
-const TaxonView = ({ taxon }: { taxon: Taxon }) => {
+const TaxonView = ({
+  taxon,
+  disabled,
+}: {
+  taxon: Taxon
+  disabled: boolean
+}) => {
   const getName = useGetWildlifeName()
   const setTaxonId = useSetAtom(currentTaxonIdAtom)
   const numPadded = padStart(taxon.fighterSpeciesNum.toString(), 4).replaceAll(
@@ -115,6 +130,7 @@ const TaxonView = ({ taxon }: { taxon: Taxon }) => {
       <div
         className="flex flex-row gap-2 bg-gray-100 rounded-full cursor-pointer hover:bg-gray-200 items-center"
         onClick={() => {
+          if (disabled) return
           setTaxonId(taxon.id)
         }}
       >
