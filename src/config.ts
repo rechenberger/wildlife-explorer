@@ -94,3 +94,5 @@ export const REFETCH_MS_BATTLE_PVP = 1_000
 export const REFETCH_MS_BATTLE_BUTTON = 2_000
 export const REFETCH_MS_LATEST_TRADE = 2_000
 export const REFETCH_MS_ACTIVE_TRADE = 1_000
+
+export const WEIRD_ROOT_TAXON_ID = 48460

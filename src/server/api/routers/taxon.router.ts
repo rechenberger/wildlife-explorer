@@ -1,6 +1,6 @@
 import { first } from "lodash-es"
 import { z } from "zod"
-import { NO_OF_ALL_TAXONS } from "~/config"
+import { NO_OF_ALL_TAXONS, WEIRD_ROOT_TAXON_ID } from "~/config"
 import { createTRPCRouter } from "~/server/api/trpc"
 import { devProcedure } from "../middleware/devProcedure"
 import { playerProcedure } from "../middleware/playerProcedure"
@@ -82,7 +82,7 @@ export const taxonRouter = createTRPCRouter({
       })
 
       let ancestorIds = taxon.metadata.taxonAncestorIds
-      ancestorIds = ancestorIds.filter((id) => id !== 48460)
+      ancestorIds = ancestorIds.filter((id) => id !== WEIRD_ROOT_TAXON_ID)
 
       let ancestors = await ctx.prisma.taxon.findMany({
         where: {

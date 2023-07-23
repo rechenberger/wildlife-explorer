@@ -1,6 +1,6 @@
 import { type Taxon } from "@prisma/client"
 import { last } from "lodash-es"
-import { MAX_RETRIES_IMPORT_TAXON } from "~/config"
+import { MAX_RETRIES_IMPORT_TAXON, WEIRD_ROOT_TAXON_ID } from "~/config"
 import { type MyPrismaClient } from "../db"
 import { type TaxonMetadata } from "../schema/TaxonMetadata"
 import { findTaxon } from "./findTaxon"
@@ -51,7 +51,7 @@ export const importTaxon = async ({
   let ancestorId = last(metadata.taxonAncestorIds) ?? null
 
   // 48460 is always the root taxon??
-  if (ancestorId && ancestorId === 48460) ancestorId = null
+  if (ancestorId && ancestorId === WEIRD_ROOT_TAXON_ID) ancestorId = null
   if (!ancestorId) {
     throw new Error(`no ancestorId for taxonId: ${taxonId}`)
   }
