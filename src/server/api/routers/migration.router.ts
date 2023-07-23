@@ -1,11 +1,10 @@
-import { chunk, flatMap, includes, uniq } from "lodash-es"
+import { chunk, includes } from "lodash-es"
 import { MAX_FIGHTERS_PER_TEAM } from "~/config"
 import { getExpRate } from "~/data/pokemonLevelExperienceMap"
 import { PokemonLevelingRate } from "~/data/pokemonLevelingRate"
 import { createTRPCRouter } from "~/server/api/trpc"
 import { importTaxon } from "~/server/inaturalist/importTaxon"
 import { getWildlifeFighterPlus } from "~/server/lib/battle/getWildlifeFighterPlus"
-import { taxonMappingByAI } from "~/server/lib/battle/taxonMappingByAI"
 import { LevelingRate, type CatchMetadata } from "~/server/schema/CatchMetadata"
 import { devProcedure } from "../middleware/devProcedure"
 
@@ -169,41 +168,47 @@ export const migrationRouter = createTRPCRouter({
     }
   }),
 
-  tmp: devProcedure.mutation(async ({ ctx }) => {
-    const allTaxons = await ctx.prisma.taxon.findMany({
-      select: {
-        id: true,
+  tmp: devProcedure.mutation(async ({}) => {
+    //
+  }),
+
+  fixTaxonProblems: devProcedure.mutation(async ({ ctx }) => {
+    const problems = await ctx.prisma.taxon.findMany({
+      where: {
+        isAnchor: false,
+        anchorId: null,
       },
     })
-    const importedIds = allTaxons.map((t) => t.id)
-    const allMappings = flatMap(taxonMappingByAI, (t) => t.children).map(
-      (t) => t.taxonId
-    )
 
-    const taxonIds = uniq(
-      allMappings.filter((id) => !includes(importedIds, id))
-    )
-
-    // const chunkSize = 30
-    // const chunks = chunk(taxonIds, chunkSize)
-    // for (const chunk of chunks) {
-    //   await Promise.all(
-    //     map(chunk, (taxonId) =>
-    //       importTaxon({
-    //         prisma: ctx.prisma,
-    //         taxonId,
-    //         playerId: "cljle5htl0001cf5du54abpjz",
-    //       })
-    //     )
-    //   )
-    // }
-
-    return taxonIds
-    // await importTaxon({
-    //   prisma: ctx.prisma,
-    //   taxonId: 3017,
-    //   playerId: "cljle5htl0001cf5du54abpjz",
-    // })
+    console.log(`${problems.length} problems`)
+    let done = 0
+    for await (const problem of problems) {
+      let candidateId = problem.ancestorId
+      while (true) {
+        if (!candidateId) {
+          throw new Error(`no ancestorId for taxonId: ${problem.id}`)
+        }
+        const candidate = await ctx.prisma.taxon.findUniqueOrThrow({
+          where: { id: candidateId },
+        })
+        if (candidate.isAnchor) {
+          break
+        } else {
+          candidateId = candidate.ancestorId
+        }
+      }
+      const anchorId = candidateId
+      await ctx.prisma.taxon.update({
+        where: {
+          id: problem.id,
+        },
+        data: {
+          anchorId,
+        },
+      })
+      console.log(`${++done} of ${problems.length} done`)
+    }
+    return problems
   }),
 
   wildlifeToTaxons: devProcedure.mutation(async ({ ctx }) => {
