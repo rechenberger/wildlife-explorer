@@ -12,6 +12,7 @@ import { cn } from "./cn"
 import { Button } from "./shadcn/ui/button"
 import { leaveIcon } from "./typeIcons"
 import { usePlayer } from "./usePlayer"
+import { REFETCH_MS_ACTIVE_TRADE } from "~/config"
 
 export const TradeDetails = ({ tradeId }: { tradeId: string }) => {
   const { playerId } = usePlayer()
@@ -22,7 +23,7 @@ export const TradeDetails = ({ tradeId }: { tradeId: string }) => {
     },
     {
       enabled: !!playerId,
-      refetchInterval: 1000,
+      refetchInterval: REFETCH_MS_ACTIVE_TRADE,
     }
   )
 

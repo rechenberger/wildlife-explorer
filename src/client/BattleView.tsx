@@ -4,7 +4,7 @@ import { find, flatMap, map, orderBy } from "lodash-es"
 import { Scroll, ScrollText, Undo2 } from "lucide-react"
 import { Fragment, useCallback, useLayoutEffect, useRef } from "react"
 import { toast } from "sonner"
-import { DEV_MODE } from "~/config"
+import { DEV_MODE, REFETCH_MS_BATTLE_PVP } from "~/config"
 import { parseBattleLog } from "~/server/lib/battle/battleLogParser"
 import { api } from "~/utils/api"
 import { atomWithLocalStorage } from "~/utils/atomWithLocalStorage"
@@ -76,7 +76,7 @@ export const BattleView = ({
       // onSuccess: (data) => {
       //   console.log(data)
       // },
-      refetchInterval: pvpStatus?.isPvp ? 1000 : undefined,
+      refetchInterval: pvpStatus?.isPvp ? REFETCH_MS_BATTLE_PVP : undefined,
     }
   )
 

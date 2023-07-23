@@ -2,7 +2,7 @@ import NiceModal from "@ebay/nice-modal-react"
 import { atom } from "jotai"
 import { Swords } from "lucide-react"
 import { useCallback, useEffect } from "react"
-import { ENABLE_BATTLE_VIEW } from "~/config"
+import { ENABLE_BATTLE_VIEW, REFETCH_MS_BATTLE_BUTTON } from "~/config"
 import { type LatLng } from "~/server/schema/LatLng"
 import { api } from "~/utils/api"
 import { BattleFastViewModal } from "./BattleFastViewModal"
@@ -22,7 +22,7 @@ export const BattleViewButton = () => {
       },
       {
         enabled: !!playerId,
-        refetchInterval: 2000,
+        refetchInterval: REFETCH_MS_BATTLE_BUTTON,
       }
     )
 

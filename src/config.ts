@@ -87,3 +87,10 @@ export const NO_OF_ALL_TAXONS = 431_880
 export const NO_OF_ALL_OBSERVATIONS = 149_632_539
 
 export const MAX_RETRIES_IMPORT_TAXON = 4
+
+export const SHOW_FIGHTERS_DEFAULT = true
+
+export const REFETCH_MS_BATTLE_PVP = 1_000
+export const REFETCH_MS_BATTLE_BUTTON = 2_000
+export const REFETCH_MS_LATEST_TRADE = 2_000
+export const REFETCH_MS_ACTIVE_TRADE = 1_000

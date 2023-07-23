@@ -3,6 +3,7 @@ import { useEffect } from "react"
 import { api } from "~/utils/api"
 import { TradeDetailsModal } from "./TradeDetailsModal"
 import { usePlayer } from "./usePlayer"
+import { REFETCH_MS_LATEST_TRADE } from "~/config"
 
 export const useLatestPendingTradeAutoOpen = () => {
   const { playerId } = usePlayer()
@@ -12,7 +13,7 @@ export const useLatestPendingTradeAutoOpen = () => {
     },
     {
       enabled: !!playerId,
-      refetchInterval: 1000,
+      refetchInterval: REFETCH_MS_LATEST_TRADE,
     }
   )
   useEffect(() => {
