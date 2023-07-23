@@ -93,7 +93,7 @@ export const WildlifeMarker = ({
                 fighterSpeciesNum: nearMe.fighter.speciesNum,
               })}
               className={cn(
-                "h-full w-full rounded-full scale-[2]",
+                "h-full w-full rounded-full scale-[3]",
                 !!w.caughtAt && "grayscale"
               )}
               alt={"Observation"}
