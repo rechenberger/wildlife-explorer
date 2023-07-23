@@ -14,37 +14,20 @@ import {
   CommandItem,
 } from "./shadcn/ui/command"
 import { Popover, PopoverContent, PopoverTrigger } from "./shadcn/ui/popover"
-import { useMyCatches } from "./useCatches"
+import { useMyCatches, type MyCatch } from "./useCatches"
 
-const frameworks = [
-  {
-    value: "next.js",
-    label: "Next.js",
-  },
-  {
-    value: "sveltekit",
-    label: "SvelteKit",
-  },
-  {
-    value: "nuxt.js",
-    label: "Nuxt.js",
-  },
-  {
-    value: "remix",
-    label: "Remix",
-  },
-  {
-    value: "astro",
-    label: "Astro",
-  },
-]
-
-export const MyCatchSelect = () => {
+export const MyCatchSelect = ({
+  onSelect,
+  selectedId,
+}: {
+  selectedId?: string | null
+  onSelect?: (c: MyCatch) => void
+}) => {
   const [open, setOpen] = React.useState(false)
-  const [selectedId, setSelectedId] = React.useState<string | null>()
 
   const { myCatches } = useMyCatches()
 
+  // const [selectedId, setSelectedId] = React.useState<string | null>()
   const selectedCatch = myCatches?.find((c) => c.id === selectedId)
 
   return (
@@ -74,8 +57,9 @@ export const MyCatchSelect = () => {
               <CommandItem
                 key={c.id}
                 onSelect={() => {
-                  setSelectedId(c.id)
+                  // setSelectedId(c.id)
                   setOpen(false)
+                  onSelect?.(c)
                 }}
               >
                 <Check

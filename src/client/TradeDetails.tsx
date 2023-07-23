@@ -1,7 +1,7 @@
 import NiceModal from "@ebay/nice-modal-react"
 import { Fragment } from "react"
 import { toast } from "sonner"
-import { RouterInputs, api } from "~/utils/api"
+import { api, type RouterInputs } from "~/utils/api"
 import { FighterChip } from "./FighterChip"
 import { MyCatchSelect } from "./MyCatchSelect"
 import { TradeDetailsModal } from "./TradeDetailsModal"
@@ -23,7 +23,13 @@ export const TradeDetails = ({ tradeId }: { tradeId: string }) => {
     }
   )
 
-  const { mutateAsync } = api.trade.updateTrade.useMutation()
+  const trpc = api.useContext()
+  const { mutateAsync } = api.trade.updateTrade.useMutation({
+    onSettled: () => {
+      trpc.trade.invalidate()
+      trpc.catch.invalidate()
+    },
+  })
 
   const updateTrade = async (
     input: Omit<RouterInputs["trade"]["updateTrade"], "tradeId" | "playerId">
@@ -72,7 +78,15 @@ export const TradeDetails = ({ tradeId }: { tradeId: string }) => {
                       </Fragment>
                     )
                   })}
-                  {isMySide && <MyCatchSelect />}
+                  {isMySide && (
+                    <MyCatchSelect
+                      onSelect={(c) => {
+                        updateTrade({
+                          addCatchId: c.id,
+                        })
+                      }}
+                    />
+                  )}
                 </div>
                 <Button
                   disabled={!isMySide || !isPending}
