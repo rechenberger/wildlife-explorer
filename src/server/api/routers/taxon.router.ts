@@ -1,4 +1,4 @@
-import { Dex, toID } from "@pkmn/dex"
+import { Dex, Species } from "@pkmn/dex"
 import { TRPCError } from "@trpc/server"
 import { first } from "lodash-es"
 import { z } from "zod"
@@ -114,9 +114,11 @@ export const taxonRouter = createTRPCRouter({
   setFighterSpecies: devProcedure
     .input(z.object({ taxonId: z.number(), fighterSpecies: z.string() }))
     .mutation(async ({ ctx, input }) => {
-      let species = Dex.species.get(input.fighterSpecies)
+      let species: Species | undefined = Dex.species.get(input.fighterSpecies)
       if (!species?.num) {
-        species = Dex.species.getByID(toID(input.fighterSpecies))
+        species = Dex.species
+          .all()
+          .find((s) => s.num === parseInt(input.fighterSpecies))
       }
       if (!species?.num) {
         throw new Error(`Species ${input.fighterSpecies} not found`)
