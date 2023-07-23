@@ -154,6 +154,7 @@ export const tradeRouter = createTRPCRouter({
             // Transaction to make sure all catches are still owned by the player
             await ctx.prisma.$transaction(async (prisma) => {
               for (const c of trade.catches) {
+                console.log(trade.metadata.playerCatches)
                 const currentPlayerId = findKey(
                   trade.metadata.playerCatches,
                   (pc) => pc.includes(c.id)
@@ -196,10 +197,10 @@ export const tradeRouter = createTRPCRouter({
       // add/remove catches
       if ("addCatchId" in input && input.addCatchId) {
         const playerCatches = trade.metadata.playerCatches || {}
-        playerCatches[ctx.player.id] = without(
-          playerCatches[ctx.player.id],
-          input.addCatchId
-        )
+        playerCatches[ctx.player.id] = uniq([
+          ...(playerCatches[ctx.player.id] || []),
+          input.addCatchId,
+        ])
         await ctx.prisma.trade.update({
           where: { id: input.tradeId },
           data: {
@@ -214,10 +215,10 @@ export const tradeRouter = createTRPCRouter({
       }
       if ("removeCatchId" in input && input.removeCatchId) {
         const playerCatches = trade.metadata.playerCatches || {}
-        playerCatches[ctx.player.id] = uniq([
-          ...(playerCatches[ctx.player.id] || []),
-          input.removeCatchId,
-        ])
+        playerCatches[ctx.player.id] = without(
+          playerCatches[ctx.player.id],
+          input.removeCatchId
+        )
         await ctx.prisma.trade.update({
           where: { id: input.tradeId },
           data: {
