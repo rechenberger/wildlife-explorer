@@ -68,6 +68,7 @@ export const taxonRouter = createTRPCRouter({
         include: {
           descendants: {
             include: {
+              foundBy: true,
               _count: {
                 select: {
                   wildlife: true,
@@ -75,6 +76,7 @@ export const taxonRouter = createTRPCRouter({
               },
             },
           },
+          foundBy: true,
           _count: {
             select: {
               wildlife: true,
@@ -93,6 +95,7 @@ export const taxonRouter = createTRPCRouter({
           },
         },
         include: {
+          foundBy: true,
           _count: {
             select: {
               wildlife: true,

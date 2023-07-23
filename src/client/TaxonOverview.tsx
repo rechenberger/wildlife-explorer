@@ -226,6 +226,10 @@ const TaxonView = ({
           <div className="text-xs opacity-60 truncate">
             {taxon._count?.wildlife} Wildlife
           </div>
+          {/* <div className="text-xs opacity-60 truncate">
+            found by {taxon.foundBy?.name}{" "}
+            <TimeAgo date={taxon.createdAt} addSuffix={true} />
+          </div> */}
         </div>
         <div className="flex flex-row gap-2 items-center justify-center">
           <ArrowRight
