@@ -28,18 +28,13 @@ import { useCatch } from "./useCatch"
 import { useGetWildlifeName } from "./useGetWildlifeName"
 import { navigatingToObservationIdAtom, useNavigation } from "./useNavigation"
 import { usePlayer } from "./usePlayer"
+import { useShowFighters } from "./useShowFighter"
 
 const JsonViewer = dynamic(() => import("../client/JsonViewer"), { ssr: false })
 
 export const currentObservationIdAtom = atom<number | null>(null)
 
-export const CurrentObservation = ({
-  wildlifeId,
-  close,
-}: {
-  wildlifeId: string
-  close: () => void
-}) => {
+export const CurrentObservation = ({ wildlifeId }: { wildlifeId: string }) => {
   const { playerId } = usePlayer()
   const { data } = api.wildlife.getOne.useQuery(
     {
@@ -59,6 +54,7 @@ export const CurrentObservation = ({
   const { attackWildlife, attackWildlifeLoading } = useAttackWildlife()
 
   const getName = useGetWildlifeName()
+  const showFighters = useShowFighters()
 
   if (!data) return null
 
@@ -76,6 +72,11 @@ export const CurrentObservation = ({
             <X size={16} />
           </button> */}
         </div>
+        {showFighters && (
+          <div className="-mt-4 text-xs italic opacity-60">
+            {getName({ wildlife: w })}
+          </div>
+        )}
         <div className="-mt-4 text-xs italic opacity-60">
           Found by {w.foundBy.name} <TimeAgo date={w.createdAt} addSuffix />
         </div>
