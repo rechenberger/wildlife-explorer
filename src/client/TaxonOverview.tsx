@@ -65,16 +65,33 @@ export const TaxonOverview = ({
         trpc.invalidate()
       },
     })
+  const { mutateAsync: unsetFighterSpecies } =
+    api.taxon.unsetFighterSpecies.useMutation({
+      onSuccess: () => {
+        trpc.invalidate()
+      },
+    })
 
   const changeFighterSpecies = ({ taxonId }: { taxonId: number }) => {
-    const fighterSpeciesName = prompt("Enter the fighterSpeciesName")
+    const fighterSpeciesName = prompt(
+      "Enter the fighterSpeciesName (type delete to remove anchor)"
+    )
     if (!fighterSpeciesName) return
-    const promise = setFighterSpecies({ taxonId, fighterSpeciesName })
-    toast.promise(promise, {
-      loading: "Changing Fighter Species...",
-      success: "Fighter Species Changed!",
-      error: (err: any) => err?.messgae || "Failed to change Fighter Species",
-    })
+    if (fighterSpeciesName === "delete") {
+      const promise = unsetFighterSpecies({ taxonId })
+      toast.promise(promise, {
+        loading: "Removing Fighter Species...",
+        success: "Fighter Species Removed!",
+        error: (err: any) => err?.message || "Failed to remove Fighter Species",
+      })
+    } else {
+      const promise = setFighterSpecies({ taxonId, fighterSpeciesName })
+      toast.promise(promise, {
+        loading: "Changing Fighter Species...",
+        success: "Fighter Species Changed!",
+        error: (err: any) => err?.message || "Failed to change Fighter Species",
+      })
+    }
   }
 
   const disabled = isFetching
