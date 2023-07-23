@@ -93,12 +93,12 @@ export const tradeRouter = createTRPCRouter({
       z.union([
         z.object({
           tradeId: z.string(),
-          addCatchId: z.string().optional(),
-          removeCatchId: z.string().optional(),
+          status: z.enum(["accept", "reject", "cancel"]),
         }),
         z.object({
           tradeId: z.string(),
-          status: z.enum(["accept", "reject", "cancel"]),
+          addCatchId: z.string().optional(),
+          removeCatchId: z.string().optional(),
         }),
       ])
     )
@@ -117,6 +117,7 @@ export const tradeRouter = createTRPCRouter({
         })
       }
       if ("status" in input) {
+        console.log("status", input.status)
         if (input.status === "cancel") {
           await ctx.prisma.trade.update({
             where: { id: input.tradeId },
