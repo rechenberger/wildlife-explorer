@@ -71,6 +71,7 @@ export const TradeDetails = ({ tradeId }: { tradeId: string }) => {
                       </Fragment>
                     )
                   })}
+                  {isMySide && <Button>+ Add Catch</Button>}
                 </div>
               </div>
               <Button
