@@ -4,6 +4,8 @@ import { ArrowRight, Loader2 } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { Fragment, useEffect, useMemo } from "react"
+import { toast } from "sonner"
+import { DEV_MODE } from "~/config"
 import { api, type RouterOutputs } from "~/utils/api"
 import { atomWithLocalStorage } from "~/utils/atomWithLocalStorage"
 import { DividerHeading } from "./DividerHeading"
@@ -55,6 +57,25 @@ export const TaxonOverview = ({
       "desc"
     )
   }, [data?.taxon.descendants])
+
+  const trpc = api.useContext()
+  const { mutateAsync: setFighterSpecies } =
+    api.taxon.setFighterSpecies.useMutation({
+      onSuccess: () => {
+        trpc.invalidate()
+      },
+    })
+
+  const changeFighterSpecies = ({ taxonId }: { taxonId: number }) => {
+    const fighterSpeciesName = prompt("Enter the fighterSpeciesName")
+    if (!fighterSpeciesName) return
+    const promise = setFighterSpecies({ taxonId, fighterSpeciesName })
+    toast.promise(promise, {
+      loading: "Changing Fighter Species...",
+      success: "Fighter Species Changed!",
+      error: (err: any) => err?.messgae || "Failed to change Fighter Species",
+    })
+  }
 
   const disabled = isFetching
   if (!data) {
@@ -108,7 +129,16 @@ export const TaxonOverview = ({
         <>
           <DividerHeading>Current Taxon</DividerHeading>
           <Fragment>
-            <TaxonView taxon={data?.taxon} disabled={disabled} />
+            <div
+              className="flex flex-col"
+              onClick={() => {
+                if (!DEV_MODE) return
+                if (!data?.taxon.id) return
+                changeFighterSpecies({ taxonId: data?.taxon.id })
+              }}
+            >
+              <TaxonView taxon={data?.taxon} disabled={disabled} />
+            </div>
           </Fragment>
         </>
         {!!descendants.length && (

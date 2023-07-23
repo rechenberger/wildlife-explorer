@@ -1,3 +1,4 @@
+import { Dex } from "@pkmn/dex"
 import { first } from "lodash-es"
 import { z } from "zod"
 import { NO_OF_ALL_TAXONS, WEIRD_ROOT_TAXON_ID } from "~/config"
@@ -107,5 +108,53 @@ export const taxonRouter = createTRPCRouter({
         taxon,
         ancestors,
       }
+    }),
+
+  setFighterSpecies: devProcedure
+    .input(z.object({ taxonId: z.number(), fighterSpeciesName: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const species = Dex.species.get(input.fighterSpeciesName)
+      if (!species) {
+        throw new Error(`Species ${input.fighterSpeciesName} not found`)
+      }
+      const fighterSpeciesName = species.name
+      const fighterSpeciesNum = species.num
+      const currentTaxon = await ctx.prisma.taxon.findUniqueOrThrow({
+        where: { id: input.taxonId },
+      })
+      const anchored = await ctx.prisma.taxon.findMany({
+        where: {
+          anchorId: currentTaxon.anchorId,
+        },
+      })
+      // console.log(anchored)
+      const descendants = anchored.filter((t) =>
+        t.metadata.taxonAncestorIds.includes(currentTaxon.id)
+      )
+      // console.log(descendants)
+      await ctx.prisma.taxon.update({
+        where: {
+          id: currentTaxon.id,
+        },
+        data: {
+          fighterSpeciesName,
+          fighterSpeciesNum,
+          isAnchor: true,
+          anchorId: null,
+        },
+      })
+      await ctx.prisma.taxon.updateMany({
+        where: {
+          id: {
+            in: descendants.map((t) => t.id),
+          },
+        },
+        data: {
+          fighterSpeciesName,
+          fighterSpeciesNum,
+          isAnchor: false,
+          anchorId: currentTaxon.id,
+        },
+      })
     }),
 })
