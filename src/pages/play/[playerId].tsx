@@ -1,5 +1,6 @@
 import NiceModal from "@ebay/nice-modal-react"
 import { Eta } from "~/client/Eta"
+import { GlobalKeyboardShortcuts } from "~/client/GlobalKeyboardShortcuts"
 import { MainActionButtons } from "~/client/MainActionButtons"
 import { MainLayout } from "~/client/MainLayout"
 import { MapBase } from "~/client/MapBase"
@@ -28,6 +29,7 @@ export default function Page() {
           {/* {ENABLE_BATTLE_VIEW && <BattleView />} */}
           <MainActionButtons />
           <WildlifeNearMe />
+          <GlobalKeyboardShortcuts />
         </NiceModal.Provider>
       </MapBase>
     </MainLayout>
