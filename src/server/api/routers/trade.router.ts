@@ -72,7 +72,7 @@ export const tradeRouter = createTRPCRouter({
       })
     )
     .mutation(async ({ ctx, input }) => {
-      await ctx.prisma.trade.create({
+      const trade = await ctx.prisma.trade.create({
         data: {
           status: "PENDING",
           players: {
@@ -80,7 +80,12 @@ export const tradeRouter = createTRPCRouter({
           },
           metadata: { playerAccept: {} } satisfies TradeMetadata,
         },
+        select: {
+          id: true,
+        },
       })
+
+      return trade
     }),
 
   updateTrade: playerProcedure

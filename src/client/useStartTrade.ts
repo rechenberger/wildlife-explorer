@@ -1,5 +1,7 @@
+import NiceModal from "@ebay/nice-modal-react"
 import { toast } from "sonner"
 import { api } from "~/utils/api"
+import { TradeDetailsModal } from "./TradeDetailsModal"
 import { usePlayer } from "./usePlayer"
 
 export const useStartTrade = () => {
@@ -19,9 +21,8 @@ export const useStartTrade = () => {
       success: "Trade started!",
       error: (err: any) => err?.message || "Failed to start trade.",
     })
-    await promise
-
-    // TODO: open modal
+    const { id } = await promise
+    NiceModal.show(TradeDetailsModal, { tradeId: id })
   }
 
   return {
