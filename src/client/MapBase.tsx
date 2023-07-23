@@ -1,5 +1,5 @@
 import { atom, useSetAtom, useStore } from "jotai"
-import { debounce } from "lodash-es"
+import { debounce, throttle } from "lodash-es"
 import { useMemo, useRef, type ReactNode } from "react"
 import { Map, type MapRef } from "react-map-gl"
 import { DEFAULT_LOCATION, DEFAULT_MAP_ZOOM } from "~/config"
@@ -51,6 +51,16 @@ export const MapBase = ({
     )
   }, [setMapState])
 
+  const setZoomThrottled = useMemo(() => {
+    return throttle(
+      (zoom: number) => {
+        store.set(mapRadiusInKmAtom, calculateRadiusFromZoomLevel(zoom))
+      },
+      100,
+      { trailing: true }
+    )
+  }, [store])
+
   const { navigate } = useNavigation()
 
   const latLng = DEFAULT_LOCATION
@@ -94,10 +104,7 @@ export const MapBase = ({
           setStickToPlayer(false)
         }}
         onZoom={(m) => {
-          store.set(
-            mapRadiusInKmAtom,
-            calculateRadiusFromZoomLevel(m.viewState.zoom)
-          )
+          setZoomThrottled(m.viewState.zoom)
         }}
         // onTouchMove={() => {
         //   setStickToPlayer(false)
