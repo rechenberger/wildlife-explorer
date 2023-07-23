@@ -154,7 +154,6 @@ export const tradeRouter = createTRPCRouter({
             // Transaction to make sure all catches are still owned by the player
             await ctx.prisma.$transaction(async (prisma) => {
               for (const c of trade.catches) {
-                console.log(trade.metadata.playerCatches)
                 const currentPlayerId = findKey(
                   trade.metadata.playerCatches,
                   (pc) => pc.includes(c.id)
