@@ -57,9 +57,9 @@ export const tradeRouter = createTRPCRouter({
             (player) => !!playerAccept[player.id]
           )
           if (allAccepted) {
-            // trade catches
-            await Promise.all(
-              trade.catches.map(async (c) => {
+            // Transaction to make sure all catches are still owned by the player
+            await ctx.prisma.$transaction(async (prisma) => {
+              for (const c of trade.catches) {
                 const otherPlayer = trade.players.find(
                   (p) => p.id !== ctx.player.id
                 )
@@ -70,20 +70,20 @@ export const tradeRouter = createTRPCRouter({
                   })
 
                 // Make sure the catch is still owned by the player
-                await ctx.prisma.catch.findFirstOrThrow({
+                await prisma.catch.findFirstOrThrow({
                   where: { id: c.id, playerId: ctx.player.id },
                 })
 
-                await ctx.prisma.catch.update({
+                await prisma.catch.update({
                   where: { id: c.id },
                   data: { playerId: otherPlayer.id },
                 })
-              })
-            )
+              }
 
-            await ctx.prisma.trade.update({
-              where: { id: input.tradeId },
-              data: { status: "COMPLETED" },
+              await prisma.trade.update({
+                where: { id: input.tradeId },
+                data: { status: "COMPLETED" },
+              })
             })
           }
         }
