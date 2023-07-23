@@ -51,7 +51,12 @@ export const scanWildlife = async ({
   LOG_SCAN_TIME && console.time("importTaxon")
   await Promise.all(
     map(taxonIds, async (taxonId) => {
-      importTaxon({ prisma, taxonId, playerId })
+      try {
+        await importTaxon({ prisma, taxonId, playerId })
+      } catch (error) {
+        console.error(`Could not import taxon ${taxonId}`)
+        throw error
+      }
     })
   )
   LOG_SCAN_TIME && console.timeEnd("importTaxon")
