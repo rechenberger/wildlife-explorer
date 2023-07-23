@@ -3,6 +3,7 @@ import { Plus, X } from "lucide-react"
 import { Fragment } from "react"
 import { toast } from "sonner"
 import { api, type RouterInputs } from "~/utils/api"
+import { CatchDetailsModal } from "./CatchDetailsModal"
 import { FighterChip } from "./FighterChip"
 import { MyCatchSelect } from "./MyCatchSelect"
 import { TradeDetailsModal } from "./TradeDetailsModal"
@@ -86,6 +87,11 @@ export const TradeDetails = ({ tradeId }: { tradeId: string }) => {
                               fighter={c}
                               showAbsoluteHp={true}
                               ltr={isLeft}
+                              onClick={() => {
+                                NiceModal.show(CatchDetailsModal, {
+                                  catchId: c.id,
+                                })
+                              }}
                             />
                           </div>
                           {isMySide && (
