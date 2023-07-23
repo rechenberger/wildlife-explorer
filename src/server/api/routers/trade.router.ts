@@ -72,6 +72,7 @@ export const tradeRouter = createTRPCRouter({
       })
     )
     .mutation(async ({ ctx, input }) => {
+      // TODO: check if you or the other player is in a battle or already has a pending trade
       const trade = await ctx.prisma.trade.create({
         data: {
           status: "PENDING",
