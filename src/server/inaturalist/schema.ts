@@ -83,7 +83,7 @@ export const AnnotationSchema = z.object({
   controlled_attribute_id: z.number(),
   controlled_value_id: z.number(),
   user_id: z.number(),
-  user: User,
+  user: User.nullish(),
   uuid: z.string(),
   vote_score: z.number(),
   votes: z.array(z.any()),
