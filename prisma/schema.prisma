@@ -241,7 +241,7 @@ model Trade {
     metadata    Json
     players     Player[]
     catches     Catch[]
-    completedAt DateTime
+    completedAt DateTime?
     status      TradeStatus
 }
 

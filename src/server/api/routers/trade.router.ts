@@ -2,6 +2,7 @@ import { TRPCError } from "@trpc/server"
 import { every, some } from "lodash-es"
 import { z } from "zod"
 import { createTRPCRouter } from "~/server/api/trpc"
+import { TradeMetadata } from "~/server/schema/TradeMetadata"
 import { playerProcedure } from "../middleware/playerProcedure"
 
 export const tradeRouter = createTRPCRouter({
@@ -11,8 +12,16 @@ export const tradeRouter = createTRPCRouter({
         otherPlayerId: z.string(),
       })
     )
-    .mutation(async ({}) => {
-      //
+    .mutation(async ({ ctx, input }) => {
+      await ctx.prisma.trade.create({
+        data: {
+          status: "PENDING",
+          players: {
+            connect: [{ id: ctx.player.id }, { id: input.otherPlayerId }],
+          },
+          metadata: { playerAccept: {} } satisfies TradeMetadata,
+        },
+      })
     }),
 
   updateTrade: playerProcedure
@@ -82,7 +91,7 @@ export const tradeRouter = createTRPCRouter({
 
               await prisma.trade.update({
                 where: { id: input.tradeId },
-                data: { status: "COMPLETED" },
+                data: { status: "COMPLETED", completedAt: new Date() },
               })
             })
           }
