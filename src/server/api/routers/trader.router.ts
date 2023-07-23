@@ -11,7 +11,7 @@ export const tradeRouter = createTRPCRouter({
         otherPlayerId: z.string(),
       })
     )
-    .mutation(async ({ ctx, input }) => {
+    .mutation(async ({}) => {
       //
     }),
 
