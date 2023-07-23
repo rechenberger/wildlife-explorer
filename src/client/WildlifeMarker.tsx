@@ -59,7 +59,8 @@ export const WildlifeMarker = ({
           onCooldown && "bg-gray-400 opacity-50",
           isNavigating &&
             navigatingtoObservationId === w.observationId &&
-            "bg-blue-500"
+            "bg-blue-500",
+          showFighters && "bg-transparent shadow-none"
         )}
         onClick={async (e) => {
           e.stopPropagation()
@@ -90,7 +91,7 @@ export const WildlifeMarker = ({
             <Image
               src={getFighterImage(w.taxon)}
               className={cn(
-                "h-full w-full rounded-full",
+                "h-full w-full rounded-full scale-[2]",
                 !!w.caughtAt && "grayscale"
               )}
               alt={"Observation"}
