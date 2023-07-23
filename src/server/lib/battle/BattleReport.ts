@@ -20,6 +20,10 @@ export const BattleReportFighter = z.object({
   wildlife: z.object({
     id: z.string(),
     metadata: BattleReportWildlifeMetadata,
+    taxon: z.object({
+      fighterSpeciesName: z.string(),
+      fighterSpeciesNum: z.number(),
+    }),
   }),
   activeTurns: z.number().optional(),
   fainted: z.boolean().optional(),

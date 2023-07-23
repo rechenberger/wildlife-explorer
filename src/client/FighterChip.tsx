@@ -5,9 +5,11 @@ import { type BattleReportFighter } from "~/server/lib/battle/BattleReport"
 import { IconFemale } from "./IconFemale"
 import { IconMale } from "./IconMale"
 import { cn } from "./cn"
+import { getFighterImage } from "./getFighterImage"
 import { Progress } from "./shadcn/ui/progress"
 import { useGetWildlifeName } from "./useGetWildlifeName"
 import { usePlayer } from "./usePlayer"
+import { useShowFighters } from "./useShowFighter"
 
 export const FighterChip = ({
   fighter,
@@ -32,6 +34,7 @@ export const FighterChip = ({
   const { player } = usePlayer()
   const canEvolve =
     fighter.fighter?.canEvolve && !player?.metadata?.activeBattleId
+  const showFighters = useShowFighters()
   return (
     <>
       <div
@@ -54,18 +57,35 @@ export const FighterChip = ({
             circleClassName
           )}
         >
-          {fighter.wildlife.metadata.taxonImageUrlSquare && (
-            <Image
-              src={fighter.wildlife.metadata.taxonImageUrlSquare}
-              className={cn(
-                "w-full object-cover object-center transition-transform",
-                fainted && "rotate-180",
-                "pointer-events-none"
+          {showFighters ? (
+            <>
+              <Image
+                src={getFighterImage(fighter.wildlife.taxon)}
+                className={cn(
+                  "h-full w-full rounded-full scale-[1] bg-gray-200"
+                )}
+                alt={"Observation"}
+                unoptimized
+                width={1}
+                height={1}
+              />
+            </>
+          ) : (
+            <>
+              {fighter.wildlife.metadata.taxonImageUrlSquare && (
+                <Image
+                  src={fighter.wildlife.metadata.taxonImageUrlSquare}
+                  className={cn(
+                    "w-full object-cover object-center transition-transform",
+                    fainted && "rotate-180",
+                    "pointer-events-none"
+                  )}
+                  alt={"Observation"}
+                  unoptimized
+                  fill={true}
+                />
               )}
-              alt={"Observation"}
-              unoptimized
-              fill={true}
-            />
+            </>
           )}
         </div>
         <div className={cn("flex-1 overflow-hidden py-1 select-none")}>
