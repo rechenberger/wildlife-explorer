@@ -19,9 +19,11 @@ import { useMyCatches, type MyCatch } from "./useCatches"
 export const MyCatchSelect = ({
   onSelect,
   selectedId,
+  children,
 }: {
   selectedId?: string | null
   onSelect?: (c: MyCatch) => void
+  children?: React.ReactNode
 }) => {
   const [open, setOpen] = React.useState(false)
 
@@ -33,19 +35,21 @@ export const MyCatchSelect = ({
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
-        <Button
-          variant="outline"
-          role="combobox"
-          aria-expanded={open}
-          className="justify-between h-auto"
-        >
-          {selectedCatch ? (
-            <FighterChip fighter={selectedCatch} showAbsoluteHp />
-          ) : (
-            "Select Catch..."
-          )}
-          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-        </Button>
+        {children || (
+          <Button
+            variant="outline"
+            role="combobox"
+            aria-expanded={open}
+            className="justify-between h-auto"
+          >
+            {selectedCatch ? (
+              <FighterChip fighter={selectedCatch} showAbsoluteHp />
+            ) : (
+              "Select Catch..."
+            )}
+            <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+          </Button>
+        )}
       </PopoverTrigger>
       <PopoverContent className="p-0">
         <Command className="">

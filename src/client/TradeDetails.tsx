@@ -1,14 +1,14 @@
 import NiceModal from "@ebay/nice-modal-react"
-import { X } from "lucide-react"
+import { Plus, X } from "lucide-react"
 import { Fragment } from "react"
 import { toast } from "sonner"
 import { api, type RouterInputs } from "~/utils/api"
-import { cn } from "./cn"
 import { FighterChip } from "./FighterChip"
 import { MyCatchSelect } from "./MyCatchSelect"
-import { Button } from "./shadcn/ui/button"
 import { TradeDetailsModal } from "./TradeDetailsModal"
 import { TypeBadge } from "./TypeBadge"
+import { cn } from "./cn"
+import { Button } from "./shadcn/ui/button"
 import { leaveIcon } from "./typeIcons"
 import { usePlayer } from "./usePlayer"
 
@@ -110,7 +110,12 @@ export const TradeDetails = ({ tradeId }: { tradeId: string }) => {
                           addCatchId: c.id,
                         })
                       }}
-                    />
+                    >
+                      <Button>
+                        <Plus className="w-4 h-4 mr-1" />
+                        <span>Add</span>
+                      </Button>
+                    </MyCatchSelect>
                   )}
                 </div>
                 <Button
