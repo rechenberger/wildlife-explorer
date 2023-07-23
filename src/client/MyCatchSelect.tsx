@@ -1,11 +1,16 @@
 "use client"
 
-import { CommandEmpty, CommandGroup, CommandInput, CommandItem } from "cmdk"
 import { Check, ChevronsUpDown } from "lucide-react"
 import * as React from "react"
 import { cn } from "./cn"
 import { Button } from "./shadcn/ui/button"
-import { Command } from "./shadcn/ui/command"
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+} from "./shadcn/ui/command"
 import { Popover, PopoverContent, PopoverTrigger } from "./shadcn/ui/popover"
 
 const frameworks = [
