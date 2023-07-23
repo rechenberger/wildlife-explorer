@@ -8,8 +8,10 @@ import { type BattleReportSide } from "~/server/lib/battle/BattleReport"
 import { fillWithNulls } from "~/utils/fillWithNulls"
 import { BattleFighterSelectModal } from "./BattleFighterSelectModal"
 import { cn } from "./cn"
+import { getFighterImage } from "./getFighterImage"
 import { useGetWildlifeName } from "./useGetWildlifeName"
 import { usePlayer } from "./usePlayer"
+import { useShowFighters } from "./useShowFighter"
 
 export const BattleFighterSelectButton = ({
   side,
@@ -40,6 +42,8 @@ export const BattleFighterSelectButton = ({
   //   playerId: playerId,
   //   choice: `switch ${fighterIdx + 1}`,
   // })
+
+  const showFighters = useShowFighters()
 
   if (side.fighters.length <= 1) return null
   return (
@@ -93,22 +97,48 @@ export const BattleFighterSelectButton = ({
                   )}
                   onClick={onClickDisabled ? undefined : () => {}}
                 >
-                  {fighter.wildlife.metadata.taxonImageUrlSquare && (
-                    <Image
-                      title={
-                        activeWildlifeIsMoveTrapped
-                          ? "You can not switch while your active wildlife is locked into its move"
-                          : undefined
-                      }
-                      src={fighter.wildlife.metadata.taxonImageUrlSquare}
-                      className={cn(
-                        "w-full object-cover object-center",
-                        activeWildlifeIsMoveTrapped && "grayscale"
+                  {showFighters ? (
+                    <>
+                      <Image
+                        src={getFighterImage({
+                          fighterSpeciesNum: fighter.fighter.speciesNum,
+                        })}
+                        title={
+                          activeWildlifeIsMoveTrapped
+                            ? "You can not switch while your active wildlife is locked into its move"
+                            : undefined
+                        }
+                        className={cn(
+                          "w-full object-cover object-center",
+                          activeWildlifeIsMoveTrapped && "grayscale",
+                          "bg-gray-200"
+                        )}
+                        alt={"Observation"}
+                        unoptimized
+                        width={1}
+                        height={1}
+                      />
+                    </>
+                  ) : (
+                    <>
+                      {fighter.wildlife.metadata.taxonImageUrlSquare && (
+                        <Image
+                          title={
+                            activeWildlifeIsMoveTrapped
+                              ? "You can not switch while your active wildlife is locked into its move"
+                              : undefined
+                          }
+                          src={fighter.wildlife.metadata.taxonImageUrlSquare}
+                          className={cn(
+                            "w-full object-cover object-center",
+                            activeWildlifeIsMoveTrapped && "grayscale"
+                          )}
+                          alt={"Observation"}
+                          unoptimized
+                          fill={true}
+                        />
                       )}
-                      alt={"Observation"}
-                      unoptimized
-                      fill={true}
-                    />
+                    </>
                   )}
                 </button>
               </Fragment>
