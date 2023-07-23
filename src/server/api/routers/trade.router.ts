@@ -6,6 +6,20 @@ import { type TradeMetadata } from "~/server/schema/TradeMetadata"
 import { playerProcedure } from "../middleware/playerProcedure"
 
 export const tradeRouter = createTRPCRouter({
+  getLatestPending: playerProcedure.query(async ({ ctx }) => {
+    return await ctx.prisma.trade.findFirst({
+      where: {
+        players: {
+          some: { id: ctx.player.id },
+        },
+        status: "PENDING",
+      },
+      orderBy: {
+        id: "desc",
+      },
+    })
+  }),
+
   startTrade: playerProcedure
     .input(
       z.object({
