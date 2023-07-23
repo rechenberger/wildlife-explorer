@@ -1,6 +1,6 @@
 import { Client } from "@googlemaps/google-maps-services-js"
 import { PlaceType } from "@prisma/client"
-import { flatMap } from "lodash-es"
+import { filter, flatMap, some } from "lodash-es"
 import { RADIUS_IN_KM_SCAN_PLACES } from "~/config"
 import { env } from "~/env.mjs"
 import { type LatLng } from "../schema/LatLng"
@@ -13,6 +13,8 @@ const types = [
   },
   {
     googleMapsType: "airport",
+    placeDenyList: ["parking"],
+    mustBeOpen: true,
     dbType: PlaceType.AIRPORT,
   },
 ]
@@ -23,6 +25,8 @@ export const findPlaces = async ({ location }: { location: LatLng }) => {
       const places = await findPlacesByType({
         location,
         type: t.googleMapsType,
+        mustBeOpen: t.mustBeOpen,
+        placeDenyList: t.placeDenyList,
       })
       return places.map((p) => {
         return {
@@ -44,9 +48,13 @@ export const findPlaces = async ({ location }: { location: LatLng }) => {
 export const findPlacesByType = async ({
   location,
   type,
+  mustBeOpen,
+  placeDenyList,
 }: {
   location: LatLng
   type: string
+  mustBeOpen?: boolean
+  placeDenyList?: string[]
 }) => {
   try {
     const client = new Client({})
@@ -64,7 +72,19 @@ export const findPlacesByType = async ({
       throw new Error(`Google Maps API error: ${result.data.error_message}`)
     }
 
-    const results = result.data.results
+    let results = result.data.results
+
+    if (mustBeOpen) {
+      results = filter(results, (r) => {
+        return !!r.opening_hours?.open_now
+      })
+    }
+
+    if (placeDenyList) {
+      results = filter(results, (r) => {
+        return !some(placeDenyList, (d) => !!r.types?.includes(d as any))
+      })
+    }
 
     const places = results.map((p) => {
       return {
