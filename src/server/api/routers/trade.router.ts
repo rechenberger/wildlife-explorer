@@ -68,6 +68,12 @@ export const tradeRouter = createTRPCRouter({
                     code: "BAD_REQUEST",
                     message: `Could not find other player`,
                   })
+
+                // Make sure the catch is still owned by the player
+                await ctx.prisma.catch.findFirstOrThrow({
+                  where: { id: c.id, playerId: ctx.player.id },
+                })
+
                 await ctx.prisma.catch.update({
                   where: { id: c.id },
                   data: { playerId: otherPlayer.id },
