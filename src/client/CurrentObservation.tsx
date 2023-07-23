@@ -1,5 +1,13 @@
+import NiceModal from "@ebay/nice-modal-react"
 import { atom, useAtomValue } from "jotai"
-import { Check, Clock, ExternalLink, Frown, LocateOff } from "lucide-react"
+import {
+  Check,
+  Clock,
+  ExternalLink,
+  Frown,
+  LocateOff,
+  Network,
+} from "lucide-react"
 import dynamic from "next/dynamic"
 import Image from "next/image"
 import Link from "next/link"
@@ -11,6 +19,7 @@ import {
 import { api } from "~/utils/api"
 import { Away } from "./Away"
 import { FighterChipByWildlife } from "./FighterChipByWildlife"
+import { TaxonOverviewModal } from "./TaxonOverviewModal"
 import { TimeAgo } from "./TimeAgo"
 import { cn } from "./cn"
 import { formatMeters } from "./formatMeters"
@@ -191,6 +200,17 @@ export const CurrentObservation = ({
             )}
           </div>
           <div className="flex-1" />
+          <button
+            className="text-right text-xs font-normal text-black opacity-60 flex flex-col items-center hover:bg-gray-200 rounded-lg p-2"
+            onClick={() => {
+              NiceModal.show(TaxonOverviewModal, {
+                taxonId: w.taxonId,
+              })
+            }}
+          >
+            <Network className="w-4 h-4" />
+            <div>Taxon</div>
+          </button>
           <div className="max-w-[50%]">
             <FighterChipByWildlife w={w} showAbsoluteHp={false} ltr={false} />
           </div>
