@@ -52,7 +52,6 @@ export const findPlaces = async ({ location }: { location: LatLng }) => {
     airports,
     (a) => a.distanceInMeter <= RADIUS_IN_KM_SCAN_PLACES * 1000
   )
-  console.log("airports", airports)
   const airportPlaces = airports.map((a) => {
     return {
       googlePlaceId: `AIRPORT_${a.code}`,
