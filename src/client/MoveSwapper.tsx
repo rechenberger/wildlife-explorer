@@ -58,7 +58,7 @@ export const MoveSwapper = ({ catchId }: { catchId: string }) => {
 
   const { data: evolutionPreview } = api.evolution.getPreview.useQuery(
     { playerId: playerId!, catchId },
-    { enabled: !!playerId && !!c?.fighter.canEvolve }
+    { enabled: !!playerId }
   )
 
   const swapInMove = ({
@@ -208,9 +208,11 @@ export const MoveSwapper = ({ catchId }: { catchId: string }) => {
           </div>
         </>
       )}
-      {!!evolutionPreview?.realNewMoves?.length && (
+      {!!evolutionPreview && (
         <>
-          <DividerHeading>Evolution Moves</DividerHeading>
+          <DividerHeading>
+            Evolution (Level {evolutionPreview.evoLevel})
+          </DividerHeading>
           <div className="grid flex-1 grid-cols-[auto_1fr] gap-1 items-center gap-x-2">
             {map(evolutionPreview?.realNewMoves, (move) => {
               return (

@@ -8,7 +8,7 @@ import {
   getPossibleMovesByCatch,
   getPossibleMovesByCatchId,
 } from "~/server/lib/battle/getPossibleMoves"
-import { getNextPossibleEvoByLevel } from "~/server/lib/battle/getWildlifeFighter"
+import { getNextEvo } from "~/server/lib/battle/getWildlifeFighter"
 import { getWildlifeFighterPlus } from "~/server/lib/battle/getWildlifeFighterPlus"
 import { type CatchMetadata } from "~/server/schema/CatchMetadata"
 import { playerProcedure } from "../middleware/playerProcedure"
@@ -17,18 +17,24 @@ export const evolutionRouter = createTRPCRouter({
   evolve: playerProcedure
     .input(z.object({ catchId: z.string() }))
     .mutation(async ({ ctx, input }) => {
-      const { evolvedMetadata } = await getNextEvolution({
+      const nextEvo = await getNextEvolution({
         catchId: input.catchId,
         playerId: ctx.player.id,
         prisma: ctx.prisma,
       })
+      if (!nextEvo || !nextEvo.canEvolve) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "This wildlife cannot evolve",
+        })
+      }
       await ctx.prisma.catch.update({
         where: {
           id: input.catchId,
         },
         data: {
           metadata: {
-            ...evolvedMetadata,
+            ...nextEvo.evolvedMetadata,
           } satisfies CatchMetadata,
         },
       })
@@ -37,17 +43,20 @@ export const evolutionRouter = createTRPCRouter({
   getPreview: playerProcedure
     .input(z.object({ catchId: z.string() }))
     .query(async ({ ctx, input }) => {
-      const { oldMoves, newMoves } = await getNextEvolution({
+      const nextEvo = await getNextEvolution({
         catchId: input.catchId,
         playerId: ctx.player.id,
         prisma: ctx.prisma,
       })
+      if (!nextEvo) return null
+      const { oldMoves, newMoves, evoLevel } = nextEvo
       const realNewMoves = newMoves.filter(
         (m) => !oldMoves.find((om) => !!om.learned && om.id === m.id)
       )
 
       return {
         realNewMoves,
+        evoLevel,
       }
     }),
 })
@@ -70,24 +79,22 @@ const getNextEvolution = async ({
 
   const fighter = await getWildlifeFighterPlus(catchToEvolve)
 
-  const nextPossibleEvo = getNextPossibleEvoByLevel({
+  const nextEvo = getNextEvo({
     species: Dex.species.get(fighter.species),
-    level: fighter.level,
+    // level: fighter.level,
   })
+  if (!nextEvo) return null
 
-  const canEvolve = !!nextPossibleEvo
-  if (!canEvolve) {
-    throw new TRPCError({
-      code: "BAD_REQUEST",
-      message: "Wildlife cannot evolve",
-    })
-  }
+  const evoLevel = nextEvo.evoLevel
+  if (!evoLevel) return null
+
+  const canEvolve = evoLevel <= fighter.level
 
   const movesLearned = filter(oldMoves, (m) => !!m.learned).map((m) => m.id)
   const evolvedMetadata = {
     ...catchToEvolve.metadata,
-    speciesNum: nextPossibleEvo.num,
-    speciesName: nextPossibleEvo.name,
+    speciesNum: nextEvo.num,
+    speciesName: nextEvo.name,
     movesLearned: movesLearned,
   } satisfies CatchMetadata
 
@@ -102,5 +109,7 @@ const getNextEvolution = async ({
     evolvedMetadata,
     oldMoves,
     newMoves,
+    canEvolve,
+    evoLevel,
   }
 }

@@ -51,6 +51,14 @@ export const getNextPossibleEvoByLevel = ({
   species: Species
   level: number
 }) => {
+  const nextEvo = getNextEvo({
+    species,
+  })
+  if (nextEvo?.evoLevel && nextEvo.evoLevel > level) return null
+  return nextEvo
+}
+
+export const getNextEvo = ({ species }: { species: Species }) => {
   const evos = map(species.evos, (e) => Dex.species.get(e))
   const possibleEvo = find(evos, (e) => {
     // if (e.evoType) return false
@@ -59,7 +67,6 @@ export const getNextPossibleEvoByLevel = ({
     // if (e.evoMove) return false
 
     if (!e.evoLevel) return false
-    if (e.evoLevel > level) return false
     return true
   })
   return possibleEvo
