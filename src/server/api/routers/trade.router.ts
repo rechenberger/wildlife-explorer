@@ -138,6 +138,15 @@ export const tradeRouter = createTRPCRouter({
         } else {
           const playerAccept = trade.metadata.playerAccept || {}
           playerAccept[ctx.player.id] = input.status === "accept" ? true : false
+          await ctx.prisma.trade.update({
+            where: { id: input.tradeId },
+            data: {
+              metadata: {
+                ...trade.metadata,
+                playerAccept,
+              } satisfies TradeMetadata,
+            },
+          })
           const allAccepted = every(
             trade.players,
             (player) => !!playerAccept[player.id]
