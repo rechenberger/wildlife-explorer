@@ -62,7 +62,7 @@ export const CurrentObservation = ({
     <>
       <>
         <div className="flex flex-row items-center gap-2">
-          <div className="flex-1 truncate text-2xl">{getName(w)}</div>
+          <div className="flex-1 truncate text-2xl">{getName(data)}</div>
           {/* <button className="shrink-0" onClick={() => close()}>
             <X size={16} />
           </button> */}
@@ -124,7 +124,7 @@ export const CurrentObservation = ({
             <Image
               src={w.metadata.taxonImageUrlMedium}
               className="w-full object-cover object-center"
-              alt={getName(w)}
+              alt={getName(data)}
               unoptimized
               fill={true}
             />

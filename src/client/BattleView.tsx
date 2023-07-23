@@ -271,7 +271,7 @@ export const BattleView = ({
                               ) : (
                                 <>
                                   <span className="italic text-black">
-                                    {getName(fighter.wildlife)}
+                                    {getName(fighter)}
                                   </span>{" "}
                                   {lastMove ? (
                                     <>

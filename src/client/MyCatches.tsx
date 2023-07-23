@@ -207,7 +207,7 @@ export const MyCatches = () => {
         [
           (c) => {
             if (order.by === "name") {
-              return c.name || getName(c.wildlife)
+              return getName(c)
             }
             if (order.by === "level") {
               return c.metadata.level
@@ -217,7 +217,7 @@ export const MyCatches = () => {
             }
             return c.id
           },
-          (c) => c.name || getName(c.wildlife),
+          (c) => getName(c),
         ],
         [order.direction, "asc"]
       ),

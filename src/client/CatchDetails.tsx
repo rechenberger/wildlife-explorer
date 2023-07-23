@@ -95,7 +95,7 @@ export const CatchDetails = ({
 
   const percentage = calcExpPercentage(c.metadata)
 
-  const catchName = c.name || getName(c.wildlife)
+  const catchName = getName(c)
   return (
     <>
       {showTitle && (

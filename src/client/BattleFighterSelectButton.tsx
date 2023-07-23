@@ -81,7 +81,7 @@ export const BattleFighterSelectButton = ({
             return (
               <Fragment key={fighterIdx}>
                 <button
-                  title={fighter.name || getName(fighter.wildlife)}
+                  title={getName(fighter)}
                   disabled={!isMySide || activeWildlifeIsMoveTrapped}
                   className={cn(
                     "relative aspect-square overflow-hidden rounded-full border-2 w-5 md:w-6 h-5 md:h-6",

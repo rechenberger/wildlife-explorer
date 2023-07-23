@@ -30,7 +30,7 @@ export const FighterChip = ({
   const hpFull = hp >= hpMax
   const fainted = hp <= 0
   const getName = useGetWildlifeName()
-  const name = fighter.name || getName(fighter.wildlife)
+  const name = getName(fighter)
   const { player } = usePlayer()
   const canEvolve =
     fighter.fighter?.canEvolve && !player?.metadata?.activeBattleId

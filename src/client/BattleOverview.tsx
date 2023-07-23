@@ -84,7 +84,7 @@ export const BattleOverview = () => {
                         {p.player
                           ? p.player.name
                           : p.wildlife
-                          ? getName(p.wildlife)
+                          ? getName({ wildlife: p.wildlife })
                           : "???"}
                       </div>
                     </Fragment>

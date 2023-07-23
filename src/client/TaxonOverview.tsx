@@ -157,7 +157,9 @@ const TaxonView = ({
           </div>
         )}
         <div className="flex flex-col flex-1 py-1 px-2 overflow-hidden">
-          <div className="text-sm font-bold truncate">{getName(taxon)}</div>
+          <div className="text-sm font-bold truncate">
+            {getName({ wildlife: taxon })}
+          </div>
           <Link
             href={`https://www.inaturalist.org/taxa/${taxon.id}`}
             target="_blank"
