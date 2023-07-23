@@ -16,6 +16,7 @@ import { navigateIcon, runIcon } from "./typeIcons"
 import { useMapFlyTo } from "./useMapRef"
 import { useNavigation } from "./useNavigation"
 import { usePlayer } from "./usePlayer"
+import { DEFAULT_MAP_PITCH, DEFAULT_MAP_ZOOM } from "~/config"
 
 const SHOW_FLUFF = true
 
@@ -178,6 +179,8 @@ const PlaceViewAirport = ({ placeId }: { placeId: string }) => {
                 NiceModal.hide(PlaceViewModal)
                 mapFlyTo({
                   center: airport,
+                  pitch: DEFAULT_MAP_PITCH,
+                  zoom: DEFAULT_MAP_ZOOM,
                 })
               } catch (e) {
                 return
