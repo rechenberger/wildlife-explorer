@@ -57,7 +57,23 @@ export const tradeRouter = createTRPCRouter({
             (player) => !!playerAccept[player.id]
           )
           if (allAccepted) {
-            // TODO: trade catches
+            // trade catches
+            await Promise.all(
+              trade.catches.map(async (c) => {
+                const otherPlayer = trade.players.find(
+                  (p) => p.id !== ctx.player.id
+                )
+                if (!otherPlayer)
+                  throw new TRPCError({
+                    code: "BAD_REQUEST",
+                    message: `Could not find other player`,
+                  })
+                await ctx.prisma.catch.update({
+                  where: { id: c.id },
+                  data: { playerId: otherPlayer.id },
+                })
+              })
+            )
 
             await ctx.prisma.trade.update({
               where: { id: input.tradeId },
