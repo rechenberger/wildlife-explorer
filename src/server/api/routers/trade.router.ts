@@ -1,5 +1,5 @@
 import { TRPCError } from "@trpc/server"
-import { every, pick, some } from "lodash-es"
+import { every, pick, some, uniq, without } from "lodash-es"
 import { z } from "zod"
 import { createTRPCRouter } from "~/server/api/trpc"
 import { getWildlifeFighterPlus } from "~/server/lib/battle/getWildlifeFighterPlus"
@@ -185,21 +185,39 @@ export const tradeRouter = createTRPCRouter({
       }
 
       // add/remove catches
-      if ("addCatchId" in input) {
+      if ("addCatchId" in input && input.addCatchId) {
+        const playerCatches = trade.metadata.playerCatches || {}
+        playerCatches[ctx.player.id] = without(
+          playerCatches[ctx.player.id],
+          input.addCatchId
+        )
         await ctx.prisma.trade.update({
           where: { id: input.tradeId },
           data: {
             catches: { connect: { id: input.addCatchId } },
-            metadata: { playerAccept: {} },
+            metadata: {
+              ...trade.metadata,
+              playerAccept: {},
+              playerCatches,
+            } satisfies TradeMetadata,
           },
         })
       }
-      if ("removeCatchId" in input) {
+      if ("removeCatchId" in input && input.removeCatchId) {
+        const playerCatches = trade.metadata.playerCatches || {}
+        playerCatches[ctx.player.id] = uniq([
+          ...(playerCatches[ctx.player.id] || []),
+          input.removeCatchId,
+        ])
         await ctx.prisma.trade.update({
           where: { id: input.tradeId },
           data: {
             catches: { disconnect: { id: input.removeCatchId } },
-            metadata: { playerAccept: {} },
+            metadata: {
+              ...trade.metadata,
+              playerAccept: {},
+              playerCatches,
+            } satisfies TradeMetadata,
           },
         })
       }
