@@ -231,6 +231,7 @@ model Place {
 
 enum PlaceType {
     CARE_CENTER
+    AIRPORT
 }
 
 model Trade {

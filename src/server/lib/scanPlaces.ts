@@ -4,7 +4,6 @@ import { chunk, filter, map } from "lodash-es"
 import { DEFAULT_DB_CHUNK_SIZE, LOG_SCAN_TIME } from "~/config"
 import { type MyPrismaClient } from "../db"
 import { type LatLng } from "../schema/LatLng"
-import { type PlaceMetadata } from "../schema/PlaceMetadata"
 import { findPlaces } from "./findPlaces"
 
 export const scanPlaces = async ({
@@ -26,24 +25,15 @@ export const scanPlaces = async ({
   for (const chunk of chunks) {
     const chunkResult = await Promise.all(
       map(chunk, async (p) => {
-        const data = {
-          googlePlaceId: p.googlePlaceId,
-          lat: p.lat,
-          lng: p.lng,
-          type: p.type,
-          metadata: {
-            name: p.name,
-          } satisfies PlaceMetadata,
-        }
         return await prisma.place.upsert({
           where: {
             googlePlaceId: p.googlePlaceId,
           },
           create: {
-            ...data,
+            ...p,
             foundById: playerId,
           },
-          update: data,
+          update: p,
         })
       })
     )
