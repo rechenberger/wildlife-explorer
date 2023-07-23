@@ -4,6 +4,7 @@ import { first } from "lodash-es"
 import { z } from "zod"
 import { NO_OF_ALL_TAXONS, WEIRD_ROOT_TAXON_ID } from "~/config"
 import { createTRPCRouter } from "~/server/api/trpc"
+import { importTaxon } from "~/server/inaturalist/importTaxon"
 import { devProcedure } from "../middleware/devProcedure"
 import { playerProcedure } from "../middleware/playerProcedure"
 
@@ -212,6 +213,16 @@ export const taxonRouter = createTRPCRouter({
           isAnchor: false,
           anchorId,
         },
+      })
+    }),
+
+  importTaxon: devProcedure
+    .input(z.object({ taxonId: z.number(), playerId: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      return await importTaxon({
+        prisma: ctx.prisma,
+        taxonId: input.taxonId,
+        playerId: input.playerId,
       })
     }),
 })

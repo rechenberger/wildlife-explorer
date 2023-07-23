@@ -12,6 +12,7 @@ import { DividerHeading } from "./DividerHeading"
 import { cn } from "./cn"
 import { getFighterImage } from "./getFighterImage"
 import { useGetWildlifeName } from "./useGetWildlifeName"
+import { useKeyboardShortcut } from "./useKeyboardShortcut"
 import { usePlayer } from "./usePlayer"
 
 type Taxon = RouterOutputs["taxon"]["getTree"]["ancestors"][number]
@@ -96,6 +97,25 @@ export const TaxonOverview = ({
       })
     }
   }
+
+  const { mutateAsync: importTaxon } = api.taxon.importTaxon.useMutation({
+    onSuccess: (data) => {
+      trpc.invalidate()
+      setTaxonId(data.id)
+    },
+  })
+
+  useKeyboardShortcut("ADD", async () => {
+    const taxonId = prompt("Enter the taxonId")
+    if (!taxonId) return
+    if (!playerId) return
+    const promise = importTaxon({ taxonId: parseInt(taxonId), playerId })
+    toast.promise(promise, {
+      loading: "Importing Taxon...",
+      success: "Taxon Imported!",
+      error: (err: any) => err?.message || "Failed to import Taxon",
+    })
+  })
 
   const disabled = isFetching
   if (!data) {
