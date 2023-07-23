@@ -85,7 +85,7 @@ export const TradeDetails = ({ tradeId }: { tradeId: string }) => {
                             <FighterChip
                               fighter={c}
                               showAbsoluteHp={true}
-                              ltr={!isLeft}
+                              ltr={isLeft}
                             />
                           </div>
                           {isMySide && (
