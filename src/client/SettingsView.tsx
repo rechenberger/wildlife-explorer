@@ -78,9 +78,7 @@ export const SettingsView = () => {
           />
           <Button
             onClick={() => {
-              NiceModal.show(TaxonOverviewModal, {
-                taxonId: 1,
-              })
+              NiceModal.show(TaxonOverviewModal)
             }}
           >
             <Network className="w-4 h-4 mr-1" />

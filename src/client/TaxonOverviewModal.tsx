@@ -4,7 +4,7 @@ import { cn } from "./cn"
 import { Dialog, DialogContent } from "./shadcn/ui/dialog"
 
 export const TaxonOverviewModal = NiceModal.create<{
-  taxonId: number
+  taxonId?: number
 }>(({ taxonId }) => {
   // Use a hook to manage the modal state
   const modal = useModal()

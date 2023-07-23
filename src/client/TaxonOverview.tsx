@@ -1,10 +1,11 @@
-import { atom, useAtom, useSetAtom } from "jotai"
+import { useAtom, useSetAtom } from "jotai"
 import { orderBy, padStart } from "lodash-es"
 import { ArrowRight, Loader2 } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { Fragment, useEffect, useMemo } from "react"
 import { api, type RouterOutputs } from "~/utils/api"
+import { atomWithLocalStorage } from "~/utils/atomWithLocalStorage"
 import { DividerHeading } from "./DividerHeading"
 import { cn } from "./cn"
 import { getFighterImage } from "./getFighterImage"
@@ -13,15 +14,16 @@ import { usePlayer } from "./usePlayer"
 
 type Taxon = RouterOutputs["taxon"]["getTree"]["ancestors"][number]
 
-const currentTaxonIdAtom = atom<number>(1)
+const currentTaxonIdAtom = atomWithLocalStorage<number>("currentTaxonId", 1)
 
 export const TaxonOverview = ({
   taxonId: initialTaxonId,
 }: {
-  taxonId: number
+  taxonId?: number
 }) => {
   const [taxonId, setTaxonId] = useAtom(currentTaxonIdAtom)
   useEffect(() => {
+    if (!initialTaxonId) return
     setTaxonId(initialTaxonId)
   }, [initialTaxonId, setTaxonId])
 
