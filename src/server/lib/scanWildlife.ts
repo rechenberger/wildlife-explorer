@@ -49,10 +49,10 @@ export const scanWildlife = async ({
     (id) => id
   )
   console.log(`Importing ${taxonIds.length} taxons`)
-  await Promise.all(
+  const importedTaxons = await Promise.all(
     map(taxonIds, async (taxonId) => {
       try {
-        await importTaxon({ prisma, taxonId, playerId })
+        return await importTaxon({ prisma, taxonId, playerId })
       } catch (error) {
         console.error(`Could not import taxon ${taxonId}`)
         throw error
@@ -97,11 +97,18 @@ export const scanWildlife = async ({
     (w) => w.foundById === playerId && w.createdAt >= minCreatedAt
   ).length
 
+  const countTaxons = taxonIds.length
+  const countTaxonsFound = filter(
+    importedTaxons,
+    (w) => w.foundById === playerId && w.createdAt >= minCreatedAt
+  ).length
+
   LOG_SCAN_TIME && console.timeEnd("scanWildlife")
 
   return {
     countAll,
     countFound,
-    countTaxons: taxonIds.length,
+    countTaxons,
+    countTaxonsFound,
   }
 }

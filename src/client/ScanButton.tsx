@@ -58,9 +58,9 @@ export const ScanButton = () => {
         success: (result) => (
           <div className="flex flex-col">
             <div className="font-bold">{`Scan complete!`}</div>
-            <div className="font-normal text-sm">{`${result.wildlife.countTaxons} different Species`}</div>
-            <div className="font-normal text-sm">{`${result.wildlife.countFound} new Observations`}</div>
-            <div className="font-normal text-sm">{`${result.places.countFound} new Places`}</div>
+            <div className="font-normal text-sm">{`${result.wildlife.countAll} new Observations (${result.wildlife.countFound} new)`}</div>
+            <div className="font-normal text-sm">{`${result.wildlife.countTaxons} different Species (${result.wildlife.countTaxonsFound} new)`}</div>
+            <div className="font-normal text-sm">{`${result.places.countFound} new Places (${result.places.countFound} new)`}</div>
           </div>
         ),
         error: "Scan failed.",
