@@ -73,6 +73,7 @@ export const SHORTCUTS = {
   SWITCH_5: { code: "Digit5", shift: true },
   SWITCH_6: { code: "Digit6", shift: true },
   GOTO_PLAYER: { code: "Space" },
+  TAXON_OVERVIEW: { code: "KeyT" },
 }
 
 export const DEFAULT_MAP_ZOOM = 15
