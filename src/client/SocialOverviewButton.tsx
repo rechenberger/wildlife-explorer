@@ -2,8 +2,10 @@ import NiceModal from "@ebay/nice-modal-react"
 import { Users } from "lucide-react"
 import { SocialOverviewModal } from "./SocialOverviewModal"
 import { cn } from "./cn"
+import { useLatestPendingTradeAutoOpen } from "./useLatestPendingTradeAutoOpen"
 
 export const SocialOverviewButton = () => {
+  useLatestPendingTradeAutoOpen()
   return (
     <>
       <div className="flex flex-col items-center gap-1">
