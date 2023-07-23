@@ -2,6 +2,7 @@ import NiceModal from "@ebay/nice-modal-react"
 import { useAtomValue, useSetAtom } from "jotai"
 import { find, flatMap, map, orderBy } from "lodash-es"
 import { Scroll, ScrollText, Undo2 } from "lucide-react"
+import Image from "next/image"
 import { Fragment, useCallback, useLayoutEffect, useRef } from "react"
 import { toast } from "sonner"
 import { DEV_MODE, REFETCH_MS_BATTLE_PVP } from "~/config"
@@ -16,6 +17,7 @@ import { FighterMoves } from "./FighterMoves"
 import { FighterTypeBadges } from "./FighterTypeBadges"
 import { TypeBadge } from "./TypeBadge"
 import { cn } from "./cn"
+import { getFighterImage } from "./getFighterImage"
 import {
   catchIcon,
   leaveIcon,
@@ -29,6 +31,7 @@ import { useGetWildlifeName } from "./useGetWildlifeName"
 import { useKeyboardShortcut } from "./useKeyboardShortcut"
 import { useMakeChoice } from "./useMakeChoice"
 import { usePlayer } from "./usePlayer"
+import { useShowFighters } from "./useShowFighter"
 
 const BIG_INACTIVE_FIGHTER = false
 const SHOW_ENEMY_MOVES = DEV_MODE
@@ -126,6 +129,8 @@ export const BattleView = ({
   const getName = useGetWildlifeName()
 
   const { doCatch } = useCatch()
+
+  const showFighters = useShowFighters()
 
   const logRef = useRef<HTMLDivElement>(null)
 
@@ -247,6 +252,26 @@ export const BattleView = ({
                         <Fragment
                           key={fighter.catch?.id ?? fighter.wildlife.id}
                         >
+                          {isActive && showFighters && (
+                            <div
+                              className={cn(
+                                "flex flex-row items-center gap-2 px-8",
+                                isMainSide ? "flex-row" : "flex-row-reverse"
+                              )}
+                            >
+                              <Image
+                                src={getFighterImage({
+                                  fighterSpeciesNum: fighter.fighter.speciesNum,
+                                  back: isMainSide,
+                                })}
+                                width={64}
+                                height={64}
+                                alt={"Fighter"}
+                                className="scale-[2]"
+                                unoptimized
+                              />
+                            </div>
+                          )}
                           {isActive && (
                             <div
                               className={cn(
