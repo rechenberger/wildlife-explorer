@@ -1,9 +1,9 @@
 import { type Taxon } from "@prisma/client"
 import { last } from "lodash-es"
-import { RETRY_IMPORT_TAXON } from "~/config"
 import { type MyPrismaClient } from "../db"
 import { type TaxonMetadata } from "../schema/TaxonMetadata"
 import { findTaxon } from "./findTaxon"
+import { MAX_RETRIES_IMPORT_TAXON } from "~/config"
 
 export const importTaxon = async ({
   prisma,
@@ -27,22 +27,19 @@ export const importTaxon = async ({
   // console.log("importTaxon", taxonId)
   let metadata: TaxonMetadata
 
-  if (RETRY_IMPORT_TAXON) {
-    let retries = 0
-    while (true) {
-      try {
-        metadata = await findTaxon({ taxonId })
-        break
-      } catch (e: any) {
-        console.error(e?.message || e)
-        retries++
-        const timeout = Math.min(1000 * 2 ** retries, 1000 * 60 * 5)
-        console.log(`importTaxon: Retry (${retries}) in ${timeout / 1000}s ...`)
-        await new Promise((resolve) => setTimeout(resolve, timeout))
-      }
+  let retries = 0
+  while (true) {
+    try {
+      metadata = await findTaxon({ taxonId })
+      break
+    } catch (e: any) {
+      console.error(e?.message || e)
+      retries++
+      if (retries > MAX_RETRIES_IMPORT_TAXON) throw e
+      const timeout = Math.min(1000 * 2 ** retries, 1000 * 60 * 5)
+      console.log(`importTaxon: Retry (${retries}) in ${timeout / 1000}s ...`)
+      await new Promise((resolve) => setTimeout(resolve, timeout))
     }
-  } else {
-    metadata = await findTaxon({ taxonId })
   }
 
   let ancestorId = last(metadata.taxonAncestorIds) ?? null

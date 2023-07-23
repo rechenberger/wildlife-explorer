@@ -85,4 +85,4 @@ export const SHOW_WILDLIFE_NEAR_ME_LIST_MOBILE = false
 export const NO_OF_ALL_TAXONS = 431_880
 export const NO_OF_ALL_OBSERVATIONS = 149_632_539
 
-export const RETRY_IMPORT_TAXON = false
+export const MAX_RETRIES_IMPORT_TAXON = 4
