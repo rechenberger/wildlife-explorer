@@ -89,7 +89,9 @@ export const WildlifeMarker = ({
         {showFighters ? (
           <>
             <Image
-              src={getFighterImage(w.taxon)}
+              src={getFighterImage({
+                fighterSpeciesNum: nearMe.fighter.speciesNum,
+              })}
               className={cn(
                 "h-full w-full rounded-full scale-[2]",
                 !!w.caughtAt && "grayscale"

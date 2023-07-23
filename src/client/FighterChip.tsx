@@ -60,7 +60,9 @@ export const FighterChip = ({
           {showFighters ? (
             <>
               <Image
-                src={getFighterImage(fighter.wildlife.taxon)}
+                src={getFighterImage({
+                  fighterSpeciesNum: fighter.fighter.speciesNum,
+                })}
                 className={cn(
                   "h-full w-full rounded-full scale-[1] bg-gray-200"
                 )}

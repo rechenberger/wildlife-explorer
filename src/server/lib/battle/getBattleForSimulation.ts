@@ -58,7 +58,7 @@ export const getBattleForSimulation = async ({
                       taxon: {
                         select: {
                           fighterSpeciesName: true,
-                          fighterSpeciesNum: true,
+                          // fighterSpeciesNum: true,
                         },
                       },
                     },
@@ -81,7 +81,7 @@ export const getBattleForSimulation = async ({
               taxon: {
                 select: {
                   fighterSpeciesName: true,
-                  fighterSpeciesNum: true,
+                  // fighterSpeciesNum: true,
                 },
               },
             },
