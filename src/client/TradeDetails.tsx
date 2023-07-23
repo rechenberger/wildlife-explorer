@@ -155,8 +155,9 @@ export const TradeDetails = ({ tradeId }: { tradeId: string }) => {
               updateTrade({
                 status: "cancel",
               })
+            } else {
+              NiceModal.hide(TradeDetailsModal)
             }
-            NiceModal.hide(TradeDetailsModal)
           }}
         />
       </div>
