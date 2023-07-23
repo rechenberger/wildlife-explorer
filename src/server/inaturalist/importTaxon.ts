@@ -80,7 +80,7 @@ export const importTaxon = async ({
   const fighterSpeciesName = ancestor.fighterSpeciesName
   const fighterSpeciesNum = ancestor.fighterSpeciesNum
   const isAnchor = false
-  const anchorId = ancestor.anchorId
+  const anchorId = ancestor.anchorId ?? ancestor.id
 
   const foundById = playerId
   return await prisma.taxon.upsert({
