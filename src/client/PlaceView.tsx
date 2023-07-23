@@ -156,7 +156,7 @@ const PlaceViewWildlifeAirport = () => {
               </div>
             </div>
             <div className="flex-1" />
-            <Away location={{ lat: +airport.lat, lng: +airport.lon }} />
+            <Away location={airport} />
           </div>
         ))}
       </div>

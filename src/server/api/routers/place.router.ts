@@ -1,9 +1,9 @@
-import { take } from "lodash-es"
+import { orderBy, take } from "lodash-es"
 import { z } from "zod"
 import { RADIUS_IN_KM_SEE_PLACES } from "~/config"
 import airports from "~/data/airports.json"
 import { createTRPCRouter } from "~/server/api/trpc"
-import { calculateBoundingBox } from "~/server/lib/latLng"
+import { calcDistanceInMeter, calculateBoundingBox } from "~/server/lib/latLng"
 import { playerProcedure } from "../middleware/playerProcedure"
 
 export const placeRouter = createTRPCRouter({
@@ -50,18 +50,36 @@ export const placeRouter = createTRPCRouter({
         query: z.string(),
       })
     )
-    .query(async ({ input }) => {
+    .query(async ({ ctx, input }) => {
       const query = input.query.toLowerCase()
-      const results = airports.filter((airport) => {
+      let results = airports.filter((airport) => {
         const name = airport.name.toLowerCase()
         const city = airport.city.toLowerCase()
         const country = airport.country.toLowerCase()
+        const code = airport.code.toLowerCase()
         return (
           name.includes(query) ||
           city.includes(query) ||
-          country.includes(query)
+          country.includes(query) ||
+          code.includes(query)
         )
       })
-      return take(results, 10)
+      let betterResults = results.map((airport) => {
+        const location = {
+          lat: +airport.lat,
+          lng: +airport.lon,
+        }
+        const distance = calcDistanceInMeter(ctx.player, location)
+        return {
+          ...location,
+          distance,
+          name: airport.name,
+          city: airport.city,
+          country: airport.country,
+          code: airport.code,
+        }
+      })
+      betterResults = orderBy(betterResults, "distance", "asc")
+      return take(betterResults, 10)
     }),
 })
