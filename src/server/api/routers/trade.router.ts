@@ -67,6 +67,24 @@ export const tradeRouter = createTRPCRouter({
         }
       }
 
-      // TODO: add/remove catches
+      // add/remove catches
+      if ("addCatchId" in input) {
+        await ctx.prisma.trade.update({
+          where: { id: input.tradeId },
+          data: {
+            catches: { connect: { id: input.addCatchId } },
+            metadata: { playerAccept: {} },
+          },
+        })
+      }
+      if ("removeCatchId" in input) {
+        await ctx.prisma.trade.update({
+          where: { id: input.tradeId },
+          data: {
+            catches: { disconnect: { id: input.removeCatchId } },
+            metadata: { playerAccept: {} },
+          },
+        })
+      }
     }),
 })
