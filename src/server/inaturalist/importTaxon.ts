@@ -10,19 +10,23 @@ export const importTaxon = async ({
   taxonId,
   playerId,
   createdAt,
+  preFilteredExisting,
 }: {
   prisma: MyPrismaClient
   taxonId: number
   playerId: string
+  preFilteredExisting?: boolean
   createdAt?: Date
 }): Promise<Taxon & { metadata: TaxonMetadata }> => {
   const id = taxonId
-  const existing = await prisma.taxon.findUnique({
-    where: {
-      id,
-    },
-  })
-  if (existing) return existing
+  if (!preFilteredExisting) {
+    const existing = await prisma.taxon.findUnique({
+      where: {
+        id,
+      },
+    })
+    if (existing) return existing
+  }
 
   // console.log("importTaxon", taxonId)
   let metadata: TaxonMetadata
