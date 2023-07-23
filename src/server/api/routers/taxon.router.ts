@@ -165,7 +165,6 @@ export const taxonRouter = createTRPCRouter({
       const currentTaxon = await ctx.prisma.taxon.findUniqueOrThrow({
         where: { id: input.taxonId },
       })
-      console.log(currentTaxon)
       if (!currentTaxon.ancestorId) {
         throw new TRPCError({
           code: "NOT_FOUND",
