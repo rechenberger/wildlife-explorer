@@ -1,5 +1,5 @@
 import { TRPCError } from "@trpc/server"
-import { every, pick, some, uniq, without } from "lodash-es"
+import { every, findKey, pick, some, uniq, without } from "lodash-es"
 import { z } from "zod"
 import { createTRPCRouter } from "~/server/api/trpc"
 import { getWildlifeFighterPlus } from "~/server/lib/battle/getWildlifeFighterPlus"
@@ -129,7 +129,6 @@ export const tradeRouter = createTRPCRouter({
         })
       }
       if ("status" in input) {
-        console.log("status", input.status)
         if (input.status === "cancel") {
           await ctx.prisma.trade.update({
             where: { id: input.tradeId },
@@ -155,8 +154,18 @@ export const tradeRouter = createTRPCRouter({
             // Transaction to make sure all catches are still owned by the player
             await ctx.prisma.$transaction(async (prisma) => {
               for (const c of trade.catches) {
+                const currentPlayerId = findKey(
+                  trade.metadata.playerCatches,
+                  (pc) => pc.includes(c.id)
+                )
+                if (!currentPlayerId) {
+                  throw new TRPCError({
+                    code: "BAD_REQUEST",
+                    message: `Could not find current owner`,
+                  })
+                }
                 const otherPlayer = trade.players.find(
-                  (p) => p.id !== ctx.player.id
+                  (p) => p.id !== currentPlayerId
                 )
                 if (!otherPlayer)
                   throw new TRPCError({
@@ -166,7 +175,7 @@ export const tradeRouter = createTRPCRouter({
 
                 // Make sure the catch is still owned by the player
                 await prisma.catch.findFirstOrThrow({
-                  where: { id: c.id, playerId: ctx.player.id },
+                  where: { id: c.id, playerId: currentPlayerId },
                 })
 
                 await prisma.catch.update({
