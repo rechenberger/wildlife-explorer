@@ -102,6 +102,6 @@ export const scanWildlife = async ({
   return {
     countAll,
     countFound,
-    countTaxonsFound: taxonIds.length,
+    countTaxons: taxonIds.length,
   }
 }
