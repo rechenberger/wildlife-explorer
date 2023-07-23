@@ -21,6 +21,7 @@ export const TradeDetails = ({ tradeId }: { tradeId: string }) => {
     },
     {
       enabled: !!playerId,
+      refetchInterval: 1000,
     }
   )
 
