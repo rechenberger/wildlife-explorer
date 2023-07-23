@@ -12,6 +12,7 @@ export const useLatestPendingTradeAutoOpen = () => {
     },
     {
       enabled: !!playerId,
+      refetchInterval: 1000,
     }
   )
   useEffect(() => {
