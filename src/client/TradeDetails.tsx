@@ -1,19 +1,20 @@
 import NiceModal from "@ebay/nice-modal-react"
+import { X } from "lucide-react"
 import { Fragment } from "react"
 import { toast } from "sonner"
 import { api, type RouterInputs } from "~/utils/api"
+import { cn } from "./cn"
 import { FighterChip } from "./FighterChip"
 import { MyCatchSelect } from "./MyCatchSelect"
+import { Button } from "./shadcn/ui/button"
 import { TradeDetailsModal } from "./TradeDetailsModal"
 import { TypeBadge } from "./TypeBadge"
-import { cn } from "./cn"
-import { Button } from "./shadcn/ui/button"
 import { leaveIcon } from "./typeIcons"
 import { usePlayer } from "./usePlayer"
 
 export const TradeDetails = ({ tradeId }: { tradeId: string }) => {
   const { playerId } = usePlayer()
-  const { data: trade } = api.trade.getById.useQuery(
+  const { data: trade, refetch: refetchTrade } = api.trade.getById.useQuery(
     {
       tradeId,
       playerId: playerId!,
@@ -24,12 +25,12 @@ export const TradeDetails = ({ tradeId }: { tradeId: string }) => {
   )
 
   const trpc = api.useContext()
-  const { mutateAsync } = api.trade.updateTrade.useMutation({
-    onSettled: () => {
-      trpc.trade.invalidate()
-      trpc.catch.invalidate()
-    },
-  })
+  const { mutateAsync, isLoading: updating } =
+    api.trade.updateTrade.useMutation({
+      onSettled: () => {
+        trpc.catch.invalidate()
+      },
+    })
 
   const updateTrade = async (
     input: Omit<RouterInputs["trade"]["updateTrade"], "tradeId" | "playerId">
@@ -45,7 +46,11 @@ export const TradeDetails = ({ tradeId }: { tradeId: string }) => {
       success: "Trade updated!",
       error: (err: any) => err?.message || "Error updating trade",
     })
-    await promise
+    try {
+      await promise
+    } finally {
+      await refetchTrade()
+    }
   }
 
   if (!trade) {
@@ -57,23 +62,43 @@ export const TradeDetails = ({ tradeId }: { tradeId: string }) => {
   }
 
   const isPending = trade.status === "PENDING"
+  const disabled = !isPending || updating
 
   return (
     <>
       <div>Trade {trade.status}</div>
       <div className="flex flex-row gap-4">
-        {trade.sides.map((side) => {
+        {trade.sides.map((side, idx) => {
           const isMySide = side.player.id === playerId
+          const isLeft = idx === 0
           return (
             <Fragment key={side.player.id}>
               <div className="flex flex-col gap-2 flex-1">
                 <div>{side.player.name}</div>
-                <div className="flex-1 flex flex-col gap-2">
+                <div className="flex-1 flex flex-col gap-3">
                   {side.catches.map((c) => {
                     return (
                       <Fragment key={c.id}>
                         <div className="flex flex-row gap-2">
-                          <FighterChip fighter={c} showAbsoluteHp={true} />
+                          <div className="flex-1">
+                            <FighterChip
+                              fighter={c}
+                              showAbsoluteHp={true}
+                              ltr={!isLeft}
+                            />
+                          </div>
+                          {isMySide && (
+                            <button
+                              disabled={disabled}
+                              onClick={() => {
+                                updateTrade({
+                                  removeCatchId: c.id,
+                                })
+                              }}
+                            >
+                              <X className="w-4 h-4" />
+                            </button>
+                          )}
                         </div>
                       </Fragment>
                     )
@@ -89,7 +114,7 @@ export const TradeDetails = ({ tradeId }: { tradeId: string }) => {
                   )}
                 </div>
                 <Button
-                  disabled={!isMySide || !isPending}
+                  disabled={!isMySide || disabled}
                   className={cn(side.accepted ? "bg-green-500" : "")}
                   onClick={() => {
                     updateTrade({
