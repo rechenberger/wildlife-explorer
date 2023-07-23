@@ -15,10 +15,12 @@ export const DraggableCatch = ({
   c,
   type,
   disabled,
+  grayscale,
 }: {
   c: MyCatch
   type: "team" | "bench"
   disabled?: boolean
+  grayscale?: boolean
 }) => {
   const {
     attributes,
@@ -60,11 +62,11 @@ export const DraggableCatch = ({
       >
         <HoverCard>
           <HoverCardTrigger>
-            <FighterChip showAbsoluteHp ltr grayscale={false} fighter={c} />
+            <FighterChip showAbsoluteHp ltr grayscale={grayscale} fighter={c} />
           </HoverCardTrigger>
           {!isDragging && (
             <HoverCardContent className="w-80">
-              <CatchDetails catchId={c.id} tiny />
+              <CatchDetails catchId={c.id} showTypes showMoves />
             </HoverCardContent>
           )}
         </HoverCard>

@@ -7,30 +7,81 @@ import {
   type DragEndEvent,
 } from "@dnd-kit/core"
 import { restrictToFirstScrollableAncestor } from "@dnd-kit/modifiers"
-import { includes, map } from "lodash-es"
+import { useAtom } from "jotai"
+import { includes, map, orderBy } from "lodash-es"
+import { SortDesc } from "lucide-react"
+import { useMemo } from "react"
 import { toast } from "sonner"
 import { z } from "zod"
 import { MAX_FIGHTERS_PER_TEAM } from "~/config"
 import { api } from "~/utils/api"
+import { atomWithLocalStorage } from "~/utils/atomWithLocalStorage"
 import { fillWithNulls } from "~/utils/fillWithNulls"
 import { DividerHeading } from "./DividerHeading"
 import { DraggableCatch } from "./DraggableCatch"
 import { DroppableTeamSlot } from "./DroppableTeamSlot"
 import { cn } from "./cn"
+import { Input } from "./shadcn/ui/input"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "./shadcn/ui/select"
+import { useGetWildlifeName } from "./useGetWildlifeName"
 import { useMyTeam } from "./useMyTeam"
 import { usePlayer } from "./usePlayer"
 
+const orderOptions = [
+  {
+    label: "Latest Caught",
+    by: "caughtAt",
+    direction: "desc",
+  },
+  {
+    label: "Oldest Caught",
+    by: "caughtAt",
+    direction: "asc",
+  },
+  {
+    label: "Highest Level",
+    by: "level",
+    direction: "desc",
+  },
+  {
+    label: "Lowest Level",
+    by: "level",
+    direction: "asc",
+  },
+  {
+    label: "A-Z",
+    by: "name",
+    direction: "asc",
+  },
+] as const
+
+const orderIdxAtom = atomWithLocalStorage<number>("catchOverview-orderIdx", 0)
+const searchAtom = atomWithLocalStorage<string>("catchOverview-search", "")
+
 export const MyCatches = () => {
   const { playerId } = usePlayer()
+
+  const getName = useGetWildlifeName()
 
   const { myTeam, catchesWithoutTeam, isLoading, isFetching } = useMyTeam()
 
   const trpc = api.useContext()
 
+  // const { careCenterIsClose } = useCareCenter()
+
   const { mutate: setMyTeamBattleOrder, isLoading: isMutating } =
     api.catch.setMyTeamBattleOrder.useMutation({
       onSuccess: () => {
         trpc.catch.getMyCatches.invalidate()
+      },
+      onError: (err) => {
+        toast.error(err.message)
       },
     })
 
@@ -48,6 +99,7 @@ export const MyCatches = () => {
     setMyTeamBattleOrder({
       catchIds: teamWithoutCatchId,
       playerId,
+      swapWithinTeam: false,
     })
   }
   const addToTeamAtPos = ({
@@ -64,6 +116,7 @@ export const MyCatches = () => {
     const currentTeamOrder = myTeam.map((c) => c.id)
 
     let newTeamOrder: string[] = []
+    let swapWithinTeam = false
 
     if (isSwapWithCurrentPosition) {
       const catchIdAtPos = currentTeamOrder[position]
@@ -76,6 +129,7 @@ export const MyCatches = () => {
         newTeamOrder[position] = catchId
 
         if (catchIdIsAlreadyInTeam) {
+          swapWithinTeam = true
           newTeamOrder[currentTeamOrder.indexOf(catchId)] = catchIdAtPos
         }
       }
@@ -93,6 +147,7 @@ export const MyCatches = () => {
     setMyTeamBattleOrder({
       catchIds: newTeamOrder,
       playerId,
+      swapWithinTeam,
     })
   }
 
@@ -143,6 +198,59 @@ export const MyCatches = () => {
     })
   )
 
+  const [orderIdx, setOrderIdx] = useAtom(orderIdxAtom)
+  const order = orderOptions[orderIdx] || orderOptions[0]!
+  const ordered = useMemo(
+    () =>
+      orderBy(
+        catchesWithoutTeam,
+        [
+          (c) => {
+            if (order.by === "name") {
+              return getName(c)
+            }
+            if (order.by === "level") {
+              return c.metadata.level
+            }
+            if (order.by === "caughtAt") {
+              return c.createdAt
+            }
+            return c.id
+          },
+          (c) => getName(c),
+        ],
+        [order.direction, "asc"]
+      ),
+    [catchesWithoutTeam, getName, order.by, order.direction]
+  )
+
+  const [search, setSearch] = useAtom(searchAtom)
+  const searched = useMemo(
+    () =>
+      ordered.filter((c) => {
+        if (!search) return true
+        const fields = [
+          c.name,
+          c.metadata.level?.toString(),
+          c.wildlife.metadata.taxonName,
+          c.wildlife.metadata.taxonCommonName,
+          c.wildlife.metadata.taxonLocaleNames?.["de"],
+          c.wildlife.metadata.taxonLocaleNames?.["en"],
+          c.fighter.ability,
+          c.fighter.nature.name,
+          c.fighter.species,
+          c.fighter.speciesNum,
+          ...c.fighter.types,
+          ...c.fighter.moves.map((m) => m.name),
+        ]
+        const searchWords = search.toLowerCase().split(" ")
+        return searchWords.every((word) =>
+          fields.some((field) => field?.toString().toLowerCase().includes(word))
+        )
+      }),
+    [ordered, search]
+  )
+
   if (isLoading) {
     return (
       <div className="flex items-center justify-center py-12 text-center text-sm opacity-60">
@@ -165,6 +273,11 @@ export const MyCatches = () => {
       sensors={sensors}
       modifiers={[restrictToFirstScrollableAncestor]}
     >
+      {/* <div className="flex flex-row gap-2 pl-4 pr-6 items-center">
+        <div>Your Catches</div>
+        <div className="flex-1" />
+        <CareButton />
+      </div> */}
       <DividerHeading>Your Team</DividerHeading>
 
       <div
@@ -185,6 +298,34 @@ export const MyCatches = () => {
         ))}
       </div>
       <DividerHeading>Your Catches</DividerHeading>
+      <div className="pt-1 pl-2 pr-4 flex-1 flex items-center gap-2 justify-end">
+        <Input
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder="Search"
+          className="rounded-full max-w-xs"
+        />
+        <div className="flex-1" />
+        <div>
+          <Select
+            onValueChange={(v) => setOrderIdx(parseInt(v))}
+            defaultValue={orderIdx.toString()}
+          >
+            <SelectTrigger className="flex flex-row gap-1 text-xs">
+              <SortDesc className="w-4 h-4 opacity-60" />
+              <SelectValue />
+            </SelectTrigger>
+
+            <SelectContent>
+              {orderOptions.map((o, idx) => (
+                <SelectItem key={idx} value={idx.toString()}>
+                  {o.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+      </div>
       {!catchesWithoutTeam.length && (
         <div className="flex items-center justify-center py-12 text-center text-sm opacity-60">
           Once you have more than {MAX_FIGHTERS_PER_TEAM} catches. New catches
@@ -193,8 +334,13 @@ export const MyCatches = () => {
       )}
       <DroppableTeamSlot id={-1} accepts={["team"]}>
         <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-2 gap-y-3 p-2">
-          {map(catchesWithoutTeam, (c) => (
-            <DraggableCatch c={c} key={c.id} type="bench" />
+          {map(searched, (c) => (
+            <DraggableCatch
+              c={c}
+              key={c.id}
+              type="bench"
+              // grayscale={!careCenterIsClose}
+            />
           ))}
         </div>
       </DroppableTeamSlot>

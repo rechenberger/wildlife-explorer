@@ -7,9 +7,9 @@ interface EffortValueYieldObj {
   hp?: number
   atk?: number
   def?: number
-  spAtk?: number
-  spDef?: number
-  speed?: number
+  spa?: number
+  spd?: number
+  spe?: number
   totalEvs?: number
   form?: string
   formName?: string
@@ -40,9 +40,9 @@ async function processLineByLine() {
       hp: safeParseInt(splitLine[3]),
       atk: safeParseInt(splitLine[4]),
       def: safeParseInt(splitLine[5]),
-      spAtk: safeParseInt(splitLine[6]),
-      spDef: safeParseInt(splitLine[7]),
-      speed: safeParseInt(splitLine[8]),
+      spa: safeParseInt(splitLine[6]),
+      spd: safeParseInt(splitLine[7]),
+      spe: safeParseInt(splitLine[8]),
       // sum the values of splitLine[3] through splitLine[8]
       totalEvs: splitLine
         .slice(3, 9)

@@ -7,7 +7,8 @@ import { type LatLng } from "~/server/schema/LatLng"
 import { api } from "~/utils/api"
 import { playerLocationAtom } from "./PlayerMarker"
 import { cn } from "./cn"
-import { useMapRef } from "./useMapRef"
+import { useKeyboardShortcut } from "./useKeyboardShortcut"
+import { useMapFlyTo } from "./useMapRef"
 import { usePlayer } from "./usePlayer"
 
 export const scanningLocationAtom = atom<LatLng | null>(null)
@@ -17,7 +18,7 @@ export const ScanButton = () => {
   const setScanningLocation = useSetAtom(scanningLocationAtom)
   const trpc = api.useContext()
   const store = useStore()
-  const { mutateAsync: scan, isLoading } = api.wildlife.scan.useMutation({
+  const { mutateAsync: scan, isLoading } = api.scan.scan.useMutation({
     onSuccess: () => {
       trpc.wildlife.invalidate()
     },
@@ -42,7 +43,35 @@ export const ScanButton = () => {
     return () => clearInterval(interval)
   }, [player?.scanCooldownAt])
 
-  const mapRef = useMapRef()
+  const mapFlyTo = useMapFlyTo()
+
+  const doScan = async () => {
+    if (!playerId || !player) return
+    setScanningLocation(store.get(playerLocationAtom))
+    mapFlyTo({ center: store.get(playerLocationAtom) })
+    const promise = scan({
+      playerId,
+    })
+    try {
+      toast.promise(promise, {
+        loading: "Scanning...",
+        success: (result) => (
+          <div className="flex flex-col">
+            <div className="font-bold">{`Scan complete!`}</div>
+            <div className="font-normal text-sm">{`${result.wildlife.countAll} new Observations (${result.wildlife.countFound} new)`}</div>
+            <div className="font-normal text-sm">{`${result.wildlife.countTaxons} different Species (${result.wildlife.countTaxonsFound} new)`}</div>
+            <div className="font-normal text-sm">{`${result.places.countFound} new Places (${result.places.countFound} new)`}</div>
+          </div>
+        ),
+        error: "Scan failed.",
+      })
+      await promise
+    } finally {
+      setScanningLocation(null)
+    }
+  }
+
+  useKeyboardShortcut("SCAN", doScan)
 
   return (
     <>
@@ -55,23 +84,7 @@ export const ScanButton = () => {
             !!cooldown && "opacity-100"
           )}
           onClick={async () => {
-            if (!playerId || !player) return
-            setScanningLocation(store.get(playerLocationAtom))
-            mapRef.current?.setCenter(store.get(playerLocationAtom))
-            const promise = scan({
-              playerId,
-            })
-            try {
-              toast.promise(promise, {
-                loading: "Scanning...",
-                success: (result) =>
-                  `Scan complete! ${result.countFound} new Observations.`,
-                error: "Scan failed.",
-              })
-              await promise
-            } finally {
-              setScanningLocation(null)
-            }
+            doScan()
           }}
         >
           <Radar size={32} />

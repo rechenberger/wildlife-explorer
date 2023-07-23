@@ -49,11 +49,7 @@ export const TeleportToCurrentPositionButton = () => {
                 playerId,
               })
               setPlayerLocation(location)
-
-              // Force Reload at new location
-              // TODO: make this more elegant
-              window.location.hash = `#${location.lat},${location.lng}`
-              window.location.reload()
+              // TODO: use map ref to center map
             } finally {
               setIsLoading(false)
             }

@@ -1,5 +1,5 @@
 import { TRPCError } from "@trpc/server"
-import { map, take } from "lodash-es"
+import { every, find, map, take } from "lodash-es"
 import { z } from "zod"
 import {
   CATCH_RATE_ALWAYS_LOOSE,
@@ -7,14 +7,20 @@ import {
   CATCH_RATE_FIRST_FIGHTER,
   MAX_FIGHTERS_PER_TEAM,
 } from "~/config"
-import { PokemonExperienceMap } from "~/data/pokemonLevelExperienceMap"
+import { getExpRate } from "~/data/pokemonLevelExperienceMap"
 import { PokemonLevelingRate } from "~/data/pokemonLevelingRate"
 import { createTRPCRouter } from "~/server/api/trpc"
 import { getWildlifeFighterPlus } from "~/server/lib/battle/getWildlifeFighterPlus"
+import { grantExp, type ExpReports } from "~/server/lib/battle/grantExp"
+import { savePostBattleCatchMetadata } from "~/server/lib/battle/savePostBattleCatchMetadata"
 import { respawnWildlife } from "~/server/lib/respawnWildlife"
-import { LevelingRate, type CatchMetadata } from "~/server/schema/CatchMetdata"
+import { LevelingRate, type CatchMetadata } from "~/server/schema/CatchMetadata"
 import { type PlayerMetadata } from "~/server/schema/PlayerMetadata"
 import { createSeed } from "~/utils/seed"
+import {
+  careCenterProcedure,
+  checkForCareCenter,
+} from "../middleware/careCenterProcedure"
 import { playerProcedure } from "../middleware/playerProcedure"
 import { wildlifeProcedure } from "../middleware/wildlifeProcedure"
 
@@ -25,7 +31,16 @@ export const catchRouter = createTRPCRouter({
         playerId: ctx.player.id,
       },
       include: {
-        wildlife: true,
+        wildlife: {
+          include: {
+            taxon: {
+              select: {
+                fighterSpeciesName: true,
+                // fighterSpeciesNum: true,
+              },
+            },
+          },
+        },
       },
       orderBy: [
         {
@@ -42,10 +57,7 @@ export const catchRouter = createTRPCRouter({
 
     const catchesWithFighter = await Promise.all(
       catches.map(async (c) => {
-        const fighter = await getWildlifeFighterPlus({
-          wildlife: c.wildlife,
-          seed: c.seed,
-        })
+        const fighter = await getWildlifeFighterPlus(c)
         return {
           ...c,
           fighter,
@@ -56,11 +68,9 @@ export const catchRouter = createTRPCRouter({
     return catchesWithFighter
   }),
 
-  setBattleOrderPosition: playerProcedure
+  setMyTeamBattleOrder: playerProcedure
     .input(
-      z.object({
-        catchId: z.string(),
-      })
+      z.object({ catchIds: z.array(z.string()), swapWithinTeam: z.boolean() })
     )
     .mutation(async ({ ctx, input }) => {
       if (ctx.player.metadata?.activeBattleId) {
@@ -70,63 +80,30 @@ export const catchRouter = createTRPCRouter({
         })
       }
 
-      const maxBattleOrderPositionData = await ctx.prisma.catch.aggregate({
-        where: {
-          playerId: ctx.player.id,
-        },
-        _max: {
-          battleOrderPosition: true,
-        },
-      })
-
-      const maxBattleOrderPosition =
-        maxBattleOrderPositionData._max.battleOrderPosition || 0
-
-      await ctx.prisma.catch.updateMany({
-        where: {
-          playerId: ctx.player.id,
-          id: input.catchId,
-        },
-        data: {
-          battleOrderPosition: maxBattleOrderPosition + 1,
-        },
-      })
-    }),
-
-  setMyTeamBattleOrder: playerProcedure
-    .input(z.object({ catchIds: z.array(z.string()) }))
-    .mutation(async ({ ctx, input }) => {
-      if (ctx.player.metadata?.activeBattleId) {
-        throw new TRPCError({
-          code: "BAD_REQUEST",
-          message: "Cannot change battle order while in a battle",
+      if (input.swapWithinTeam) {
+        const currentTeam = await ctx.prisma.catch.findMany({
+          where: {
+            playerId: ctx.player.id,
+            battleOrderPosition: {
+              not: null,
+            },
+          },
         })
+        const allInTeam = every(input.catchIds, (id) =>
+          find(currentTeam, { id })
+        )
+        const didNotRemove = input.catchIds.length === currentTeam.length
+        if (!allInTeam || !didNotRemove) {
+          throw new TRPCError({
+            code: "BAD_REQUEST",
+            message: "When swappingWithinTeam all catches must be in the team",
+          })
+        }
+      } else {
+        await checkForCareCenter({ ctx })
       }
 
       const catchIdsMaxPerTeam = take(input.catchIds, MAX_FIGHTERS_PER_TEAM)
-
-      // await ctx.prisma.catch.updateMany({
-      //   where: {
-      //     playerId: ctx.player.id,
-      //   },
-      //   data: {
-      //     battleOrderPosition: null,
-      //   },
-      // })
-
-      // await Promise.all(
-      //   map(catchIdsMaxPerTeam, async (catchId, index) => {
-      //     await ctx.prisma.catch.updateMany({
-      //       where: {
-      //         playerId: ctx.player.id,
-      //         id: catchId,
-      //       },
-      //       data: {
-      //         battleOrderPosition: index + 1,
-      //       },
-      //     })
-      //   })
-      // )
       await ctx.prisma.$transaction([
         ctx.prisma.catch.updateMany({
           where: {
@@ -148,7 +125,6 @@ export const catchRouter = createTRPCRouter({
           })
         ),
       ])
-      return true
     }),
 
   catch: wildlifeProcedure.mutation(async ({ ctx }) => {
@@ -183,6 +159,12 @@ export const catchRouter = createTRPCRouter({
           },
           select: {
             metadata: true,
+            battleParticipants: {
+              select: {
+                id: true,
+                playerId: true,
+              },
+            },
           },
         })
       : null
@@ -211,6 +193,7 @@ export const catchRouter = createTRPCRouter({
     await respawnWildlife({
       prisma: ctx.prisma,
       wildlifeId: ctx.wildlife.id,
+      reason: isLucky ? "CATCH_SUCCESS" : "CATCH_FAIL",
     })
 
     if (battle) {
@@ -236,6 +219,15 @@ export const catchRouter = createTRPCRouter({
     }
 
     if (!isLucky) {
+      // Catch metadata
+      if (battle?.metadata.battleReport) {
+        await savePostBattleCatchMetadata({
+          battleReport: battle.metadata.battleReport,
+          prisma: ctx.prisma,
+        })
+      }
+
+      // Failed catch
       throw new TRPCError({
         code: "BAD_REQUEST",
         message: "Wildlife escaped 💨",
@@ -262,17 +254,40 @@ export const catchRouter = createTRPCRouter({
     const levelingRate = LevelingRate.parse(
       PokemonLevelingRate[speciesNum]?.levelingRate
     )
-    const baseExp =
-      PokemonExperienceMap[`${level}-${levelingRate}`]?.requiredExperience
+    if (!levelingRate) {
+      console.error(
+        `No leveling rate for Species Name:${speciesName} Num:${speciesNum}`
+      )
+      throw new TRPCError({
+        code: "CONFLICT",
+        message: "Wildlife has no leveling rate 🤔",
+      })
+    }
+    const exp = getExpRate({
+      level,
+      levelingRate,
+    })?.requiredExperience
+    if (!level) {
+      throw new TRPCError({
+        code: "CONFLICT",
+        message: "Wildlife has no level 🤔",
+      })
+    }
+    if (!exp) {
+      throw new TRPCError({
+        code: "CONFLICT",
+        message: "Wildlife has no exp 🤔",
+      })
+    }
 
+    // Create new catch
     const catchMetadata = {
       speciesNum,
       level,
-      exp: baseExp,
+      exp,
       levelingRate,
       speciesName,
     } satisfies CatchMetadata
-
     await ctx.prisma.catch.create({
       data: {
         playerId: ctx.player.id,
@@ -287,8 +302,34 @@ export const catchRouter = createTRPCRouter({
       },
     })
 
+    // EXP
+    let expReports: ExpReports | null = null
+    if (battle && battle.metadata.battleReport) {
+      const winnerParticipationId = find(
+        battle.battleParticipants,
+        (bp) => bp.playerId === ctx.player.id
+      )?.id
+      if (winnerParticipationId) {
+        const result = await grantExp({
+          battleReport: battle.metadata.battleReport,
+          prisma: ctx.prisma,
+          winnerParticipationId,
+          onlyFaintedGiveExp: false,
+        })
+        expReports = result.expReports
+      }
+    }
+
+    // Catch metadata for battle participants
+    if (battle && battle.metadata.battleReport) {
+      await savePostBattleCatchMetadata({
+        battleReport: battle.metadata.battleReport,
+        prisma: ctx.prisma,
+      })
+    }
+
     return {
-      success: true,
+      expReports,
     }
   }),
 
@@ -310,4 +351,69 @@ export const catchRouter = createTRPCRouter({
         },
       })
     }),
+
+  care: careCenterProcedure.mutation(async ({ ctx }) => {
+    const all = await ctx.prisma.catch.findMany({
+      where: {
+        playerId: ctx.player.id,
+      },
+      include: {
+        wildlife: {
+          include: {
+            taxon: {
+              select: {
+                fighterSpeciesName: true,
+                // fighterSpeciesNum: true,
+              },
+            },
+          },
+        },
+      },
+    })
+    let count = 0
+    await Promise.all(
+      map(all, async (c) => {
+        const fighter = await getWildlifeFighterPlus(c)
+        let needToSave = false
+
+        // PP
+        const moves = fighter.moves.map((m) => {
+          if (!m.id) {
+            throw new Error("No move id")
+          }
+          if (m.status?.pp !== m.definition.pp) {
+            needToSave = true
+          }
+          return {
+            id: m.id,
+            pp: m.definition.pp,
+          }
+        })
+
+        // HP
+        if (fighter.hp !== fighter.hpMax) {
+          needToSave = true
+        }
+        const hp = fighter.hpMax
+
+        if (needToSave) {
+          count++
+          await ctx.prisma.catch.update({
+            where: {
+              id: c.id,
+            },
+            data: {
+              metadata: {
+                ...c.metadata,
+                moves,
+                hp,
+              } satisfies CatchMetadata,
+            },
+          })
+        }
+      })
+    )
+
+    return { count }
+  }),
 })

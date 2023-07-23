@@ -1,13 +1,23 @@
 import { BATTLE_INPUT_VERSION } from "~/config"
 import { type MyPrismaClient } from "~/server/db"
+import { CatchMetadata } from "~/server/schema/CatchMetadata"
 import { WildlifeMetadata } from "~/server/schema/WildlifeMetadata"
 import { BattleReportWildlifeMetadata } from "./BattleReport"
 
 const BattleSimulationWildlifeMetadata = BattleReportWildlifeMetadata.merge(
   WildlifeMetadata.pick({
     taxonAncestorIds: true,
+    observationCaptive: true,
   })
 )
+
+const BattleSimulationCatchMetadata = CatchMetadata.pick({
+  level: true,
+  moves: true,
+  hp: true,
+  evs: true,
+  speciesName: true,
+})
 
 export const getBattleForSimulation = async ({
   prisma,
@@ -45,8 +55,15 @@ export const getBattleForSimulation = async ({
                     select: {
                       id: true,
                       metadata: true,
+                      taxon: {
+                        select: {
+                          fighterSpeciesName: true,
+                          // fighterSpeciesNum: true,
+                        },
+                      },
                     },
                   },
+                  metadata: true,
                 },
                 take: playerPartyLimit,
                 orderBy: {
@@ -61,6 +78,12 @@ export const getBattleForSimulation = async ({
               metadata: true,
               observationId: true,
               respawnsAt: true,
+              taxon: {
+                select: {
+                  fighterSpeciesName: true,
+                  // fighterSpeciesNum: true,
+                },
+              },
             },
           },
         },
@@ -90,6 +113,7 @@ export const getBattleForSimulation = async ({
             ...bp.player,
             catches: bp.player.catches.map((c) => ({
               ...c,
+              metadata: BattleSimulationCatchMetadata.parse(c.metadata),
               wildlife: {
                 ...c.wildlife,
                 metadata: BattleSimulationWildlifeMetadata.parse(

@@ -1,7 +1,9 @@
 import { first } from "lodash-es"
 import { z } from "zod"
+import { NO_OF_ALL_TAXONS } from "~/config"
 import { createTRPCRouter } from "~/server/api/trpc"
 import { devProcedure } from "../middleware/devProcedure"
+import { playerProcedure } from "../middleware/playerProcedure"
 
 export const taxonRouter = createTRPCRouter({
   dev: devProcedure.mutation(async ({}) => {
@@ -34,4 +36,76 @@ export const taxonRouter = createTRPCRouter({
     const result = first(parsed.results)?.children
     return result
   }),
+
+  globalExplorationProgress: playerProcedure.query(async ({ ctx }) => {
+    const taxonCount = await ctx.prisma.taxon.count({})
+    const taxonCountMax = NO_OF_ALL_TAXONS
+
+    const wildlifeCount = await ctx.prisma.wildlife.count({})
+    const animals = await ctx.prisma.taxon.findFirstOrThrow({
+      where: { id: 1 },
+      select: {
+        metadata: true,
+      },
+    })
+    const wildlifeCountMax = animals.metadata.taxonObservationsCount
+
+    return {
+      taxonCount,
+      taxonCountMax,
+      wildlifeCount,
+      wildlifeCountMax,
+    }
+  }),
+
+  getTree: playerProcedure
+    .input(z.object({ taxonId: z.number() }))
+    .query(async ({ ctx, input }) => {
+      const taxon = await ctx.prisma.taxon.findUniqueOrThrow({
+        where: { id: input.taxonId },
+        include: {
+          descendants: {
+            include: {
+              _count: {
+                select: {
+                  wildlife: true,
+                },
+              },
+            },
+          },
+          _count: {
+            select: {
+              wildlife: true,
+            },
+          },
+        },
+      })
+
+      let ancestorIds = taxon.metadata.taxonAncestorIds
+      ancestorIds = ancestorIds.filter((id) => id !== 48460)
+
+      let ancestors = await ctx.prisma.taxon.findMany({
+        where: {
+          id: {
+            in: ancestorIds,
+          },
+        },
+        include: {
+          _count: {
+            select: {
+              wildlife: true,
+            },
+          },
+        },
+      })
+
+      ancestors = ancestorIds.map(
+        (id) => ancestors.find((ancestor) => ancestor.id === id)!
+      )
+
+      return {
+        taxon,
+        ancestors,
+      }
+    }),
 })

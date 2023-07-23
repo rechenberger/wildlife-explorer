@@ -40,7 +40,10 @@ export default function Page() {
   // const taxons = api.migration.taxons.useMutation()
   // const battleOrder = api.migration.battleOrder.useMutation()
   // const catchMetadata = api.migration.catchMetadata.useMutation()
-  const catchOriginalPlayer = api.migration.catchOriginalPlayer.useMutation()
+  // const catchOriginalPlayer = api.migration.catchOriginalPlayer.useMutation()
+  // const addMissingExp = api.migration.addMissingExp.useMutation()
+  const tmp = api.migration.tmp.useMutation()
+  // const wildlifeToTaxons = api.migration.wildlifeToTaxons.useMutation()
   const taxonDev = api.taxon.dev.useMutation()
   return (
     <MainLayout>
@@ -49,7 +52,10 @@ export default function Page() {
         {/* <MigrationButton {...taxons} label="Taxons" />
         <MigrationButton {...battleOrder} label="battleOrder" /> */}
         <MigrationButton {...taxonDev} label="taxonDev" />
-        <MigrationButton {...catchOriginalPlayer} label="catchOriginalPlayer" />
+        <MigrationButton {...tmp} label="tmp" />
+        {/* <MigrationButton {...wildlifeToTaxons} label="wildlifeToTaxons" /> */}
+        {/* <MigrationButton {...catchOriginalPlayer} label="catchOriginalPlayer" /> */}
+        {/* <MigrationButton {...addMissingExp} label="addMissingExp" /> */}
         {/* <MigrationButton {...catchMetadata} label="catchMetadata" /> */}
       </div>
     </MainLayout>

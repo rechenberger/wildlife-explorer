@@ -1,9 +1,12 @@
+import { chunk, flatMap, includes, uniq } from "lodash-es"
 import { MAX_FIGHTERS_PER_TEAM } from "~/config"
-import { PokemonExperienceMap } from "~/data/pokemonLevelExperienceMap"
+import { getExpRate } from "~/data/pokemonLevelExperienceMap"
 import { PokemonLevelingRate } from "~/data/pokemonLevelingRate"
 import { createTRPCRouter } from "~/server/api/trpc"
+import { importTaxon } from "~/server/inaturalist/importTaxon"
 import { getWildlifeFighterPlus } from "~/server/lib/battle/getWildlifeFighterPlus"
-import { LevelingRate, type CatchMetadata } from "~/server/schema/CatchMetdata"
+import { taxonMappingByAI } from "~/server/lib/battle/taxonMappingByAI"
+import { LevelingRate, type CatchMetadata } from "~/server/schema/CatchMetadata"
 import { devProcedure } from "../middleware/devProcedure"
 
 export const migrationRouter = createTRPCRouter({
@@ -16,10 +19,52 @@ export const migrationRouter = createTRPCRouter({
     return wildlife
   }),
 
-  catchMetadata: devProcedure.mutation(async ({ ctx }) => {
+  addMissingExp: devProcedure.mutation(async ({ ctx }) => {
     const catches = await ctx.prisma.catch.findMany({
       include: {
         wildlife: true,
+      },
+    })
+    for await (const catchXX of catches) {
+      const { level, exp, levelingRate } = catchXX.metadata
+      if (exp) continue
+
+      if (!level) throw new Error("no level")
+      if (!levelingRate) throw new Error("no levelingRate")
+
+      const requiredExp = getExpRate({
+        level,
+        levelingRate,
+      })?.requiredExperience
+
+      if (!requiredExp) throw new Error("no exp")
+
+      await ctx.prisma.catch.update({
+        where: {
+          id: catchXX.id,
+        },
+        data: {
+          metadata: {
+            ...catchXX.metadata,
+            exp: requiredExp,
+          },
+        },
+      })
+    }
+  }),
+
+  catchMetadata: devProcedure.mutation(async ({ ctx }) => {
+    const catches = await ctx.prisma.catch.findMany({
+      include: {
+        wildlife: {
+          include: {
+            taxon: {
+              select: {
+                fighterSpeciesName: true,
+              },
+            },
+          },
+        },
       },
     })
 
@@ -39,8 +84,10 @@ export const migrationRouter = createTRPCRouter({
       const levelingRate = LevelingRate.parse(
         PokemonLevelingRate[speciesNum]?.levelingRate
       )
-      const baseExp =
-        PokemonExperienceMap[`${level}-${levelingRate}`]?.requiredExperience
+      const baseExp = getExpRate({
+        level,
+        levelingRate,
+      })?.requiredExperience
 
       const catchMetadata = {
         speciesNum,
@@ -120,5 +167,103 @@ export const migrationRouter = createTRPCRouter({
         })
       }
     }
+  }),
+
+  tmp: devProcedure.mutation(async ({ ctx }) => {
+    const allTaxons = await ctx.prisma.taxon.findMany({
+      select: {
+        id: true,
+      },
+    })
+    const importedIds = allTaxons.map((t) => t.id)
+    const allMappings = flatMap(taxonMappingByAI, (t) => t.children).map(
+      (t) => t.taxonId
+    )
+
+    const taxonIds = uniq(
+      allMappings.filter((id) => !includes(importedIds, id))
+    )
+
+    // const chunkSize = 30
+    // const chunks = chunk(taxonIds, chunkSize)
+    // for (const chunk of chunks) {
+    //   await Promise.all(
+    //     map(chunk, (taxonId) =>
+    //       importTaxon({
+    //         prisma: ctx.prisma,
+    //         taxonId,
+    //         playerId: "cljle5htl0001cf5du54abpjz",
+    //       })
+    //     )
+    //   )
+    // }
+
+    return taxonIds
+    // await importTaxon({
+    //   prisma: ctx.prisma,
+    //   taxonId: 3017,
+    //   playerId: "cljle5htl0001cf5du54abpjz",
+    // })
+  }),
+
+  wildlifeToTaxons: devProcedure.mutation(async ({ ctx }) => {
+    let wildlife = await ctx.prisma.wildlife.findMany({
+      distinct: ["taxonId"],
+      orderBy: {
+        createdAt: "asc",
+      },
+      select: {
+        taxonId: true,
+        metadata: true,
+        foundById: true,
+        createdAt: true,
+      },
+    })
+
+    const allTaxons = await ctx.prisma.taxon.findMany({
+      select: {
+        id: true,
+      },
+    })
+    const importedIds = allTaxons.map((t) => t.id)
+
+    wildlife = wildlife.filter((w) => !includes(importedIds, w.taxonId))
+
+    console.log(`Importing ${wildlife.length}`)
+
+    let done = 0
+    const chunkSize = 20
+    const chunks = chunk(wildlife, chunkSize)
+    for (const chunk of chunks) {
+      const doChunk = async () => {
+        await Promise.all(
+          chunk.map(async (w) => {
+            await importTaxon({
+              prisma: ctx.prisma,
+              taxonId: w.taxonId,
+              playerId: w.foundById,
+              createdAt: w.createdAt,
+            })
+            console.log(`${++done} of ${wildlife.length} done`)
+          })
+        )
+      }
+      // Retry Logic:
+      let retries = 0
+      while (true) {
+        try {
+          await doChunk()
+          break
+        } catch (e: any) {
+          console.error(e?.message || e)
+          retries++
+          const timeout = Math.min(1000 * 2 ** retries, 1000 * 60 * 5)
+          console.log(`CHUNK: Retry (${retries}) in ${timeout / 1000}s ...`)
+          await new Promise((resolve) => setTimeout(resolve, timeout))
+        }
+      }
+    }
+
+    return { length: wildlife.length }
   }),
 })

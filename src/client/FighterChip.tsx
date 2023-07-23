@@ -1,9 +1,15 @@
+import { Sparkles } from "lucide-react"
 import Image from "next/image"
 import { DEV_MODE } from "~/config"
 import { type BattleReportFighter } from "~/server/lib/battle/BattleReport"
+import { IconFemale } from "./IconFemale"
+import { IconMale } from "./IconMale"
 import { cn } from "./cn"
+import { getFighterImage } from "./getFighterImage"
 import { Progress } from "./shadcn/ui/progress"
 import { useGetWildlifeName } from "./useGetWildlifeName"
+import { usePlayer } from "./usePlayer"
+import { useShowFighters } from "./useShowFighter"
 
 export const FighterChip = ({
   fighter,
@@ -11,18 +17,24 @@ export const FighterChip = ({
   showAbsoluteHp,
   grayscale,
   onClick,
+  circleClassName,
 }: {
   fighter: BattleReportFighter
   ltr?: boolean
   showAbsoluteHp: boolean
   grayscale?: boolean
   onClick?: () => void
+  circleClassName?: string
 }) => {
   const { hp, hpMax, status } = fighter.fighter
   const hpFull = hp >= hpMax
   const fainted = hp <= 0
   const getName = useGetWildlifeName()
-  const name = fighter.name || getName(fighter.wildlife)
+  const name = getName(fighter)
+  const { player } = usePlayer()
+  const canEvolve =
+    fighter.fighter?.canEvolve && !player?.metadata?.activeBattleId
+  const showFighters = useShowFighters()
   return (
     <>
       <div
@@ -41,27 +53,47 @@ export const FighterChip = ({
               : fainted
               ? "ring-red-500"
               : "ring-amber-400",
-            grayscale && "grayscale"
+            grayscale && "grayscale",
+            circleClassName
           )}
         >
-          {fighter.wildlife.metadata.taxonImageUrlSquare && (
-            <Image
-              src={fighter.wildlife.metadata.taxonImageUrlSquare}
-              className={cn(
-                "w-full object-cover object-center transition-transform",
-                fainted && "rotate-180",
-                "pointer-events-none"
+          {showFighters ? (
+            <>
+              <Image
+                src={getFighterImage({
+                  fighterSpeciesNum: fighter.fighter.speciesNum,
+                })}
+                className={cn(
+                  "h-full w-full rounded-full scale-[1] bg-gray-200"
+                )}
+                alt={"Observation"}
+                unoptimized
+                width={1}
+                height={1}
+              />
+            </>
+          ) : (
+            <>
+              {fighter.wildlife.metadata.taxonImageUrlSquare && (
+                <Image
+                  src={fighter.wildlife.metadata.taxonImageUrlSquare}
+                  className={cn(
+                    "w-full object-cover object-center transition-transform",
+                    fainted && "rotate-180",
+                    "pointer-events-none"
+                  )}
+                  alt={"Observation"}
+                  unoptimized
+                  fill={true}
+                />
               )}
-              alt={"Observation"}
-              unoptimized
-              fill={true}
-            />
+            </>
           )}
         </div>
         <div className={cn("flex-1 overflow-hidden py-1 select-none")}>
-          <div className="flex items-baseline gap-1">
+          <div className="flex items-center gap-1">
             <div
-              className="truncate text-xs font-bold"
+              className="truncate text-xs font-bold flex-1"
               title={`${name} ${
                 DEV_MODE
                   ? `(${fighter.fighter.species} ${fighter.fighter.level} ${fighter.fighter.gender})`
@@ -69,6 +101,22 @@ export const FighterChip = ({
               }`}
             >
               {name}
+            </div>
+            <div
+              className={cn(
+                "shrink-0 text-xs font-bol",
+                fighter.fighter.gender === "M"
+                  ? "text-blue-600"
+                  : "text-pink-600"
+              )}
+              title={fighter.fighter.gender === "M" ? "Male" : "Female"}
+              style={{ lineHeight: "1" }} // https://teampilot.ai/team/tristan/chat/clk7z6osk0005le08yj6f4cvc
+            >
+              {fighter.fighter.gender === "M" ? (
+                <IconMale className="w-2 h-2" />
+              ) : (
+                <IconFemale className="w-2 h-2" />
+              )}
             </div>
             {/* {SHOW_FIGHTER_NAME && (
               <div
@@ -92,8 +140,16 @@ export const FighterChip = ({
                 {status.toUpperCase()}
               </div>
             )}
-            <div className="truncate opacity-60">
-              Lv. {fighter.fighter.level}
+            <div
+              className={cn(
+                "truncate opacity-60",
+                "flex flex-row gap-0.5 items-center",
+                canEvolve && "text-yellow-600 animate-pulse"
+              )}
+              title={canEvolve ? "Can evolve" : undefined}
+            >
+              <span>Lv. {fighter.fighter.level}</span>
+              {canEvolve && <Sparkles className="w-3 h-3" />}
             </div>
           </div>
         </div>

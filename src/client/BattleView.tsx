@@ -2,14 +2,13 @@ import NiceModal from "@ebay/nice-modal-react"
 import { useAtomValue, useSetAtom } from "jotai"
 import { find, flatMap, map, orderBy } from "lodash-es"
 import { Scroll, ScrollText, Undo2 } from "lucide-react"
-import Image from "next/image"
-import { Fragment, useLayoutEffect, useRef } from "react"
+import { Fragment, useCallback, useLayoutEffect, useRef } from "react"
 import { toast } from "sonner"
-import { DEV_MODE, MAX_FIGHTERS_PER_TEAM } from "~/config"
+import { DEV_MODE } from "~/config"
 import { parseBattleLog } from "~/server/lib/battle/battleLogParser"
 import { api } from "~/utils/api"
 import { atomWithLocalStorage } from "~/utils/atomWithLocalStorage"
-import { fillWithNulls } from "~/utils/fillWithNulls"
+import { BattleFighterSelectButton } from "./BattleFighterSelectButton"
 import { BattleViewPvp } from "./BattleViewPvp"
 import { CatchDetailsModal } from "./CatchDetailsModal"
 import { FighterChip } from "./FighterChip"
@@ -27,13 +26,15 @@ import {
 } from "./typeIcons"
 import { useCatch } from "./useCatch"
 import { useGetWildlifeName } from "./useGetWildlifeName"
+import { useKeyboardShortcut } from "./useKeyboardShortcut"
+import { useMakeChoice } from "./useMakeChoice"
 import { usePlayer } from "./usePlayer"
 
 const BIG_INACTIVE_FIGHTER = false
-const SHOW_ENEMY_MOVES = false
+const SHOW_ENEMY_MOVES = DEV_MODE
 const SHOW_INACTIVE_MOVES = true
 const SHOW_FIGHTER_TYPES = true
-const SHOW_ABILITY = false
+const SHOW_ABILITY = DEV_MODE
 const SHOW_NATURE = false
 
 export const showBattleLogAtom = atomWithLocalStorage("showBattleLog", false)
@@ -80,15 +81,8 @@ export const BattleView = ({
   )
 
   const battleLogAsHtml = parseBattleLog(data?.battleReport.outputLog, true)
-
   const trpc = api.useContext()
-  const { mutate: makeChoice, isLoading: choiceLoading } =
-    api.battle.makeChoice.useMutation({
-      onSuccess: () => {
-        trpc.battle.invalidate()
-      },
-      onError: (err) => toast.error(err.message),
-    })
+  const { mutate: makeChoice, isLoading: choiceLoading } = useMakeChoice()
   const { mutate: reset } = api.battle.reset.useMutation({
     onSuccess: () => {
       trpc.battle.invalidate()
@@ -101,6 +95,29 @@ export const BattleView = ({
       trpc.battle.invalidate()
     },
   })
+
+  const ezChoice = useCallback(
+    (choice: string) => {
+      if (!playerId) return
+      return makeChoice({
+        battleId,
+        playerId: playerId,
+        choice,
+      })
+    },
+    [battleId, makeChoice, playerId]
+  )
+
+  useKeyboardShortcut("MOVE_1", () => ezChoice("move 1"))
+  useKeyboardShortcut("MOVE_2", () => ezChoice("move 2"))
+  useKeyboardShortcut("MOVE_3", () => ezChoice("move 3"))
+  useKeyboardShortcut("MOVE_4", () => ezChoice("move 4"))
+  useKeyboardShortcut("SWITCH_1", () => ezChoice("switch 1"))
+  useKeyboardShortcut("SWITCH_2", () => ezChoice("switch 2"))
+  useKeyboardShortcut("SWITCH_3", () => ezChoice("switch 3"))
+  useKeyboardShortcut("SWITCH_4", () => ezChoice("switch 4"))
+  useKeyboardShortcut("SWITCH_5", () => ezChoice("switch 5"))
+  useKeyboardShortcut("SWITCH_6", () => ezChoice("switch 6"))
 
   const isLoading = pvpStatus?.isPvp
     ? false
@@ -230,51 +247,53 @@ export const BattleView = ({
                         <Fragment
                           key={fighter.catch?.id ?? fighter.wildlife.id}
                         >
-                          <div
-                            className={cn(
-                              "rounded-full border border-dashed border-gray-200 bg-gray-100 px-4 py-1 text-xs text-black/60",
-                              isMainSide
-                                ? "ml-4 self-start rounded-bl-none"
-                                : "mr-4 self-end rounded-tr-none"
-                            )}
-                          >
-                            {isLoading ? (
-                              <>
-                                <div className="-mt-1 flex h-5 animate-pulse justify-center gap-0.5 text-lg font-extrabold">
-                                  <div className="animate-bounce">•</div>
-                                  <div className="animate-bounce delay-75">
-                                    •
+                          {isActive && (
+                            <div
+                              className={cn(
+                                "rounded-full border border-dashed border-gray-200 bg-gray-100 px-4 py-1 text-xs text-black/60",
+                                isMainSide
+                                  ? "ml-4 self-start rounded-bl-none"
+                                  : "mr-4 self-end rounded-tr-none"
+                              )}
+                            >
+                              {isLoading ? (
+                                <>
+                                  <div className="-mt-1 flex h-5 animate-pulse justify-center gap-0.5 text-lg font-extrabold">
+                                    <div className="animate-bounce">•</div>
+                                    <div className="animate-bounce delay-75">
+                                      •
+                                    </div>
+                                    <div className="animate-bounce delay-150">
+                                      •
+                                    </div>
                                   </div>
-                                  <div className="animate-bounce delay-150">
-                                    •
-                                  </div>
-                                </div>
-                              </>
-                            ) : (
-                              <>
-                                <span className="italic text-black">
-                                  {getName(fighter.wildlife)}
-                                </span>{" "}
-                                {lastMove ? (
-                                  <>
-                                    uses{" "}
-                                    <span className="italic text-black">
-                                      {lastMove.name}
-                                    </span>
-                                    , dealing{" "}
-                                    <span className="italic text-black">
-                                      {lastMove.totalDamage || "no"}
-                                    </span>{" "}
-                                    damage
-                                  </>
-                                ) : justFainted ? (
-                                  "fainted"
-                                ) : (
-                                  "enters the battle"
-                                )}
-                              </>
-                            )}
-                          </div>
+                                </>
+                              ) : (
+                                <>
+                                  <span className="italic text-black">
+                                    {getName(fighter)}
+                                  </span>{" "}
+                                  {lastMove ? (
+                                    <>
+                                      uses{" "}
+                                      <span className="italic text-black">
+                                        {lastMove.name}
+                                      </span>
+                                      , dealing{" "}
+                                      <span className="italic text-black">
+                                        {lastMove.totalDamage || "no"}
+                                      </span>{" "}
+                                      damage
+                                    </>
+                                  ) : justFainted ? (
+                                    "fainted"
+                                  ) : (
+                                    "enters the battle"
+                                  )}
+                                </>
+                              )}
+                            </div>
+                          )}
                           <div
                             className={cn(
                               "flex items-center gap-2",
@@ -293,13 +312,17 @@ export const BattleView = ({
                                 ltr={isMySide}
                                 showAbsoluteHp={isMySide}
                                 grayscale={!isActive && !justFainted}
-                                onClick={() => {
-                                  const catchId = fighter.catch?.id
-                                  if (!catchId) return
-                                  NiceModal.show(CatchDetailsModal, {
-                                    catchId,
-                                  })
-                                }}
+                                onClick={
+                                  isMySide && !!fighter.catch?.id
+                                    ? () => {
+                                        const catchId = fighter.catch?.id
+                                        if (!catchId) return
+                                        NiceModal.show(CatchDetailsModal, {
+                                          catchId,
+                                        })
+                                      }
+                                    : undefined
+                                }
                               />
                               <div
                                 className={cn(
@@ -327,14 +350,14 @@ export const BattleView = ({
                                       />
                                     )}
                                   </>
-                                ) : (
+                                ) : pvpStatus.status === "FINISHED" ? (
                                   <>
                                     <TypeBadge
                                       icon={isWinner ? winnerIcon : loserIcon}
                                       content={isWinner ? "Won" : "Defeated"}
                                     />
                                   </>
-                                )}
+                                ) : null}
                               </div>
                             </div>
                             {/* <div className="hidden flex-1 md:flex" /> */}
@@ -342,6 +365,7 @@ export const BattleView = ({
                               (isActive || SHOW_INACTIVE_MOVES) && (
                                 <FighterMoves
                                   fighter={fighter}
+                                  hideMobileDetails
                                   disabled={
                                     isLoading ||
                                     !isActive ||
@@ -349,12 +373,12 @@ export const BattleView = ({
                                     !battleIsActive ||
                                     !!isChoiceDone
                                   }
-                                  onClick={({ moveIdx }) => {
+                                  onClick={({ moveId }) => {
                                     if (!playerId) return
                                     makeChoice({
                                       battleId,
                                       playerId: playerId,
-                                      choice: `move ${moveIdx + 1}`,
+                                      choice: `move ${moveId}`,
                                     })
                                   }}
                                 />
@@ -366,73 +390,17 @@ export const BattleView = ({
                   </div>
                   <div
                     className={cn(
-                      "flex w-full items-center gap-1",
+                      "flex w-full items-center gap-3",
                       isMainSide ? "flex-row" : "flex-row-reverse"
                     )}
                   >
-                    {side.fighters.length >= 2 &&
-                      map(
-                        fillWithNulls(side.fighters, MAX_FIGHTERS_PER_TEAM),
-                        (fighter, fighterIdx) => {
-                          if (!fighter) {
-                            return (
-                              <div
-                                key={fighterIdx}
-                                className={cn(
-                                  "relative aspect-square h-4 w-4 overflow-hidden rounded-full border-2",
-                                  "border-gray-100 bg-gray-50"
-                                )}
-                              />
-                            )
-                          }
-
-                          const { hp, hpMax } = fighter.fighter
-                          const hpFull = hp >= hpMax
-                          const dead = hp <= 0
-                          return (
-                            <Fragment key={fighterIdx}>
-                              <button
-                                title={
-                                  fighter.name || getName(fighter.wildlife)
-                                }
-                                disabled={!isMySide}
-                                className={cn(
-                                  "relative aspect-square h-4 w-4 overflow-hidden rounded-full border-2",
-                                  hpFull
-                                    ? "border-green-500"
-                                    : dead
-                                    ? "border-red-500"
-                                    : "border-amber-400",
-                                  isMySide ? "cursor-pointer" : "cursor-default"
-                                )}
-                                onClick={() => {
-                                  if (!playerId) return
-                                  if (!isMySide) return
-                                  makeChoice({
-                                    battleId,
-                                    playerId: playerId,
-                                    choice: `switch ${fighterIdx + 1}`,
-                                  })
-                                }}
-                              >
-                                {fighter.wildlife.metadata
-                                  .taxonImageUrlSquare && (
-                                  <Image
-                                    src={
-                                      fighter.wildlife.metadata
-                                        .taxonImageUrlSquare
-                                    }
-                                    className="w-full object-cover object-center"
-                                    alt={"Observation"}
-                                    unoptimized
-                                    fill={true}
-                                  />
-                                )}
-                              </button>
-                            </Fragment>
-                          )
-                        }
-                      )}
+                    <BattleFighterSelectButton
+                      side={side}
+                      isMainSide={isMainSide}
+                      isMySide={isMySide}
+                      battleIsActive={battleIsActive}
+                      battleId={battleId}
+                    />
                     {isMySide && (
                       <div
                         className={cn(

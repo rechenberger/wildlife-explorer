@@ -13,7 +13,12 @@ import {
 } from "~/config"
 import { type MyPrismaClient } from "~/server/db"
 import { createSeed, rngInt } from "~/utils/seed"
-import { BattleReport, type BattleReportSide } from "./BattleReport"
+import {
+  BattleReport,
+  type BattleReportFighter,
+  type BattleReportSide,
+} from "./BattleReport"
+import { applyFighterStats } from "./applyFighterStats"
 import {
   getBattleForSimulation,
   type BattleInput,
@@ -94,12 +99,15 @@ export const simulateBattle = async ({
       }[] = []
 
       if (!!battleParticipant.player?.catches) {
+        // Dont bring fainted fighters, they suck
+        const nonFainted = battleParticipant.player.catches.filter((c) =>
+          typeof c.metadata.hp === "number" ? c.metadata.hp > 0 : true
+        )
         team = await Promise.all(
-          battleParticipant.player?.catches.map(async (c, idx) => {
+          nonFainted.map(async (c, idx) => {
             return {
               fighter: await getWildlifeFighter({
-                wildlife: c.wildlife,
-                seed: c.seed,
+                ...c,
                 idx,
               }),
               wildlife: c.wildlife,
@@ -134,6 +142,13 @@ export const simulateBattle = async ({
           name,
           team: team.map((t) => t.fighter),
         })
+        battle.getSide(sideId).pokemon.forEach((p, idx) => {
+          const fighter = team[idx]
+          if (!fighter) {
+            throw new Error("Fighter not found in team")
+          }
+          applyFighterStats({ p, catchMetadata: fighter.catch?.metadata })
+        })
       }
 
       return {
@@ -141,6 +156,7 @@ export const simulateBattle = async ({
         name,
         team,
         player: battleParticipant.player,
+        participationId: battleParticipant.id,
       }
     })
   )
@@ -210,6 +226,8 @@ export const simulateBattle = async ({
       const team = teams[sideIdx]!
       const fighters = side.pokemon.map((p) => {
         const idxInTeam = parseInt(p.name[1]!) - 1
+        // console.log({ name: p.name, turns: p.activeTurns })
+
         const fighter = team.team[idxInTeam]
 
         const foe = first(p.foes())
@@ -226,13 +244,16 @@ export const simulateBattle = async ({
           name: fighter?.catch?.name,
           catch: fighter?.catch,
           wildlife: fighter!.wildlife,
-        }
+          activeTurns: p.activeTurns,
+          fainted: p.fainted,
+        } satisfies BattleReportFighter
       })
       return {
         name: team.name,
         fighters,
         player: team.player,
         isWinner: battle.winner === side.name,
+        participationId: team.participationId,
       } satisfies BattleReportSide
     })
 

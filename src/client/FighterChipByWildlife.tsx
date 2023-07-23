@@ -2,7 +2,7 @@ import { api, type RouterOutputs } from "~/utils/api"
 import { FighterChip } from "./FighterChip"
 import { usePlayer } from "./usePlayer"
 
-type Wildlife = RouterOutputs["wildlife"]["nearMe"][number]
+type Wildlife = RouterOutputs["wildlife"]["getOne"]["wildlife"]
 
 export const FighterChipByWildlife = ({
   w,
@@ -16,7 +16,7 @@ export const FighterChipByWildlife = ({
   enabled?: boolean
 }) => {
   const { playerId } = usePlayer()
-  const { data: fighter } = api.wildlife.getFighter.useQuery(
+  const { data: fighter } = api.wildlife.getOne.useQuery(
     {
       playerId: playerId!,
       wildlifeId: w.id,

@@ -1,5 +1,7 @@
 import {
   Apple,
+  ArrowLeft,
+  ArrowLeftRight,
   ArrowRight,
   Award,
   Biohazard,
@@ -12,19 +14,23 @@ import {
   Clock,
   Droplets,
   Dumbbell,
+  Edit2,
   Flame,
   Frown,
   Gem,
   Ghost,
   HeartHandshake,
+  HeartPulse,
   HelpCircle,
   Leaf,
   Milestone,
   Moon,
   Mountain,
+  Navigation,
   Puzzle,
   Scale,
   Snowflake,
+  Sparkle,
   Sparkles,
   Swords,
   Zap,
@@ -172,52 +178,62 @@ export const getTypeIcon = (type: string) => {
   return typeIcon || { ...fallbackTypeIcon, name: type }
 }
 
+const defaultIcon = {
+  name: "",
+  icon: ArrowLeft,
+  bgFull: "bg-gray-500 text-white",
+  bgHalf: "bg-gray-200",
+  ringFull: "hover:ring ring-gray-500",
+}
+
 export const abilityIcon = {
+  ...defaultIcon,
   name: "Ability",
   icon: Puzzle,
-  bgFull: "bg-black/40 text-white",
-  bgHalf: "bg-black/20",
-  ringFull: "hover:ring ring-black",
 }
 
 export const natureIcon = {
+  ...defaultIcon,
   name: "Nature",
   icon: Scale,
-  bgFull: "bg-black/40 text-white",
-  bgHalf: "bg-black/20",
-  ringFull: "hover:ring ring-black",
 }
 
 export const itemIcon = {
+  ...defaultIcon,
   name: "Item",
   icon: Apple,
-  bgFull: "bg-black/40 text-white",
-  bgHalf: "bg-black/20",
-  ringFull: "hover:ring ring-black",
 }
 
 export const leaveIcon = {
+  ...defaultIcon,
   name: "Leave",
   icon: ArrowRight,
-  bgFull: "bg-gray-500 text-white",
-  bgHalf: "bg-gray-500/50",
-  ringFull: "hover:ring ring-gray-500",
 }
 
 export const catchIcon = {
+  ...defaultIcon,
   name: "Catch",
   icon: HeartHandshake,
-  bgFull: "bg-gray-500 text-white",
-  bgHalf: "bg-gray-500/50",
-  ringFull: "hover:ring ring-gray-500",
+}
+
+export const careIcon = {
+  name: "Care",
+  icon: HeartPulse,
+  bgFull: "bg-purple-500 text-white",
+  bgHalf: "bg-purple-500/50",
+  ringFull: "hover:ring ring-purple-500",
 }
 
 export const runIcon = {
+  ...defaultIcon,
   name: "Run",
   icon: Milestone,
-  bgFull: "bg-gray-500 text-white",
-  bgHalf: "bg-gray-500/50",
-  ringFull: "hover:ring ring-gray-500",
+}
+
+export const navigateIcon = {
+  ...defaultIcon,
+  name: "Navigate",
+  icon: Navigation,
 }
 
 export const readyIcon = {
@@ -250,6 +266,31 @@ export const loserIcon = {
   bgFull: "bg-red-500 text-white",
   bgHalf: "bg-red-500/50",
   ringFull: "hover:ring ring-red-500",
+}
+
+export const editIcon = {
+  ...defaultIcon,
+  name: "Edit",
+  icon: Edit2,
+}
+
+export const swapIcon = {
+  ...defaultIcon,
+  name: "Edit",
+  icon: ArrowLeftRight,
+}
+
+export const evolveIcon = {
+  bgHalf: "bg-yellow-500/50",
+  bgFull: "bg-yellow-500",
+  ringFull: "hover:ring ring-yellow-500",
+  name: "Evolve",
+  icon: Sparkle,
+}
+export const pastIcon = {
+  ...defaultIcon,
+  name: "Past",
+  icon: Clock,
 }
 
 export type TypeIcon = {

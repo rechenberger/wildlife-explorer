@@ -20,7 +20,13 @@ export const BattleReportFighter = z.object({
   wildlife: z.object({
     id: z.string(),
     metadata: BattleReportWildlifeMetadata,
+    // taxon: z.object({
+    //   fighterSpeciesName: z.string(),
+    //   fighterSpeciesNum: z.number(),
+    // }),
   }),
+  activeTurns: z.number().optional(),
+  fainted: z.boolean().optional(),
 })
 
 export type BattleReportFighter = z.infer<typeof BattleReportFighter>
@@ -34,6 +40,7 @@ export const BattleReportSide = z.object({
     })
     .nullish(),
   isWinner: z.boolean(),
+  participationId: z.string().nullish(),
 })
 export type BattleReportSide = z.infer<typeof BattleReportSide>
 

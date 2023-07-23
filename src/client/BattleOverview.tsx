@@ -38,7 +38,7 @@ export const BattleOverview = () => {
       <div className="flex flex-col gap-2">
         {battles?.map((battle) => {
           const myParticipation = battle.battleParticipants.find(
-            (p) => p.playerId === playerId
+            (p) => p.player?.id === playerId
           )
           const statusLabel =
             battle.status === "IN_PROGRESS"
@@ -84,7 +84,7 @@ export const BattleOverview = () => {
                         {p.player
                           ? p.player.name
                           : p.wildlife
-                          ? getName(p.wildlife)
+                          ? getName({ wildlife: p.wildlife })
                           : "???"}
                       </div>
                     </Fragment>

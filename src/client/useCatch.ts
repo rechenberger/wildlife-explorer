@@ -1,5 +1,7 @@
+import NiceModal from "@ebay/nice-modal-react"
 import { toast } from "sonner"
 import { api } from "~/utils/api"
+import { ExpReportsModal } from "./ExpReportsModal"
 import { confetti } from "./confetti"
 import { usePlayer } from "./usePlayer"
 
@@ -13,6 +15,15 @@ export const useCatch = () => {
       trpc.wildlife.invalidate()
       trpc.battle.invalidate()
     },
+    onSuccess: (data) => {
+      confetti()
+      const expReports = data?.expReports
+      if (expReports) {
+        NiceModal.show(ExpReportsModal, {
+          expReports,
+        })
+      }
+    },
   })
 
   const doCatch = async ({ wildlifeId }: { wildlifeId: string }) => {
@@ -24,10 +35,6 @@ export const useCatch = () => {
       success: "You caught it! 🎉",
       error: (err) => err.message || "Failed to catch. Try again.",
     })
-    try {
-      await promise
-      confetti()
-    } catch (error) {}
   }
 
   return { doCatch, isLoading }

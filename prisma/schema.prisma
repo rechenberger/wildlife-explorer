@@ -2,8 +2,7 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-    provider        = "prisma-client-js"
-    previewFeatures = ["jsonProtocol", "orderByNulls"]
+    provider = "prisma-client-js"
 }
 
 datasource db {
@@ -86,6 +85,8 @@ model Player {
     scanCooldownAt  DateTime?
     catches         Catch[]   @relation("CatchPlayer")
     originalCatches Catch[]   @relation("CatchOriginalPlayer")
+    placesFound     Place[]
+    taxonsFound     Taxon[]
     trades          Trade[]
 
     @@index([lat, lng])
@@ -128,8 +129,9 @@ model Wildlife {
     respawnsAt DateTime
     catches    Catch[]
 
-    observationId Int  @unique
+    observationId Int   @unique
     taxonId       Int
+    taxon         Taxon @relation(fields: [taxonId], references: [id])
     metadata      Json
 
     foundById String
@@ -143,6 +145,31 @@ model Wildlife {
     @@index([lat, lng])
     @@index([taxonId])
     @@index([observationId])
+}
+
+model Taxon {
+    id        Int      @id
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    metadata Json
+
+    isAnchor           Boolean
+    fighterSpeciesName String
+    fighterSpeciesNum  Int
+
+    ancestorId  Int?
+    ancestor    Taxon?  @relation("TaxonAncestor", fields: [ancestorId], references: [id])
+    descendants Taxon[] @relation("TaxonAncestor")
+
+    anchorId            Int?
+    anchor              Taxon?  @relation("TaxonAncestorAnchor", fields: [anchorId], references: [id])
+    descendantsAnchored Taxon[] @relation("TaxonAncestorAnchor")
+
+    foundById String
+    foundBy   Player @relation(fields: [foundById], references: [id])
+
+    wildlife Wildlife[]
 }
 
 model Battle {
@@ -182,6 +209,28 @@ model BattleParticipation {
 
     @@index([playerId])
     @@index([wildlifeId])
+}
+
+model Place {
+    id        String   @id @default(cuid())
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    metadata      Json
+    type          PlaceType
+    googlePlaceId String    @unique
+
+    lat Float
+    lng Float
+
+    foundById String
+    foundBy   Player @relation(fields: [foundById], references: [id], onDelete: Cascade)
+
+    @@index([lat, lng])
+}
+
+enum PlaceType {
+    CARE_CENTER
 }
 
 model Trade {

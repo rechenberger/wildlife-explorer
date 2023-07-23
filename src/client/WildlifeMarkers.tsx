@@ -2,6 +2,7 @@ import { Loader2 } from "lucide-react"
 import { WILDLIFE_REFETCH_INTERVAL_IN_MS } from "~/config"
 import { api } from "~/utils/api"
 import { WildlifeMarker } from "./WildlifeMarker"
+import { useActiveNavigation } from "./useActiveNavigation"
 import { usePlayer } from "./usePlayer"
 
 export const useWildlife = () => {
@@ -24,6 +25,7 @@ export const useWildlife = () => {
 
 export const WildlifeMarkers = () => {
   const { wildlife, isFetching } = useWildlife()
+  const { isNavigating } = useActiveNavigation()
 
   return (
     <>
@@ -33,7 +35,13 @@ export const WildlifeMarkers = () => {
         </div>
       )}
       {wildlife?.map((w) => {
-        return <WildlifeMarker key={w.id} w={w} />
+        return (
+          <WildlifeMarker
+            key={w.wildlife.id}
+            nearMe={w}
+            isNavigating={isNavigating}
+          />
+        )
       })}
     </>
   )

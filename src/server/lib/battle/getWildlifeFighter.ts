@@ -1,43 +1,131 @@
 import { Dex, type PokemonSet, type Species } from "@pkmn/dex"
-import { filter, map, orderBy, take } from "lodash-es"
-import { MAX_MOVES_PER_FIGHTER } from "~/config"
+import { filter, find, map, max, min, orderBy, take } from "lodash-es"
+import { MAX_MOVES_PER_FIGHTER, USE_LATEST_GEN } from "~/config"
+import { type CatchMetadata } from "~/server/schema/CatchMetadata"
 import { type WildlifeMetadata } from "~/server/schema/WildlifeMetadata"
 import { rngInt, rngItem, rngItemWithWeights } from "~/utils/seed"
-import { taxonMappingByAncestors } from "./taxonMappingByAncestors"
 
 export type GetWildlifeFighterOptions = {
   wildlife: {
     metadata: Pick<
       WildlifeMetadata,
-      "taxonAncestorIds" | "taxonCommonName" | "taxonName"
+      | "taxonAncestorIds"
+      | "taxonCommonName"
+      | "taxonName"
+      | "observationCaptive"
     >
+    taxon: {
+      fighterSpeciesName: string
+    }
   }
+  metadata?: Pick<CatchMetadata, "level" | "moves" | "evs" | "speciesName">
   seed: string
   idx?: number
+  name?: string | null
+}
+
+export const getHightestPossibleEvoByLevel = ({
+  species,
+  level,
+}: {
+  species: Species
+  level: number
+}) => {
+  let highestPossibleEvo = null
+  while (true) {
+    const possibleEvo = getNextPossibleEvoByLevel({
+      species,
+      level,
+    })
+    if (!possibleEvo) break
+    species = possibleEvo
+    highestPossibleEvo = possibleEvo
+  }
+  return highestPossibleEvo
+}
+
+export const getNextPossibleEvoByLevel = ({
+  species,
+  level,
+}: {
+  species: Species
+  level: number
+}) => {
+  const nextEvo = getNextEvo({
+    species,
+  })
+  if (nextEvo?.evoLevel && nextEvo.evoLevel > level) return null
+  return nextEvo
+}
+
+export const getNextEvo = ({ species }: { species: Species }) => {
+  const evos = map(species.evos, (e) => Dex.species.get(e))
+  const possibleEvo = find(evos, (e) => {
+    // if (e.evoType) return false
+    // if (e.evoCondition) return false
+    // if (e.evoItem) return false
+    // if (e.evoMove) return false
+
+    if (!e.evoLevel) return false
+    return true
+  })
+  return possibleEvo
 }
 
 export const getWildlifeFighter = async ({
   wildlife,
   seed,
   idx,
+  metadata: catchMetaData,
+  name: givenName,
 }: GetWildlifeFighterOptions) => {
-  const mapping = taxonMappingByAncestors(wildlife.metadata.taxonAncestorIds)
-  const speciesName = mapping.pokemon
-  const species = Dex.species.get(speciesName)
-  const level = rngInt({
-    seed: [seed, "level"],
-    min: 1,
-    max: 20,
-  })
+  const minLevel = wildlife.metadata.observationCaptive ? 20 : 1
+  const maxLevel = wildlife.metadata.observationCaptive ? 100 : 20
+  const level =
+    catchMetaData?.level ||
+    rngInt({
+      seed: [seed, "level"],
+      min: minLevel,
+      max: maxLevel,
+    })
 
-  const possibleMoves = await getMovesInLearnset(species)
-  const moves = take(
-    filter(
-      orderBy(possibleMoves, (m) => m.level, "desc"),
-      (m) => m.level <= level
-    ),
-    MAX_MOVES_PER_FIGHTER
-  ).map((m) => m.move)
+  // const mapping = taxonMappingByAncestors(wildlife.metadata.taxonAncestorIds)
+  let speciesName =
+    catchMetaData?.speciesName ?? wildlife.taxon.fighterSpeciesName
+  let species = Dex.species.get(speciesName)
+
+  // Wildlife starts at lowest evolution
+  if (!catchMetaData?.speciesName) {
+    while (species.prevo) {
+      species = Dex.species.get(species.prevo)
+      speciesName = species.name
+    }
+  }
+
+  // Evolve captives to highest possible evolution
+  const canEvolveByLevel = wildlife.metadata.observationCaptive
+  if (canEvolveByLevel) {
+    const highestPossibleEvo = getHightestPossibleEvoByLevel({ species, level })
+    if (highestPossibleEvo) {
+      species = highestPossibleEvo
+      speciesName = species.name
+    }
+  }
+
+  let moves: string[]
+  if (catchMetaData?.moves?.length) {
+    // PP are done in applyFighterStats
+    moves = catchMetaData?.moves?.map((m) => m.id)
+  } else {
+    const possibleMoves = await getMovesInLearnset(speciesName)
+    moves = take(
+      filter(
+        orderBy(possibleMoves, (m) => m.level, "desc"),
+        (m) => m.level <= level
+      ),
+      MAX_MOVES_PER_FIGHTER
+    ).map((m) => m.move)
+  }
 
   const nature = rngItem({
     items: Dex.natures.all(),
@@ -62,7 +150,9 @@ export const getWildlifeFighter = async ({
 
   // TODO: locale
   const name = `${typeof idx === "number" ? `#${idx + 1}: ` : ""}${
-    wildlife.metadata.taxonCommonName ?? wildlife.metadata.taxonName
+    givenName ??
+    wildlife.metadata.taxonCommonName ??
+    wildlife.metadata.taxonName
   }`
 
   const ivs = {
@@ -98,7 +188,7 @@ export const getWildlifeFighter = async ({
     }),
   }
 
-  const evs = {
+  const evs = catchMetaData?.evs ?? {
     hp: 0,
     atk: 0,
     def: 0,
@@ -126,31 +216,44 @@ export const getWildlifeFighter = async ({
   return fighter
 }
 
-async function getMovesInLearnset(species: Species) {
+export async function getMovesInLearnset(speciesName: string) {
+  const species = Dex.species.get(speciesName)
   const moves: {
     move: string
     level: number
     method: "level"
+    gen: number
   }[] = []
   const learnset = await Dex.learnsets.get(species.name)
-  const gen = Math.max(species.gen, 3).toString()
+
+  // console.log(species)
+  // console.log(learnset)
+  // const gen = Math.max(species.gen, 3).toString()
 
   for (const move in learnset.learnset) {
     const learnMethods = learnset.learnset[move]!
 
     for (const method of learnMethods) {
-      if (method.startsWith(gen) && method[1] === "L") {
-        const isLevelThingy = method[1] === "L"
+      const isLevelThingy = method[1] === "L"
+      if (isLevelThingy) {
+        const gen = parseInt(method[0]!)
         const level = parseInt(method.substring(2))
         if (isLevelThingy) {
           moves.push({
             move,
             level,
             method: "level",
+            gen,
           })
         }
       }
     }
   }
-  return moves
+
+  const possibleGens = map(moves, (m) => m.gen)
+  const latestGen = USE_LATEST_GEN ? max(possibleGens) : min(possibleGens)
+
+  const latestMoves = filter(moves, (m) => !!latestGen && m.gen === latestGen)
+
+  return latestMoves
 }

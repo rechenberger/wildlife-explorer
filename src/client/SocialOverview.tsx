@@ -6,7 +6,7 @@ import { api } from "~/utils/api"
 import { BattleViewModal } from "./BattleViewModal"
 import { SocialOverviewModal } from "./SocialOverviewModal"
 import { TimeAgo } from "./TimeAgo"
-import { useMapSetCenter } from "./useMapRef"
+import { useMapFlyTo } from "./useMapRef"
 import { usePlayer } from "./usePlayer"
 
 export const SocialOverview = () => {
@@ -27,7 +27,7 @@ export const SocialOverview = () => {
     },
   })
 
-  const setMapCenter = useMapSetCenter()
+  const mapFlyTo = useMapFlyTo()
 
   return (
     <>
@@ -55,7 +55,7 @@ export const SocialOverview = () => {
                   className="flex flex-row gap-1 rounded text-xs items-center bg-black text-white px-2 py-0.5 border"
                   onClick={() => {
                     NiceModal.hide(SocialOverviewModal)
-                    setMapCenter(player)
+                    mapFlyTo({ center: player })
                   }}
                 >
                   <Locate className="w-4 h-4" />

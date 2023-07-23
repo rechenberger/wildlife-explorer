@@ -1,6 +1,6 @@
-import { createContext, useContext } from "react"
+import { type FlyToOptions } from "mapbox-gl"
+import { createContext, useCallback, useContext } from "react"
 import { type MapRef } from "react-map-gl"
-import { type LatLng } from "~/server/schema/LatLng"
 
 const Context = createContext({
   current: null as null | MapRef,
@@ -12,13 +12,22 @@ export const useMapRef = () => {
   return context
 }
 
-export const useMapSetCenter = () => {
+export const useMapFlyTo = () => {
   const ref = useMapRef()
-  return ({ lat, lng }: LatLng) => {
-    if (ref.current) {
-      ref.current.setCenter({ lat, lng })
-    } else {
-      console.warn("MapRef not found")
-    }
-  }
+  return useCallback(
+    (options: FlyToOptions & { instant?: boolean }) => {
+      if (ref.current) {
+        if (options.instant) {
+          if (options.center) ref.current.setCenter(options.center)
+          if (options.zoom) ref.current.setZoom(options.zoom)
+          if (options.pitch) ref.current.setPitch(options.pitch)
+        } else {
+          ref.current.flyTo(options)
+        }
+      } else {
+        console.warn("MapRef not found")
+      }
+    },
+    [ref]
+  )
 }

@@ -1,4 +1,31 @@
-export const PokemonExperienceMap: {
+import { find } from "lodash-es"
+import { type CatchMetadata } from "~/server/schema/CatchMetadata"
+
+export const getExpRate = ({
+  level,
+  levelingRate,
+}: Pick<CatchMetadata, "levelingRate" | "level">) => {
+  if (!levelingRate) return undefined
+  if (!level) return undefined
+  const key = `${level}-${levelingRate}`
+  return pokemonExperienceMap[key]
+}
+
+export const getLevelFromExp = ({
+  exp,
+  levelingRate,
+}: Pick<CatchMetadata, "levelingRate" | "exp">) => {
+  if (!levelingRate) return undefined
+  if (!exp) return undefined
+  const nextLevel = find(
+    pokemonExperienceMap,
+    (obj) => obj.requiredExperience > exp && obj.levelingRate === levelingRate
+  )
+  const currentLevelBasedOnExp = (nextLevel?.level || 1) - 1
+  return currentLevelBasedOnExp
+}
+
+const pokemonExperienceMap: {
   [key: string]: {
     level: number
     levelingRate: string

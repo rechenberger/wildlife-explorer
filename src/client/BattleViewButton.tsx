@@ -1,30 +1,39 @@
 import NiceModal from "@ebay/nice-modal-react"
 import { atom } from "jotai"
-import { find } from "lodash-es"
 import { Swords } from "lucide-react"
-import { useEffect } from "react"
+import { useCallback, useEffect } from "react"
 import { ENABLE_BATTLE_VIEW } from "~/config"
 import { type LatLng } from "~/server/schema/LatLng"
 import { api } from "~/utils/api"
+import { BattleFastViewModal } from "./BattleFastViewModal"
 import { BattleViewModal } from "./BattleViewModal"
 import { cn } from "./cn"
+import { useKeyboardShortcut } from "./useKeyboardShortcut"
 import { usePlayer } from "./usePlayer"
 
 export const scanningLocationAtom = atom<LatLng | null>(null)
 
 export const BattleViewButton = () => {
   const { playerId } = usePlayer()
-  const { data: battles } = api.battle.getMyBattles.useQuery(
-    {
-      playerId: playerId!,
-    },
-    {
-      enabled: !!playerId,
-      refetchInterval: 2000,
-    }
-  )
-  const activeBattleId = find(battles, (b) => b.status === "IN_PROGRESS")?.id
-  const pvpInviteBattleId = find(battles, (b) => b.status === "INVITING")?.id
+  const { data: latestParticipation } =
+    api.battle.getMyLatestParticipation.useQuery(
+      {
+        playerId: playerId!,
+      },
+      {
+        enabled: !!playerId,
+        refetchInterval: 2000,
+      }
+    )
+
+  const activeBattleId =
+    latestParticipation?.battle?.status === "IN_PROGRESS"
+      ? latestParticipation?.battle?.id
+      : undefined
+  const pvpInviteBattleId =
+    latestParticipation?.battle?.status === "INVITING"
+      ? latestParticipation?.battle?.id
+      : undefined
 
   useEffect(() => {
     if (!pvpInviteBattleId) return
@@ -32,6 +41,19 @@ export const BattleViewButton = () => {
       battleId: pvpInviteBattleId,
     })
   }, [activeBattleId, pvpInviteBattleId])
+
+  const openBattleView = useCallback(() => {
+    const battleId = activeBattleId ?? pvpInviteBattleId
+    if (battleId) {
+      NiceModal.show(BattleViewModal, {
+        battleId,
+      })
+    } else {
+      NiceModal.show(BattleFastViewModal)
+    }
+  }, [activeBattleId, pvpInviteBattleId])
+
+  useKeyboardShortcut("BATTLE", openBattleView)
 
   if (!ENABLE_BATTLE_VIEW) return null
 
@@ -41,9 +63,7 @@ export const BattleViewButton = () => {
         <button
           className={cn("relative rounded-xl bg-black p-2 text-white")}
           onClick={async () => {
-            NiceModal.show(BattleViewModal, {
-              battleId: activeBattleId ?? pvpInviteBattleId ?? undefined,
-            })
+            openBattleView()
           }}
         >
           <Swords size={32} />

@@ -28,6 +28,11 @@ export const wildlifeProcedure = playerProcedure
             battleId: true,
           },
         },
+        taxon: {
+          select: {
+            fighterSpeciesName: true,
+          },
+        },
       },
     })
     if (!wildlife) {
