@@ -149,7 +149,7 @@ export const tradeRouter = createTRPCRouter({
 
                 await prisma.catch.update({
                   where: { id: c.id },
-                  data: { playerId: otherPlayer.id },
+                  data: { playerId: otherPlayer.id, battleOrderPosition: null },
                 })
               }
 
