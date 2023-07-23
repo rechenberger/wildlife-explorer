@@ -112,7 +112,7 @@ export const TradeDetails = ({ tradeId }: { tradeId: string }) => {
                         })
                       }}
                     >
-                      <Button>
+                      <Button disabled={disabled}>
                         <Plus className="w-4 h-4 mr-1" />
                         <span>Add</span>
                       </Button>
