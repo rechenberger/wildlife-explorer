@@ -5,18 +5,19 @@ import { RADIUS_IN_KM_SCAN_PLACES } from "~/config"
 import { env } from "~/env.mjs"
 import { type LatLng } from "../schema/LatLng"
 import { type PlaceMetadata } from "../schema/PlaceMetadata"
+import { searchAirports } from "./airports"
 
 const types = [
   {
     googleMapsType: "veterinary_care",
     dbType: PlaceType.CARE_CENTER,
   },
-  {
-    googleMapsType: "airport",
-    placeDenyList: ["parking"],
-    mustBeOpen: true,
-    dbType: PlaceType.AIRPORT,
-  },
+  // {
+  //   googleMapsType: "airport",
+  //   placeDenyList: ["parking"],
+  //   mustBeOpen: true,
+  //   dbType: PlaceType.AIRPORT,
+  // },
 ]
 
 export const findPlaces = async ({ location }: { location: LatLng }) => {
@@ -25,8 +26,8 @@ export const findPlaces = async ({ location }: { location: LatLng }) => {
       const places = await findPlacesByType({
         location,
         type: t.googleMapsType,
-        mustBeOpen: t.mustBeOpen,
-        placeDenyList: t.placeDenyList,
+        // mustBeOpen: t.mustBeOpen,
+        // placeDenyList: t.placeDenyList,
       })
       return places.map((p) => {
         return {
@@ -42,7 +43,30 @@ export const findPlaces = async ({ location }: { location: LatLng }) => {
     })
   )
 
-  return places.flat()
+  console.time("searchAirports")
+  let airports = await searchAirports({
+    // query: "",
+    location,
+  })
+  airports = filter(
+    airports,
+    (a) => a.distanceInMeter <= RADIUS_IN_KM_SCAN_PLACES * 1000
+  )
+  console.log("airports", airports)
+  const airportPlaces = airports.map((a) => {
+    return {
+      googlePlaceId: `AIRPORT_${a.code}`,
+      lat: a.lat,
+      lng: a.lng,
+      type: PlaceType.AIRPORT,
+      metadata: {
+        name: a.name,
+      } satisfies PlaceMetadata,
+    }
+  })
+  console.timeEnd("searchAirports")
+
+  return [...places.flat(), ...airportPlaces]
 }
 
 export const findPlacesByType = async ({
