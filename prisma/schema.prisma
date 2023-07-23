@@ -117,7 +117,7 @@ model Catch {
 
     trades Trade[]
 
-    @@unique([wildlifeId, playerId])
+    @@unique([wildlifeId, originalPlayerId])
     @@index([playerId, battleOrderPosition])
 }
 
