@@ -1,9 +1,10 @@
 import NiceModal from "@ebay/nice-modal-react"
-import { ArrowLeftRight, HeartPulse } from "lucide-react"
+import { ArrowLeftRight } from "lucide-react"
 import { api } from "~/utils/api"
 import { Away } from "./Away"
 import { CareButton } from "./CareButton"
 import { MyCatchesModal } from "./MyCatchesModal"
+import { placeTypeIcons } from "./PlaceMarker"
 import { TypeBadge } from "./TypeBadge"
 import { Button } from "./shadcn/ui/button"
 import { navigateIcon, runIcon } from "./typeIcons"
@@ -34,22 +35,54 @@ export const PlaceView = ({
       </div>
     )
   }
+  const typeIcon = placeTypeIcons[place.type]
 
   return (
     <div className="flex flex-col items-center gap-4 pt-12">
-      <HeartPulse className="w-8 h-8 self-center" />
+      <typeIcon.icon className="w-8 h-8 self-center" />
       <div className="flex flex-col text-center">
         {SHOW_FLUFF && (
           <div className="text-sm text-gray-500 italic text-center">
             Welcome to
           </div>
         )}
-        <div>Wildlife Care Center</div>
+        <div>{typeIcon.label}</div>
         {place.metadata.name && (
           <div className="text-sm opacity-60">{place.metadata.name}</div>
         )}
         <Away location={place} />
       </div>
+      {place.type === "CARE_CENTER" && <PlaceViewWildlifeCareCenter />}
+      <div className="mt-8 flex flex-row gap-4 w-56">
+        <TypeBadge
+          icon={navigateIcon}
+          content={"Visit"}
+          size="big"
+          onClick={() => {
+            navigate({
+              lat: place.lat,
+              lng: place.lng,
+            })
+          }}
+          className="flex-1"
+        />
+        <TypeBadge
+          icon={runIcon}
+          content={"Leave"}
+          size="big"
+          onClick={() => {
+            close()
+          }}
+          className="flex-1"
+        />
+      </div>
+    </div>
+  )
+}
+
+const PlaceViewWildlifeCareCenter = () => {
+  return (
+    <>
       {SHOW_FLUFF && (
         <div className="text-sm text-gray-500 italic text-center">
           This is the perfect place to rest, rejuvenate your team, and prepare
@@ -81,29 +114,6 @@ export const PlaceView = ({
           Wildlife Explorer. Let&apos;s get ready for the next adventure!
         </div>
       )}
-      <div className="mt-8 flex flex-row gap-4 w-56">
-        <TypeBadge
-          icon={navigateIcon}
-          content={"Visit"}
-          size="big"
-          onClick={() => {
-            navigate({
-              lat: place.lat,
-              lng: place.lng,
-            })
-          }}
-          className="flex-1"
-        />
-        <TypeBadge
-          icon={runIcon}
-          content={"Leave"}
-          size="big"
-          onClick={() => {
-            close()
-          }}
-          className="flex-1"
-        />
-      </div>
-    </div>
+    </>
   )
 }
