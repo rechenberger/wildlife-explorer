@@ -111,12 +111,17 @@ export const tradeRouter = createTRPCRouter({
       if (!some(trade.players, { id: ctx.player.id })) {
         throw new Error("You are not part of this trade")
       }
-      if (some(trade.players, (p) => p.metadata?.activeBattleId)) {
-        throw new TRPCError({
-          code: "BAD_REQUEST",
-          message: `You can not trade while one of the players is in a battle`,
-        })
+
+      // When in battle can only cancel
+      if (!("status" in input && input.status === "cancel")) {
+        if (some(trade.players, (p) => p.metadata?.activeBattleId)) {
+          throw new TRPCError({
+            code: "BAD_REQUEST",
+            message: `You can not trade while one of the players is in a battle`,
+          })
+        }
       }
+
       if (trade.status !== "PENDING") {
         throw new TRPCError({
           code: "BAD_REQUEST",
