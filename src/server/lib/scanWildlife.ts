@@ -1,6 +1,6 @@
 import { type Wildlife } from "@prisma/client"
 import { subSeconds } from "date-fns"
-import { chunk, filter, flatMap, map, uniqBy } from "lodash-es"
+import { chunk, filter, flatMap, includes, map, uniqBy } from "lodash-es"
 import {
   DEFAULT_DB_CHUNK_SIZE,
   LOG_SCAN_TIME,
@@ -49,10 +49,32 @@ export const scanWildlife = async ({
     (id) => id
   )
   console.log(`Importing ${taxonIds.length} taxons`)
+
+  const existingTaxon = await prisma.taxon.findMany({
+    select: {
+      id: true,
+    },
+    where: {
+      id: { in: taxonIds },
+    },
+  })
+
+  const existingTaxonIds = existingTaxon.map((t) => t.id)
+
+  const taxonIdsWithoutExisting = filter(
+    taxonIds,
+    (id) => !includes(existingTaxonIds, id)
+  )
+
   const importedTaxons = await Promise.all(
-    map(taxonIds, async (taxonId) => {
+    map(taxonIdsWithoutExisting, async (taxonId) => {
       try {
-        return await importTaxon({ prisma, taxonId, playerId })
+        return await importTaxon({
+          prisma,
+          taxonId,
+          playerId,
+          preFilteredExisting: true,
+        })
       } catch (error) {
         console.error(`Could not import taxon ${taxonId}`)
         throw error
