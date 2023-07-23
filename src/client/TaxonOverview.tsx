@@ -171,6 +171,9 @@ const TaxonView = ({
             {taxon.metadata.taxonObservationsCount.toLocaleString()}{" "}
             Observations
           </Link>
+          <div className="text-xs opacity-60 truncate">
+            {taxon._count?.wildlife} Wildlife
+          </div>
         </div>
         <div className="flex flex-row gap-2 items-center justify-center">
           <ArrowRight
