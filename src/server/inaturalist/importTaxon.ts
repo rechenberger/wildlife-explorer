@@ -24,7 +24,7 @@ export const importTaxon = async ({
   })
   if (existing) return existing
 
-  console.log("importTaxon", taxonId)
+  // console.log("importTaxon", taxonId)
   let metadata: TaxonMetadata
 
   if (RETRY_IMPORT_TAXON) {

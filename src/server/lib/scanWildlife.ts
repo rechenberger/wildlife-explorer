@@ -43,12 +43,12 @@ export const scanWildlife = async ({
     (o) => o.observationId
   )
 
+  LOG_SCAN_TIME && console.time("importTaxon")
   const taxonIds = uniqBy(
     map(observations, (o) => o.taxonId),
     (id) => id
   )
-
-  LOG_SCAN_TIME && console.time("importTaxon")
+  console.log(`Importing ${taxonIds.length} taxons`)
   await Promise.all(
     map(taxonIds, async (taxonId) => {
       try {
@@ -102,5 +102,6 @@ export const scanWildlife = async ({
   return {
     countAll,
     countFound,
+    countTaxonsFound: taxonIds.length,
   }
 }

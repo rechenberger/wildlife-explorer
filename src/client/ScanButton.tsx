@@ -59,6 +59,7 @@ export const ScanButton = () => {
           <div className="flex flex-col">
             <div className="font-bold">{`Scan complete!`}</div>
             <div className="font-normal text-sm">{`${result.wildlife.countFound} new Observations`}</div>
+            <div className="font-normal text-sm">{`${result.wildlife.countTaxonsFound} new Species`}</div>
             <div className="font-normal text-sm">{`${result.places.countFound} new Places`}</div>
           </div>
         ),
