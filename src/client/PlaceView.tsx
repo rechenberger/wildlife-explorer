@@ -1,5 +1,7 @@
 import NiceModal from "@ebay/nice-modal-react"
+import { map } from "lodash-es"
 import { ArrowLeftRight } from "lucide-react"
+import { useState } from "react"
 import { api } from "~/utils/api"
 import { Away } from "./Away"
 import { CareButton } from "./CareButton"
@@ -7,6 +9,7 @@ import { MyCatchesModal } from "./MyCatchesModal"
 import { placeTypeIcons } from "./PlaceMarker"
 import { TypeBadge } from "./TypeBadge"
 import { Button } from "./shadcn/ui/button"
+import { Input } from "./shadcn/ui/input"
 import { navigateIcon, runIcon } from "./typeIcons"
 import { useNavigation } from "./useNavigation"
 import { usePlayer } from "./usePlayer"
@@ -53,6 +56,7 @@ export const PlaceView = ({
         <Away location={place} />
       </div>
       {place.type === "CARE_CENTER" && <PlaceViewWildlifeCareCenter />}
+      {place.type === "AIRPORT" && <PlaceViewWildlifeAirport />}
       <div className="mt-8 flex flex-row gap-4 w-56">
         <TypeBadge
           icon={navigateIcon}
@@ -114,6 +118,48 @@ const PlaceViewWildlifeCareCenter = () => {
           Wildlife Explorer. Let&apos;s get ready for the next adventure!
         </div>
       )}
+    </>
+  )
+}
+const PlaceViewWildlifeAirport = () => {
+  const { playerId } = usePlayer()
+  const [query, setQuery] = useState("")
+  const { data } = api.place.searchAirports.useQuery(
+    {
+      query,
+      playerId: playerId!,
+    },
+    {
+      enabled: !!playerId && query.length >= 3,
+    }
+  )
+
+  return (
+    <>
+      <div>
+        <Input
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          className="w-96"
+        />
+      </div>
+      <div className="flex flex-col gap-1 w-96">
+        {map(data, (airport) => (
+          <div
+            key={airport.code}
+            className="flex flex-row gap-2 rounded p-2 bg-gray-100 hover:bg-gray-200 text-xs items-center"
+          >
+            <div className="flex flex-col overflow-hidden">
+              <div className="truncate">{airport.name}</div>
+              <div className="truncate">
+                {airport.city}, {airport.country}
+              </div>
+            </div>
+            <div className="flex-1" />
+            <Away location={{ lat: +airport.lat, lng: +airport.lon }} />
+          </div>
+        ))}
+      </div>
     </>
   )
 }

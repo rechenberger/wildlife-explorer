@@ -1,5 +1,7 @@
+import { take } from "lodash-es"
 import { z } from "zod"
 import { RADIUS_IN_KM_SEE_PLACES } from "~/config"
+import airports from "~/data/airports.json"
 import { createTRPCRouter } from "~/server/api/trpc"
 import { calculateBoundingBox } from "~/server/lib/latLng"
 import { playerProcedure } from "../middleware/playerProcedure"
@@ -40,5 +42,26 @@ export const placeRouter = createTRPCRouter({
         },
       })
       return place
+    }),
+
+  searchAirports: playerProcedure
+    .input(
+      z.object({
+        query: z.string(),
+      })
+    )
+    .query(async ({ input }) => {
+      const query = input.query.toLowerCase()
+      const results = airports.filter((airport) => {
+        const name = airport.name.toLowerCase()
+        const city = airport.city.toLowerCase()
+        const country = airport.country.toLowerCase()
+        return (
+          name.includes(query) ||
+          city.includes(query) ||
+          country.includes(query)
+        )
+      })
+      return take(results, 10)
     }),
 })
