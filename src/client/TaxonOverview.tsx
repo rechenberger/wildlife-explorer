@@ -85,7 +85,10 @@ export const TaxonOverview = ({
         error: (err: any) => err?.message || "Failed to remove Fighter Species",
       })
     } else {
-      const promise = setFighterSpecies({ taxonId, fighterSpeciesName })
+      const promise = setFighterSpecies({
+        taxonId,
+        fighterSpecies: fighterSpeciesName,
+      })
       toast.promise(promise, {
         loading: "Changing Fighter Species...",
         success: "Fighter Species Changed!",
