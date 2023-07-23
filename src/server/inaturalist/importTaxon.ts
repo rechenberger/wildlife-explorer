@@ -83,8 +83,11 @@ export const importTaxon = async ({
   const anchorId = ancestor.anchorId
 
   const foundById = playerId
-  return await prisma.taxon.create({
-    data: {
+  return await prisma.taxon.upsert({
+    where: {
+      id,
+    },
+    create: {
       id,
       metadata,
       foundById,
@@ -94,6 +97,14 @@ export const importTaxon = async ({
       fighterSpeciesName,
       fighterSpeciesNum,
       createdAt,
+    },
+    update: {
+      metadata,
+      isAnchor,
+      anchorId,
+      ancestorId,
+      fighterSpeciesName,
+      fighterSpeciesNum,
     },
   })
 }
