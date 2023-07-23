@@ -39,7 +39,7 @@ export const FighterChip = ({
     <>
       <div
         className={cn(
-          "flex items-center gap-4 rounded-full bg-gray-200",
+          "flex items-center gap-4 rounded-full bg-gray-200 text-left text-black",
           ltr ? "flex-row" : "flex-row-reverse",
           onClick && "cursor-pointer"
         )}

@@ -15,7 +15,7 @@ export const wildlifeProcedure = playerProcedure
       include: {
         catches: {
           where: {
-            playerId: ctx.player.id,
+            originalPlayerId: ctx.player.id,
           },
         },
         battleParticipations: {

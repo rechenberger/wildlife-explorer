@@ -1,6 +1,6 @@
 import NiceModal from "@ebay/nice-modal-react"
 import { map } from "lodash-es"
-import { Locate, Swords, User } from "lucide-react"
+import { ArrowLeftRight, Locate, Swords, User } from "lucide-react"
 import { Fragment } from "react"
 import { api } from "~/utils/api"
 import { BattleViewModal } from "./BattleViewModal"
@@ -8,6 +8,7 @@ import { SocialOverviewModal } from "./SocialOverviewModal"
 import { TimeAgo } from "./TimeAgo"
 import { useMapFlyTo } from "./useMapRef"
 import { usePlayer } from "./usePlayer"
+import { useStartTrade } from "./useStartTrade"
 
 export const SocialOverview = () => {
   const { playerId } = usePlayer()
@@ -26,6 +27,8 @@ export const SocialOverview = () => {
       })
     },
   })
+
+  const { startTrade, startTradeIsLoading } = useStartTrade()
 
   const mapFlyTo = useMapFlyTo()
 
@@ -62,19 +65,34 @@ export const SocialOverview = () => {
                   <div>Locate</div>
                 </button>
                 {playerId !== player.id && (
-                  <button
-                    className="flex flex-row gap-1 rounded text-xs items-center bg-black text-white px-2 py-0.5 border"
-                    onClick={() => {
-                      if (!playerId) return
-                      startPvp({
-                        playerId,
-                        otherPlayerId: player.id,
-                      })
-                    }}
-                  >
-                    <Swords className="w-4 h-4" />
-                    <div>Battle</div>
-                  </button>
+                  <>
+                    <button
+                      className="flex flex-row gap-1 rounded text-xs items-center bg-black text-white px-2 py-0.5 border"
+                      onClick={() => {
+                        if (!playerId) return
+                        startPvp({
+                          playerId,
+                          otherPlayerId: player.id,
+                        })
+                      }}
+                    >
+                      <Swords className="w-4 h-4" />
+                      <div>Battle</div>
+                    </button>
+                    <button
+                      className="flex flex-row gap-1 rounded text-xs items-center bg-black text-white px-2 py-0.5 border"
+                      disabled={startTradeIsLoading}
+                      onClick={() => {
+                        if (startTradeIsLoading) return
+                        startTrade({
+                          playerId: player.id,
+                        })
+                      }}
+                    >
+                      <ArrowLeftRight className="w-4 h-4" />
+                      <div>Trade</div>
+                    </button>
+                  </>
                 )}
               </div>
             </div>

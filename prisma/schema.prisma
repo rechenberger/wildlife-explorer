@@ -117,7 +117,7 @@ model Catch {
 
     trades Trade[]
 
-    @@unique([wildlifeId, playerId])
+    @@unique([wildlifeId, originalPlayerId])
     @@index([playerId, battleOrderPosition])
 }
 
@@ -241,7 +241,7 @@ model Trade {
     metadata    Json
     players     Player[]
     catches     Catch[]
-    completedAt DateTime
+    completedAt DateTime?
     status      TradeStatus
 }
 

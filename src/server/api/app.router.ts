@@ -12,7 +12,7 @@ import { pvpRouter } from "./routers/pvp.router"
 import { scanRouter } from "./routers/scan.router"
 import { socialRouter } from "./routers/social.router"
 import { taxonRouter } from "./routers/taxon.router"
-import { tradeRouter } from "./routers/trader.router"
+import { tradeRouter } from "./routers/trade.router"
 import { wildlifeRouter } from "./routers/wildlife.router"
 
 /**
