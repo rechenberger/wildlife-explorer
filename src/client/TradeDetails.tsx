@@ -50,6 +50,7 @@ export const TradeDetails = ({ tradeId }: { tradeId: string }) => {
     })
     try {
       await promise
+    } catch (e) {
     } finally {
       await refetchTrade()
     }
