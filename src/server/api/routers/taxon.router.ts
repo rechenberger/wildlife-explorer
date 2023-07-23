@@ -199,7 +199,7 @@ export const taxonRouter = createTRPCRouter({
           message: "No ancestor found",
         })
       }
-      const anchorId = ancestor.anchorId
+      const anchorId = ancestor.anchorId ?? ancestor.id
       const fighterSpeciesName = ancestor.fighterSpeciesName
       const fighterSpeciesNum = ancestor.fighterSpeciesNum
 
