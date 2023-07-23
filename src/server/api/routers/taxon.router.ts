@@ -115,7 +115,7 @@ export const taxonRouter = createTRPCRouter({
     .input(z.object({ taxonId: z.number(), fighterSpeciesName: z.string() }))
     .mutation(async ({ ctx, input }) => {
       const species = Dex.species.get(input.fighterSpeciesName)
-      if (!species) {
+      if (!species?.num) {
         throw new Error(`Species ${input.fighterSpeciesName} not found`)
       }
       const fighterSpeciesName = species.name
