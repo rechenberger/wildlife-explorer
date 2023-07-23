@@ -3,6 +3,7 @@ import { Fragment } from "react"
 import { toast } from "sonner"
 import { RouterInputs, api } from "~/utils/api"
 import { FighterChip } from "./FighterChip"
+import { MyCatchSelect } from "./MyCatchSelect"
 import { TradeDetailsModal } from "./TradeDetailsModal"
 import { TypeBadge } from "./TypeBadge"
 import { cn } from "./cn"
@@ -59,7 +60,7 @@ export const TradeDetails = ({ tradeId }: { tradeId: string }) => {
           const isMySide = side.player.id === playerId
           return (
             <Fragment key={side.player.id}>
-              <div className="flex flex-col gap-2">
+              <div className="flex flex-col gap-2 flex-1">
                 <div>{side.player.name}</div>
                 <div className="flex-1 flex flex-col gap-2">
                   {side.catches.map((c) => {
@@ -71,20 +72,20 @@ export const TradeDetails = ({ tradeId }: { tradeId: string }) => {
                       </Fragment>
                     )
                   })}
-                  {isMySide && <Button>+ Add Catch</Button>}
+                  {isMySide && <MyCatchSelect />}
                 </div>
+                <Button
+                  disabled={!isMySide || !isPending}
+                  className={cn(side.accepted ? "bg-green-500" : "")}
+                  onClick={() => {
+                    updateTrade({
+                      status: side.accepted ? "reject" : "accept",
+                    })
+                  }}
+                >
+                  {side.accepted ? "Accepted" : "Accept"}
+                </Button>
               </div>
-              <Button
-                disabled={!isMySide || !isPending}
-                className={cn(side.accepted ? "bg-green-500" : "bg-red-500")}
-                onClick={() => {
-                  updateTrade({
-                    status: side.accepted ? "reject" : "accept",
-                  })
-                }}
-              >
-                {side.accepted ? "Reject" : "Accept"}
-              </Button>
             </Fragment>
           )
         })}
