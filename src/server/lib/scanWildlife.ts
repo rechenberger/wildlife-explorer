@@ -10,7 +10,7 @@ import {
 import { type MyPrismaClient } from "~/server/db"
 import { findObservations } from "~/server/inaturalist/findObservations"
 import { type LatLng } from "~/server/schema/LatLng"
-import { importTaxon } from "../inaturalist/importTaxon"
+import { ImportedTaxon, importTaxon } from "../inaturalist/importTaxon"
 import { WildlifeMetadata } from "../schema/WildlifeMetadata"
 
 export const scanWildlife = async ({
@@ -66,21 +66,26 @@ export const scanWildlife = async ({
     (id) => !includes(existingTaxonIds, id)
   )
 
-  const importedTaxons = await Promise.all(
-    map(taxonIdsWithoutExisting, async (taxonId) => {
-      try {
-        return await importTaxon({
-          prisma,
-          taxonId,
-          playerId,
-          preFilteredExisting: true,
-        })
-      } catch (error) {
-        console.error(`Could not import taxon ${taxonId}`)
-        throw error
-      }
-    })
-  )
+  const batches = chunk(taxonIdsWithoutExisting, 20)
+  const importedTaxons: ImportedTaxon[] = []
+  for (const batch of batches) {
+    const importedBatch = await Promise.all(
+      map(batch, async (taxonId) => {
+        try {
+          return await importTaxon({
+            prisma,
+            taxonId,
+            playerId,
+            preFilteredExisting: true,
+          })
+        } catch (error) {
+          console.error(`Could not import taxon ${taxonId}`)
+          throw error
+        }
+      })
+    )
+    importedTaxons.push(...importedBatch)
+  }
   LOG_SCAN_TIME && console.timeEnd("importTaxon")
 
   const now = new Date()

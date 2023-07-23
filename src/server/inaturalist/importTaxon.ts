@@ -1,9 +1,11 @@
 import { type Taxon } from "@prisma/client"
 import { last } from "lodash-es"
+import { MAX_RETRIES_IMPORT_TAXON } from "~/config"
 import { type MyPrismaClient } from "../db"
 import { type TaxonMetadata } from "../schema/TaxonMetadata"
 import { findTaxon } from "./findTaxon"
-import { MAX_RETRIES_IMPORT_TAXON } from "~/config"
+
+export type ImportedTaxon = Taxon & { metadata: TaxonMetadata }
 
 export const importTaxon = async ({
   prisma,
@@ -17,7 +19,7 @@ export const importTaxon = async ({
   playerId: string
   preFilteredExisting?: boolean
   createdAt?: Date
-}): Promise<Taxon & { metadata: TaxonMetadata }> => {
+}): Promise<ImportedTaxon> => {
   const id = taxonId
   if (!preFilteredExisting) {
     const existing = await prisma.taxon.findUnique({
