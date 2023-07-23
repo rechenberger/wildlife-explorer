@@ -41,9 +41,11 @@ const frameworks = [
 
 export const MyCatchSelect = () => {
   const [open, setOpen] = React.useState(false)
-  const [value, setValue] = React.useState("")
+  const [selectedId, setSelectedId] = React.useState<string | null>()
 
   const { myCatches } = useMyCatches()
+
+  const selectedCatch = myCatches?.find((c) => c.id === selectedId)
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -52,11 +54,13 @@ export const MyCatchSelect = () => {
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="w-[200px] justify-between"
+          className="justify-between h-auto"
         >
-          {value
-            ? frameworks.find((framework) => framework.value === value)?.label
-            : "Select Catch..."}
+          {selectedCatch ? (
+            <FighterChip fighter={selectedCatch} showAbsoluteHp />
+          ) : (
+            "Select Catch..."
+          )}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
@@ -69,15 +73,15 @@ export const MyCatchSelect = () => {
             {map(myCatches, (c) => (
               <CommandItem
                 key={c.id}
-                // onSelect={(currentValue) => {
-                //   setValue(currentValue === value ? "" : currentValue)
-                //   setOpen(false)
-                // }}
+                onSelect={() => {
+                  setSelectedId(c.id)
+                  setOpen(false)
+                }}
               >
                 <Check
                   className={cn(
                     "mr-2 h-4 w-4",
-                    value === c.id ? "opacity-100" : "opacity-0"
+                    selectedId === c.id ? "opacity-100" : "opacity-0"
                   )}
                 />
                 <div className="flex-1">
