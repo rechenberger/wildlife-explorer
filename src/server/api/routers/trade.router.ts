@@ -1,7 +1,8 @@
 import { TRPCError } from "@trpc/server"
-import { every, some } from "lodash-es"
+import { every, pick, some } from "lodash-es"
 import { z } from "zod"
 import { createTRPCRouter } from "~/server/api/trpc"
+import { getWildlifeFighterPlus } from "~/server/lib/battle/getWildlifeFighterPlus"
 import { type TradeMetadata } from "~/server/schema/TradeMetadata"
 import { playerProcedure } from "../middleware/playerProcedure"
 
@@ -19,6 +20,50 @@ export const tradeRouter = createTRPCRouter({
       },
     })
   }),
+
+  getById: playerProcedure
+    .input(z.object({ tradeId: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const tradeRaw = await ctx.prisma.trade.findUniqueOrThrow({
+        where: { id: input.tradeId },
+        include: {
+          players: true,
+          catches: {
+            include: {
+              wildlife: {
+                include: {
+                  taxon: true,
+                },
+              },
+            },
+          },
+        },
+      })
+
+      const sides = await Promise.all(
+        tradeRaw.players.map(async (p) => ({
+          player: p,
+          accepted: tradeRaw.metadata.playerAccept?.[p.id] ?? false,
+          catches: await Promise.all(
+            tradeRaw.catches
+              .filter((c) => c.playerId === p.id)
+              .map(async (c) => {
+                return {
+                  ...c,
+                  fighter: await getWildlifeFighterPlus(c),
+                }
+              })
+          ),
+        }))
+      )
+
+      const trade = {
+        ...pick(tradeRaw, ["id", "status", "createdAt", "completedAt"]),
+        sides,
+      }
+
+      return trade
+    }),
 
   startTrade: playerProcedure
     .input(
