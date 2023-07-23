@@ -49,6 +49,7 @@ export const wildlifeRouter = createTRPCRouter({
         taxon: {
           select: {
             fighterSpeciesName: true,
+            fighterSpeciesNum: true,
           },
         },
       },
@@ -102,6 +103,7 @@ export const wildlifeRouter = createTRPCRouter({
           taxon: {
             select: {
               fighterSpeciesName: true,
+              fighterSpeciesNum: true,
             },
           },
         },

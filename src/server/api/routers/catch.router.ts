@@ -36,6 +36,7 @@ export const catchRouter = createTRPCRouter({
             taxon: {
               select: {
                 fighterSpeciesName: true,
+                fighterSpeciesNum: true,
               },
             },
           },
@@ -362,6 +363,7 @@ export const catchRouter = createTRPCRouter({
             taxon: {
               select: {
                 fighterSpeciesName: true,
+                fighterSpeciesNum: true,
               },
             },
           },

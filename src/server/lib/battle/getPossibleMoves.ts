@@ -28,6 +28,7 @@ export const getPossibleMovesByCatchId = async ({
           taxon: {
             select: {
               fighterSpeciesName: true,
+              fighterSpeciesNum: true,
             },
           },
         },

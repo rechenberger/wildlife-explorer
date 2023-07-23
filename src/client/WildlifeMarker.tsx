@@ -8,8 +8,10 @@ import { type RouterOutputs } from "~/utils/api"
 import { CurrentObservationModal } from "./CurrentObservationModal"
 import { FighterChip } from "./FighterChip"
 import { cn } from "./cn"
+import { getFighterImage } from "./getFighterImage"
 import { useMarkerScaling } from "./useMarkerScaling"
 import { navigatingToObservationIdAtom, useNavigation } from "./useNavigation"
+import { useShowFighters } from "./useShowFighter"
 
 type NearMe = RouterOutputs["wildlife"]["nearMe"][number]
 
@@ -28,6 +30,8 @@ export const WildlifeMarker = ({
   const { navigate } = useNavigation()
 
   // const [hovering, setHovering] = useState(false)
+
+  const showFighters = useShowFighters()
 
   const onCooldown = w.respawnsAt > new Date()
   if (!w.lat || !w.lng) {
@@ -81,19 +85,38 @@ export const WildlifeMarker = ({
         // }}
       >
         {/* <Squirrel size={24} className="animate text-white" /> */}
-        {w.metadata.taxonImageUrlSquare && (
-          <Image
-            src={w.metadata.taxonImageUrlSquare}
-            className={cn(
-              "h-full w-full rounded-full",
-              !!w.caughtAt && "grayscale"
+        {showFighters ? (
+          <>
+            <Image
+              src={getFighterImage(w.taxon)}
+              className={cn(
+                "h-full w-full rounded-full",
+                !!w.caughtAt && "grayscale"
+              )}
+              alt={"Observation"}
+              unoptimized
+              width={1}
+              height={1}
+            />
+          </>
+        ) : (
+          <>
+            {w.metadata.taxonImageUrlSquare && (
+              <Image
+                src={w.metadata.taxonImageUrlSquare}
+                className={cn(
+                  "h-full w-full rounded-full",
+                  !!w.caughtAt && "grayscale"
+                )}
+                alt={"Observation"}
+                unoptimized
+                width={1}
+                height={1}
+              />
             )}
-            alt={"Observation"}
-            unoptimized
-            width={1}
-            height={1}
-          />
+          </>
         )}
+
         {!!w.caughtAt ? (
           <>
             <div className="absolute inset-0 flex items-center justify-center rounded-full bg-green-500 opacity-40"></div>

@@ -7,6 +7,7 @@ import { Fragment, useEffect, useMemo } from "react"
 import { api, type RouterOutputs } from "~/utils/api"
 import { DividerHeading } from "./DividerHeading"
 import { cn } from "./cn"
+import { getFighterImage } from "./getFighterImage"
 import { useGetWildlifeName } from "./useGetWildlifeName"
 import { usePlayer } from "./usePlayer"
 
@@ -136,7 +137,6 @@ const TaxonView = ({
     " ",
     "0"
   )
-  const fighterImgUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${taxon.fighterSpeciesNum}.png`
   return (
     <Fragment>
       <div
@@ -192,7 +192,7 @@ const TaxonView = ({
         </Link>
         <div className="relative aspect-square h-full rounded-full overflow-hide shrink-0">
           <Image
-            src={fighterImgUrl}
+            src={getFighterImage(taxon)}
             alt={"Fighter Image"}
             unoptimized
             fill={true}
