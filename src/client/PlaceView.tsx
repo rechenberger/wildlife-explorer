@@ -2,15 +2,18 @@ import NiceModal from "@ebay/nice-modal-react"
 import { map } from "lodash-es"
 import { ArrowLeftRight } from "lucide-react"
 import { useState } from "react"
+import { toast } from "sonner"
 import { api } from "~/utils/api"
 import { Away } from "./Away"
 import { CareButton } from "./CareButton"
 import { MyCatchesModal } from "./MyCatchesModal"
 import { placeTypeIcons } from "./PlaceMarker"
+import { PlaceViewModal } from "./PlaceViewModal"
 import { TypeBadge } from "./TypeBadge"
 import { Button } from "./shadcn/ui/button"
 import { Input } from "./shadcn/ui/input"
 import { navigateIcon, runIcon } from "./typeIcons"
+import { useMapFlyTo } from "./useMapRef"
 import { useNavigation } from "./useNavigation"
 import { usePlayer } from "./usePlayer"
 
@@ -56,7 +59,7 @@ export const PlaceView = ({
         <Away location={place} />
       </div>
       {place.type === "CARE_CENTER" && <PlaceViewWildlifeCareCenter />}
-      {place.type === "AIRPORT" && <PlaceViewWildlifeAirport />}
+      {place.type === "AIRPORT" && <PlaceViewAirport placeId={placeId} />}
       <div className="mt-8 flex flex-row gap-4 w-56">
         <TypeBadge
           icon={navigateIcon}
@@ -121,7 +124,7 @@ const PlaceViewWildlifeCareCenter = () => {
     </>
   )
 }
-const PlaceViewWildlifeAirport = () => {
+const PlaceViewAirport = ({ placeId }: { placeId: string }) => {
   const { playerId } = usePlayer()
   const [query, setQuery] = useState("")
   const { data } = api.place.searchAirports.useQuery(
@@ -134,6 +137,15 @@ const PlaceViewWildlifeAirport = () => {
     }
   )
 
+  const trpc = api.useContext()
+  const { mutateAsync: fly } = api.place.flyToAirport.useMutation({
+    onSuccess: () => {
+      trpc.invalidate()
+    },
+  })
+
+  const mapFlyTo = useMapFlyTo()
+
   return (
     <>
       <div>
@@ -145,9 +157,32 @@ const PlaceViewWildlifeAirport = () => {
       </div>
       <div className="flex flex-col gap-1 w-96">
         {map(data, (airport) => (
-          <div
+          <button
             key={airport.code}
-            className="flex flex-row gap-2 rounded p-2 bg-gray-100 hover:bg-gray-200 text-xs items-center"
+            className="flex flex-row gap-2 rounded p-2 bg-gray-100 hover:bg-gray-200 text-xs items-center text-left"
+            onClick={async () => {
+              if (!confirm(`Fly to ${airport.name}?`)) return
+              if (!playerId) return
+              const promise = fly({
+                playerId,
+                destinationCode: airport.code,
+                placeId,
+              })
+              toast.promise(promise, {
+                loading: "Flying...",
+                success: "You have arrived!",
+                error: (err: any) => err?.message || "Something went wrong",
+              })
+              try {
+                await promise
+                NiceModal.hide(PlaceViewModal)
+                mapFlyTo({
+                  center: airport,
+                })
+              } catch (e) {
+                return
+              }
+            }}
           >
             <div className="flex flex-col overflow-hidden">
               <div className="truncate">{airport.name}</div>
@@ -157,7 +192,7 @@ const PlaceViewWildlifeAirport = () => {
             </div>
             <div className="flex-1" />
             <Away location={airport} />
-          </div>
+          </button>
         ))}
       </div>
     </>

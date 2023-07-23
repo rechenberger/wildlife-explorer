@@ -1,8 +1,11 @@
+import { TRPCError } from "@trpc/server"
 import { z } from "zod"
-import { RADIUS_IN_KM_SEE_PLACES } from "~/config"
+import { RADIUS_IN_KM_SEE_PLACES, RADIUS_IN_M_AIRPORT } from "~/config"
 import { createTRPCRouter } from "~/server/api/trpc"
-import { searchAirports } from "~/server/lib/airports"
+import { findAirportByCode, searchAirports } from "~/server/lib/airports"
 import { calculateBoundingBox } from "~/server/lib/latLng"
+import { PlayerMetadata } from "~/server/schema/PlayerMetadata"
+import { placeProcedure } from "../middleware/placeProcedure"
 import { playerProcedure } from "../middleware/playerProcedure"
 
 export const placeRouter = createTRPCRouter({
@@ -53,6 +56,41 @@ export const placeRouter = createTRPCRouter({
       return await searchAirports({
         query: input.query,
         location: ctx.player,
+      })
+    }),
+
+  flyToAirport: placeProcedure
+    .input(
+      z.object({
+        destinationCode: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      if (ctx.place.type !== "AIRPORT") {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: `Can only fly from an airport`,
+        })
+      }
+      if (ctx.place.distanceInMeter > RADIUS_IN_M_AIRPORT) {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: `Can only fly from an airport within ${RADIUS_IN_M_AIRPORT}m`,
+        })
+      }
+      const airport = await findAirportByCode({ code: input.destinationCode })
+      await ctx.prisma.player.update({
+        where: {
+          id: ctx.player.id,
+        },
+        data: {
+          lat: airport.lat,
+          lng: airport.lng,
+          metadata: {
+            ...ctx.player.metadata,
+            navigation: null,
+          } satisfies PlayerMetadata,
+        },
       })
     }),
 })

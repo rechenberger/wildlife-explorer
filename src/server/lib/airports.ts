@@ -42,3 +42,21 @@ export const searchAirports = async ({
   betterResults = orderBy(betterResults, (r) => r.distanceInMeter, "asc")
   return take(betterResults, 10)
 }
+
+export const findAirportByCode = async ({ code }: { code: string }) => {
+  const airport = airports.find((a) => a.code === code)
+  if (!airport) {
+    throw new Error(`No airport found for code ${code}`)
+  }
+  const airportLocation = {
+    lat: +airport.lat,
+    lng: +airport.lon,
+  }
+  return {
+    ...airportLocation,
+    name: airport.name,
+    city: airport.city,
+    country: airport.country,
+    code: airport.code,
+  }
+}
