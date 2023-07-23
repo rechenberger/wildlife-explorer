@@ -128,7 +128,7 @@ export const taxonRouter = createTRPCRouter({
       })
       const anchored = await ctx.prisma.taxon.findMany({
         where: {
-          anchorId: currentTaxon.anchorId,
+          anchorId: currentTaxon.anchorId ?? currentTaxon.id,
         },
       })
       // console.log(anchored)
