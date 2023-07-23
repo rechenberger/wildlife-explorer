@@ -12,6 +12,7 @@ import { pvpRouter } from "./routers/pvp.router"
 import { scanRouter } from "./routers/scan.router"
 import { socialRouter } from "./routers/social.router"
 import { taxonRouter } from "./routers/taxon.router"
+import { tradeRouter } from "./routers/trader.router"
 import { wildlifeRouter } from "./routers/wildlife.router"
 
 /**
@@ -33,6 +34,7 @@ export const appRouter = createTRPCRouter({
   place: placeRouter,
   scan: scanRouter,
   evolution: evolutionRouter,
+  trade: tradeRouter,
   migration: migrationRouter,
 })
 

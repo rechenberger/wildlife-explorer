@@ -5,8 +5,9 @@ import { BattleParticipationMetadata } from "./schema/BattleParticipationMetadat
 import { CatchMetadata } from "./schema/CatchMetadata"
 import { PlaceMetadata } from "./schema/PlaceMetadata"
 import { PlayerMetadata } from "./schema/PlayerMetadata"
-import { WildlifeMetadata } from "./schema/WildlifeMetadata"
 import { TaxonMetadata } from "./schema/TaxonMetadata"
+import { TradeMetadata } from "./schema/TradeMetadata"
+import { WildlifeMetadata } from "./schema/WildlifeMetadata"
 
 const createPrisma = () => {
   return new PrismaClient({
@@ -80,6 +81,16 @@ const createPrisma = () => {
           },
           compute: (data) => {
             return TaxonMetadata.parse(data.metadata || {})
+          },
+        },
+      },
+      trade: {
+        metadata: {
+          needs: {
+            metadata: true,
+          },
+          compute: (data) => {
+            return TradeMetadata.parse(data.metadata || {})
           },
         },
       },

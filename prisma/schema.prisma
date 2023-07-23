@@ -87,6 +87,7 @@ model Player {
     originalCatches Catch[]   @relation("CatchOriginalPlayer")
     placesFound     Place[]
     taxonsFound     Taxon[]
+    trades          Trade[]
 
     @@index([lat, lng])
     @@index([userId])
@@ -113,6 +114,8 @@ model Catch {
     seed String
 
     battleOrderPosition Int?
+
+    trades Trade[]
 
     @@unique([wildlifeId, playerId])
     @@index([playerId, battleOrderPosition])
@@ -228,4 +231,22 @@ model Place {
 
 enum PlaceType {
     CARE_CENTER
+}
+
+model Trade {
+    id        String   @id @default(cuid())
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    metadata    Json
+    players     Player[]
+    catches     Catch[]
+    completedAt DateTime
+    status      TradeStatus
+}
+
+enum TradeStatus {
+    PENDING
+    COMPLETED
+    CANCELLED
 }
