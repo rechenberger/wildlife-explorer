@@ -165,6 +165,7 @@ export const taxonRouter = createTRPCRouter({
       const currentTaxon = await ctx.prisma.taxon.findUniqueOrThrow({
         where: { id: input.taxonId },
       })
+      console.log(currentTaxon)
       if (!currentTaxon.ancestorId) {
         throw new TRPCError({
           code: "NOT_FOUND",
@@ -181,7 +182,6 @@ export const taxonRouter = createTRPCRouter({
       const ancestor = await ctx.prisma.taxon.findFirst({
         where: {
           id: currentTaxon.ancestorId,
-          isAnchor: true,
         },
       })
 
@@ -197,7 +197,7 @@ export const taxonRouter = createTRPCRouter({
 
       await ctx.prisma.taxon.updateMany({
         where: {
-          anchorId: currentTaxon.id,
+          OR: [{ anchorId: currentTaxon.id }, { id: currentTaxon.id }],
         },
         data: {
           fighterSpeciesName,
