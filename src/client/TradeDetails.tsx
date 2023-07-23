@@ -87,11 +87,15 @@ export const TradeDetails = ({ tradeId }: { tradeId: string }) => {
                               fighter={c}
                               showAbsoluteHp={true}
                               ltr={isLeft}
-                              onClick={() => {
-                                NiceModal.show(CatchDetailsModal, {
-                                  catchId: c.id,
-                                })
-                              }}
+                              onClick={
+                                isMySide
+                                  ? () => {
+                                      NiceModal.show(CatchDetailsModal, {
+                                        catchId: c.id,
+                                      })
+                                    }
+                                  : undefined
+                              }
                             />
                           </div>
                           {isMySide && (
