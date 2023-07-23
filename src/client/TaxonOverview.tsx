@@ -1,9 +1,9 @@
 import { atom, useAtom, useSetAtom } from "jotai"
-import { padStart } from "lodash-es"
+import { orderBy, padStart } from "lodash-es"
 import { ArrowRight, Loader2 } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
-import { Fragment, useEffect } from "react"
+import { Fragment, useEffect, useMemo } from "react"
 import { api, type RouterOutputs } from "~/utils/api"
 import { DividerHeading } from "./DividerHeading"
 import { cn } from "./cn"
@@ -44,6 +44,14 @@ export const TaxonOverview = ({
         enabled: !!playerId,
       }
     )
+
+  const descendants = useMemo(() => {
+    return orderBy(
+      data?.taxon.descendants,
+      (t) => t.metadata.taxonObservationsCount,
+      "desc"
+    )
+  }, [data?.taxon.descendants])
 
   const disabled = isFetching
   if (!data) {
@@ -100,12 +108,10 @@ export const TaxonOverview = ({
             <TaxonView taxon={data?.taxon} disabled={disabled} />
           </Fragment>
         </>
-        {!!data?.taxon.descendants.length && (
+        {!!descendants.length && (
           <>
-            <DividerHeading>
-              {data?.taxon.descendants.length} Descendants
-            </DividerHeading>
-            {data?.taxon.descendants.map((taxon) => (
+            <DividerHeading>{descendants.length} Descendants</DividerHeading>
+            {descendants.map((taxon) => (
               <Fragment key={taxon.id}>
                 <TaxonView taxon={taxon} disabled={disabled} />
               </Fragment>
