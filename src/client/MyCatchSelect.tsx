@@ -51,14 +51,14 @@ export const MyCatchSelect = () => {
         >
           {value
             ? frameworks.find((framework) => framework.value === value)?.label
-            : "Select framework..."}
+            : "Select Catch..."}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-[200px] p-0">
         <Command>
-          <CommandInput placeholder="Search framework..." />
-          <CommandEmpty>No framework found.</CommandEmpty>
+          <CommandInput placeholder="Search..." />
+          <CommandEmpty>No catch found.</CommandEmpty>
           <CommandGroup>
             {frameworks.map((framework) => (
               <CommandItem
