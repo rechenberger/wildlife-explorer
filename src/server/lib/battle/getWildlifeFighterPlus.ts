@@ -115,7 +115,7 @@ export const transformWildlifeFighterPlus = ({
   const nature = Dex.natures.get(pokemonSet.nature)
 
   const ivLabels = mapValues(pokemonSet.ivs, (iv) => ivToLabel({ iv }))
-  const ivSum = sum(Object.values(pokemonSet.ivs))
+  const ivSore = Math.floor((100 * sum(Object.values(pokemonSet.ivs))) / 6 / 31)
   const fighterPlus = {
     hp: p.hp,
     hpMax: p.maxhp,
@@ -136,7 +136,7 @@ export const transformWildlifeFighterPlus = ({
       ? moveRequestData.moves
       : undefined,
     ivLabels,
-    ivSum,
+    ivSore,
     canEvolve,
     // statusState: p.statusState,
   } satisfies WildlifeFighterPlus
@@ -181,7 +181,7 @@ export const WildlifeFighterPlus = z.object({
       spe: z.string(),
     })
     .nullish(),
-  ivSum: z.number().nullish(),
+  ivSore: z.number().nullish(),
   isActive: z.boolean(),
   justFainted: z.boolean(),
   lastMove: z

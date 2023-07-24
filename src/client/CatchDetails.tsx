@@ -246,6 +246,11 @@ export const CatchDetails = ({
           <>
             <DividerHeading>Stats</DividerHeading>
             <FighterStatsChart fighter={c} />
+            {typeof c.fighter.ivSore === "number" && (
+              <div className="text-xs text-center opacity-60">
+                {c.fighter.ivSore}% IV Perfection
+              </div>
+            )}
           </>
         )}
         {showStats && DEV_MODE && (
