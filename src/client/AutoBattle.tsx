@@ -4,6 +4,8 @@ import { api } from "~/utils/api"
 import { useLatestBattleParticipation } from "./BattleViewButton"
 import { useCare } from "./CareButton"
 import { Button } from "./shadcn/ui/button"
+import { Input } from "./shadcn/ui/input"
+import { Label } from "./shadcn/ui/label"
 import { useAttackWildlife } from "./useAttackWildlife"
 import { useGetWildlifeName } from "./useGetWildlifeName"
 import { useMakeChoice } from "./useMakeChoice"
@@ -11,9 +13,9 @@ import { usePlayer } from "./usePlayer"
 import { useWildlifeToBattle } from "./useWildlife"
 
 const useAutoBattle = () => {
-  const maxLevel = 20
-  const minLevel = 10
-  const maxIvScore = 74
+  const [minLevel, setMinLevel] = useState(10)
+  const [maxLevel, setMaxLevel] = useState(20)
+  const [maxIvScore, setMaxIvScore] = useState(74)
 
   const [active, setActive] = useState(false)
   const [logs, setLogs] = useState<string[]>([])
@@ -111,6 +113,9 @@ const useAutoBattle = () => {
     getName,
     log,
     makeChoice,
+    maxIvScore,
+    maxLevel,
+    minLevel,
     playerId,
     refetchLatestBattleParticipation,
     wildlife,
@@ -120,16 +125,58 @@ const useAutoBattle = () => {
     logs,
     active,
     setActive,
+    minLevel,
+    setMinLevel,
+    maxLevel,
+    setMaxLevel,
+    maxIvScore,
+    setMaxIvScore,
   }
 }
 
 export const AutoBattle = () => {
-  const { logs, active, setActive } = useAutoBattle()
+  const {
+    logs,
+    active,
+    setActive,
+    minLevel,
+    setMinLevel,
+    maxLevel,
+    setMaxLevel,
+    maxIvScore,
+    setMaxIvScore,
+  } = useAutoBattle()
 
   return (
     <>
       <div className="flex flex-col items-center gap-4">
         <div>Auto Battle</div>
+        <div className="flex flex-row gap-2">
+          <Label>
+            <span>Min Level</span>
+            <Input
+              type="number"
+              value={minLevel}
+              onChange={(e) => setMinLevel(parseInt(e.target.value))}
+            />
+          </Label>
+          <Label>
+            <span>Max Level</span>
+            <Input
+              type="number"
+              value={maxLevel}
+              onChange={(e) => setMaxLevel(parseInt(e.target.value))}
+            />
+          </Label>
+          <Label>
+            <span>Max IV Score</span>
+            <Input
+              type="number"
+              value={maxIvScore}
+              onChange={(e) => setMaxIvScore(parseInt(e.target.value))}
+            />
+          </Label>
+        </div>
         <Button onClick={() => setActive(!active)}>
           <Swords className="w-4 h-4 mr-1" />
           {active ? "Stop" : "Start"}
