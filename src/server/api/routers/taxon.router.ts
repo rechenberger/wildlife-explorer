@@ -1,10 +1,11 @@
 import { Dex, Species } from "@pkmn/dex"
 import { TRPCError } from "@trpc/server"
-import { first } from "lodash-es"
+import { first, orderBy, uniqBy } from "lodash-es"
 import { z } from "zod"
 import { NO_OF_ALL_TAXONS, WEIRD_ROOT_TAXON_ID } from "~/config"
 import { createTRPCRouter } from "~/server/api/trpc"
 import { importTaxon } from "~/server/inaturalist/importTaxon"
+import { getNextEvo } from "~/server/lib/battle/getWildlifeFighter"
 import { devProcedure } from "../middleware/devProcedure"
 import { playerProcedure } from "../middleware/playerProcedure"
 
@@ -225,4 +226,44 @@ export const taxonRouter = createTRPCRouter({
         playerId: input.playerId,
       })
     }),
+
+  getFighters: playerProcedure.query(async ({ ctx }) => {
+    const taxons = await ctx.prisma.taxon.findMany({
+      where: {
+        isAnchor: true,
+      },
+    })
+
+    const allSpecies = taxons.flatMap((t) => {
+      const anchored = Dex.species.get(t.fighterSpeciesName)
+      if (!anchored) {
+        throw new Error(
+          `Species not found ${t.fighterSpeciesName} for taxon ${t.id}`
+        )
+      }
+      let lowestEvo = anchored
+      while (lowestEvo.prevo) {
+        lowestEvo = Dex.species.get(lowestEvo.prevo)
+      }
+
+      let allEvos = []
+      let highestEvo: Species | undefined = lowestEvo
+      while (highestEvo) {
+        allEvos.push(highestEvo)
+        highestEvo = getNextEvo({
+          species: highestEvo,
+        })
+      }
+
+      return allEvos
+    })
+
+    let species = allSpecies.map((s) => ({
+      name: s.name,
+      num: s.num,
+    }))
+    species = orderBy(species, (s) => s.num)
+    species = uniqBy(species, (s) => s.num)
+    return species
+  }),
 })

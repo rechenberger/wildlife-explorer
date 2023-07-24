@@ -1,10 +1,11 @@
 import NiceModal from "@ebay/nice-modal-react"
 import { useAtom } from "jotai"
 import { map } from "lodash-es"
-import { ArrowLeftRight, Network } from "lucide-react"
+import { ArrowLeftRight, Network, Squirrel } from "lucide-react"
 import Link from "next/link"
 import { Fragment } from "react"
 import { SwitchCard } from "./SwitchCard"
+import { TaxonFighterOverviewModal } from "./TaxonFighterOverviewModal"
 import { TaxonOverviewModal } from "./TaxonOverviewModal"
 import { cn } from "./cn"
 import { Button } from "./shadcn/ui/button"
@@ -83,6 +84,14 @@ export const SettingsView = () => {
           >
             <Network className="w-4 h-4 mr-1" />
             <div>Taxon Overview</div>
+          </Button>
+          <Button
+            onClick={() => {
+              NiceModal.show(TaxonFighterOverviewModal)
+            }}
+          >
+            <Squirrel className="w-4 h-4 mr-1" />
+            <div>Fighter Overview</div>
           </Button>
         </div>
       </div>

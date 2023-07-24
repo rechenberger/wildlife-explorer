@@ -75,6 +75,7 @@ export const SHORTCUTS = {
   SWITCH_6: { code: "Digit6", shift: true },
   GOTO_PLAYER: { code: "Space" },
   TAXON_OVERVIEW: { code: "KeyT" },
+  FIGHTER_OVERVIEW: { code: "KeyF" },
   ADD: { code: "KeyA" },
 }
 
