@@ -8,7 +8,7 @@ import { playerProcedure } from "../middleware/playerProcedure"
 
 export const tradeRouter = createTRPCRouter({
   getLatestPending: playerProcedure.query(async ({ ctx }) => {
-    return await ctx.prisma.trade.findFirst({
+    const trade = await ctx.prisma.trade.findFirst({
       where: {
         players: {
           some: { id: ctx.player.id },
@@ -19,6 +19,7 @@ export const tradeRouter = createTRPCRouter({
         id: "desc",
       },
     })
+    return trade ?? null
   }),
 
   getById: playerProcedure
