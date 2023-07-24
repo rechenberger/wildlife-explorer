@@ -38,6 +38,8 @@ export const WildlifeMarker = ({
     return null
   }
 
+  const ivScore = nearMe.fighter.ivScore
+
   return (
     <Marker
       key={w.observationId}
@@ -60,7 +62,7 @@ export const WildlifeMarker = ({
           isNavigating &&
             navigatingtoObservationId === w.observationId &&
             "bg-blue-500",
-          showFighters && "bg-transparent shadow-none"
+          showFighters && ["bg-transparent shadow-none"]
         )}
         onClick={async (e) => {
           e.stopPropagation()
@@ -94,7 +96,10 @@ export const WildlifeMarker = ({
               })}
               className={cn(
                 "h-full w-full rounded-full scale-[3]",
-                !!w.caughtAt && "grayscale"
+                !!w.caughtAt && "grayscale",
+                !!ivScore &&
+                  ivScore > 75 &&
+                  "bg bg-gradient-radial from-amber-200/80 via-transparent to-transparent"
               )}
               alt={"Observation"}
               unoptimized
