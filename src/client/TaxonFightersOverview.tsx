@@ -1,6 +1,8 @@
+import NiceModal from "@ebay/nice-modal-react"
 import { map } from "lodash-es"
 import Image from "next/image"
 import { api } from "~/utils/api"
+import { TaxonOverviewModal } from "./TaxonOverviewModal"
 import { cn } from "./cn"
 import { getFighterImage } from "./getFighterImage"
 import { usePlayer } from "./usePlayer"
@@ -22,7 +24,12 @@ export const TaxonFightersOverview = () => {
         {map(data, (fighter) => (
           <div
             key={fighter.num}
-            className="text-xs flex flex-col text-center bg-gray-200 p-1 rounded"
+            className="text-xs flex flex-col text-center bg-gray-200 p-1 rounded hover:bg-gray-300 cursor-pointer"
+            onClick={() => {
+              NiceModal.show(TaxonOverviewModal, {
+                taxonId: fighter.taxonId,
+              })
+            }}
           >
             <div>
               <Image

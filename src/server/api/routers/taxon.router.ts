@@ -255,13 +255,14 @@ export const taxonRouter = createTRPCRouter({
         })
       }
 
-      return allEvos
+      return allEvos.map((s) => ({
+        name: s.name,
+        num: s.num,
+        taxonId: t.id,
+      }))
     })
 
-    let species = allSpecies.map((s) => ({
-      name: s.name,
-      num: s.num,
-    }))
+    let species = allSpecies
     species = orderBy(species, (s) => s.num)
     species = uniqBy(species, (s) => s.num)
     return species
