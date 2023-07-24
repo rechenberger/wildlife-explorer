@@ -51,7 +51,7 @@ const useAutoBattle = () => {
 
   useKeyboardShortcut("CANCEL", () => {
     toast("Auto Battle Stopped")
-    setActive((active) => !active)
+    setActive(false)
   })
 
   useEffect(() => {
