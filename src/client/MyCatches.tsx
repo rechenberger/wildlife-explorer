@@ -56,7 +56,7 @@ const orderOptions = [
   },
   {
     label: "Highest IVs",
-    by: "ivSore",
+    by: "ivScore",
     direction: "desc",
   },
   {
@@ -220,8 +220,8 @@ export const MyCatches = () => {
             if (order.by === "caughtAt") {
               return c.createdAt
             }
-            if (order.by === "ivSore") {
-              return c.fighter.ivSore
+            if (order.by === "ivScore") {
+              return c.fighter.ivScore
             }
             return c.id
           },

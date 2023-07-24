@@ -1,6 +1,5 @@
 import { Sparkles } from "lucide-react"
 import Image from "next/image"
-import { IV_SCORE_EXCEPTIONAL } from "~/config"
 import { type BattleReportFighter } from "~/server/lib/battle/BattleReport"
 import { IconFemale } from "./IconFemale"
 import { IconMale } from "./IconMale"
@@ -36,9 +35,6 @@ export const FighterChip = ({
     fighter.fighter?.canEvolve && !player?.metadata?.activeBattleId
   const showFighters = useShowFighters()
 
-  const ivScoreExceptional =
-    fighter.fighter.ivSore && fighter.fighter.ivSore > IV_SCORE_EXCEPTIONAL
-
   return (
     <>
       <div
@@ -71,8 +67,13 @@ export const FighterChip = ({
                   "h-full w-full rounded-full scale-[1] bg-gray-200",
                   fainted && "rotate-180",
                   "pointer-events-none",
-                  ivScoreExceptional &&
-                    "bg-gradient-to-b from-gray-200 to-amber-100"
+                  fighter.fighter.ivScore && [
+                    "bg-gradient-to-b from-gray-200",
+                    "to-gray-200",
+                    // fighter.fighter.ivScore > 70 && "to-green-200",
+                    fighter.fighter.ivScore > 75 && "to-amber-200",
+                    fighter.fighter.ivScore > 85 && "to-red-200",
+                  ]
                 )}
                 alt={"Observation"}
                 unoptimized
