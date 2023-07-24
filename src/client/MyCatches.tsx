@@ -55,6 +55,11 @@ const orderOptions = [
     direction: "asc",
   },
   {
+    label: "Highest IVs",
+    by: "ivSum",
+    direction: "desc",
+  },
+  {
     label: "A-Z",
     by: "name",
     direction: "asc",
@@ -214,6 +219,9 @@ export const MyCatches = () => {
             }
             if (order.by === "caughtAt") {
               return c.createdAt
+            }
+            if (order.by === "ivSum") {
+              return c.fighter.ivSum
             }
             return c.id
           },

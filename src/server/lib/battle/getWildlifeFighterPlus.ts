@@ -1,6 +1,6 @@
 import { Dex, type PokemonSet } from "@pkmn/dex"
 import { Battle, toID, type Pokemon } from "@pkmn/sim"
-import { first, mapValues } from "lodash-es"
+import { first, mapValues, sum } from "lodash-es"
 import { z } from "zod"
 import { SHOW_EXACT_IVS } from "~/config"
 import {
@@ -115,6 +115,7 @@ export const transformWildlifeFighterPlus = ({
   const nature = Dex.natures.get(pokemonSet.nature)
 
   const ivLabels = mapValues(pokemonSet.ivs, (iv) => ivToLabel({ iv }))
+  const ivSum = sum(Object.values(pokemonSet.ivs))
   const fighterPlus = {
     hp: p.hp,
     hpMax: p.maxhp,
@@ -135,6 +136,7 @@ export const transformWildlifeFighterPlus = ({
       ? moveRequestData.moves
       : undefined,
     ivLabels,
+    ivSum,
     canEvolve,
     // statusState: p.statusState,
   } satisfies WildlifeFighterPlus
@@ -179,6 +181,7 @@ export const WildlifeFighterPlus = z.object({
       spe: z.string(),
     })
     .nullish(),
+  ivSum: z.number().nullish(),
   isActive: z.boolean(),
   justFainted: z.boolean(),
   lastMove: z
