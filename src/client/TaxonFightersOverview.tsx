@@ -17,6 +17,7 @@ export const TaxonFightersOverview = () => {
   )
   return (
     <>
+      <div className="text-center">{data?.length} Fighters</div>
       <div className="grid grid-cols-3 md:grid-cols-6 gap-2">
         {map(data, (fighter) => (
           <div
