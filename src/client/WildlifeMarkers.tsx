@@ -1,11 +1,13 @@
+import { useStore } from "jotai"
 import { Loader2 } from "lucide-react"
 import { WildlifeMarker } from "./WildlifeMarker"
-import { useActiveNavigation } from "./useActiveNavigation"
+import { isNavigatingAtom } from "./useActiveNavigation"
 import { useWildlife } from "./useWildlife"
 
 export const WildlifeMarkers = () => {
   const { wildlife, isFetching } = useWildlife()
-  const { isNavigating } = useActiveNavigation()
+  const store = useStore()
+  const isNavigating = store.get(isNavigatingAtom)
 
   return (
     <>
