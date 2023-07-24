@@ -6,7 +6,7 @@ import { ScrollArea } from "./shadcn/ui/scroll-area"
 
 export const ExpReportsModal = NiceModal.create<{
   expReports: ExpReports
-  battleId: string
+  battleId?: string
 }>(({ expReports, battleId }) => {
   // Use a hook to manage the modal state
   const modal = useModal()

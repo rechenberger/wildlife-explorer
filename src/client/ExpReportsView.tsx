@@ -19,7 +19,7 @@ export const ExpReportsView = ({
   battleId,
 }: {
   expReports: ExpReports
-  battleId: string
+  battleId?: string
 }) => {
   return (
     <>
@@ -100,18 +100,20 @@ export const ExpReportsView = ({
         ))}
       </div>
       <div className="flex flex-row gap-2 mt-4">
-        <TypeBadge
-          icon={pastIcon}
-          content="Back to Battle"
-          className="flex-1"
-          size="big"
-          onClick={() => {
-            NiceModal.hide(ExpReportsModal)
-            NiceModal.show(BattleViewModal, {
-              battleId,
-            })
-          }}
-        />
+        {battleId && (
+          <TypeBadge
+            icon={pastIcon}
+            content="Back to Battle"
+            className="flex-1"
+            size="big"
+            onClick={() => {
+              NiceModal.hide(ExpReportsModal)
+              NiceModal.show(BattleViewModal, {
+                battleId,
+              })
+            }}
+          />
+        )}
         <TypeBadge
           icon={leaveIcon}
           content="Leave"

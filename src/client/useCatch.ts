@@ -15,7 +15,7 @@ export const useCatch = () => {
       trpc.wildlife.invalidate()
       trpc.battle.invalidate()
     },
-    onSuccess: (data) => {
+    onSuccess: (data, input) => {
       confetti()
       const expReports = data?.expReports
       if (expReports) {
