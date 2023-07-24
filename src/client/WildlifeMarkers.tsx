@@ -1,27 +1,7 @@
 import { Loader2 } from "lucide-react"
-import { WILDLIFE_REFETCH_INTERVAL_IN_MS } from "~/config"
-import { api } from "~/utils/api"
 import { WildlifeMarker } from "./WildlifeMarker"
 import { useActiveNavigation } from "./useActiveNavigation"
-import { usePlayer } from "./usePlayer"
-
-export const useWildlife = () => {
-  const { playerId } = usePlayer()
-  const { data: wildlife, isFetching } = api.wildlife.nearMe.useQuery(
-    {
-      playerId: playerId!,
-    },
-    {
-      enabled: !!playerId,
-      keepPreviousData: true,
-      refetchInterval: WILDLIFE_REFETCH_INTERVAL_IN_MS,
-    }
-  )
-  return {
-    wildlife,
-    isFetching,
-  }
-}
+import { useWildlife } from "./useWildlife"
 
 export const WildlifeMarkers = () => {
   const { wildlife, isFetching } = useWildlife()

@@ -1,7 +1,6 @@
 import NiceModal from "@ebay/nice-modal-react"
 import { useStore } from "jotai"
-import { filter, orderBy } from "lodash-es"
-import { Fragment, useMemo } from "react"
+import { Fragment } from "react"
 import { RADIUS_IN_M_CATCH_WILDLIFE } from "~/config"
 import { calcDistanceInMeter } from "~/server/lib/latLng"
 import { BattleViewModal } from "./BattleViewModal"
@@ -12,30 +11,17 @@ import { FighterChip } from "./FighterChip"
 import { MyCatchesModal } from "./MyCatchesModal"
 import { playerLocationAtom } from "./PlayerMarker"
 import { TypeBadge } from "./TypeBadge"
-import { useWildlife } from "./WildlifeMarkers"
 import { cn } from "./cn"
 import { careIcon, pastIcon, swapIcon } from "./typeIcons"
 import { useAttackWildlife } from "./useAttackWildlife"
 import { useCareCenter } from "./useCareCenter"
 import { useMyTeam } from "./useMyTeam"
+import { useWildlifeToBattle } from "./useWildlife"
 
 export const BattleFastView = () => {
   const { myTeam } = useMyTeam()
 
-  const { wildlife } = useWildlife()
-  const wildlifeSorted = useMemo(() => {
-    let result = wildlife
-    result = filter(result, (w) => !w.wildlife.caughtAt)
-    result = orderBy(
-      result,
-      [
-        (w) => (w.wildlife.metadata.observationCaptive ? 1 : 0),
-        (w) => w.fighter.level,
-      ],
-      ["desc", "desc"]
-    )
-    return result
-  }, [wildlife])
+  const wildlife = useWildlifeToBattle()
 
   const { care, isLoading: careIsLoading } = useCare()
   const { careCenterIsClose } = useCareCenter()
@@ -75,7 +61,7 @@ export const BattleFastView = () => {
               Wildlife
             </div>
             <div className="flex flex-col gap-3 p-2 text-black flex-1 overflow-auto">
-              {wildlifeSorted?.map((w) => {
+              {wildlife?.map((w) => {
                 const isRespawning = w.wildlife.respawnsAt > new Date()
                 return (
                   <Fragment key={w.wildlife.id}>

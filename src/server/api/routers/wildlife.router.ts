@@ -1,6 +1,10 @@
 import { filter, first, map, orderBy, take } from "lodash-es"
 import { z } from "zod"
-import { MAX_NUMBER_SEE_WILDLIFE, RADIUS_IN_KM_SEE_WILDLIFE } from "~/config"
+import {
+  MAX_NUMBER_SEE_WILDLIFE,
+  RADIUS_IN_KM_SEE_WILDLIFE,
+  RADIUS_IN_M_CATCH_WILDLIFE,
+} from "~/config"
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc"
 import { findObservations } from "~/server/inaturalist/findObservations"
 import { getWildlifeFighterPlus } from "~/server/lib/battle/getWildlifeFighterPlus"
@@ -24,7 +28,7 @@ export const wildlifeRouter = createTRPCRouter({
       radiusInKm: RADIUS_IN_KM_SEE_WILDLIFE,
     })
 
-    let wildlifeRaw = await ctx.prisma.wildlife.findMany({
+    const wildlifeRaw = await ctx.prisma.wildlife.findMany({
       where: {
         lat: {
           gte: bbox.minLat,
@@ -54,16 +58,22 @@ export const wildlifeRouter = createTRPCRouter({
         },
       },
     })
-    if (wildlifeRaw.length > MAX_NUMBER_SEE_WILDLIFE) {
-      wildlifeRaw = take(
-        orderBy(wildlifeRaw, (w) => calcDistanceInMeter(w, ctx.player), "asc"),
-        MAX_NUMBER_SEE_WILDLIFE
-      )
-    }
+
+    let wildlifeWithDistance = map(wildlifeRaw, (w) => {
+      const distanceInMeter = calcDistanceInMeter(w, ctx.player)
+      const inRange = distanceInMeter <= RADIUS_IN_M_CATCH_WILDLIFE
+      return {
+        ...w,
+        distanceInMeter,
+        inRange,
+      }
+    })
+    wildlifeWithDistance = orderBy(wildlifeWithDistance, "distanceInMeter")
+    wildlifeWithDistance = take(wildlifeWithDistance, MAX_NUMBER_SEE_WILDLIFE)
 
     // console.time("nearMe Fighters")
     let wildlife = await Promise.all(
-      map(wildlifeRaw, async (w) => {
+      map(wildlifeWithDistance, async (w) => {
         return {
           wildlife: {
             ...w,
