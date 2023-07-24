@@ -110,3 +110,6 @@ export const LEVELS = {
     MAX: 60,
   },
 }
+
+export const IV_SCORE_MAX = 100
+export const IV_SCORE_EXCEPTIONAL = 80

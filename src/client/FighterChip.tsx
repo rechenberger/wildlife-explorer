@@ -1,6 +1,6 @@
 import { Sparkles } from "lucide-react"
 import Image from "next/image"
-import { DEV_MODE } from "~/config"
+import { IV_SCORE_EXCEPTIONAL } from "~/config"
 import { type BattleReportFighter } from "~/server/lib/battle/BattleReport"
 import { IconFemale } from "./IconFemale"
 import { IconMale } from "./IconMale"
@@ -35,6 +35,10 @@ export const FighterChip = ({
   const canEvolve =
     fighter.fighter?.canEvolve && !player?.metadata?.activeBattleId
   const showFighters = useShowFighters()
+
+  const ivScoreExceptional =
+    fighter.fighter.ivSore && fighter.fighter.ivSore > IV_SCORE_EXCEPTIONAL
+
   return (
     <>
       <div
@@ -64,7 +68,11 @@ export const FighterChip = ({
                   fighterSpeciesNum: fighter.fighter.speciesNum,
                 })}
                 className={cn(
-                  "h-full w-full rounded-full scale-[1] bg-gray-200"
+                  "h-full w-full rounded-full scale-[1] bg-gray-200",
+                  fainted && "rotate-180",
+                  "pointer-events-none",
+                  ivScoreExceptional &&
+                    "bg-gradient-to-b from-gray-200 to-amber-100"
                 )}
                 alt={"Observation"}
                 unoptimized
@@ -92,14 +100,7 @@ export const FighterChip = ({
         </div>
         <div className={cn("flex-1 overflow-hidden py-1 select-none")}>
           <div className="flex items-center gap-1">
-            <div
-              className="truncate text-xs font-bold flex-1"
-              title={`${name} ${
-                DEV_MODE
-                  ? `(${fighter.fighter.species} ${fighter.fighter.level} ${fighter.fighter.gender})`
-                  : ""
-              }`}
-            >
+            <div className={cn("truncate text-xs font-bold flex-1")}>
               {name}
             </div>
             <div

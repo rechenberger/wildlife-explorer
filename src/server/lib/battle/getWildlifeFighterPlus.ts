@@ -2,7 +2,7 @@ import { Dex, type PokemonSet } from "@pkmn/dex"
 import { Battle, toID, type Pokemon } from "@pkmn/sim"
 import { first, mapValues, sum } from "lodash-es"
 import { z } from "zod"
-import { SHOW_EXACT_IVS } from "~/config"
+import { IV_SCORE_MAX, SHOW_EXACT_IVS } from "~/config"
 import {
   WildlifeFighterPlusMove,
   getWildlifeFighterPlusMove,
@@ -115,7 +115,9 @@ export const transformWildlifeFighterPlus = ({
   const nature = Dex.natures.get(pokemonSet.nature)
 
   const ivLabels = mapValues(pokemonSet.ivs, (iv) => ivToLabel({ iv }))
-  const ivSore = Math.floor((100 * sum(Object.values(pokemonSet.ivs))) / 6 / 31)
+  const ivSore = Math.floor(
+    (IV_SCORE_MAX * sum(Object.values(pokemonSet.ivs))) / 6 / 31
+  )
   const fighterPlus = {
     hp: p.hp,
     hpMax: p.maxhp,
