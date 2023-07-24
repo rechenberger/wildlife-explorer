@@ -160,7 +160,7 @@ export const AutoBattle = () => {
         <div>Auto Battle</div>
         <div className="flex flex-row gap-2">
           <Label>
-            <span>Min Level</span>
+            <div className="mb-1">Min Level</div>
             <Input
               type="number"
               value={minLevel}
@@ -168,7 +168,7 @@ export const AutoBattle = () => {
             />
           </Label>
           <Label>
-            <span>Max Level</span>
+            <div className="mb-1">Max Level</div>
             <Input
               type="number"
               value={maxLevel}
@@ -176,7 +176,7 @@ export const AutoBattle = () => {
             />
           </Label>
           <Label>
-            <span>Max IV Score</span>
+            <div className="mb-1">Max IV Score</div>
             <Input
               type="number"
               value={maxIvScore}

@@ -292,6 +292,11 @@ export const pastIcon = {
   name: "Past",
   icon: Clock,
 }
+export const battleIcon = {
+  ...defaultIcon,
+  name: "Battle",
+  icon: Swords,
+}
 
 export type TypeIcon = {
   name: string

@@ -3,6 +3,7 @@ import { useStore } from "jotai"
 import { Fragment } from "react"
 import { RADIUS_IN_M_CATCH_WILDLIFE } from "~/config"
 import { calcDistanceInMeter } from "~/server/lib/latLng"
+import { AutoBattleModal } from "./AutoBattleModal"
 import { BattleViewModal } from "./BattleViewModal"
 import { useCare } from "./CareButton"
 import { CatchDetailsModal } from "./CatchDetailsModal"
@@ -12,7 +13,7 @@ import { MyCatchesModal } from "./MyCatchesModal"
 import { playerLocationAtom } from "./PlayerMarker"
 import { TypeBadge } from "./TypeBadge"
 import { cn } from "./cn"
-import { careIcon, pastIcon, swapIcon } from "./typeIcons"
+import { battleIcon, careIcon, pastIcon, swapIcon } from "./typeIcons"
 import { useAttackWildlife } from "./useAttackWildlife"
 import { useCareCenter } from "./useCareCenter"
 import { useMyTeam } from "./useMyTeam"
@@ -99,7 +100,7 @@ export const BattleFastView = () => {
             </div>
           </div>
         </div>
-        <div className="flex flex-row gap-2">
+        <div className="flex flex-row gap-2 flex-wrap">
           <TypeBadge
             icon={swapIcon}
             content={"Swap"}
@@ -122,6 +123,15 @@ export const BattleFastView = () => {
               if (!careCenterIsClose) return
               if (careIsLoading) return
               care()
+            }}
+          />
+          <TypeBadge
+            icon={battleIcon}
+            content={"Auto"}
+            size="big"
+            className="flex-1"
+            onClick={() => {
+              NiceModal.show(AutoBattleModal)
             }}
           />
           <TypeBadge
