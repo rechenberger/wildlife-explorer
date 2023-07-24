@@ -34,7 +34,7 @@ export const FighterChip = ({
   const canEvolve =
     fighter.fighter?.canEvolve && !player?.metadata?.activeBattleId
   const showFighters = useShowFighters()
-
+  const ivScore = fighter.fighter.ivScore
   return (
     <>
       <div
@@ -67,12 +67,12 @@ export const FighterChip = ({
                   "h-full w-full rounded-full scale-[1] bg-gray-200",
                   fainted && "rotate-180",
                   "pointer-events-none",
-                  fighter.fighter.ivScore && [
+                  ivScore && [
                     "bg-gradient-to-b from-gray-200",
                     "to-gray-200",
-                    // fighter.fighter.ivScore > 70 && "to-green-200",
-                    fighter.fighter.ivScore > 75 && "to-amber-200",
-                    fighter.fighter.ivScore > 85 && "to-red-200",
+                    ivScore >= 75 && "to-amber-200",
+                    ivScore >= 85 && "from-amber-200 to-red-200",
+                    ivScore >= 95 && "from-red-200 to-gray-600",
                   ]
                 )}
                 alt={"Observation"}
