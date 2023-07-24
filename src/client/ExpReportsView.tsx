@@ -1,15 +1,26 @@
+import NiceModal from "@ebay/nice-modal-react"
 import * as ProgressPrimitive from "@radix-ui/react-progress"
 import { map } from "lodash-es"
 import { Fragment } from "react"
 import { type RouterOutputs } from "~/utils/api"
+import { BattleViewModal } from "./BattleViewModal"
+import { ExpReportsModal } from "./ExpReportsModal"
 import { FighterChip } from "./FighterChip"
+import { TypeBadge } from "./TypeBadge"
 import { cn } from "./cn"
+import { leaveIcon, pastIcon } from "./typeIcons"
 
 export type ExpReports = NonNullable<
   RouterOutputs["battle"]["makeChoice"]
 >["expReports"]
 
-export const ExpReportsView = ({ expReports }: { expReports: ExpReports }) => {
+export const ExpReportsView = ({
+  expReports,
+  battleId,
+}: {
+  expReports: ExpReports
+  battleId: string
+}) => {
   return (
     <>
       <div className="mb-4">🏆 Winner Winner, Exp Dinner 🎉</div>
@@ -87,6 +98,29 @@ export const ExpReportsView = ({ expReports }: { expReports: ExpReports }) => {
             )}
           </Fragment>
         ))}
+      </div>
+      <div className="flex flex-row gap-2 mt-4">
+        <TypeBadge
+          icon={pastIcon}
+          content="Back to Battle"
+          className="flex-1"
+          size="big"
+          onClick={() => {
+            NiceModal.hide(ExpReportsModal)
+            NiceModal.show(BattleViewModal, {
+              battleId,
+            })
+          }}
+        />
+        <TypeBadge
+          icon={leaveIcon}
+          content="Leave"
+          className="flex-1"
+          size="big"
+          onClick={() => {
+            NiceModal.hide(ExpReportsModal)
+          }}
+        />
       </div>
     </>
   )

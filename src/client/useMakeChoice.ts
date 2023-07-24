@@ -1,6 +1,7 @@
 import NiceModal from "@ebay/nice-modal-react"
 import { toast } from "sonner"
 import { api } from "~/utils/api"
+import { BattleViewModal } from "./BattleViewModal"
 import { ExpReportsModal } from "./ExpReportsModal"
 import { confetti } from "./confetti"
 
@@ -8,7 +9,7 @@ export const useMakeChoice = () => {
   const trpc = api.useContext()
 
   return api.battle.makeChoice.useMutation({
-    onSuccess: (data) => {
+    onSuccess: (data, input) => {
       trpc.battle.invalidate()
 
       if (data) {
@@ -17,8 +18,10 @@ export const useMakeChoice = () => {
         if (data?.iAmWinner) {
           confetti()
           if (expReports) {
+            NiceModal.hide(BattleViewModal)
             NiceModal.show(ExpReportsModal, {
               expReports,
+              battleId: input.battleId,
             })
           } else {
             toast("You win! 🎉")
