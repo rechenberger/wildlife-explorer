@@ -13,7 +13,7 @@ import { usePlayer } from "./usePlayer"
 
 export const scanningLocationAtom = atom<LatLng | null>(null)
 
-export const BattleViewButton = () => {
+export const useLatestBattleParticipation = () => {
   const { playerId } = usePlayer()
   const { data: latestParticipation } =
     api.battle.getMyLatestParticipation.useQuery(
@@ -34,6 +34,15 @@ export const BattleViewButton = () => {
     latestParticipation?.battle?.status === "INVITING"
       ? latestParticipation?.battle?.id
       : undefined
+
+  return {
+    activeBattleId,
+    pvpInviteBattleId,
+  }
+}
+
+export const BattleViewButton = () => {
+  const { activeBattleId, pvpInviteBattleId } = useLatestBattleParticipation()
 
   useEffect(() => {
     if (!pvpInviteBattleId) return
