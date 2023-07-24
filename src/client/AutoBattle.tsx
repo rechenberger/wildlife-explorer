@@ -1,5 +1,6 @@
 import { Swords } from "lucide-react"
 import { useCallback, useEffect, useRef, useState } from "react"
+import { toast } from "sonner"
 import { api } from "~/utils/api"
 import { useLatestBattleParticipation } from "./BattleViewButton"
 import { useCare } from "./CareButton"
@@ -8,6 +9,7 @@ import { Input } from "./shadcn/ui/input"
 import { Label } from "./shadcn/ui/label"
 import { useAttackWildlife } from "./useAttackWildlife"
 import { useGetWildlifeName } from "./useGetWildlifeName"
+import { useKeyboardShortcut } from "./useKeyboardShortcut"
 import { useMakeChoice } from "./useMakeChoice"
 import { usePlayer } from "./usePlayer"
 import { useWildlifeToBattle } from "./useWildlife"
@@ -46,6 +48,11 @@ const useAutoBattle = () => {
   const loadingRef = useRef(false)
 
   const getName = useGetWildlifeName()
+
+  useKeyboardShortcut("CANCEL", () => {
+    toast("Auto Battle Stopped")
+    setActive((active) => !active)
+  })
 
   useEffect(() => {
     if (loadingRef.current) return

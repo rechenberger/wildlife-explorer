@@ -78,6 +78,7 @@ export const SHORTCUTS = {
   FIGHTER_OVERVIEW: { code: "KeyF" },
   AUTO_BATTLE: { code: "KeyB", shift: true },
   ADD: { code: "KeyA" },
+  CANCEL: { code: "Escape" },
 }
 
 export const DEFAULT_MAP_ZOOM = 15
