@@ -1,6 +1,6 @@
 import { Dex, type PokemonSet, type Species } from "@pkmn/dex"
 import { filter, find, map, max, min, orderBy, take } from "lodash-es"
-import { MAX_MOVES_PER_FIGHTER, USE_LATEST_GEN } from "~/config"
+import { LEVELS, MAX_MOVES_PER_FIGHTER, USE_LATEST_GEN } from "~/config"
 import { type CatchMetadata } from "~/server/schema/CatchMetadata"
 import { type WildlifeMetadata } from "~/server/schema/WildlifeMetadata"
 import { rngInt, rngItem, rngItemWithWeights } from "~/utils/seed"
@@ -79,8 +79,12 @@ export const getWildlifeFighter = async ({
   metadata: catchMetaData,
   name: givenName,
 }: GetWildlifeFighterOptions) => {
-  const minLevel = wildlife.metadata.observationCaptive ? 20 : 1
-  const maxLevel = wildlife.metadata.observationCaptive ? 100 : 20
+  const minLevel = wildlife.metadata.observationCaptive
+    ? LEVELS.CAPTIVE.MIN
+    : LEVELS.WILD.MIN
+  const maxLevel = wildlife.metadata.observationCaptive
+    ? LEVELS.CAPTIVE.MAX
+    : LEVELS.WILD.MAX
   const level =
     catchMetaData?.level ||
     rngInt({

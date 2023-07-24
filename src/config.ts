@@ -98,3 +98,14 @@ export const REFETCH_MS_LATEST_TRADE = 2_000
 export const REFETCH_MS_ACTIVE_TRADE = 1_000
 
 export const WEIRD_ROOT_TAXON_ID = 48460
+
+export const LEVELS = {
+  WILD: {
+    MIN: 1,
+    MAX: 20,
+  },
+  CAPTIVE: {
+    MIN: 21,
+    MAX: 60,
+  },
+}
