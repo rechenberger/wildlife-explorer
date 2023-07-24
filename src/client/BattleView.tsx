@@ -128,7 +128,9 @@ export const BattleView = ({
 
   const getName = useGetWildlifeName()
 
-  const { doCatch } = useCatch()
+  const { doCatch } = useCatch({
+    battleId,
+  })
 
   const showFighters = useShowFighters()
 
