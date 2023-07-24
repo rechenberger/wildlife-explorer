@@ -15,16 +15,18 @@ export const scanningLocationAtom = atom<LatLng | null>(null)
 
 export const useLatestBattleParticipation = () => {
   const { playerId } = usePlayer()
-  const { data: latestParticipation } =
-    api.battle.getMyLatestParticipation.useQuery(
-      {
-        playerId: playerId!,
-      },
-      {
-        enabled: !!playerId,
-        refetchInterval: REFETCH_MS_BATTLE_BUTTON,
-      }
-    )
+  const {
+    data: latestParticipation,
+    refetch: refetchLatestBattleParticipation,
+  } = api.battle.getMyLatestParticipation.useQuery(
+    {
+      playerId: playerId!,
+    },
+    {
+      enabled: !!playerId,
+      refetchInterval: REFETCH_MS_BATTLE_BUTTON,
+    }
+  )
 
   const activeBattleId =
     latestParticipation?.battle?.status === "IN_PROGRESS"
@@ -38,6 +40,7 @@ export const useLatestBattleParticipation = () => {
   return {
     activeBattleId,
     pvpInviteBattleId,
+    refetchLatestBattleParticipation,
   }
 }
 

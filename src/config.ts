@@ -76,6 +76,7 @@ export const SHORTCUTS = {
   GOTO_PLAYER: { code: "Space" },
   TAXON_OVERVIEW: { code: "KeyT" },
   FIGHTER_OVERVIEW: { code: "KeyF" },
+  AUTO_BATTLE: { code: "KeyB", shift: true },
   ADD: { code: "KeyA" },
 }
 

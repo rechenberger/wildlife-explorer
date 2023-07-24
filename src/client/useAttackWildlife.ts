@@ -18,7 +18,7 @@ export const useAttackWildlife = () => {
       },
     })
   const attackWildlife = useCallback(
-    ({ wildlifeId }: { wildlifeId: string }) => {
+    async ({ wildlifeId }: { wildlifeId: string }) => {
       if (!playerId) return
 
       const promise = mutateAsync({ wildlifeId, playerId })
@@ -27,6 +27,9 @@ export const useAttackWildlife = () => {
         success: "The Battle is on! 🔥",
         error: (err) => err.message || "Failed to start battle. Try again.",
       })
+      try {
+        await promise
+      } catch (error) {}
     },
     [mutateAsync, playerId]
   )
