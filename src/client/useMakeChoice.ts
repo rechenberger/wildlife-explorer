@@ -18,8 +18,8 @@ export const useMakeChoice = ({
         trpc.invalidate()
         const expReports = data?.expReports
         if (data?.iAmWinner) {
-          confetti()
           if (expReports && !skipExpReports) {
+            confetti()
             NiceModal.hide(BattleViewModal)
             NiceModal.show(ExpReportsModal, {
               expReports,
