@@ -1,6 +1,6 @@
 import { isNumber } from "@turf/turf"
 import { atom, useAtom } from "jotai"
-import { take } from "lodash-es"
+import { forEach, takeRight } from "lodash-es"
 import { Swords } from "lucide-react"
 import { useCallback, useEffect, useRef, useState } from "react"
 import { toast } from "sonner"
@@ -23,7 +23,7 @@ import { useWildlifeToBattle } from "./useWildlife"
 const minLevelAtom = atomWithLocalStorage("autoBattleMinLevel", 10)
 const maxLevelAtom = atomWithLocalStorage("autoBattleMaxLevel", 20)
 const maxIvScoreAtom = atomWithLocalStorage("autoBattleMaxIvScore", 74)
-const expReportsAtom = atom<ExpReports | null>(null)
+const expReportsAtom = atom<ExpReports>([])
 
 const useAutoBattle = () => {
   const [minLevel, setMinLevel] = useAtom(minLevelAtom)
@@ -92,9 +92,9 @@ const useAutoBattle = () => {
         }
         if (choiceResult?.expReports) {
           setExpReports((prevReports) => {
-            if (!prevReports) return choiceResult.expReports
-            return prevReports.map((o) => {
-              const n = choiceResult.expReports.find(
+            const newReports = choiceResult.expReports
+            const reports = prevReports.map((o) => {
+              const n = newReports.find(
                 (r) =>
                   r.battleReportFighter.catch?.id ===
                   o.battleReportFighter.catch?.id
@@ -114,6 +114,19 @@ const useAutoBattle = () => {
                 },
               } as any
             })
+            forEach(newReports, (n) => {
+              if (
+                !reports.find(
+                  (r) =>
+                    r.battleReportFighter.catch?.id ===
+                    n.battleReportFighter.catch?.id
+                )
+              ) {
+                reports.push(n)
+              }
+            })
+
+            return reports
           })
         }
         return true
@@ -211,6 +224,8 @@ export const AutoBattle = () => {
   const [showCompleteBattleReport, setshowCompleteBattleReport] =
     useState(false)
 
+  const logsShown = showCompleteBattleReport ? logs : takeRight(logs, 3)
+
   return (
     <>
       <div className="flex flex-col items-center gap-4">
@@ -263,18 +278,16 @@ export const AutoBattle = () => {
           </div>
         )}
         <div className="flex flex-col-reverse items-center gap-2 text-xs text-left">
-          {take(logs, showCompleteBattleReport ? Infinity : 3).map(
-            (log, idx) => (
-              <div
-                key={idx}
-                className={cn(
-                  idx === logs.length - 1 ? "font-bold" : "opacity-60"
-                )}
-              >
-                {log}
-              </div>
-            )
-          )}
+          {logsShown.map((log, idx) => (
+            <div
+              key={idx}
+              className={cn(
+                idx === logsShown.length - 1 ? "font-bold" : "opacity-60"
+              )}
+            >
+              {log}
+            </div>
+          ))}
         </div>
         <div className="flex flex-row gap-2 w-full">
           <Button
