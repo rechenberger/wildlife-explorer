@@ -8,6 +8,7 @@ import { atomWithLocalStorage } from "~/utils/atomWithLocalStorage"
 import { useLatestBattleParticipation } from "./BattleViewButton"
 import { useCare } from "./CareButton"
 import { ExpReportsView, type ExpReports } from "./ExpReportsView"
+import { cn } from "./cn"
 import { Button } from "./shadcn/ui/button"
 import { Input } from "./shadcn/ui/input"
 import { Label } from "./shadcn/ui/label"
@@ -256,9 +257,16 @@ export const AutoBattle = () => {
             <ExpReportsView expReports={expReports} reportsOnly />
           </div>
         )}
-        <div className="flex flex-col items-center gap-2 text-xs text-left">
+        <div className="flex flex-col-reverse items-center gap-2 text-xs text-left">
           {logs.map((log, idx) => (
-            <div key={idx}>{log}</div>
+            <div
+              key={idx}
+              className={cn(
+                idx === logs.length - 1 ? "font-bold" : "opacity-60"
+              )}
+            >
+              {log}
+            </div>
           ))}
         </div>
       </div>
