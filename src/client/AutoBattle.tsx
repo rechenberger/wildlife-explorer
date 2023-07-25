@@ -11,6 +11,7 @@ import { useCare } from "./CareButton"
 import { ExpReportsView, type ExpReports } from "./ExpReportsView"
 import { cn } from "./cn"
 import { Button } from "./shadcn/ui/button"
+import { Checkbox } from "./shadcn/ui/checkbox"
 import { Input } from "./shadcn/ui/input"
 import { Label } from "./shadcn/ui/label"
 import { useAttackWildlife } from "./useAttackWildlife"
@@ -232,6 +233,18 @@ export const AutoBattle = () => {
     useState(false)
 
   const logsShown = showCompleteBattleReport ? logs : takeRight(logs, 3)
+  const [autoRestart, setAutoRestart] = useState(false)
+
+  const autoRestartTimerRef = useRef<NodeJS.Timeout | null>(null)
+  useEffect(() => {
+    if (autoRestartTimerRef.current && !autoRestart) {
+      clearTimeout(autoRestartTimerRef.current)
+    }
+
+    if (autoRestart && !active) {
+      autoRestartTimerRef.current = setTimeout(() => setActive(true), 5000)
+    }
+  }, [autoRestart, active, setActive])
 
   return (
     <>
@@ -263,10 +276,30 @@ export const AutoBattle = () => {
             />
           </Label>
         </div>
-        <Button onClick={() => setActive(!active)}>
+        <Button
+          onClick={() => {
+            if (active && autoRestart) {
+              setAutoRestart(false)
+            }
+            setActive(!active)
+          }}
+        >
           <Swords className="w-4 h-4 mr-1" />
           {active ? "Stop" : "Start"}
         </Button>
+        <div className="flex items-center space-x-2">
+          <Checkbox
+            id="autoRestart"
+            checked={autoRestart}
+            onCheckedChange={(v) => setAutoRestart(v === true)}
+          />
+          <label
+            htmlFor="autoRestart"
+            className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+          >
+            Autorestart
+          </label>
+        </div>
         {/* {expReports && (
           <Button
             onClick={() => {
