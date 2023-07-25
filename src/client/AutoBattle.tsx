@@ -1,7 +1,9 @@
+import { useAtom } from "jotai"
 import { Swords } from "lucide-react"
 import { useCallback, useEffect, useRef, useState } from "react"
 import { toast } from "sonner"
 import { api } from "~/utils/api"
+import { atomWithLocalStorage } from "~/utils/atomWithLocalStorage"
 import { useLatestBattleParticipation } from "./BattleViewButton"
 import { useCare } from "./CareButton"
 import { Button } from "./shadcn/ui/button"
@@ -14,10 +16,14 @@ import { useMakeChoice } from "./useMakeChoice"
 import { usePlayer } from "./usePlayer"
 import { useWildlifeToBattle } from "./useWildlife"
 
+const minLevelAtom = atomWithLocalStorage("autoBattleMinLevel", 10)
+const maxLevelAtom = atomWithLocalStorage("autoBattleMaxLevel", 20)
+const maxIvScoreAtom = atomWithLocalStorage("autoBattleMaxIvScore", 74)
+
 const useAutoBattle = () => {
-  const [minLevel, setMinLevel] = useState(10)
-  const [maxLevel, setMaxLevel] = useState(20)
-  const [maxIvScore, setMaxIvScore] = useState(74)
+  const [minLevel, setMinLevel] = useAtom(minLevelAtom)
+  const [maxLevel, setMaxLevel] = useAtom(maxLevelAtom)
+  const [maxIvScore, setMaxIvScore] = useAtom(maxIvScoreAtom)
 
   const [active, setActive] = useState(false)
   const [logs, setLogs] = useState<string[]>([])
