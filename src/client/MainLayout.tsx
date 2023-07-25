@@ -20,7 +20,7 @@ export const MainLayout = ({ children }: { children?: ReactNode }) => {
         <link rel="manifest" href="/manifest.json" />
         <script
           defer
-          src="http://localhost:3000/widgetScript.js"
+          src="http://localhost:3000/widget.js"
           data-launchpad-slug-id="wilda-afbd2c9d288c7494142cb0fe15a943dc"
           data-icon-bg="#508090"
           data-icon-color="#fff"
