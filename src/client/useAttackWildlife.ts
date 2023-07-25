@@ -5,16 +5,20 @@ import { api } from "~/utils/api"
 import { BattleViewModal } from "./BattleViewModal"
 import { usePlayer } from "./usePlayer"
 
-export const useAttackWildlife = () => {
+export const useAttackWildlife = ({
+  skipBattleView,
+}: { skipBattleView?: boolean } = {}) => {
   const { playerId } = usePlayer()
   const trpc = api.useContext()
   const { mutateAsync, isLoading: attackWildlifeLoading } =
     api.battle.attackWildlife.useMutation({
       onSuccess: (data) => {
         trpc.battle.invalidate()
-        NiceModal.show(BattleViewModal, {
-          battleId: data.id,
-        })
+        if (!skipBattleView) {
+          NiceModal.show(BattleViewModal, {
+            battleId: data.id,
+          })
+        }
       },
     })
   const attackWildlife = useCallback(

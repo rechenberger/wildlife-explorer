@@ -32,7 +32,7 @@ const useAutoBattle = () => {
     setLogs((logs) => [...logs, msg])
   }, [])
 
-  const { mutateAsync: makeChoice } = useMakeChoice()
+  const { mutateAsync: makeChoice } = useMakeChoice({ skipExpReports: true })
   const { activeBattleId, refetchLatestBattleParticipation } =
     useLatestBattleParticipation()
 
@@ -50,7 +50,7 @@ const useAutoBattle = () => {
 
   const wildlife = useWildlifeToBattle()
   const { care } = useCare()
-  const { attackWildlife } = useAttackWildlife()
+  const { attackWildlife } = useAttackWildlife({ skipBattleView: true })
 
   const loadingRef = useRef(false)
 

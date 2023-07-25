@@ -5,7 +5,9 @@ import { BattleViewModal } from "./BattleViewModal"
 import { ExpReportsModal } from "./ExpReportsModal"
 import { confetti } from "./confetti"
 
-export const useMakeChoice = () => {
+export const useMakeChoice = ({
+  skipExpReports,
+}: { skipExpReports?: boolean } = {}) => {
   const trpc = api.useContext()
 
   return api.battle.makeChoice.useMutation({
@@ -17,7 +19,7 @@ export const useMakeChoice = () => {
         const expReports = data?.expReports
         if (data?.iAmWinner) {
           confetti()
-          if (expReports) {
+          if (expReports && !skipExpReports) {
             NiceModal.hide(BattleViewModal)
             NiceModal.show(ExpReportsModal, {
               expReports,
