@@ -11,6 +11,7 @@ import {
 import dynamic from "next/dynamic"
 import Image from "next/image"
 import Link from "next/link"
+import { teampilot } from "~/client/teampilot"
 import {
   ENABLE_BATTLE_VIEW,
   MIN_METER_ACCURACY_SHOW_INACCURATE,
@@ -248,13 +249,11 @@ export const CurrentObservation = ({ wildlifeId }: { wildlifeId: string }) => {
               "flex-1 rounded bg-black px-2 py-1 text-sm text-white"
             )}
             onClick={async () => {
-              const tp = (window as any).teampilot
-              tp.showChatWidget(true)
-              tp.sendMessage(
-                `I want to learn more about "${getName({
-                  wildlife: w,
-                })}" and why its mapped to "${getName(data)}"`
-              )
+              const message = `I want to learn more about "${getName({
+                wildlife: w,
+              })}" and why its mapped to "${getName(data)}"`
+              teampilot.showChat()
+              teampilot.sendMessage(message)
             }}
           >
             Chat
