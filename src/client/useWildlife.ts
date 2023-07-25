@@ -1,6 +1,6 @@
 import { filter, orderBy } from "lodash-es"
 import { useMemo } from "react"
-import { WILDLIFE_REFETCH_INTERVAL_IN_MS } from "~/config"
+import { IV_SCORE_EXCEPTIONAL, WILDLIFE_REFETCH_INTERVAL_IN_MS } from "~/config"
 import { api } from "~/utils/api"
 import { usePlayer } from "./usePlayer"
 
@@ -28,7 +28,14 @@ export const useWildlifeToBattle = () => {
     let result = wildlife
     result = filter(result, (w) => w.wildlife.inRange)
     result = filter(result, (w) => !w.wildlife.caughtAt)
-    result = orderBy(result, [(w) => w.fighter.level], ["desc"])
+    result = orderBy(
+      result,
+      [
+        (w) => !!w.fighter.ivScore && w.fighter.ivScore >= IV_SCORE_EXCEPTIONAL,
+        (w) => w.fighter.level,
+      ],
+      ["desc", "desc"]
+    )
     return result
   }, [wildlife])
   return wildlifeSorted

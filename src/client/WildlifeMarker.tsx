@@ -4,6 +4,7 @@ import { Check, Clock } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { Marker } from "react-map-gl"
+import { IV_SCORE_EXCEPTIONAL } from "~/config"
 import { type RouterOutputs } from "~/utils/api"
 import { CurrentObservationModal } from "./CurrentObservationModal"
 import { FighterChip } from "./FighterChip"
@@ -98,7 +99,7 @@ export const WildlifeMarker = ({
                 "h-full w-full rounded-full scale-[3]",
                 !!w.caughtAt && "grayscale",
                 !!ivScore &&
-                  ivScore > 75 &&
+                  ivScore >= IV_SCORE_EXCEPTIONAL &&
                   "bg bg-gradient-radial from-amber-200/80 via-transparent to-transparent"
               )}
               alt={"Observation"}
