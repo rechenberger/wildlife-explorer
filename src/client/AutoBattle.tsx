@@ -1,3 +1,4 @@
+import { isNumber } from "@turf/turf"
 import { useAtom } from "jotai"
 import { Swords } from "lucide-react"
 import { useCallback, useEffect, useRef, useState } from "react"
@@ -92,6 +93,8 @@ const useAutoBattle = () => {
           if (w.fighter.level < minLevel) return false
           if (w.fighter.level > maxLevel) return false
           if (
+            maxIvScore &&
+            isNumber(maxIvScore) &&
             typeof w.fighter.ivScore === "number" &&
             w.fighter.ivScore > maxIvScore
           ) {
