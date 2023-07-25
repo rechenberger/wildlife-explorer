@@ -1,5 +1,6 @@
 import { isNumber } from "@turf/turf"
 import { atom, useAtom } from "jotai"
+import { take } from "lodash-es"
 import { Swords } from "lucide-react"
 import { useCallback, useEffect, useRef, useState } from "react"
 import { toast } from "sonner"
@@ -204,7 +205,11 @@ export const AutoBattle = () => {
     maxIvScore,
     setMaxIvScore,
     expReports,
+    setExpReports,
   } = useAutoBattle()
+
+  const [showCompleteBattleReport, setshowCompleteBattleReport] =
+    useState(false)
 
   return (
     <>
@@ -258,16 +263,34 @@ export const AutoBattle = () => {
           </div>
         )}
         <div className="flex flex-col-reverse items-center gap-2 text-xs text-left">
-          {logs.map((log, idx) => (
-            <div
-              key={idx}
-              className={cn(
-                idx === logs.length - 1 ? "font-bold" : "opacity-60"
-              )}
-            >
-              {log}
-            </div>
-          ))}
+          {take(logs, showCompleteBattleReport ? Infinity : 3).map(
+            (log, idx) => (
+              <div
+                key={idx}
+                className={cn(
+                  idx === logs.length - 1 ? "font-bold" : "opacity-60"
+                )}
+              >
+                {log}
+              </div>
+            )
+          )}
+        </div>
+        <div className="flex flex-row gap-2 w-full">
+          <Button
+            onClick={() => setshowCompleteBattleReport((s) => !s)}
+            variant={"secondary"}
+            className="flex-1"
+          >
+            {`${showCompleteBattleReport ? "Hide" : "Show"} All Logs`}
+          </Button>
+          <Button
+            onClick={() => setExpReports([])}
+            variant={"secondary"}
+            className="flex-1"
+          >
+            Reset Exp Reports
+          </Button>
         </div>
       </div>
     </>
