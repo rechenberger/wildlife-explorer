@@ -24,6 +24,7 @@ export const MainLayout = ({ children }: { children?: ReactNode }) => {
           data-launchpad-slug-id="wilda-afbd2c9d288c7494142cb0fe15a943dc"
           data-icon-bg="#508090"
           data-icon-color="#fff"
+          data-hide-bubble
         />
       </Head>
       <main className="relative flex h-[100svh] w-full flex-col items-center justify-center bg-gradient-to-br  from-cyan-500 to-amber-600 text-white">
