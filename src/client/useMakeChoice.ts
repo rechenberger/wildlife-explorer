@@ -17,19 +17,21 @@ export const useMakeChoice = ({
       if (data) {
         trpc.invalidate()
         const expReports = data?.expReports
-        if (data?.iAmWinner) {
-          if (expReports && !skipExpReports) {
+        if (!skipExpReports) {
+          if (data?.iAmWinner) {
             confetti()
-            NiceModal.hide(BattleViewModal)
-            NiceModal.show(ExpReportsModal, {
-              expReports,
-              battleId: input.battleId,
-            })
+            if (expReports) {
+              NiceModal.hide(BattleViewModal)
+              NiceModal.show(ExpReportsModal, {
+                expReports,
+                battleId: input.battleId,
+              })
+            } else {
+              toast("You win! 🎉")
+            }
           } else {
-            toast("You win! 🎉")
+            toast(`${data.winnerName} won the battle!`)
           }
-        } else {
-          toast(`${data.winnerName} won the battle!`)
         }
       }
     },
