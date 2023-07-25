@@ -60,6 +60,8 @@ const useAutoBattle = () => {
     setActive(false)
   })
 
+  const [counter, setCounter] = useState(0)
+
   useEffect(() => {
     if (loadingRef.current) return
 
@@ -81,6 +83,7 @@ const useAutoBattle = () => {
         if (choiceResult?.iAmWinner !== undefined) {
           log(`Battle ${choiceResult?.iAmWinner ? "won" : "lost"}`)
         }
+        return true
         // TODO: accumulate xp reports
       } else {
         // Start Battle
@@ -115,10 +118,15 @@ const useAutoBattle = () => {
     }
 
     loadingRef.current = true
-    doStuff().then(() => {
+    doStuff().then((r) => {
+      if (r) {
+        // counter re-triggers effect
+        setCounter((c) => c + 1)
+      }
       loadingRef.current = false
     })
   }, [
+    counter,
     active,
     activeBattleId,
     attackWildlife,
