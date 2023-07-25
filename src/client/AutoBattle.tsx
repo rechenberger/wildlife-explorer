@@ -24,18 +24,23 @@ const minLevelAtom = atomWithLocalStorage("autoBattleMinLevel", 10)
 const maxLevelAtom = atomWithLocalStorage("autoBattleMaxLevel", 20)
 const maxIvScoreAtom = atomWithLocalStorage("autoBattleMaxIvScore", 74)
 const expReportsAtom = atom<ExpReports>([])
+const logsAtom = atom<string[]>([])
 
 const useAutoBattle = () => {
+  const [active, setActive] = useState(false)
+
   const [minLevel, setMinLevel] = useAtom(minLevelAtom)
   const [maxLevel, setMaxLevel] = useAtom(maxLevelAtom)
   const [maxIvScore, setMaxIvScore] = useAtom(maxIvScoreAtom)
   const [expReports, setExpReports] = useAtom(expReportsAtom)
+  const [logs, setLogs] = useAtom(logsAtom)
 
-  const [active, setActive] = useState(false)
-  const [logs, setLogs] = useState<string[]>([])
-  const log = useCallback((msg: string) => {
-    setLogs((logs) => [...logs, msg])
-  }, [])
+  const log = useCallback(
+    (msg: string) => {
+      setLogs((logs) => [...logs, msg])
+    },
+    [setLogs]
+  )
 
   const { mutateAsync: makeChoice } = useMakeChoice({ skipExpReports: true })
   const { activeBattleId, refetchLatestBattleParticipation } =
@@ -203,6 +208,7 @@ const useAutoBattle = () => {
     setMaxIvScore,
     expReports,
     setExpReports,
+    setLogs,
   }
 }
 
@@ -219,6 +225,7 @@ export const AutoBattle = () => {
     setMaxIvScore,
     expReports,
     setExpReports,
+    setLogs,
   } = useAutoBattle()
 
   const [showCompleteBattleReport, setshowCompleteBattleReport] =
@@ -298,7 +305,10 @@ export const AutoBattle = () => {
             {`${showCompleteBattleReport ? "Hide" : "Show"} All Logs`}
           </Button>
           <Button
-            onClick={() => setExpReports([])}
+            onClick={() => {
+              setExpReports([])
+              setLogs([])
+            }}
             variant={"secondary"}
             className="flex-1"
           >
