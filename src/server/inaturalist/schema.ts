@@ -125,7 +125,7 @@ export const Observation = z.object({
   observed_on_details: DateDetails.nullable(),
   observed_on_string: z.string().nullable(),
   observed_on: z.string().nullable(),
-  observed_time_zone: z.string(),
+  observed_time_zone: z.string().nullable(),
   ofvs: z.array(z.any()),
   outlinks: z.array(z.any()),
   owners_identification_from_vision: z.boolean().nullable(),
