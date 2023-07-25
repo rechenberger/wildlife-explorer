@@ -31,7 +31,10 @@ export const useWildlifeToBattle = () => {
     result = orderBy(
       result,
       [
-        (w) => !!w.fighter.ivScore && w.fighter.ivScore >= IV_SCORE_EXCEPTIONAL,
+        (w) =>
+          !!w.fighter.ivScore && w.fighter.ivScore >= IV_SCORE_EXCEPTIONAL
+            ? w.fighter.ivScore
+            : 0,
         (w) => w.fighter.level,
       ],
       ["desc", "desc"]
