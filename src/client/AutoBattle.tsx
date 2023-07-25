@@ -1,5 +1,5 @@
 import { isNumber } from "@turf/turf"
-import { useAtom } from "jotai"
+import { atom, useAtom } from "jotai"
 import { Swords } from "lucide-react"
 import { useCallback, useEffect, useRef, useState } from "react"
 import { toast } from "sonner"
@@ -7,6 +7,7 @@ import { api } from "~/utils/api"
 import { atomWithLocalStorage } from "~/utils/atomWithLocalStorage"
 import { useLatestBattleParticipation } from "./BattleViewButton"
 import { useCare } from "./CareButton"
+import { ExpReportsView, type ExpReports } from "./ExpReportsView"
 import { Button } from "./shadcn/ui/button"
 import { Input } from "./shadcn/ui/input"
 import { Label } from "./shadcn/ui/label"
@@ -20,11 +21,13 @@ import { useWildlifeToBattle } from "./useWildlife"
 const minLevelAtom = atomWithLocalStorage("autoBattleMinLevel", 10)
 const maxLevelAtom = atomWithLocalStorage("autoBattleMaxLevel", 20)
 const maxIvScoreAtom = atomWithLocalStorage("autoBattleMaxIvScore", 74)
+const expReportsAtom = atom<ExpReports | null>(null)
 
 const useAutoBattle = () => {
   const [minLevel, setMinLevel] = useAtom(minLevelAtom)
   const [maxLevel, setMaxLevel] = useAtom(maxLevelAtom)
   const [maxIvScore, setMaxIvScore] = useAtom(maxIvScoreAtom)
+  const [expReports, setExpReports] = useAtom(expReportsAtom)
 
   const [active, setActive] = useState(false)
   const [logs, setLogs] = useState<string[]>([])
@@ -85,6 +88,32 @@ const useAutoBattle = () => {
           log(`Battle ${choiceResult?.iAmWinner ? "won" : "lost"}`)
           await refetchLatestBattleParticipation()
         }
+        if (choiceResult?.expReports) {
+          setExpReports((prevReports) => {
+            if (!prevReports) return choiceResult.expReports
+            return prevReports.map((o) => {
+              const n = choiceResult.expReports.find(
+                (r) =>
+                  r.battleReportFighter.catch?.id ===
+                  o.battleReportFighter.catch?.id
+              )
+
+              if (!n) return o
+
+              return {
+                ...o,
+                levelGained: (o.levelGained || 0) + (n.levelGained || 0),
+                expGained: (o.expGained || 0) + (n.expGained || 0),
+                expPercentageAfter: {
+                  expPercentage: Math.max(
+                    o.expPercentageAfter?.expPercentage || 0,
+                    n.expPercentageAfter?.expPercentage || 0
+                  ),
+                },
+              } as any
+            })
+          })
+        }
         return true
         // TODO: accumulate xp reports
       } else {
@@ -144,6 +173,7 @@ const useAutoBattle = () => {
     playerId,
     refetchLatestBattleParticipation,
     wildlife,
+    setExpReports,
   ])
 
   return {
@@ -156,6 +186,8 @@ const useAutoBattle = () => {
     setMaxLevel,
     maxIvScore,
     setMaxIvScore,
+    expReports,
+    setExpReports,
   }
 }
 
@@ -170,6 +202,7 @@ export const AutoBattle = () => {
     setMaxLevel,
     maxIvScore,
     setMaxIvScore,
+    expReports,
   } = useAutoBattle()
 
   return (
@@ -206,6 +239,23 @@ export const AutoBattle = () => {
           <Swords className="w-4 h-4 mr-1" />
           {active ? "Stop" : "Start"}
         </Button>
+        {/* {expReports && (
+          <Button
+            onClick={() => {
+              NiceModal.show(ExpReportsModal, {
+                expReports,
+              })
+            }}
+          >
+            <Sparkles className="w-4 h-4 mr-1" />
+            Show Exp
+          </Button>
+        )} */}
+        {expReports && (
+          <div className="flex flex-col w-full">
+            <ExpReportsView expReports={expReports} reportsOnly />
+          </div>
+        )}
         <div className="flex flex-col items-center gap-2 text-xs text-left">
           {logs.map((log, idx) => (
             <div key={idx}>{log}</div>

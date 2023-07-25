@@ -17,13 +17,17 @@ export type ExpReports = NonNullable<
 export const ExpReportsView = ({
   expReports,
   battleId,
+  reportsOnly,
 }: {
   expReports: ExpReports
   battleId?: string
+  reportsOnly?: boolean
 }) => {
   return (
     <>
-      <div className="mb-4">🏆 Winner Winner, Exp Dinner 🎉</div>
+      {!reportsOnly && (
+        <div className="mb-4">🏆 Winner Winner, Exp Dinner 🎉</div>
+      )}
       <div className="grid grid-cols-[11rem_1fr] gap-4 justify-start items-center p-2">
         {map(expReports, (expReport, idx) => (
           <Fragment key={idx}>
@@ -99,31 +103,33 @@ export const ExpReportsView = ({
           </Fragment>
         ))}
       </div>
-      <div className="flex flex-row gap-2 mt-4">
-        {battleId && (
+      {!reportsOnly && (
+        <div className="flex flex-row gap-2 mt-4">
+          {battleId && (
+            <TypeBadge
+              icon={pastIcon}
+              content="Back to Battle"
+              className="flex-1"
+              size="big"
+              onClick={() => {
+                NiceModal.hide(ExpReportsModal)
+                NiceModal.show(BattleViewModal, {
+                  battleId,
+                })
+              }}
+            />
+          )}
           <TypeBadge
-            icon={pastIcon}
-            content="Back to Battle"
+            icon={leaveIcon}
+            content="Leave"
             className="flex-1"
             size="big"
             onClick={() => {
               NiceModal.hide(ExpReportsModal)
-              NiceModal.show(BattleViewModal, {
-                battleId,
-              })
             }}
           />
-        )}
-        <TypeBadge
-          icon={leaveIcon}
-          content="Leave"
-          className="flex-1"
-          size="big"
-          onClick={() => {
-            NiceModal.hide(ExpReportsModal)
-          }}
-        />
-      </div>
+        </div>
+      )}
     </>
   )
 }
