@@ -82,6 +82,7 @@ const useAutoBattle = () => {
 
         if (choiceResult?.iAmWinner !== undefined) {
           log(`Battle ${choiceResult?.iAmWinner ? "won" : "lost"}`)
+          await refetchLatestBattleParticipation()
         }
         return true
         // TODO: accumulate xp reports
