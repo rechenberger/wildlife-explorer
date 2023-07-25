@@ -8,7 +8,9 @@ import { cn } from "./cn"
 import { useWildlifeToBattle } from "./useWildlife"
 
 export const WildlifeNearMe = () => {
-  const wildlife = useWildlifeToBattle()
+  const wildlife = useWildlifeToBattle({
+    ignoreRange: true,
+  })
   const [mobileOpen, setMobileOpen] = useState(false)
   return (
     <>

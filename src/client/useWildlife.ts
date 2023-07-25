@@ -22,11 +22,17 @@ export const useWildlife = () => {
   }
 }
 
-export const useWildlifeToBattle = () => {
+export const useWildlifeToBattle = ({
+  ignoreRange,
+}: {
+  ignoreRange?: boolean
+} = {}) => {
   const { wildlife } = useWildlife()
   const wildlifeSorted = useMemo(() => {
     let result = wildlife
-    result = filter(result, (w) => w.wildlife.inRange)
+    if (!ignoreRange) {
+      result = filter(result, (w) => w.wildlife.inRange)
+    }
     result = filter(result, (w) => !w.wildlife.caughtAt)
     result = orderBy(
       result,
