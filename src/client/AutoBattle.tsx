@@ -19,6 +19,7 @@ import { useKeyboardShortcut } from "./useKeyboardShortcut"
 import { useMakeChoice } from "./useMakeChoice"
 import { usePlayer } from "./usePlayer"
 import { useWildlifeToBattle } from "./useWildlife"
+import { AUTO_BATTLE_WAIT_SECONDS } from "~/config"
 
 const minLevelAtom = atomWithLocalStorage("autoBattleMinLevel", 10)
 const maxLevelAtom = atomWithLocalStorage("autoBattleMaxLevel", 20)
@@ -158,7 +159,11 @@ const useAutoBattle = () => {
         })
         if (!w) {
           log("No wildlife to battle")
-          setActive(false)
+          // setActive(false)
+          log(`Waiting ${AUTO_BATTLE_WAIT_SECONDS}s`)
+          await new Promise((r) =>
+            setTimeout(r, AUTO_BATTLE_WAIT_SECONDS * 1000)
+          )
           return
         }
         await care()
