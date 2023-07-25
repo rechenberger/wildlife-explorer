@@ -20,10 +20,8 @@ export const MainLayout = ({ children }: { children?: ReactNode }) => {
         <link rel="manifest" href="/manifest.json" />
         <script
           defer
-          src="http://localhost:3000/widget.js"
-          data-launchpad-slug-id="wilda-afbd2c9d288c7494142cb0fe15a943dc"
-          data-icon-bg="#508090"
-          data-icon-color="#fff"
+          src="https://teampilot.ai/widget.js"
+          data-launchpad-slug-id="wilma-73d033dca3da17a8da85fbfd97aa1fea"
           data-hide-bubble
         />
       </Head>
