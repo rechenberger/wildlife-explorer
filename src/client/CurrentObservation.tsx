@@ -248,12 +248,12 @@ export const CurrentObservation = ({ wildlifeId }: { wildlifeId: string }) => {
               "flex-1 rounded bg-black px-2 py-1 text-sm text-white"
             )}
             onClick={async () => {
-              const w = window as any
-              w.teampilot.showChatWidget(true)
-              w.teampilot.sendMessage(
+              const tp = (window as any).teampilot
+              tp.showChatWidget(true)
+              tp.sendMessage(
                 `I want to learn more about "${getName({
                   wildlife: w,
-                })}" and why its mapped to "${getName(w)}"`
+                })}" and why its mapped to "${getName(data)}"`
               )
             }}
           >
