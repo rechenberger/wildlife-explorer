@@ -252,8 +252,8 @@ export const CurrentObservation = ({ wildlifeId }: { wildlifeId: string }) => {
               const message = `I want to learn more about "${getName({
                 wildlife: w,
               })}" and why its mapped to "${getName(data)}"`
-              teampilot.showChat()
-              teampilot.sendMessage(message)
+              teampilot().showChat()
+              teampilot().sendMessage(message)
             }}
           >
             Chat
