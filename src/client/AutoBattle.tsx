@@ -4,6 +4,7 @@ import { forEach, takeRight } from "lodash-es"
 import { Swords } from "lucide-react"
 import { useCallback, useEffect, useRef, useState } from "react"
 import { toast } from "sonner"
+import { AUTO_BATTLE_WAIT_SECONDS } from "~/config"
 import { api } from "~/utils/api"
 import { atomWithLocalStorage } from "~/utils/atomWithLocalStorage"
 import { useLatestBattleParticipation } from "./BattleViewButton"
@@ -14,12 +15,12 @@ import { Button } from "./shadcn/ui/button"
 import { Input } from "./shadcn/ui/input"
 import { Label } from "./shadcn/ui/label"
 import { useAttackWildlife } from "./useAttackWildlife"
+import { useCareCenter } from "./useCareCenter"
 import { useGetWildlifeName } from "./useGetWildlifeName"
 import { useKeyboardShortcut } from "./useKeyboardShortcut"
 import { useMakeChoice } from "./useMakeChoice"
 import { usePlayer } from "./usePlayer"
 import { useWildlifeToBattle } from "./useWildlife"
-import { AUTO_BATTLE_WAIT_SECONDS } from "~/config"
 
 const minLevelAtom = atomWithLocalStorage("autoBattleMinLevel", 10)
 const maxLevelAtom = atomWithLocalStorage("autoBattleMaxLevel", 20)
@@ -60,6 +61,7 @@ const useAutoBattle = () => {
   )
 
   const wildlife = useWildlifeToBattle()
+  const { careCenterIsClose } = useCareCenter()
   const { care } = useCare()
   const { attackWildlife } = useAttackWildlife({ skipBattleView: true })
 
@@ -166,7 +168,9 @@ const useAutoBattle = () => {
           )
           return
         }
-        await care()
+        if (careCenterIsClose) {
+          await care()
+        }
         await attackWildlife({
           wildlifeId: w!.wildlife.id,
         })
@@ -199,6 +203,7 @@ const useAutoBattle = () => {
     refetchLatestBattleParticipation,
     wildlife,
     setExpReports,
+    careCenterIsClose,
   ])
 
   return {
