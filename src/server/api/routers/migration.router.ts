@@ -1,9 +1,11 @@
-import { chunk, includes } from "lodash-es"
+import { Dex, Species } from "@pkmn/dex"
+import { chunk, includes, orderBy, uniqBy } from "lodash-es"
 import { MAX_FIGHTERS_PER_TEAM } from "~/config"
 import { getExpRate } from "~/data/pokemonLevelExperienceMap"
 import { PokemonLevelingRate } from "~/data/pokemonLevelingRate"
 import { createTRPCRouter } from "~/server/api/trpc"
 import { importTaxon } from "~/server/inaturalist/importTaxon"
+import { getNextEvo } from "~/server/lib/battle/getWildlifeFighter"
 import { getWildlifeFighterPlus } from "~/server/lib/battle/getWildlifeFighterPlus"
 import { LevelingRate, type CatchMetadata } from "~/server/schema/CatchMetadata"
 import { devProcedure } from "../middleware/devProcedure"
@@ -270,5 +272,48 @@ export const migrationRouter = createTRPCRouter({
     }
 
     return { length: wildlife.length }
+  }),
+
+  getFighters: devProcedure.mutation(async ({ ctx }) => {
+    const taxons = await ctx.prisma.taxon.findMany({
+      where: {
+        isAnchor: true,
+      },
+    })
+
+    const allSpecies = taxons.flatMap((t) => {
+      const anchored = Dex.species.get(t.fighterSpeciesName)
+      if (!anchored) {
+        throw new Error(
+          `Species not found ${t.fighterSpeciesName} for taxon ${t.id}`
+        )
+      }
+      let lowestEvo = anchored
+      while (lowestEvo.prevo) {
+        lowestEvo = Dex.species.get(lowestEvo.prevo)
+      }
+
+      let allEvos = []
+      let highestEvo: Species | undefined = lowestEvo
+      while (highestEvo) {
+        allEvos.push(highestEvo)
+        highestEvo = getNextEvo({
+          species: highestEvo,
+        })
+      }
+
+      return allEvos.map((s) => ({
+        name: s.name,
+        num: s.num,
+        taxonId: t.id,
+      }))
+    })
+
+    let species = allSpecies
+    species = orderBy(species, (s) => s.num)
+    species = uniqBy(species, (s) => s.num)
+    return {
+      allFighters: species.map((s) => s.name).join(", "),
+    }
   }),
 })
