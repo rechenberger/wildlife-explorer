@@ -26,7 +26,7 @@ export const calcExpForDefeatedPokemon = ({
       `Could not find baseExp for speciesNum ${defeatedSpeciesNum}}`
     )
   }
-  if (!receivingLevel) {
+  if (typeof receivingLevel !== "number" || receivingLevel < 0) {
     throw new Error(`receiving Pokemon has no level`)
   }
   //b is the base experience yield of the fainted Pokémon's species
