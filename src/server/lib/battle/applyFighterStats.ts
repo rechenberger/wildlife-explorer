@@ -27,7 +27,7 @@ export const applyFighterStats = ({
 
     const ppStatus = status.pp
     let ppTarget = maxpp
-    if (ppFromMetadata) {
+    if (typeof ppFromMetadata === "number") {
       ppTarget = Math.min(ppFromMetadata, ppTarget)
     } else {
       ppTarget = Math.min(ppStatus, ppTarget)
