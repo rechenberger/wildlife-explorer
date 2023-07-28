@@ -24,22 +24,34 @@ export const FighterMoves = ({
   hideMobileDetails?: boolean
 }) => {
   const moves = fighter.fighter.moves
+  const trappedMoves =
+    fighter.fighter.trappedInMoves?.map((m) => ({
+      id: m.id,
+      name: m.move,
+      status: null,
+      definition: null,
+    })) ?? []
+
+  const movesMerged = [...moves, ...trappedMoves]
   return (
     <>
       <div className="grid flex-1 grid-cols-1 gap-1">
-        {map(fillWithNulls(moves, MAX_MOVES_PER_FIGHTER), (move, moveIdx) => {
-          return (
-            <Fragment key={moveIdx}>
-              <FighterMove
-                fighter={fighter}
-                move={move}
-                onClick={onClick}
-                disabled={allDisabled}
-                hideMobileDetails={hideMobileDetails}
-              />
-            </Fragment>
-          )
-        })}
+        {map(
+          fillWithNulls(movesMerged, MAX_MOVES_PER_FIGHTER),
+          (move, moveIdx) => {
+            return (
+              <Fragment key={moveIdx}>
+                <FighterMove
+                  fighter={fighter}
+                  move={move}
+                  onClick={onClick}
+                  disabled={allDisabled}
+                  hideMobileDetails={hideMobileDetails}
+                />
+              </Fragment>
+            )
+          }
+        )}
       </div>
     </>
   )
@@ -49,7 +61,15 @@ export type FighterMoveProps = {
   fighter: BattleReportFighter
   disabled?: boolean
   onClick?: (options: { moveId: string }) => void
-  move: BattleReportFighter["fighter"]["moves"][number] | null
+  move:
+    | BattleReportFighter["fighter"]["moves"][number]
+    | {
+        id: string
+        name: string
+        status: null
+        definition: null
+      }
+    | null
   hideMobileDetails?: boolean
 }
 
@@ -60,7 +80,7 @@ export const FighterMove = ({
   move,
   hideMobileDetails = false,
 }: FighterMoveProps) => {
-  const availablePp = move?.status?.pp ?? move?.definition?.pp
+  const availablePp = move?.status?.pp ?? move?.definition?.pp ?? 1
 
   const disabled =
     !move ||
@@ -71,7 +91,8 @@ export const FighterMove = ({
         fighter.fighter.trappedInMoves,
         (trappedMove) => trappedMove.id === move.id
       ))
-  const typeIcon = move?.definition.type
+
+  const typeIcon = move?.definition?.type
     ? getTypeIcon(move?.definition.type)
     : null
   const effectiveness = readableEffectiveness((move as any) ?? {})
@@ -130,7 +151,7 @@ export const FighterMove = ({
                   hideMobileDetails && "hidden sm:block"
                 )}
               >
-                {move?.definition.basePower}
+                {move?.definition?.basePower ?? 0}
               </div>
               <div
                 className={cn(
@@ -138,10 +159,10 @@ export const FighterMove = ({
                   hideMobileDetails && "hidden sm:block"
                 )}
               >
-                {move?.definition.accuracy}
+                {move?.definition?.accuracy ?? 0}
               </div>
               <div className="w-8 shrink-0 opacity-60">
-                {availablePp}/{move?.definition?.pp}
+                {availablePp}/{move?.definition?.pp ?? 1}
               </div>
             </div>
           </button>
@@ -155,25 +176,27 @@ export const FighterMove = ({
           >
             <div className="font-bold opacity-80">{move.name}</div>
             <div className="text-sm opacity-80">
-              {replaceByWildlife(move.definition.desc)}
+              {!!move?.definition?.desc
+                ? replaceByWildlife(move.definition.desc)
+                : ""}
             </div>
             <div className="flex flex-row gap-1 text-center text-sm items-center mt-4">
               <div className="flex-1 flex flex-col gap-1">
                 <div className="text-xs font-bold opacity-60">Category</div>
-                <div>{move.definition.category}</div>
+                <div>{move.definition?.category}</div>
               </div>
               <div className="w-px bg-black/60 self-stretch" />
               <div className="flex-1 flex flex-col gap-1">
                 <div className="text-xs font-bold opacity-60">Power</div>
-                <div>{move.definition.basePower}</div>
+                <div>{move.definition?.basePower}</div>
               </div>
               <div className="w-px bg-black/60 self-stretch" />
               <div className="flex-1 flex flex-col gap-1">
                 <div className="text-xs font-bold opacity-60">Accuracy</div>
                 <div>
-                  {move.definition.accuracy === true
+                  {move?.definition?.accuracy === true
                     ? "Always hits"
-                    : move.definition.accuracy}
+                    : move?.definition?.accuracy ?? 0}
                 </div>
               </div>
             </div>
@@ -181,7 +204,7 @@ export const FighterMove = ({
             <div className="flex flex-row gap-1 text-center text-sm items-center">
               <div className="flex-1 flex flex-col gap-1">
                 <div className="text-xs font-bold opacity-60">Type</div>
-                <div>{move.definition.type}</div>
+                <div>{move?.definition?.type}</div>
               </div>
               <div className="w-px bg-black/60 self-stretch" />
               {effectiveness && (
