@@ -5,7 +5,7 @@ import {
   type PokemonSet,
   type SideID,
 } from "@pkmn/sim"
-import { findIndex, first, map } from "lodash-es"
+import { findIndex, first, map, sum } from "lodash-es"
 import {
   BATTLE_INPUT_VERSION,
   BATTLE_REPORT_VERSION,
@@ -23,6 +23,7 @@ import {
   getBattleForSimulation,
   type BattleInput,
 } from "./getBattleForSimulation"
+import { getDungeonFighter } from "./getDungeonFighter"
 import { getWildlifeFighter } from "./getWildlifeFighter"
 import { transformWildlifeFighterPlus } from "./getWildlifeFighterPlus"
 
@@ -137,20 +138,6 @@ export const simulateBattle = async ({
         ]
       }
 
-      if (!battleJson) {
-        battle.setPlayer(sideId, {
-          name,
-          team: team.map((t) => t.fighter),
-        })
-        battle.getSide(sideId).pokemon.forEach((p, idx) => {
-          const fighter = team[idx]
-          if (!fighter) {
-            throw new Error("Fighter not found in team")
-          }
-          applyFighterStats({ p, catchMetadata: fighter.catch?.metadata })
-        })
-      }
-
       return {
         sideId,
         name,
@@ -160,6 +147,47 @@ export const simulateBattle = async ({
       }
     })
   )
+
+  if (battleInput.placeId) {
+    const playerTeam = first(teams)?.team ?? []
+    const avgLevel =
+      sum(playerTeam.map((t) => t.fighter.level)) / playerTeam.length
+
+    const placeFighter = {
+      fighter: await getDungeonFighter({
+        seed: `${battleInput.placeId}-${battleInput.tier}`,
+        level: avgLevel,
+      }),
+      wildlife: null,
+    }
+    const placeParticipant = {
+      sideId: `p${teams.length + 1}` as SideID,
+      name: battleInput.placeId,
+      team: [placeFighter],
+      player: null,
+      participationId: null,
+    }
+
+    //TODO: FIXME: continue here fixing wildlife as null
+
+    // teams.push(placeParticipant)
+  }
+
+  if (!battleJson) {
+    teams.forEach(({ sideId, name, team }) => {
+      battle.setPlayer(sideId, {
+        name,
+        team: team.map((t) => t.fighter),
+      })
+      battle.getSide(sideId).pokemon.forEach((p, idx) => {
+        const fighter = team[idx]
+        if (!fighter) {
+          throw new Error("Fighter not found in team")
+        }
+        applyFighterStats({ p, catchMetadata: fighter.catch?.metadata })
+      })
+    })
+  }
 
   // CHOICE
   if (choice) {
