@@ -60,9 +60,12 @@ export const FighterMove = ({
   move,
   hideMobileDetails = false,
 }: FighterMoveProps) => {
+  const availablePp = move?.status?.pp ?? move?.definition?.pp
+
   const disabled =
     !move ||
     allDisabled ||
+    availablePp === 0 ||
     (!!fighter.fighter.trappedInMoves &&
       !some(
         fighter.fighter.trappedInMoves,
@@ -138,8 +141,7 @@ export const FighterMove = ({
                 {move?.definition.accuracy}
               </div>
               <div className="w-8 shrink-0 opacity-60">
-                {move?.status?.pp ?? move?.definition?.pp}/
-                {move?.definition?.pp}
+                {availablePp}/{move?.definition?.pp}
               </div>
             </div>
           </button>
