@@ -10,7 +10,7 @@ import { CurrentObservationModal } from "./CurrentObservationModal"
 import { FighterChip } from "./FighterChip"
 import { cn } from "./cn"
 import { getFighterImage } from "./getFighterImage"
-import { useMarkerScaling } from "./useMarkerScaling"
+import { useMarkerScalingProps } from "./useMarkerScaling"
 import { navigatingToObservationIdAtom, useNavigation } from "./useNavigation"
 import { useShowFighters } from "./useShowFighter"
 
@@ -25,12 +25,8 @@ export const WildlifeMarker = ({
 }) => {
   const w = nearMe.wildlife
   const navigatingtoObservationId = useAtomValue(navigatingToObservationIdAtom)
-
-  const { markerScalingProps } = useMarkerScaling()
-
+  const { markerScalingProps } = useMarkerScalingProps()
   const { navigate } = useNavigation()
-
-  // const [hovering, setHovering] = useState(false)
 
   const showFighters = useShowFighters()
 
@@ -56,7 +52,7 @@ export const WildlifeMarker = ({
         target="_blank"
         {...markerScalingProps}
         className={cn(
-          "group relative flex aspect-square h-12 items-center justify-center rounded-full bg-amber-400 p-1 shadow transition-transform md:hover:scale-[3]",
+          "group relative flex aspect-square h-12 items-center justify-center rounded-full bg-amber-400 p-1 shadow transition-transform",
           !!w.metadata.observationCaptive && "bg-orange-700",
           !!w.caughtAt && "bg-green-500 opacity-50",
           onCooldown && "bg-gray-400 opacity-50",
