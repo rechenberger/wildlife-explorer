@@ -91,6 +91,8 @@ export const getBattleForSimulation = async ({
           id: "asc",
         },
       },
+      placeId: true,
+      tier: true,
     },
   })
   const battleInput = {
@@ -124,6 +126,8 @@ export const getBattleForSimulation = async ({
           }
         : null,
     })),
+    placeId: battleRaw.placeId,
+    tier: battleRaw.tier,
   }
   // console.log("battleInput", JSON.stringify(battleInput, null, 2))
 

@@ -2,6 +2,7 @@ import { exampleRouter } from "~/server/api/routers/example.router"
 import { createTRPCRouter } from "~/server/api/trpc"
 import { battleRouter } from "./routers/battle.router"
 import { catchRouter } from "./routers/catch.router"
+import { dungeonRouter } from "./routers/dungeon.router"
 import { evolutionRouter } from "./routers/evolution.router"
 import { migrationRouter } from "./routers/migration.router"
 import { moveRouter } from "./routers/move.router"
@@ -36,6 +37,7 @@ export const appRouter = createTRPCRouter({
   evolution: evolutionRouter,
   trade: tradeRouter,
   migration: migrationRouter,
+  dungeon: dungeonRouter,
 })
 
 // export type definition of API
