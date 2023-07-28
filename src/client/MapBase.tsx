@@ -38,17 +38,13 @@ export const MapBase = ({
   const store = useStore()
 
   const setMapStateDebounced = useMemo(() => {
-    return debounce(
-      (newState: {
-        lat: number
-        lng: number
-        radiusInKm: number
-        zoom: number
-      }) => {
-        setMapState(newState)
-      },
-      100
-    )
+    return debounce((newState: { lat: number; lng: number; zoom: number }) => {
+      const radiusInKm = calculateRadiusFromZoomLevel(newState.zoom)
+      setMapState({
+        ...newState,
+        radiusInKm,
+      })
+    }, 100)
   }, [setMapState])
 
   const setZoomThrottled = useMemo(() => {
@@ -56,7 +52,7 @@ export const MapBase = ({
       (zoom: number) => {
         store.set(mapRadiusInKmAtom, calculateRadiusFromZoomLevel(zoom))
       },
-      100,
+      300,
       { trailing: true }
     )
   }, [store])
@@ -90,7 +86,6 @@ export const MapBase = ({
           setMapStateDebounced({
             lat: e.viewState.latitude,
             lng: e.viewState.longitude,
-            radiusInKm: calculateRadiusFromZoomLevel(e.viewState.zoom),
             zoom: e.viewState.zoom,
           })
         }}

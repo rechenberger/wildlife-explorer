@@ -4,16 +4,6 @@ import { calcDistanceInMeter } from "~/server/lib/latLng"
 import { type LatLng } from "../schema/LatLng"
 
 export const searchCapitals = async ({ location }: { location: LatLng }) => {
-  // const filtered = capitals.filter((c) => {
-  //   const parseLat = parseFloat(c.CapitalLatitude)
-  //   const parseLng = parseFloat(c.CapitalLongitude)
-  //   if (isNaN(parseLat) || isNaN(parseLng)) {
-  //     console.log("invalid lat/lng", c.CapitalName)
-  //     return false
-  //   }
-  //   return true
-  // })
-
   let betterCapitals = capitals.map((capital) => {
     const capitalLocation = {
       lat: +capital.CapitalLatitude,

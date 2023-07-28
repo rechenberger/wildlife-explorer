@@ -5,7 +5,7 @@ import { Marker } from "react-map-gl"
 import { type RouterOutputs } from "~/utils/api"
 import { PlaceViewModal } from "./PlaceViewModal"
 import { cn } from "./cn"
-import { useMarkerScaling } from "./useMarkerScaling"
+import { useMarkerScalingProps } from "./useMarkerScaling"
 import { useNavigation } from "./useNavigation"
 
 type Place = RouterOutputs["place"]["nearMe"][number]
@@ -31,7 +31,7 @@ export const placeTypeIcons = {
 export const PlaceMarker = ({ place }: { place: Place }) => {
   const { navigate } = useNavigation()
 
-  const { markerScalingProps } = useMarkerScaling()
+  const { markerScalingProps } = useMarkerScalingProps()
 
   const placeTypeIcon = placeTypeIcons[place.type]
 
