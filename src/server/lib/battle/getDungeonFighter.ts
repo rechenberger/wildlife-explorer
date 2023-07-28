@@ -1,0 +1,168 @@
+import { Dex, type PokemonSet } from "@pkmn/dex"
+import { filter, map, max, min, uniq } from "lodash-es"
+import { MAX_MOVES_PER_FIGHTER, USE_LATEST_GEN } from "~/config"
+import { rngInt, rngItem, rngItemWithWeights } from "~/utils/seed"
+
+export type GetDungeonFighterOptions = {
+  seed: string
+  level: number
+}
+
+export const getDungeonFighter = async ({
+  seed,
+  level,
+}: GetDungeonFighterOptions) => {
+  const allSpecies = Dex.species.all()
+
+  const species = rngItem({ seed: [seed, "species"], items: allSpecies })
+
+  let speciesName = species.name
+
+  let moves: string[] = []
+  const possibleMoves = await getAllMovesInLearnset(speciesName)
+
+  const possibleStatusMoves = filter(
+    possibleMoves,
+    (m) => Dex.moves.get(m.move).category === "Status"
+  )
+  const possibleNonStatusMoves = filter(
+    possibleMoves,
+    (m) => Dex.moves.get(m.move).category !== "Status"
+  )
+
+  const amountStatusMoves = rngInt({
+    seed: [seed, "moves", "status"],
+    min: 0,
+    max: 2,
+  })
+
+  const amountNonStatusMoves = MAX_MOVES_PER_FIGHTER - amountStatusMoves
+
+  for (let i = 0; i < amountStatusMoves; i++) {
+    const move = rngItem({
+      items: possibleStatusMoves,
+      seed: [seed, "moves", "status", i],
+    })
+    moves.push(move.move)
+  }
+
+  for (let i = 0; i < amountNonStatusMoves; i++) {
+    const move = rngItem({
+      items: possibleNonStatusMoves,
+      seed: [seed, "moves", "nonStatus", i],
+    })
+    moves.push(move.move)
+  }
+  moves = uniq(moves)
+
+  const nature = rngItem({
+    items: Dex.natures.all(),
+    seed: [seed, "nature"],
+  })
+
+  const gender = rngItem({
+    items: ["M", "F"],
+    seed: [seed, "gender"],
+  })
+
+  const ability = rngItemWithWeights({
+    seed: [seed, "ability"],
+    items: map(species.abilities, (a, key) => ({
+      item: a as string,
+      weight: key === "H" ? 0.1 : 1,
+    })),
+  })
+
+  // TODO: ???
+  const item = ""
+
+  // TODO: locale
+  const name = speciesName
+
+  const ivs = {
+    hp: rngInt({
+      seed: [seed, "iv", "hp"],
+      min: 0,
+      max: 31,
+    }),
+    atk: rngInt({
+      seed: [seed, "iv", "atk"],
+      min: 0,
+      max: 31,
+    }),
+    def: rngInt({
+      seed: [seed, "iv", "def"],
+      min: 0,
+      max: 31,
+    }),
+    spa: rngInt({
+      seed: [seed, "iv", "spa"],
+      min: 0,
+      max: 31,
+    }),
+    spd: rngInt({
+      seed: [seed, "iv", "spd"],
+      min: 0,
+      max: 31,
+    }),
+    spe: rngInt({
+      seed: [seed, "iv", "spe"],
+      min: 0,
+      max: 31,
+    }),
+  }
+
+  //could be more random, but max 252 per stat and max 510 total *shrug*
+  const evs = {
+    hp: level - 20,
+    atk: level - 20,
+    def: level - 20,
+    spa: level - 20,
+    spd: level - 20,
+    spe: level - 20,
+  }
+
+  const fighter: PokemonSet = {
+    // ...base,
+    name,
+    species: speciesName,
+    moves,
+    level,
+    nature: nature.name,
+    ivs,
+    evs,
+    gender,
+    item,
+    ability,
+  }
+
+  return fighter
+}
+
+export async function getAllMovesInLearnset(speciesName: string) {
+  const species = Dex.species.get(speciesName)
+  const moves: {
+    move: string
+    gen: number
+  }[] = []
+  const learnset = await Dex.learnsets.get(species.name)
+
+  for (const move in learnset.learnset) {
+    const learnMethods = learnset.learnset[move]!
+
+    for (const method of learnMethods) {
+      const gen = parseInt(method[0]!)
+      moves.push({
+        move,
+        gen,
+      })
+    }
+  }
+
+  const possibleGens = map(moves, (m) => m.gen)
+  const latestGen = USE_LATEST_GEN ? max(possibleGens) : min(possibleGens)
+
+  const latestMoves = filter(moves, (m) => !!latestGen && m.gen === latestGen)
+
+  return latestMoves
+}
