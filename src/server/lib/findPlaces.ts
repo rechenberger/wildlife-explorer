@@ -6,6 +6,7 @@ import { env } from "~/env.mjs"
 import { type LatLng } from "../schema/LatLng"
 import { type PlaceMetadata } from "../schema/PlaceMetadata"
 import { searchAirports } from "./airports"
+import { searchCapitals } from "./capitals"
 
 const types = [
   {
@@ -65,7 +66,28 @@ export const findPlaces = async ({ location }: { location: LatLng }) => {
   })
   console.timeEnd("searchAirports")
 
-  return [...places.flat(), ...airportPlaces]
+  console.time("searchCapitals")
+  let capitals = await searchCapitals({
+    location,
+  })
+  capitals = filter(
+    capitals,
+    (a) => a.distanceInMeter <= RADIUS_IN_KM_SCAN_PLACES * 1000
+  )
+  const capitalPlaces = capitals.map((c) => {
+    return {
+      googlePlaceId: `CAPITAL_${c.code}`,
+      lat: c.lat,
+      lng: c.lng,
+      type: PlaceType.DUNGEON,
+      metadata: {
+        name: c.name,
+      } satisfies PlaceMetadata,
+    }
+  })
+  console.timeEnd("searchCapitals")
+
+  return [...places.flat(), ...airportPlaces, ...capitalPlaces]
 }
 
 export const findPlacesByType = async ({
