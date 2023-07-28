@@ -3,7 +3,7 @@ import { z } from "zod"
 import { createTRPCRouter } from "~/server/api/trpc"
 import { type BattleMetadata } from "~/server/schema/BattleMetadata"
 import { type BattleParticipationMetadata } from "~/server/schema/BattleParticipationMetadata"
-import { PlayerMetadata } from "~/server/schema/PlayerMetadata"
+import { type PlayerMetadata } from "~/server/schema/PlayerMetadata"
 import { playerProcedure } from "../middleware/playerProcedure"
 
 export const dungeonRouter = createTRPCRouter({
