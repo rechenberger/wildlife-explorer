@@ -30,6 +30,8 @@ export const FighterMoves = ({
       name: m.move,
       status: null,
       definition: null,
+      disabled: null,
+      disabledSource: null,
     })) ?? []
 
   const movesMerged = [...moves, ...trappedMoves]
@@ -68,6 +70,8 @@ export type FighterMoveProps = {
         name: string
         status: null
         definition: null
+        disabled: boolean | null
+        disabledSource: string | null
       }
     | null
   hideMobileDetails?: boolean
@@ -84,6 +88,7 @@ export const FighterMove = ({
 
   const disabled =
     !move ||
+    move.disabled ||
     allDisabled ||
     availablePp === 0 ||
     (!!fighter.fighter.trappedInMoves &&
@@ -179,6 +184,11 @@ export const FighterMove = ({
             )}
           >
             <div className="font-bold opacity-80">{move.name}</div>
+            {move.disabledSource && (
+              <div className="font-bold opacity-80">
+                Disabled: {move.disabledSource}
+              </div>
+            )}
             <div className="text-sm opacity-80">
               {replaceByWildlife(move.definition?.desc || "")}
             </div>

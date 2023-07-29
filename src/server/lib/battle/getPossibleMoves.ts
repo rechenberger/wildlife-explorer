@@ -63,7 +63,7 @@ export const getPossibleMovesByCatch = async ({
 
   let allMoves = both.map((move) => {
     const movePlus = getWildlifeFighterPlusMove({
-      move: move.move,
+      move: { id: move.move },
     })
     let activeIdx: number | null = findIndex(
       fighter.moves,

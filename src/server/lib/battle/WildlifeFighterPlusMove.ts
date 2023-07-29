@@ -7,14 +7,18 @@ export const getWildlifeFighterPlusMove = ({
   foeTypes,
   p,
 }: {
-  move: string
+  move: {
+    id: string
+    disabled?: string | boolean
+    disabledSource?: string
+  }
   foeTypes?: string[]
   p?: Pokemon
 }) => {
-  const definition = Dex.moves.get(move)
+  const definition = Dex.moves.get(move.id)
   const id = definition.id.toString()
 
-  const status = p ? p.getMoveData(move) : null
+  const status = p ? p.getMoveData(move.id) : null
 
   const moveType = definition.type
   const immunity = foeTypes ? Dex.getImmunity(moveType, foeTypes) : null
@@ -24,11 +28,13 @@ export const getWildlifeFighterPlusMove = ({
 
   return {
     id,
-    name: definition?.name || move,
+    name: definition?.name || move.id,
     status,
     definition,
     effectiveness,
     immunity,
+    disabled: move.disabled,
+    disabledSource: move.disabledSource,
   } satisfies WildlifeFighterPlusMove
 }
 
@@ -51,5 +57,8 @@ export const WildlifeFighterPlusMove = z.object({
   }),
   effectiveness: z.number().nullish(),
   immunity: z.boolean().nullish(),
+
+  disabled: z.string().or(z.boolean()).optional(),
+  disabledSource: z.string().optional(),
 })
 export type WildlifeFighterPlusMove = z.infer<typeof WildlifeFighterPlusMove>
