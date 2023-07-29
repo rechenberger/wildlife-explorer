@@ -7,7 +7,11 @@ export const getWildlifeFighterPlusMove = ({
   foeTypes,
   p,
 }: {
-  move: { id: string; disabled?: string | boolean; disabledSource?: string }
+  move: {
+    id: string
+    disabled?: string | boolean
+    disabledSource?: string
+  }
   foeTypes?: string[]
   p?: Pokemon
 }) => {
