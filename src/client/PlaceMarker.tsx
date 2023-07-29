@@ -1,6 +1,6 @@
 import NiceModal from "@ebay/nice-modal-react"
 import { PlaceType } from "@prisma/client"
-import { HeartPulse, Plane } from "lucide-react"
+import { Castle, HeartPulse, Plane } from "lucide-react"
 import { Marker } from "react-map-gl"
 import { type RouterOutputs } from "~/utils/api"
 import { PlaceViewModal } from "./PlaceViewModal"
@@ -20,6 +20,11 @@ export const placeTypeIcons = {
     icon: Plane,
     bgColor: "bg-cyan-500",
     label: "Airport",
+  },
+  [PlaceType.DUNGEON]: {
+    icon: Castle,
+    bgColor: "bg-orange-500",
+    label: "Dungeon",
   },
 }
 

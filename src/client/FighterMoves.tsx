@@ -84,7 +84,7 @@ export const FighterMove = ({
   move,
   hideMobileDetails = false,
 }: FighterMoveProps) => {
-  const availablePp = move?.status?.pp ?? move?.definition?.pp ?? 1
+  const availablePp = move?.status?.pp ?? move?.definition?.pp
 
   const disabled =
     !move ||
@@ -150,29 +150,33 @@ export const FighterMove = ({
                   {effectiveness.symbol}
                 </div>
               )}
-              <div
-                className={cn(
-                  "w-5 shrink-0 opacity-60",
-                  hideMobileDetails && "hidden sm:block"
-                )}
-              >
-                {move?.definition?.basePower ?? 0}
-              </div>
-              <div
-                className={cn(
-                  "w-5 shrink-0 opacity-60",
-                  hideMobileDetails && "hidden sm:block"
-                )}
-              >
-                {move?.definition?.accuracy ?? 0}
-              </div>
-              <div className="w-8 shrink-0 opacity-60">
-                {availablePp}/{move?.definition?.pp ?? 1}
-              </div>
+              {!!move?.definition && (
+                <>
+                  <div
+                    className={cn(
+                      "w-5 shrink-0 opacity-60",
+                      hideMobileDetails && "hidden sm:block"
+                    )}
+                  >
+                    {move?.definition?.basePower}
+                  </div>
+                  <div
+                    className={cn(
+                      "w-5 shrink-0 opacity-60",
+                      hideMobileDetails && "hidden sm:block"
+                    )}
+                  >
+                    {move?.definition?.accuracy}
+                  </div>
+                  <div className="w-8 shrink-0 opacity-60">
+                    {availablePp}/{move?.definition?.pp}
+                  </div>
+                </>
+              )}
             </div>
           </button>
         </HoverCardTrigger>
-        {move && (
+        {move && !!move.definition && (
           <HoverCardContent
             className={cn(
               "w-80 flex flex-col gap-2",
@@ -186,9 +190,7 @@ export const FighterMove = ({
               </div>
             )}
             <div className="text-sm opacity-80">
-              {!!move?.definition?.desc
-                ? replaceByWildlife(move.definition.desc)
-                : ""}
+              {replaceByWildlife(move.definition?.desc || "")}
             </div>
             <div className="flex flex-row gap-1 text-center text-sm items-center mt-4">
               <div className="flex-1 flex flex-col gap-1">
@@ -206,7 +208,7 @@ export const FighterMove = ({
                 <div>
                   {move?.definition?.accuracy === true
                     ? "Always hits"
-                    : move?.definition?.accuracy ?? 0}
+                    : move?.definition?.accuracy}
                 </div>
               </div>
             </div>

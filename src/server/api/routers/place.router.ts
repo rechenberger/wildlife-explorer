@@ -4,7 +4,7 @@ import { RADIUS_IN_KM_SEE_PLACES, RADIUS_IN_M_AIRPORT } from "~/config"
 import { createTRPCRouter } from "~/server/api/trpc"
 import { findAirportByCode, searchAirports } from "~/server/lib/airports"
 import { calculateBoundingBox } from "~/server/lib/latLng"
-import { PlayerMetadata } from "~/server/schema/PlayerMetadata"
+import { type PlayerMetadata } from "~/server/schema/PlayerMetadata"
 import { placeProcedure } from "../middleware/placeProcedure"
 import { playerProcedure } from "../middleware/playerProcedure"
 
