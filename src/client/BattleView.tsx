@@ -375,7 +375,7 @@ export const BattleView = ({
                               <FighterChip
                                 fighter={fighter}
                                 ltr={isMySide}
-                                showAbsoluteHp={isMySide}
+                                showAbsoluteHp={isMySide || DEV_MODE}
                                 grayscale={!isActive && !justFainted}
                                 onClick={
                                   isMySide && !!fighter.catch?.id
