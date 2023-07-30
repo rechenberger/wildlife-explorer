@@ -236,8 +236,20 @@ export const CatchDetails = ({
         {showExp && !!percentage && (
           <>
             {showDividers && <DividerHeading>Experience</DividerHeading>}
-            <div className="flex flex-1 items-center text-xs justify-center">
-              {percentage?.expAbsolute} / {percentage?.expNextLevelAbsolute}
+            <div className="flex flex-1 items-center text-xs justify-between opacity-60">
+              <div>
+                <strong>{percentage?.expAbsolute.toLocaleString()} Exp</strong>{" "}
+                (Level {c.fighter.level})
+              </div>
+              <div>
+                Next Level:{" "}
+                <strong>
+                  {(
+                    percentage?.expNextLevelAbsolute - percentage?.expAbsolute
+                  ).toLocaleString()}{" "}
+                  Exp
+                </strong>
+              </div>
             </div>
             <Progress className="w-full" value={percentage?.expPercentage} />
           </>
