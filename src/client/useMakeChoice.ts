@@ -22,6 +22,11 @@ export const useMakeChoice = ({
             confetti()
             if (expReports) {
               NiceModal.hide(BattleViewModal)
+              if (data.nextBattleId) {
+                NiceModal.show(BattleViewModal, {
+                  battleId: data.nextBattleId,
+                })
+              }
               NiceModal.show(ExpReportsModal, {
                 expReports,
                 prevBattleId: input.battleId,

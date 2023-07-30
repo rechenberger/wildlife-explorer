@@ -122,15 +122,17 @@ export const ExpReportsView = ({
               }}
             />
           )}
-          <TypeBadge
-            icon={leaveIcon}
-            content="Leave"
-            className="flex-1"
-            size="big"
-            onClick={() => {
-              NiceModal.hide(ExpReportsModal)
-            }}
-          />
+          {!nextBattleId && (
+            <TypeBadge
+              icon={leaveIcon}
+              content="Leave"
+              className="flex-1"
+              size="big"
+              onClick={() => {
+                NiceModal.hide(ExpReportsModal)
+              }}
+            />
+          )}
           {nextBattleId && (
             <TypeBadge
               icon={battleIcon}
