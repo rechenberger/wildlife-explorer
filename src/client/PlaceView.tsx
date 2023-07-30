@@ -2,6 +2,7 @@ import { api } from "~/utils/api"
 import { Away } from "./Away"
 import { placeTypeIcons } from "./PlaceMarker"
 import { PlaceViewAirport } from "./PlaceViewAirport"
+import { PlaceViewDungeon } from "./PlaceViewDungeon"
 import { PlaceViewWildlifeCareCenter } from "./PlaceViewWildlifeCareCenter"
 import { TypeBadge } from "./TypeBadge"
 import { navigateIcon, runIcon } from "./typeIcons"
@@ -36,11 +37,10 @@ export const PlaceView = ({
     <div className="flex flex-col items-center gap-4 pt-12">
       <typeIcon.icon className="w-8 h-8 self-center" />
       <div className="flex flex-col text-center">
-        (
         <div className="text-sm text-gray-500 italic text-center">
           Welcome to
         </div>
-        )<div>{typeIcon.label}</div>
+        <div>{typeIcon.label}</div>
         {place.metadata.name && (
           <div className="text-sm opacity-60">{place.metadata.name}</div>
         )}
@@ -48,6 +48,7 @@ export const PlaceView = ({
       </div>
       {place.type === "CARE_CENTER" && <PlaceViewWildlifeCareCenter />}
       {place.type === "AIRPORT" && <PlaceViewAirport placeId={placeId} />}
+      {place.type === "DUNGEON" && <PlaceViewDungeon placeId={placeId} />}
       <div className="mt-8 flex flex-row gap-4 w-56">
         <TypeBadge
           icon={navigateIcon}
