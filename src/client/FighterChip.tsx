@@ -37,7 +37,9 @@ export const FighterChip = ({
   onClick?: () => void
   circleClassName?: string
 }) => {
-  const { hp, hpMax, status } = fighter.fighter
+  const { hpMax, status } = fighter.fighter
+  let hp = fighter.fighter.hp
+  hp = Math.min(hp, hpMax)
   const hpFull = hp >= hpMax
   const fainted = hp <= 0
   const getName = useGetWildlifeName()

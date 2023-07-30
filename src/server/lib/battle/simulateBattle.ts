@@ -90,7 +90,7 @@ export const simulateBattle = async ({
   const avgPlayerLevel = playerLevels.length
     ? Math.ceil(sum(playerLevels) / playerLevels.length)
     : FIGHTER_MAX_LEVEL
-  const isDungeon = battleInput.placeId && battleInput.tier
+  const isDungeon = !!battleInput.placeId && !!battleInput.tier
   const normalizePlayerLevels = isDungeon
 
   // BUILD TEAMS
@@ -205,7 +205,16 @@ export const simulateBattle = async ({
           if (!fighter) {
             throw new Error("Fighter not found in team")
           }
-          applyFighterStats({ p, catchMetadata: fighter.catch?.metadata })
+          let hp = fighter.catch?.metadata.hp
+          hp = normalizePlayerLevels ? hp : hp && Math.min(hp, p.maxhp)
+          applyFighterStats({
+            p,
+            catchMetadata: {
+              ...fighter.catch?.metadata,
+              // On first tier set hp to max (because of level normalization)
+              hp: normalizePlayerLevels && battleInput?.tier === 1 ? null : hp,
+            },
+          })
         })
       }
 
