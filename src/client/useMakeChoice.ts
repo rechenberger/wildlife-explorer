@@ -26,12 +26,13 @@ export const useMakeChoice = ({
                 NiceModal.show(BattleViewModal, {
                   battleId: data.nextBattleId,
                 })
+              } else {
+                NiceModal.show(ExpReportsModal, {
+                  expReports,
+                  prevBattleId: input.battleId,
+                  nextBattleId: data.nextBattleId,
+                })
               }
-              NiceModal.show(ExpReportsModal, {
-                expReports,
-                prevBattleId: input.battleId,
-                nextBattleId: data.nextBattleId,
-              })
             } else {
               toast("You win! 🎉")
             }
