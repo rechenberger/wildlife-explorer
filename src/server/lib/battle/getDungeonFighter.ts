@@ -1,5 +1,5 @@
 import { Dex, type PokemonSet } from "@pkmn/dex"
-import { filter, find, map, max, min, uniq } from "lodash-es"
+import { filter, find, map, max, min, uniq, uniqBy } from "lodash-es"
 import {
   FIGHTER_MAX_NUM,
   MAX_MOVES_PER_FIGHTER,
@@ -44,10 +44,12 @@ export const getDungeonFighter = async ({
   let speciesName = species.name
 
   let moves: string[] = []
-  const possibleMoves = await getAllMovesInLearnset(speciesName)
+  let possibleMoves = await getAllMovesInLearnset(speciesName)
   if (!possibleMoves.length) {
     return retry("no moves in learnset")
   }
+
+  possibleMoves = uniqBy(possibleMoves, (m) => m.move)
 
   const possibleStatusMoves = filter(
     possibleMoves,
