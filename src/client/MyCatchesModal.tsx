@@ -2,7 +2,6 @@ import NiceModal, { useModal } from "@ebay/nice-modal-react"
 import { MyCatches } from "./MyCatches"
 import { cn } from "./cn"
 import { Dialog, DialogContent } from "./shadcn/ui/dialog"
-import { ScrollArea } from "./shadcn/ui/scroll-area"
 
 export const MyCatchesModal = NiceModal.create<{}>(({}) => {
   // Use a hook to manage the modal state
@@ -22,15 +21,14 @@ export const MyCatchesModal = NiceModal.create<{}>(({}) => {
         className={cn(
           "border-0 bg-white pt-3",
           "rounded-t-lg max-sm:bottom-0 max-sm:top-auto max-sm:translate-y-0 max-sm:p-4 max-sm:pt-3",
-          "md:max-w-2xl xl:max-w-6xl"
+          "md:max-w-2xl xl:max-w-6xl",
+          "max-h-[calc(100svh-100px)] overflow-auto"
         )}
         style={{
           paddingBottom: "calc(env(safe-area-inset-bottom) + 1.5rem)",
         }}
       >
-        <ScrollArea className="max-h-[calc(100svh-100px)]">
-          <MyCatches />
-        </ScrollArea>
+        <MyCatches />
       </DialogContent>
     </Dialog>
   )
