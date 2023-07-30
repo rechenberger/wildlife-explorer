@@ -48,7 +48,6 @@ export const dungeonRouter = createTRPCRouter({
           },
           battle: {
             placeId: input.placeId,
-            status: "FINISHED",
           },
         },
         orderBy: {
