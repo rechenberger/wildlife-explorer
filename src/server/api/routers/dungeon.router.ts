@@ -126,6 +126,7 @@ export const dungeonRouter = createTRPCRouter({
           })
           const fighter = transformPokemonSetToPlus({
             pokemonSet,
+            isTraded: false,
           })
           return { fighter, battleId, tier }
         })

@@ -77,6 +77,8 @@ export const migrationRouter = createTRPCRouter({
       const wildlifeFighterPlus = await getWildlifeFighterPlus({
         wildlife,
         seed: c.seed,
+        playerId: null,
+        originalPlayerId: null,
       })
 
       const speciesName = wildlifeFighterPlus.species

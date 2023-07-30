@@ -8,7 +8,10 @@ import {
   getPossibleMovesByCatch,
   getPossibleMovesByCatchId,
 } from "~/server/lib/battle/getPossibleMoves"
-import { getNextEvo } from "~/server/lib/battle/getWildlifeFighter"
+import {
+  getNextEvo,
+  isEvoPossible,
+} from "~/server/lib/battle/getWildlifeFighter"
 import { getWildlifeFighterPlus } from "~/server/lib/battle/getWildlifeFighterPlus"
 import { type CatchMetadata } from "~/server/schema/CatchMetadata"
 import { playerProcedure } from "../middleware/playerProcedure"
@@ -49,14 +52,14 @@ export const evolutionRouter = createTRPCRouter({
         prisma: ctx.prisma,
       })
       if (!nextEvo) return null
-      const { oldMoves, newMoves, evoLevel } = nextEvo
+      const { oldMoves, newMoves, evoConditionLabel } = nextEvo
       const realNewMoves = newMoves.filter(
         (m) => !oldMoves.find((om) => !!om.learned && om.id === m.id)
       )
 
       return {
         realNewMoves,
-        evoLevel,
+        evoConditionLabel,
       }
     }),
 })
@@ -85,10 +88,18 @@ const getNextEvolution = async ({
   })
   if (!nextEvo) return null
 
-  const evoLevel = nextEvo.evoLevel
-  if (!evoLevel) return null
+  const canEvolve = isEvoPossible({
+    isTraded: catchToEvolve.originalPlayerId !== catchToEvolve.playerId,
+    level: fighter.level,
+    nextEvo,
+  })
 
-  const canEvolve = evoLevel <= fighter.level
+  const evoConditionLabel =
+    nextEvo.evoType === "trade"
+      ? "Trade"
+      : nextEvo.evoLevel
+      ? `Level ${nextEvo.evoLevel}`
+      : "Unknown"
 
   const movesLearned = filter(oldMoves, (m) => !!m.learned).map((m) => m.id)
   const evolvedMetadata = {
@@ -110,6 +121,6 @@ const getNextEvolution = async ({
     oldMoves,
     newMoves,
     canEvolve,
-    evoLevel,
+    evoConditionLabel,
   }
 }

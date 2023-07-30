@@ -135,6 +135,8 @@ export const simulateBattle = async ({
               wildlife: battleParticipant.wildlife,
               seed: createSeed(battleParticipant.wildlife),
               idx: 0,
+              playerId: null,
+              originalPlayerId: null,
             }),
             wildlife: battleParticipant.wildlife,
           },
@@ -285,6 +287,8 @@ export const simulateBattle = async ({
           pokemon: p,
           pokemonSet: fighter!.fighter,
           foeTypes,
+          isTraded:
+            fighter?.catch?.playerId !== fighter?.catch?.originalPlayerId,
         })
 
         return {
