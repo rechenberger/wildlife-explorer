@@ -7,6 +7,7 @@ import { FighterTypeBadges } from "./FighterTypeBadges"
 import { Button } from "./shadcn/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./shadcn/ui/tabs"
 import { usePlayer } from "./usePlayer"
+import { cn } from "./cn"
 
 export const PlaceViewDungeon = ({ placeId }: { placeId: string }) => {
   const { playerId } = usePlayer()
@@ -57,7 +58,7 @@ export const PlaceViewDungeon = ({ placeId }: { placeId: string }) => {
         <TorchIcon className="w-6 h-6 rotate-45" />
         <span className="ml-2">Enter Dungeon</span>
       </Button>
-      <Tabs defaultValue="highscore" className="">
+      <Tabs defaultValue="highscore" className="w-full">
         <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger value="highscore">Highscore</TabsTrigger>
           <TabsTrigger value="fighters">Wildlife</TabsTrigger>
@@ -74,16 +75,21 @@ export const PlaceViewDungeon = ({ placeId }: { placeId: string }) => {
               return (
                 <button
                   key={hs.player.id}
-                  className="p-2 rounded bg-gray-200 hover:bg-gray-300 flex flex-row gap-4"
+                  className={cn(
+                    "px-2 py-4 rounded hover:bg-gray-100 flex flex-row gap-4 text-left border-b",
+                    idx === 0 && "border-t"
+                  )}
                   onClick={() => {
                     NiceModal.show(BattleViewModal, {
                       battleId: hs.battleId,
                     })
                   }}
                 >
-                  <div>#{idx + 1}</div>
+                  <div className="font-bold">#{idx + 1}</div>
                   <div className="flex-1 truncate">{hs.player.name}</div>
-                  <div>Tier {hs.tier}</div>
+                  <div>
+                    Tier <strong>{hs.tier}</strong>
+                  </div>
                 </button>
               )
             })}
@@ -100,7 +106,10 @@ export const PlaceViewDungeon = ({ placeId }: { placeId: string }) => {
               return (
                 <button
                   key={idx}
-                  className="rounded flex flex-row flex-wrap gap-4 items-center p-2 border-b text-left hover:bg-gray-100"
+                  className={cn(
+                    "rounded flex flex-row flex-wrap gap-4 items-center p-2 border-b text-left hover:bg-gray-100",
+                    idx === 0 && "border-t"
+                  )}
                   onClick={() => {
                     NiceModal.show(BattleViewModal, {
                       battleId,
