@@ -1,5 +1,6 @@
 import { TRPCError } from "@trpc/server"
 import { createTRPCRouter } from "~/server/api/trpc"
+import { type MyPrismaClient } from "~/server/db"
 import { type BattleMetadata } from "~/server/schema/BattleMetadata"
 import { type BattleParticipationMetadata } from "~/server/schema/BattleParticipationMetadata"
 import { type PlayerMetadata } from "~/server/schema/PlayerMetadata"
@@ -13,47 +14,73 @@ export const dungeonRouter = createTRPCRouter({
         message: "You are already in a battle",
       })
     }
-
-    const battle = await ctx.prisma.battle.create({
-      data: {
-        status: "IN_PROGRESS",
-        metadata: {} satisfies BattleMetadata,
-        battleParticipants: {
-          create: [
-            {
-              metadata: {} satisfies BattleParticipationMetadata,
-              playerId: ctx.player.id,
-            },
-            {
-              metadata: {
-                isPlaceEncounter: true,
-              } satisfies BattleParticipationMetadata,
-            },
-          ],
-        },
-        placeId: input.placeId,
-        tier: 1,
-      },
-      select: {
-        id: true,
-      },
+    const { id: battleId } = await startDungeonBattle({
+      prisma: ctx.prisma,
+      placeId: input.placeId,
+      tier: 1,
+      player: ctx.player,
     })
 
-    await ctx.prisma.player.update({
-      where: {
-        id: ctx.player.id,
-      },
-      data: {
-        lat: ctx.player.lat,
-        lng: ctx.player.lng,
-        metadata: {
-          ...ctx.player.metadata,
-          activeBattleId: battle.id,
-          navigation: null,
-        } satisfies PlayerMetadata,
-      },
-    })
-
-    return battle
+    return { battleId }
   }),
 })
+
+export const startDungeonBattle = async ({
+  prisma,
+  placeId,
+  tier,
+  player,
+}: {
+  prisma: MyPrismaClient
+  placeId: string
+  tier: number
+  player: {
+    id: string
+    lat?: number
+    lng?: number
+    metadata: PlayerMetadata
+  }
+}) => {
+  const playerId = player.id
+  const battle = await prisma.battle.create({
+    data: {
+      status: "IN_PROGRESS",
+      metadata: {} satisfies BattleMetadata,
+      battleParticipants: {
+        create: [
+          {
+            metadata: {} satisfies BattleParticipationMetadata,
+            playerId,
+          },
+          {
+            metadata: {
+              isPlaceEncounter: true,
+            } satisfies BattleParticipationMetadata,
+          },
+        ],
+      },
+      placeId,
+      tier,
+    },
+    select: {
+      id: true,
+    },
+  })
+
+  await prisma.player.update({
+    where: {
+      id: playerId,
+    },
+    data: {
+      lat: player.lat,
+      lng: player.lng,
+      metadata: {
+        ...player.metadata,
+        activeBattleId: battle.id,
+        navigation: null,
+      } satisfies PlayerMetadata,
+    },
+  })
+
+  return battle
+}

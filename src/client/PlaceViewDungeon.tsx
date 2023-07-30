@@ -13,7 +13,7 @@ export const PlaceViewDungeon = ({ placeId }: { placeId: string }) => {
     onSuccess: (data) => {
       trpc.battle.invalidate()
       NiceModal.show(BattleViewModal, {
-        battleId: data.id,
+        battleId: data.battleId,
       })
     },
   })
