@@ -3,6 +3,7 @@ import { toast } from "sonner"
 import { api } from "~/utils/api"
 import { BattleViewModal } from "./BattleViewModal"
 import { FighterChip } from "./FighterChip"
+import { FighterTypeBadges } from "./FighterTypeBadges"
 import { Button } from "./shadcn/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./shadcn/ui/tabs"
 import { usePlayer } from "./usePlayer"
@@ -94,20 +95,23 @@ export const PlaceViewDungeon = ({ placeId }: { placeId: string }) => {
               Explore the dungeons to find out about the Wildlife in there!
             </div>
           )}
-          <div className="flex flex-col gap-3">
+          <div className="flex flex-col">
             {fighters?.map((fighter, idx) => {
               return (
                 <div
                   key={idx}
-                  className="rounded flex flex-row gap-4 items-center"
+                  className="rounded flex flex-row flex-wrap gap-4 items-center py-2 border-b"
                   // onClick={() => {
                   //   NiceModal.show(BattleViewModal, {
                   //     battleId: hs.battleId,
                   //   })
                   // }}
                 >
-                  <div className="w-20">
+                  <div className="w-16">
                     Tier <strong>{idx + 1}</strong>
+                  </div>
+                  <div className="w-20 flex flex-col gap-1">
+                    <FighterTypeBadges fighter={{ fighter }} showTypes />
                   </div>
                   <div className="flex-1">
                     <FighterChip
