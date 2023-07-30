@@ -92,7 +92,7 @@ export const simulateBattle = async ({
 
       let team: {
         fighter: PokemonSet
-        wildlife: Omit<
+        wildlife?: Omit<
           NonNullable<typeof battleParticipant.wildlife>,
           "observationId" | "respawnsAt"
         >

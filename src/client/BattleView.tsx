@@ -164,7 +164,7 @@ export const BattleView = ({
     const wildlifeId = find(
       flatMap(battleReport.sides, (s) => s.fighters),
       (f) => !f.catch
-    )?.wildlife.id
+    )?.wildlife?.id
 
     if (!wildlifeId) {
       toast.error("No wildlife to catch")
@@ -245,14 +245,18 @@ export const BattleView = ({
                       isMainSide ? "flex-col" : "flex-col-reverse"
                     )}
                   >
-                    {map(side.fighters, (fighter) => {
+                    {map(side.fighters, (fighter, fighterIdx) => {
                       const { isActive, lastMove, justFainted } =
                         fighter.fighter
                       if (!isActive && !BIG_INACTIVE_FIGHTER && !justFainted)
                         return null
                       return (
                         <Fragment
-                          key={fighter.catch?.id ?? fighter.wildlife.id}
+                          key={
+                            fighter.catch?.id ??
+                            fighter.wildlife?.id ??
+                            fighterIdx
+                          }
                         >
                           {isActive && showFighters && (
                             <div
