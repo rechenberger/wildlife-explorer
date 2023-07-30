@@ -13,6 +13,7 @@ import { type PlayerMetadata } from "~/server/schema/PlayerMetadata"
 import { devProcedure } from "../middleware/devProcedure"
 import { playerProcedure } from "../middleware/playerProcedure"
 import { wildlifeProcedure } from "../middleware/wildlifeProcedure"
+import { startDungeonBattle } from "./dungeon.router"
 
 export const battleRouter = createTRPCRouter({
   attackWildlife: wildlifeProcedure.mutation(async ({ ctx }) => {
@@ -174,6 +175,8 @@ export const battleRouter = createTRPCRouter({
           id: true,
           status: true,
           metadata: true,
+          tier: true,
+          placeId: true,
         },
       })
       console.timeEnd("getBattleFast")
@@ -211,9 +214,37 @@ export const battleRouter = createTRPCRouter({
         prisma: ctx.prisma,
         battleId: input.battleId,
       })
+
+      // Get DUNGEON
+      let dungeon:
+        | {
+            placeId: string
+            name: string
+            tier: number
+          }
+        | undefined
+      if (battle.placeId && battle.tier) {
+        const place = await ctx.prisma.place.findFirst({
+          where: {
+            id: battle.placeId,
+          },
+          select: {
+            metadata: true,
+          },
+        })
+        if (place && place.metadata?.name) {
+          dungeon = {
+            placeId: battle.placeId,
+            name: place.metadata.name,
+            tier: battle.tier,
+          }
+        }
+      }
+
       return {
         battleReport,
         status: battle.status,
+        dungeon,
       }
     }),
 
@@ -355,10 +386,22 @@ export const battleRouter = createTRPCRouter({
             prisma: ctx.prisma,
           })
 
+          let nextBattleId: string | undefined
+          if (iAmWinner && battleDb.placeId && battleDb.tier) {
+            const nextBattle = await startDungeonBattle({
+              prisma: ctx.prisma,
+              placeId: battleDb.placeId,
+              tier: battleDb.tier + 1,
+              player: ctx.player,
+            })
+            nextBattleId = nextBattle.id
+          }
+
           return {
             iAmWinner,
             expReports,
             winnerName: winnerSide.name,
+            nextBattleId,
           }
         }
       }

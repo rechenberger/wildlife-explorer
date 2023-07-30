@@ -83,7 +83,7 @@ export const FighterChip = ({
             </>
           ) : (
             <>
-              {fighter.wildlife.metadata.taxonImageUrlSquare && (
+              {fighter.wildlife?.metadata.taxonImageUrlSquare && (
                 <Image
                   src={fighter.wildlife.metadata.taxonImageUrlSquare}
                   className={cn(

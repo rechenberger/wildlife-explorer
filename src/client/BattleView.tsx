@@ -143,8 +143,21 @@ export const BattleView = ({
 
   if (!data || !pvpStatus || error) {
     return (
-      <div className="flex items-center justify-center py-48 text-center text-sm opacity-60">
-        {error ? error.message : "Loading..."}
+      <div className="flex flex-col gap-8 items-center justify-center py-48 text-center text-sm">
+        <div className="opacity-60">{error ? error.message : "Loading..."}</div>
+        <TypeBadge
+          size="big"
+          content="Try Running"
+          icon={runIcon}
+          onClick={() => {
+            if (!playerId) return
+            run({
+              battleId,
+              playerId,
+            })
+          }}
+          className="w-[76px] sm:w-28"
+        />
       </div>
     )
   }
@@ -164,7 +177,7 @@ export const BattleView = ({
     const wildlifeId = find(
       flatMap(battleReport.sides, (s) => s.fighters),
       (f) => !f.catch
-    )?.wildlife.id
+    )?.wildlife?.id
 
     if (!wildlifeId) {
       toast.error("No wildlife to catch")
@@ -181,7 +194,16 @@ export const BattleView = ({
     <>
       <div className="flex flex-row gap-2">
         <h3 className="flex-1">
-          {battleIsActive ? "Active Battle" : "Past Battle"}
+          {data.dungeon ? (
+            <div className="flex flex-row gap-1">
+              <strong>{data.dungeon.name}</strong>
+              <span>Dungeon</span>
+              <span>Tier</span>
+              <strong>#{data.dungeon.tier}</strong>
+            </div>
+          ) : (
+            <span>{battleIsActive ? "Active Battle" : "Past Battle"}</span>
+          )}
         </h3>
 
         <div className="absolute right-12 top-4 shrink-0 flex flex-row gap-4">
@@ -245,14 +267,18 @@ export const BattleView = ({
                       isMainSide ? "flex-col" : "flex-col-reverse"
                     )}
                   >
-                    {map(side.fighters, (fighter) => {
+                    {map(side.fighters, (fighter, fighterIdx) => {
                       const { isActive, lastMove, justFainted } =
                         fighter.fighter
                       if (!isActive && !BIG_INACTIVE_FIGHTER && !justFainted)
                         return null
                       return (
                         <Fragment
-                          key={fighter.catch?.id ?? fighter.wildlife.id}
+                          key={
+                            fighter.catch?.id ??
+                            fighter.wildlife?.id ??
+                            fighterIdx
+                          }
                         >
                           {isActive && showFighters && (
                             <div

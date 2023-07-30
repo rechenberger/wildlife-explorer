@@ -5,7 +5,7 @@ import { useShowFighters } from "./useShowFighter"
 
 type Nameable = {
   name?: string | null
-  wildlife: {
+  wildlife?: {
     metadata: Pick<
       WildlifeMetadata,
       "taxonLocaleNames" | "taxonCommonName" | "taxonName"
@@ -27,11 +27,11 @@ export const useGetWildlifeName = () => {
       }
 
       const name =
-        w.wildlife.metadata.taxonLocaleNames?.[locale] ||
-        w.wildlife.metadata.taxonCommonName ||
-        w.wildlife.metadata.taxonName
+        w.wildlife?.metadata.taxonLocaleNames?.[locale] ||
+        w.wildlife?.metadata.taxonCommonName ||
+        w.wildlife?.metadata.taxonName
 
-      return name
+      return name || "Unknown"
     },
     [locale, showFighters]
   )

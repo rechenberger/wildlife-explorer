@@ -5,10 +5,11 @@ import {
   type PokemonSet,
   type SideID,
 } from "@pkmn/sim"
-import { findIndex, first, map } from "lodash-es"
+import { findIndex, first, map, max } from "lodash-es"
 import {
   BATTLE_INPUT_VERSION,
   BATTLE_REPORT_VERSION,
+  FIGHTER_MAX_LEVEL,
   MAX_FIGHTERS_PER_TEAM,
 } from "~/config"
 import { type MyPrismaClient } from "~/server/db"
@@ -23,6 +24,7 @@ import {
   getBattleForSimulation,
   type BattleInput,
 } from "./getBattleForSimulation"
+import { getDungeonFighter } from "./getDungeonFighter"
 import { getWildlifeFighter } from "./getWildlifeFighter"
 import { transformWildlifeFighterPlus } from "./getWildlifeFighterPlus"
 
@@ -91,7 +93,7 @@ export const simulateBattle = async ({
 
       let team: {
         fighter: PokemonSet
-        wildlife: Omit<
+        wildlife?: Omit<
           NonNullable<typeof battleParticipant.wildlife>,
           "observationId" | "respawnsAt"
         >
@@ -135,6 +137,41 @@ export const simulateBattle = async ({
           //   wildlife: { ...battleParticipant.wildlife, id: "fake-2" },
           // },
         ]
+      } else if (
+        battleParticipant.metadata.isPlaceEncounter &&
+        battleInput?.placeId
+      ) {
+        const playerLevels = battleInput.battleParticipants
+          .filter((p) => !!p.player?.id)
+          .flatMap((p) => p.player?.catches ?? [])
+          .map((c) => c.metadata.level || FIGHTER_MAX_LEVEL)
+
+        if (!battleInput.tier) {
+          throw new Error("Place encounter without tier")
+        }
+
+        let level = playerLevels.length
+          ? Math.ceil(max(playerLevels) || FIGHTER_MAX_LEVEL)
+          : FIGHTER_MAX_LEVEL
+        // let level = playerLevels.length
+        //   ? Math.ceil(sum(playerLevels) / playerLevels.length)
+        //   : FIGHTER_MAX_LEVEL
+
+        level += battleInput.tier
+
+        team = [
+          {
+            fighter: await getDungeonFighter({
+              seed: `${battleInput.placeId}-${battleInput.tier}`,
+              level,
+              idx: 0,
+            }),
+          },
+        ]
+      } else {
+        throw new Error(
+          `Cant initiate Battle Participant ${battleParticipant.id}`
+        )
       }
 
       if (!battleJson) {

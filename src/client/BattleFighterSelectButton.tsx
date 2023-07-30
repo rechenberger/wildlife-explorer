@@ -121,7 +121,7 @@ export const BattleFighterSelectButton = ({
                     </>
                   ) : (
                     <>
-                      {fighter.wildlife.metadata.taxonImageUrlSquare && (
+                      {fighter.wildlife?.metadata.taxonImageUrlSquare && (
                         <Image
                           title={
                             activeWildlifeIsMoveTrapped
