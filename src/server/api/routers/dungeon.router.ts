@@ -50,11 +50,16 @@ export const dungeonRouter = createTRPCRouter({
             placeId: input.placeId,
           },
         },
-        orderBy: {
-          battle: {
-            tier: "desc",
+        orderBy: [
+          {
+            battle: {
+              tier: "desc",
+            },
           },
-        },
+          {
+            createdAt: "asc",
+          },
+        ],
         distinct: ["playerId"],
         take: 10,
         select: {
@@ -63,6 +68,7 @@ export const dungeonRouter = createTRPCRouter({
             select: {
               id: true,
               tier: true,
+              createdAt: true,
             },
           },
         },
