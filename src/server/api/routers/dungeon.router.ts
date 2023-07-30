@@ -23,13 +23,18 @@ export const dungeonRouter = createTRPCRouter({
 
       const battle = await ctx.prisma.battle.create({
         data: {
-          status: "INVITING",
+          status: "IN_PROGRESS",
           metadata: {} satisfies BattleMetadata,
           battleParticipants: {
             create: [
               {
                 metadata: {} satisfies BattleParticipationMetadata,
                 playerId: ctx.player.id,
+              },
+              {
+                metadata: {
+                  isPlaceEncounter: true,
+                } satisfies BattleParticipationMetadata,
               },
             ],
           },

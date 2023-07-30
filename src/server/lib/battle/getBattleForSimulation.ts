@@ -37,6 +37,7 @@ export const getBattleForSimulation = async ({
       battleParticipants: {
         select: {
           id: true,
+          metadata: true,
           player: {
             select: {
               id: true,
