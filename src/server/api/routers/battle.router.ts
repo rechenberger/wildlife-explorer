@@ -395,11 +395,16 @@ export const battleRouter = createTRPCRouter({
 
           let nextBattleId: string | undefined
           if (iAmWinner && battleDb.placeId && battleDb.tier) {
+            const startWithCatchId = winnerSide.fighters.find(
+              (f) => f.fighter.isActive
+            )?.catch?.id
+
             const nextBattle = await startDungeonBattle({
               prisma: ctx.prisma,
               placeId: battleDb.placeId,
               tier: battleDb.tier + 1,
               player: ctx.player,
+              startWithCatchId,
             })
             nextBattleId = nextBattle.id
           }

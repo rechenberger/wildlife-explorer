@@ -88,6 +88,7 @@ export const startDungeonBattle = async ({
   placeId,
   tier,
   player,
+  startWithCatchId,
 }: {
   prisma: MyPrismaClient
   placeId: string
@@ -98,6 +99,7 @@ export const startDungeonBattle = async ({
     lng?: number
     metadata: PlayerMetadata
   }
+  startWithCatchId?: string
 }) => {
   const playerId = player.id
   const battle = await prisma.battle.create({
@@ -107,7 +109,9 @@ export const startDungeonBattle = async ({
       battleParticipants: {
         create: [
           {
-            metadata: {} satisfies BattleParticipationMetadata,
+            metadata: {
+              startWithCatchId,
+            } satisfies BattleParticipationMetadata,
             playerId,
           },
           {

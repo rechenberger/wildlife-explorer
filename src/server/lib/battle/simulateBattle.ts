@@ -5,7 +5,7 @@ import {
   type PokemonSet,
   type SideID,
 } from "@pkmn/sim"
-import { findIndex, first, map, max } from "lodash-es"
+import { findIndex, first, map, max, orderBy } from "lodash-es"
 import {
   BATTLE_INPUT_VERSION,
   BATTLE_REPORT_VERSION,
@@ -101,12 +101,21 @@ export const simulateBattle = async ({
       }[] = []
 
       if (!!battleParticipant.player?.catches) {
+        let catches = battleParticipant.player.catches
         // Dont bring fainted fighters, they suck
-        const nonFainted = battleParticipant.player.catches.filter((c) =>
+        catches = catches.filter((c) =>
           typeof c.metadata.hp === "number" ? c.metadata.hp > 0 : true
         )
+        if (battleParticipant.metadata.startWithCatchId) {
+          catches = orderBy(
+            catches,
+            (c) => c.id === battleParticipant.metadata.startWithCatchId,
+            "desc"
+          )
+        }
+
         team = await Promise.all(
-          nonFainted.map(async (c, idx) => {
+          catches.map(async (c, idx) => {
             return {
               fighter: await getWildlifeFighter({
                 ...c,
