@@ -5,7 +5,7 @@ import {
   type PokemonSet,
   type SideID,
 } from "@pkmn/sim"
-import { findIndex, first, map, sum } from "lodash-es"
+import { findIndex, first, map, max } from "lodash-es"
 import {
   BATTLE_INPUT_VERSION,
   BATTLE_REPORT_VERSION,
@@ -145,14 +145,19 @@ export const simulateBattle = async ({
           .filter((p) => !!p.player?.id)
           .flatMap((p) => p.player?.catches ?? [])
           .map((c) => c.metadata.level || FIGHTER_MAX_LEVEL)
-        const avgLevel = playerLevels.length
-          ? Math.ceil(sum(playerLevels) / playerLevels.length)
-          : FIGHTER_MAX_LEVEL
 
         if (!battleInput.tier) {
           throw new Error("Place encounter without tier")
         }
-        const level = avgLevel + battleInput.tier
+
+        let level = playerLevels.length
+          ? Math.ceil(max(playerLevels) || FIGHTER_MAX_LEVEL)
+          : FIGHTER_MAX_LEVEL
+        // let level = playerLevels.length
+        //   ? Math.ceil(sum(playerLevels) / playerLevels.length)
+        //   : FIGHTER_MAX_LEVEL
+
+        level += battleInput.tier
 
         team = [
           {
