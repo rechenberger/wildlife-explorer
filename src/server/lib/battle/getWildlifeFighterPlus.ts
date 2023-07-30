@@ -68,7 +68,7 @@ export const transformWildlifeFighterPlus = ({
 
   const canEvolve = !!nextPossibleEvo
 
-  const moves = p.moves.map((move) => {
+  const moves = p.getMoves().map((move) => {
     return getWildlifeFighterPlusMove({
       move,
       p,
