@@ -20,9 +20,9 @@ export const SocialOverviewModal = NiceModal.create<{}>(({}) => {
       <DialogContent
         className={cn(
           "border-0 bg-white pt-3",
-          "rounded-t-lg max-sm:bottom-0 max-sm:top-auto max-sm:translate-y-0 max-sm:p-4 max-sm:pt-3",
-          "px-0",
-          "max-h-96 overflow-auto"
+          "rounded-t-lg max-sm:bottom-0 max-sm:top-auto max-sm:translate-y-0 max-sm:pt-3",
+          "px-0 sm:px-0",
+          "max-h-[calc(100svh-200px)] overflow-auto"
         )}
         style={{
           paddingBottom: "calc(env(safe-area-inset-bottom) + 1.5rem)",
