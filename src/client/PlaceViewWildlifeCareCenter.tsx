@@ -1,8 +1,8 @@
 import NiceModal from "@ebay/nice-modal-react"
 import { ArrowLeftRight } from "lucide-react"
-import { Button } from "react-day-picker"
 import { CareButton } from "./CareButton"
 import { MyCatchesModal } from "./MyCatchesModal"
+import { Button } from "./shadcn/ui/button"
 
 const SHOW_FLUFF = true
 export const PlaceViewWildlifeCareCenter = () => {
