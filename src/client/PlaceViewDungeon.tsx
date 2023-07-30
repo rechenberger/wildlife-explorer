@@ -76,7 +76,7 @@ export const PlaceViewDungeon = ({ placeId }: { placeId: string }) => {
         <TabsContent value="highscore">
           {!highscores?.length && (
             <div className="flex items-center justify-center py-12 text-center text-sm opacity-60">
-              No one has ever beaten this dungeon. Be the first!
+              No one has ever entered this dungeon. Be the first!
             </div>
           )}
           <div className="flex flex-col gap-2">
@@ -107,7 +107,7 @@ export const PlaceViewDungeon = ({ placeId }: { placeId: string }) => {
         <TabsContent value="fighters">
           {!fighters?.length && (
             <div className="flex items-center justify-center py-12 text-center text-sm opacity-60">
-              Explore the dungeons to find out about the Wildlife in there!
+              Explore the dungeon to find out about the Wildlife in there!
             </div>
           )}
           <div className="flex flex-col">
