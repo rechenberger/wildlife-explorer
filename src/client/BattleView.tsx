@@ -194,7 +194,16 @@ export const BattleView = ({
     <>
       <div className="flex flex-row gap-2">
         <h3 className="flex-1">
-          {battleIsActive ? "Active Battle" : "Past Battle"}
+          {data.dungeon ? (
+            <div className="flex flex-row gap-1">
+              <strong>{data.dungeon.name}</strong>
+              <span>Dungeon</span>
+              <span>Tier</span>
+              <strong>#{data.dungeon.tier}</strong>
+            </div>
+          ) : (
+            <span>{battleIsActive ? "Active Battle" : "Past Battle"}</span>
+          )}
         </h3>
 
         <div className="absolute right-12 top-4 shrink-0 flex flex-row gap-4">

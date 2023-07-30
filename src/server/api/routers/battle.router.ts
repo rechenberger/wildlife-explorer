@@ -175,6 +175,8 @@ export const battleRouter = createTRPCRouter({
           id: true,
           status: true,
           metadata: true,
+          tier: true,
+          placeId: true,
         },
       })
       console.timeEnd("getBattleFast")
@@ -212,9 +214,37 @@ export const battleRouter = createTRPCRouter({
         prisma: ctx.prisma,
         battleId: input.battleId,
       })
+
+      // Get DUNGEON
+      let dungeon:
+        | {
+            placeId: string
+            name: string
+            tier: number
+          }
+        | undefined
+      if (battle.placeId && battle.tier) {
+        const place = await ctx.prisma.place.findFirst({
+          where: {
+            id: battle.placeId,
+          },
+          select: {
+            metadata: true,
+          },
+        })
+        if (place && place.metadata?.name) {
+          dungeon = {
+            placeId: battle.placeId,
+            name: place.metadata.name,
+            tier: battle.tier,
+          }
+        }
+      }
+
       return {
         battleReport,
         status: battle.status,
+        dungeon,
       }
     }),
 
