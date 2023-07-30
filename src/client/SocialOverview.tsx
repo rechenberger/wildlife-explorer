@@ -1,6 +1,6 @@
 import NiceModal from "@ebay/nice-modal-react"
 import { map } from "lodash-es"
-import { ArrowLeftRight, Locate, Swords, User } from "lucide-react"
+import { ArrowLeftRight, Eye, Locate, Swords, User } from "lucide-react"
 import { Fragment } from "react"
 import { api } from "~/utils/api"
 import { BattleViewModal } from "./BattleViewModal"
@@ -93,6 +93,21 @@ export const SocialOverview = () => {
                       <div>Trade</div>
                     </button>
                   </>
+                )}
+                {player.metadata?.activeBattleId && (
+                  <button
+                    className="flex flex-row gap-1 rounded text-xs items-center bg-black text-white px-2 py-0.5 border"
+                    onClick={() => {
+                      const battleId = player.metadata?.activeBattleId
+                      if (!battleId) return
+                      NiceModal.show(BattleViewModal, {
+                        battleId,
+                      })
+                    }}
+                  >
+                    <Eye className="w-4 h-4" />
+                    <div>Watch</div>
+                  </button>
                 )}
               </div>
             </div>
