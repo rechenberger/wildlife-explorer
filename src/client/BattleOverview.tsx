@@ -79,8 +79,15 @@ export const BattleOverview = () => {
                 {battle.place ? (
                   <>
                     <div>
-                      {battle.place.metadata.name} {battle.place.type}{" "}
-                      {battle.tier ? `Tier #${battle.tier}` : ""}
+                      <strong>{battle.place.metadata.name}</strong>{" "}
+                      <span className="capitalize">
+                        {battle.place.type.toLowerCase()}
+                      </span>{" "}
+                      {battle.tier && (
+                        <>
+                          Tier <strong>#{battle.tier}</strong>
+                        </>
+                      )}
                     </div>
                   </>
                 ) : (
