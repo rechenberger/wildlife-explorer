@@ -149,11 +149,16 @@ export const simulateBattle = async ({
           ? Math.ceil(sum(playerLevels) / playerLevels.length)
           : FIGHTER_MAX_LEVEL
 
+        if (!battleInput.tier) {
+          throw new Error("Place encounter without tier")
+        }
+        const level = avgLevel + battleInput.tier
+
         team = [
           {
             fighter: await getDungeonFighter({
               seed: `${battleInput.placeId}-${battleInput.tier}`,
-              level: avgLevel,
+              level,
               idx: 0,
             }),
           },
