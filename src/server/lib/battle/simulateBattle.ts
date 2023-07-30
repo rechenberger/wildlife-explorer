@@ -9,6 +9,7 @@ import { findIndex, first, map, sum } from "lodash-es"
 import {
   BATTLE_INPUT_VERSION,
   BATTLE_REPORT_VERSION,
+  FIGHTER_MAX_LEVEL,
   MAX_FIGHTERS_PER_TEAM,
 } from "~/config"
 import { type MyPrismaClient } from "~/server/db"
@@ -140,9 +141,11 @@ export const simulateBattle = async ({
         battleParticipant.metadata.isPlaceEncounter &&
         battleInput?.placeId
       ) {
-        const playerTeam = first(teams)?.team ?? []
-        const avgLevel =
-          sum(playerTeam.map((t) => t.fighter.level)) / playerTeam.length
+        const playerLevels = battleInput.battleParticipants
+          .filter((p) => !!p.player?.id)
+          .flatMap((p) => p.player?.catches ?? [])
+          .map((c) => c.metadata.level || FIGHTER_MAX_LEVEL)
+        const avgLevel = sum(playerLevels) / playerLevels.length
 
         team = [
           {
