@@ -1,9 +1,9 @@
 import NiceModal from "@ebay/nice-modal-react"
 import { useEffect } from "react"
+import { REFETCH_MS_LATEST_TRADE } from "~/config"
 import { api } from "~/utils/api"
 import { TradeDetailsModal } from "./TradeDetailsModal"
 import { usePlayer } from "./usePlayer"
-import { REFETCH_MS_LATEST_TRADE } from "~/config"
 
 export const useLatestPendingTradeAutoOpen = () => {
   const { playerId } = usePlayer()
@@ -16,8 +16,9 @@ export const useLatestPendingTradeAutoOpen = () => {
       refetchInterval: REFETCH_MS_LATEST_TRADE,
     }
   )
+  const tradeId = trade?.id
   useEffect(() => {
-    if (!trade) return
-    NiceModal.show(TradeDetailsModal, { tradeId: trade.id })
-  }, [trade])
+    if (!tradeId) return
+    NiceModal.show(TradeDetailsModal, { tradeId })
+  }, [tradeId])
 }

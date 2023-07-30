@@ -18,6 +18,16 @@ export const PlaceViewDungeon = ({ placeId }: { placeId: string }) => {
     },
   })
 
+  const { data: highscores } = api.dungeon.getHighscore.useQuery(
+    {
+      placeId,
+      playerId: playerId!,
+    },
+    {
+      enabled: !!playerId,
+    }
+  )
+
   return (
     <>
       <Button
@@ -34,6 +44,25 @@ export const PlaceViewDungeon = ({ placeId }: { placeId: string }) => {
         <TorchIcon className="w-6 h-6 rotate-45" />
         <span className="ml-2">Enter Dungeon</span>
       </Button>
+      <div className="flex flex-col gap-2">
+        {highscores?.map((hs, idx) => {
+          return (
+            <button
+              key={hs.player.id}
+              className="p-2 rounded bg-gray-200 hover:bg-gray-300 flex flex-row gap-4"
+              onClick={() => {
+                NiceModal.show(BattleViewModal, {
+                  battleId: hs.battleId,
+                })
+              }}
+            >
+              <div>#{idx + 1}</div>
+              <div className="flex-1 truncate">{hs.player.name}</div>
+              <div>Tier {hs.tier}</div>
+            </button>
+          )
+        })}
+      </div>
     </>
   )
 }

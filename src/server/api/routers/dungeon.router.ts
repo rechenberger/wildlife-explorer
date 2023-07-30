@@ -1,10 +1,12 @@
 import { TRPCError } from "@trpc/server"
+import { z } from "zod"
 import { createTRPCRouter } from "~/server/api/trpc"
 import { type MyPrismaClient } from "~/server/db"
 import { type BattleMetadata } from "~/server/schema/BattleMetadata"
 import { type BattleParticipationMetadata } from "~/server/schema/BattleParticipationMetadata"
 import { type PlayerMetadata } from "~/server/schema/PlayerMetadata"
 import { placeProcedure } from "../middleware/placeProcedure"
+import { playerProcedure } from "../middleware/playerProcedure"
 
 export const dungeonRouter = createTRPCRouter({
   startDungeon: placeProcedure.mutation(async ({ ctx, input }) => {
@@ -23,6 +25,55 @@ export const dungeonRouter = createTRPCRouter({
 
     return { battleId }
   }),
+
+  getHighscore: playerProcedure
+    .input(
+      z.object({
+        placeId: z.string(),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const participations = await ctx.prisma.battleParticipation.findMany({
+        where: {
+          playerId: {
+            not: null,
+          },
+          battle: {
+            placeId: input.placeId,
+            status: "FINISHED",
+          },
+        },
+        orderBy: {
+          battle: {
+            tier: "desc",
+          },
+        },
+        distinct: ["playerId"],
+        take: 10,
+        select: {
+          player: true,
+          battle: {
+            select: {
+              id: true,
+              tier: true,
+            },
+          },
+        },
+      })
+
+      const highscore = participations.map((p) => {
+        if (!p.player) {
+          throw new Error("Player not found")
+        }
+        return {
+          battleId: p.battle.id,
+          tier: p.battle.tier,
+          player: p.player,
+        }
+      })
+
+      return highscore
+    }),
 })
 
 export const startDungeonBattle = async ({

@@ -145,19 +145,21 @@ export const BattleView = ({
     return (
       <div className="flex flex-col gap-8 items-center justify-center py-48 text-center text-sm">
         <div className="opacity-60">{error ? error.message : "Loading..."}</div>
-        <TypeBadge
-          size="big"
-          content="Try Running"
-          icon={runIcon}
-          onClick={() => {
-            if (!playerId) return
-            run({
-              battleId,
-              playerId,
-            })
-          }}
-          className="w-[76px] sm:w-28"
-        />
+        {!!error && (
+          <TypeBadge
+            size="big"
+            content="Try Running"
+            icon={runIcon}
+            onClick={() => {
+              if (!playerId) return
+              run({
+                battleId,
+                playerId,
+              })
+            }}
+            className="w-[76px] sm:w-28"
+          />
+        )}
       </div>
     )
   }
