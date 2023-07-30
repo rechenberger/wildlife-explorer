@@ -3,6 +3,7 @@ import { z } from "zod"
 import { RADIUS_IN_M_DUNGEON } from "~/config"
 import { createTRPCRouter } from "~/server/api/trpc"
 import { type MyPrismaClient } from "~/server/db"
+import { checkIfReadyForBattle } from "~/server/lib/battle/checkIfReadyForBattle"
 import { type BattleMetadata } from "~/server/schema/BattleMetadata"
 import { type BattleParticipationMetadata } from "~/server/schema/BattleParticipationMetadata"
 import { type PlayerMetadata } from "~/server/schema/PlayerMetadata"
@@ -17,12 +18,9 @@ export const dungeonRouter = createTRPCRouter({
         message: `Can only enter a dungeon when within ${RADIUS_IN_M_DUNGEON}m`,
       })
     }
-    if (ctx.player.metadata?.activeBattleId) {
-      throw new TRPCError({
-        code: "BAD_REQUEST",
-        message: "You are already in a battle",
-      })
-    }
+
+    await checkIfReadyForBattle(ctx)
+
     const { id: battleId } = await startDungeonBattle({
       prisma: ctx.prisma,
       placeId: input.placeId,

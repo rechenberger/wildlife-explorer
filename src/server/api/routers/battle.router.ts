@@ -4,6 +4,7 @@ import { every, find, map } from "lodash-es"
 import { z } from "zod"
 import { BATTLE_REPORT_VERSION } from "~/config"
 import { createTRPCRouter } from "~/server/api/trpc"
+import { checkIfReadyForBattle } from "~/server/lib/battle/checkIfReadyForBattle"
 import { grantExp } from "~/server/lib/battle/grantExp"
 import { savePostBattleCatchMetadata } from "~/server/lib/battle/savePostBattleCatchMetadata"
 import { simulateBattle } from "~/server/lib/battle/simulateBattle"
@@ -24,47 +25,7 @@ export const battleRouter = createTRPCRouter({
       })
     }
 
-    const playerInFight = await ctx.prisma.battleParticipation.findFirst({
-      where: {
-        playerId: ctx.player.id,
-        battle: {
-          status: "IN_PROGRESS",
-        },
-      },
-    })
-    if (playerInFight || ctx.player.metadata?.activeBattleId) {
-      throw new TRPCError({
-        code: "BAD_REQUEST",
-        message: "You are already in a battle",
-      })
-    }
-
-    const team = await ctx.prisma.catch.findMany({
-      where: {
-        playerId: ctx.player.id,
-        battleOrderPosition: {
-          not: null,
-        },
-      },
-    })
-    if (!team?.length) {
-      throw new TRPCError({
-        code: "BAD_REQUEST",
-        message: "You need to catch at least one wildlife to battle 😉",
-      })
-    }
-    const fighterWithHp = find(team, (c) => {
-      if (typeof c.metadata?.hp !== "number") {
-        return true
-      }
-      return c.metadata?.hp > 0
-    })
-    if (!fighterWithHp) {
-      throw new TRPCError({
-        code: "BAD_REQUEST",
-        message: "Your whole team is fainted 🤦",
-      })
-    }
+    await checkIfReadyForBattle(ctx)
 
     const battle = await ctx.prisma.battle.create({
       data: {
