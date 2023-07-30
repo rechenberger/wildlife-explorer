@@ -1,6 +1,11 @@
 import { Dex, type PokemonSet } from "@pkmn/dex"
-import { filter, map, max, min, uniq } from "lodash-es"
-import { MAX_MOVES_PER_FIGHTER, USE_LATEST_GEN } from "~/config"
+import { filter, find, map, max, min, uniq } from "lodash-es"
+import {
+  FIGHTER_MAX_NUM,
+  MAX_MOVES_PER_FIGHTER,
+  USE_LATEST_GEN,
+} from "~/config"
+import { PokemonLevelingRate } from "~/data/pokemonLevelingRate"
 import { rngInt, rngItem, rngItemWithWeights, rngItems } from "~/utils/seed"
 
 export type GetDungeonFighterOptions = {
@@ -16,19 +21,32 @@ export const getDungeonFighter = async ({
 }: GetDungeonFighterOptions): Promise<PokemonSet> => {
   const allSpecies = Dex.species.all()
 
-  const species = rngItem({ seed: [seed, "species"], items: allSpecies })
+  const num = rngInt({ seed: [seed, "species"], min: 1, max: FIGHTER_MAX_NUM })
+
+  const retry = (reason: string) => {
+    const newSeed = `${seed}-retry`
+    console.log(
+      `Species #${num} because: ${reason}`,
+      `trying with seed ${newSeed}`
+    )
+    return getDungeonFighter({ seed: newSeed, level, idx })
+  }
+
+  const species = find(allSpecies, (s) => s.num === num)
+  if (!species) {
+    return retry("not found in dex")
+  }
+  const levelingRate = PokemonLevelingRate[`${num}`]
+  if (!levelingRate) {
+    return retry("levelingRate not found")
+  }
 
   let speciesName = species.name
 
   let moves: string[] = []
   const possibleMoves = await getAllMovesInLearnset(speciesName)
   if (!possibleMoves.length) {
-    // Species has no moves lets try again:
-    const newSeed = `${seed}-retry`
-    console.log(
-      `Species ${speciesName} has no moves, trying again with seed ${newSeed}`
-    )
-    return getDungeonFighter({ seed: newSeed, level, idx })
+    return retry("no moves in learnset")
   }
 
   const possibleStatusMoves = filter(

@@ -5,7 +5,11 @@ import { Scroll, ScrollText, Undo2 } from "lucide-react"
 import Image from "next/image"
 import { Fragment, useCallback, useLayoutEffect, useRef } from "react"
 import { toast } from "sonner"
-import { DEV_MODE, REFETCH_MS_BATTLE_PVP } from "~/config"
+import {
+  DEV_MODE,
+  FIGHTER_MAX_NUM_WITH_BACK_IMG,
+  REFETCH_MS_BATTLE_PVP,
+} from "~/config"
 import { parseBattleLog } from "~/server/lib/battle/battleLogParser"
 import { api } from "~/utils/api"
 import { atomWithLocalStorage } from "~/utils/atomWithLocalStorage"
@@ -297,7 +301,13 @@ export const BattleView = ({
                                 width={64}
                                 height={64}
                                 alt={"Fighter"}
-                                className="scale-[2]"
+                                className={cn(
+                                  "scale-[2]",
+                                  isMainSide &&
+                                    fighter.fighter.speciesNum >
+                                      FIGHTER_MAX_NUM_WITH_BACK_IMG &&
+                                    "transform scale-x-[-2]"
+                                )}
                                 unoptimized
                               />
                             </div>

@@ -118,3 +118,5 @@ export const IV_SCORE_MAX = 100
 export const IV_SCORE_EXCEPTIONAL = 75
 export const AUTO_BATTLE_WAIT_SECONDS = 5
 export const FIGHTER_MAX_LEVEL = 100
+export const FIGHTER_MAX_NUM = 1010
+export const FIGHTER_MAX_NUM_WITH_BACK_IMG = 835
