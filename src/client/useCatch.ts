@@ -23,7 +23,7 @@ export const useCatch = ({ battleId }: { battleId?: string } = {}) => {
         if (battleId) NiceModal.hide(BattleViewModal)
         NiceModal.show(ExpReportsModal, {
           expReports,
-          battleId,
+          prevBattleId: battleId,
         })
       }
     },
