@@ -90,7 +90,7 @@ export const PlaceViewDungeon = ({ placeId }: { placeId: string }) => {
           </div>
         </TabsContent>
         <TabsContent value="fighters">
-          {!highscores?.length && (
+          {!fighters?.length && (
             <div className="flex items-center justify-center py-12 text-center text-sm opacity-60">
               Explore the dungeons to find out about the Wildlife in there!
             </div>
