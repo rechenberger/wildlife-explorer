@@ -13,7 +13,7 @@ export const getDungeonFighter = async ({
   seed,
   level,
   idx,
-}: GetDungeonFighterOptions) => {
+}: GetDungeonFighterOptions): Promise<PokemonSet> => {
   const allSpecies = Dex.species.all()
 
   const species = rngItem({ seed: [seed, "species"], items: allSpecies })
@@ -22,6 +22,14 @@ export const getDungeonFighter = async ({
 
   let moves: string[] = []
   const possibleMoves = await getAllMovesInLearnset(speciesName)
+  if (!possibleMoves.length) {
+    // Species has no moves lets try again:
+    const newSeed = `${seed}-retry`
+    console.log(
+      `Species ${speciesName} has no moves, trying again with seed ${newSeed}`
+    )
+    return getDungeonFighter({ seed: newSeed, level, idx })
+  }
 
   const possibleStatusMoves = filter(
     possibleMoves,
