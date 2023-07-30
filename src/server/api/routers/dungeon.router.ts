@@ -1,5 +1,6 @@
 import { TRPCError } from "@trpc/server"
 import { z } from "zod"
+import { RADIUS_IN_M_DUNGEON } from "~/config"
 import { createTRPCRouter } from "~/server/api/trpc"
 import { type MyPrismaClient } from "~/server/db"
 import { type BattleMetadata } from "~/server/schema/BattleMetadata"
@@ -10,6 +11,12 @@ import { playerProcedure } from "../middleware/playerProcedure"
 
 export const dungeonRouter = createTRPCRouter({
   startDungeon: placeProcedure.mutation(async ({ ctx, input }) => {
+    if (ctx.place.distanceInMeter > RADIUS_IN_M_DUNGEON) {
+      throw new TRPCError({
+        code: "FORBIDDEN",
+        message: `Can only enter a dungeon when within ${RADIUS_IN_M_DUNGEON}m`,
+      })
+    }
     if (ctx.player.metadata?.activeBattleId) {
       throw new TRPCError({
         code: "BAD_REQUEST",

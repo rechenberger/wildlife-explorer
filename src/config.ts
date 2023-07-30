@@ -16,6 +16,7 @@ export const RADIUS_IN_KM_SEE_PLACES = RADIUS_IN_KM_SCAN_PLACES
 export const RADIUS_IN_M_CATCH_WILDLIFE = 500
 export const RADIUS_IN_M_CARE_CENTER = 500
 export const RADIUS_IN_M_AIRPORT = 500
+export const RADIUS_IN_M_DUNGEON = 500
 
 const DEV_RESPAWN = DEV_MODE ? 10 / 60 : undefined
 export const RESPAWN_TIME_IN_MINUTES = {
