@@ -77,7 +77,9 @@ export const simulateBattle = async ({
     battle = new Battle({
       formatid: toID("gen7randombattle"),
       // formatid: toID("doubles"),
-      seed: [13103, 5088, 17178, 48392], // TODO:
+
+      // TODO: think about this:
+      // seed: [13103, 5088, 17178, 48392],
     })
   }
 
