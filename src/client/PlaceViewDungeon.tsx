@@ -96,19 +96,19 @@ export const PlaceViewDungeon = ({ placeId }: { placeId: string }) => {
             </div>
           )}
           <div className="flex flex-col">
-            {fighters?.map((fighter, idx) => {
+            {fighters?.map(({ fighter, battleId, tier }, idx) => {
               return (
-                <div
+                <button
                   key={idx}
-                  className="rounded flex flex-row flex-wrap gap-4 items-center py-2 border-b"
-                  // onClick={() => {
-                  //   NiceModal.show(BattleViewModal, {
-                  //     battleId: hs.battleId,
-                  //   })
-                  // }}
+                  className="rounded flex flex-row flex-wrap gap-4 items-center p-2 border-b text-left hover:bg-gray-100"
+                  onClick={() => {
+                    NiceModal.show(BattleViewModal, {
+                      battleId,
+                    })
+                  }}
                 >
                   <div className="w-16">
-                    Tier <strong>{idx + 1}</strong>
+                    Tier <strong>{tier}</strong>
                   </div>
                   <div className="w-20 flex flex-col gap-1">
                     <FighterTypeBadges fighter={{ fighter }} showTypes />
@@ -120,7 +120,7 @@ export const PlaceViewDungeon = ({ placeId }: { placeId: string }) => {
                       ltr={false}
                     />
                   </div>
-                </div>
+                </button>
               )
             })}
           </div>

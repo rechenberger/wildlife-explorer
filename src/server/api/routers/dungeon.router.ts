@@ -1,5 +1,5 @@
 import { TRPCError } from "@trpc/server"
-import { range } from "lodash-es"
+import { orderBy } from "lodash-es"
 import { z } from "zod"
 import { RADIUS_IN_M_DUNGEON } from "~/config"
 import { createTRPCRouter } from "~/server/api/trpc"
@@ -90,35 +90,37 @@ export const dungeonRouter = createTRPCRouter({
       })
     )
     .query(async ({ ctx, input }) => {
-      const playerHighestParticipation =
-        await ctx.prisma.battleParticipation.findFirst({
-          where: {
-            playerId: ctx.player.id,
-            battle: {
-              placeId: input.placeId,
+      const battles = await ctx.prisma.battle.findMany({
+        where: {
+          placeId: input.placeId,
+          battleParticipants: {
+            some: {
+              playerId: ctx.player.id,
             },
           },
-          orderBy: {
-            battle: {
-              tier: "desc",
-            },
+          tier: {
+            not: null,
           },
-          select: {
-            battle: {
-              select: {
-                tier: true,
-              },
-            },
-          },
-        })
+        },
+        orderBy: {
+          updatedAt: "desc",
+        },
+        distinct: ["tier"],
+        select: {
+          id: true,
+          tier: true,
+        },
+      })
 
-      const highestTier = playerHighestParticipation?.battle.tier ?? 0
-      if (!highestTier) {
+      if (!battles.length) {
         return []
       }
 
-      const fighters = await Promise.all(
-        range(1, highestTier + 1).map(async (tier) => {
+      let fighters = await Promise.all(
+        battles?.map(async ({ tier, id: battleId }) => {
+          if (!tier) {
+            throw new Error("Tier not found")
+          }
           const pokemonSet = await getDungeonFighter({
             level: tier,
             seed: `${input.placeId}-${tier}`,
@@ -126,9 +128,11 @@ export const dungeonRouter = createTRPCRouter({
           const fighter = transformPokemonSetToPlus({
             pokemonSet,
           })
-          return fighter
+          return { fighter, battleId, tier }
         })
       )
+
+      fighters = orderBy(fighters, (f) => f.tier, "asc")
 
       return fighters
     }),
