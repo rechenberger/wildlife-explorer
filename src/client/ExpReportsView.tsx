@@ -8,21 +8,24 @@ import { ExpReportsModal } from "./ExpReportsModal"
 import { FighterChip } from "./FighterChip"
 import { TypeBadge } from "./TypeBadge"
 import { cn } from "./cn"
-import { leaveIcon, pastIcon } from "./typeIcons"
+import { battleIcon, leaveIcon, pastIcon } from "./typeIcons"
 
 export type ExpReports = NonNullable<
   RouterOutputs["battle"]["makeChoice"]
 >["expReports"]
 
+export type ExpReportsViewProps = {
+  expReports: ExpReports
+  prevBattleId?: string
+  nextBattleId?: string
+  reportsOnly?: boolean
+}
 export const ExpReportsView = ({
   expReports,
-  battleId,
+  prevBattleId,
+  nextBattleId,
   reportsOnly,
-}: {
-  expReports: ExpReports
-  battleId?: string
-  reportsOnly?: boolean
-}) => {
+}: ExpReportsViewProps) => {
   return (
     <>
       {!reportsOnly && (
@@ -105,7 +108,7 @@ export const ExpReportsView = ({
       </div>
       {!reportsOnly && (
         <div className="flex flex-row gap-2 mt-4">
-          {battleId && (
+          {prevBattleId && (
             <TypeBadge
               icon={pastIcon}
               content="Back to Battle"
@@ -114,7 +117,7 @@ export const ExpReportsView = ({
               onClick={() => {
                 NiceModal.hide(ExpReportsModal)
                 NiceModal.show(BattleViewModal, {
-                  battleId,
+                  battleId: prevBattleId,
                 })
               }}
             />
@@ -128,6 +131,20 @@ export const ExpReportsView = ({
               NiceModal.hide(ExpReportsModal)
             }}
           />
+          {nextBattleId && (
+            <TypeBadge
+              icon={battleIcon}
+              content="Next Battle"
+              className="flex-1"
+              size="big"
+              onClick={() => {
+                NiceModal.hide(ExpReportsModal)
+                NiceModal.show(BattleViewModal, {
+                  battleId: nextBattleId,
+                })
+              }}
+            />
+          )}
         </div>
       )}
     </>
