@@ -15,8 +15,8 @@ import { TypeBadge } from "./TypeBadge"
 import { cn } from "./cn"
 import { battleIcon, careIcon, pastIcon, swapIcon } from "./typeIcons"
 import { useAttackWildlife } from "./useAttackWildlife"
-import { useCareCenter } from "./useCareCenter"
 import { useMyTeam } from "./useMyTeam"
+import { useCareCenter } from "./usePlace"
 import { useWildlifeToBattle } from "./useWildlife"
 
 export const BattleFastView = () => {
