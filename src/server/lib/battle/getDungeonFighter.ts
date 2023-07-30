@@ -1,16 +1,18 @@
 import { Dex, type PokemonSet } from "@pkmn/dex"
 import { filter, map, max, min, uniq } from "lodash-es"
 import { MAX_MOVES_PER_FIGHTER, USE_LATEST_GEN } from "~/config"
-import { rngInt, rngItem, rngItemWithWeights } from "~/utils/seed"
+import { rngInt, rngItem, rngItemWithWeights, rngItems } from "~/utils/seed"
 
 export type GetDungeonFighterOptions = {
   seed: string
   level: number
+  idx: number
 }
 
 export const getDungeonFighter = async ({
   seed,
   level,
+  idx,
 }: GetDungeonFighterOptions) => {
   const allSpecies = Dex.species.all()
 
@@ -31,29 +33,30 @@ export const getDungeonFighter = async ({
   )
 
   const amountStatusMoves = rngInt({
-    seed: [seed, "moves", "status"],
+    seed: [seed, "moves", "status", "amount"],
     min: 0,
     max: 2,
   })
 
   const amountNonStatusMoves = MAX_MOVES_PER_FIGHTER - amountStatusMoves
 
-  for (let i = 0; i < amountStatusMoves; i++) {
-    const move = rngItem({
-      items: possibleStatusMoves,
-      seed: [seed, "moves", "status", i],
+  moves.push(
+    ...rngItems({
+      items: possibleStatusMoves.map((m) => m.move),
+      seed: [seed, "moves", "status"],
+      count: amountStatusMoves,
     })
-    moves.push(move.move)
-  }
+  )
 
-  for (let i = 0; i < amountNonStatusMoves; i++) {
-    const move = rngItem({
-      items: possibleNonStatusMoves,
-      seed: [seed, "moves", "nonStatus", i],
+  moves.push(
+    ...rngItems({
+      items: possibleNonStatusMoves.map((m) => m.move),
+      seed: [seed, "moves", "nonStatus"],
+      count: amountNonStatusMoves,
     })
-    moves.push(move.move)
-  }
-  moves = uniq(moves)
+  )
+
+  moves = uniq(moves).filter(Boolean)
 
   const nature = rngItem({
     items: Dex.natures.all(),
@@ -77,7 +80,9 @@ export const getDungeonFighter = async ({
   const item = ""
 
   // TODO: locale
-  const name = speciesName
+  const name = `${typeof idx === "number" ? `#${idx + 1}: ` : ""}${
+    species.name
+  }`
 
   const ivs = {
     hp: rngInt({

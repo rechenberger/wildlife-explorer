@@ -145,13 +145,16 @@ export const simulateBattle = async ({
           .filter((p) => !!p.player?.id)
           .flatMap((p) => p.player?.catches ?? [])
           .map((c) => c.metadata.level || FIGHTER_MAX_LEVEL)
-        const avgLevel = sum(playerLevels) / playerLevels.length
+        const avgLevel = playerLevels.length
+          ? Math.ceil(sum(playerLevels) / playerLevels.length)
+          : FIGHTER_MAX_LEVEL
 
         team = [
           {
             fighter: await getDungeonFighter({
               seed: `${battleInput.placeId}-${battleInput.tier}`,
               level: avgLevel,
+              idx: 0,
             }),
           },
         ]
