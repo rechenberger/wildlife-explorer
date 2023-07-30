@@ -76,20 +76,29 @@ export const BattleOverview = () => {
               }}
             >
               <div className="flex-1">
-                <div className="flex flex-row gap-4">
-                  {battle.battleParticipants.map((p, idx) => (
-                    <Fragment key={p.id}>
-                      {idx > 0 && <div>vs</div>}
-                      <div>
-                        {p.player
-                          ? p.player.name
-                          : p.wildlife
-                          ? getName({ wildlife: p.wildlife })
-                          : "???"}
-                      </div>
-                    </Fragment>
-                  ))}
-                </div>
+                {battle.place ? (
+                  <>
+                    <div>
+                      {battle.place.metadata.name} {battle.place.type}{" "}
+                      {battle.tier ? `Tier #${battle.tier}` : ""}
+                    </div>
+                  </>
+                ) : (
+                  <div className="flex flex-row gap-4">
+                    {battle.battleParticipants.map((p, idx) => (
+                      <Fragment key={p.id}>
+                        {idx > 0 && <div>vs</div>}
+                        <div>
+                          {p.player
+                            ? p.player.name
+                            : p.wildlife
+                            ? getName({ wildlife: p.wildlife })
+                            : "???"}
+                        </div>
+                      </Fragment>
+                    ))}
+                  </div>
+                )}
                 <div className="flex flex-row gap-1 text-xs opacity-60">
                   <div>{statusLabel}</div>
                   <TimeAgo date={battle.updatedAt} addSuffix />

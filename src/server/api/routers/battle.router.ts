@@ -150,6 +150,13 @@ export const battleRouter = createTRPCRouter({
             wildlife: true,
           },
         },
+        tier: true,
+        place: {
+          select: {
+            type: true,
+            metadata: true,
+          },
+        },
       },
       orderBy: {
         createdAt: "desc",
