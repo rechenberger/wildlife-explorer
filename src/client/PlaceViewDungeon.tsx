@@ -2,7 +2,9 @@ import NiceModal from "@ebay/nice-modal-react"
 import { toast } from "sonner"
 import { api } from "~/utils/api"
 import { BattleViewModal } from "./BattleViewModal"
+import { FighterChip } from "./FighterChip"
 import { Button } from "./shadcn/ui/button"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "./shadcn/ui/tabs"
 import { usePlayer } from "./usePlayer"
 
 export const PlaceViewDungeon = ({ placeId }: { placeId: string }) => {
@@ -28,6 +30,16 @@ export const PlaceViewDungeon = ({ placeId }: { placeId: string }) => {
     }
   )
 
+  const { data: fighters } = api.dungeon.getFighters.useQuery(
+    {
+      placeId,
+      playerId: playerId!,
+    },
+    {
+      enabled: !!playerId,
+    }
+  )
+
   return (
     <>
       <Button
@@ -44,25 +56,72 @@ export const PlaceViewDungeon = ({ placeId }: { placeId: string }) => {
         <TorchIcon className="w-6 h-6 rotate-45" />
         <span className="ml-2">Enter Dungeon</span>
       </Button>
-      <div className="flex flex-col gap-2">
-        {highscores?.map((hs, idx) => {
-          return (
-            <button
-              key={hs.player.id}
-              className="p-2 rounded bg-gray-200 hover:bg-gray-300 flex flex-row gap-4"
-              onClick={() => {
-                NiceModal.show(BattleViewModal, {
-                  battleId: hs.battleId,
-                })
-              }}
-            >
-              <div>#{idx + 1}</div>
-              <div className="flex-1 truncate">{hs.player.name}</div>
-              <div>Tier {hs.tier}</div>
-            </button>
-          )
-        })}
-      </div>
+      <Tabs defaultValue="highscore" className="">
+        <TabsList className="grid w-full grid-cols-2">
+          <TabsTrigger value="highscore">Highscore</TabsTrigger>
+          <TabsTrigger value="fighters">Wildlife</TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="highscore">
+          {!highscores?.length && (
+            <div className="flex items-center justify-center py-12 text-center text-sm opacity-60">
+              No one has ever beaten this dungeon. Be the first!
+            </div>
+          )}
+          <div className="flex flex-col gap-2">
+            {highscores?.map((hs, idx) => {
+              return (
+                <button
+                  key={hs.player.id}
+                  className="p-2 rounded bg-gray-200 hover:bg-gray-300 flex flex-row gap-4"
+                  onClick={() => {
+                    NiceModal.show(BattleViewModal, {
+                      battleId: hs.battleId,
+                    })
+                  }}
+                >
+                  <div>#{idx + 1}</div>
+                  <div className="flex-1 truncate">{hs.player.name}</div>
+                  <div>Tier {hs.tier}</div>
+                </button>
+              )
+            })}
+          </div>
+        </TabsContent>
+        <TabsContent value="fighters">
+          {!highscores?.length && (
+            <div className="flex items-center justify-center py-12 text-center text-sm opacity-60">
+              Explore the dungeons to find out about the Wildlife in there!
+            </div>
+          )}
+          <div className="flex flex-col gap-3">
+            {fighters?.map((fighter, idx) => {
+              return (
+                <div
+                  key={idx}
+                  className="rounded flex flex-row gap-4 items-center"
+                  // onClick={() => {
+                  //   NiceModal.show(BattleViewModal, {
+                  //     battleId: hs.battleId,
+                  //   })
+                  // }}
+                >
+                  <div className="w-20">
+                    Tier <strong>{idx + 1}</strong>
+                  </div>
+                  <div className="flex-1">
+                    <FighterChip
+                      fighter={{ fighter }}
+                      showAbsoluteHp={false}
+                      ltr={false}
+                    />
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+        </TabsContent>
+      </Tabs>
     </>
   )
 }

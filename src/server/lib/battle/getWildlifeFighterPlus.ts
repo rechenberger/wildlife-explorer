@@ -17,25 +17,38 @@ import {
 export const getWildlifeFighterPlus = async (
   options: GetWildlifeFighterOptions
 ) => {
-  const fighter = await getWildlifeFighter(options)
+  const pokemonSet = await getWildlifeFighter(options)
 
+  return transformPokemonSetToPlus({
+    pokemonSet,
+    catchMetadata: options.metadata,
+  })
+}
+
+export const transformPokemonSetToPlus = ({
+  pokemonSet,
+  catchMetadata,
+}: {
+  pokemonSet: PokemonSet
+  catchMetadata?: GetWildlifeFighterOptions["metadata"]
+}) => {
   const battle = new Battle({
     formatid: toID("gen7randombattle"),
     seed: [13103, 5088, 17178, 48392], // TODO:
   })
   battle.setPlayer("p1", {
     name: "Player",
-    team: [fighter],
+    team: [pokemonSet],
   })
 
   const p = first(first(battle.sides)?.pokemon)
   if (!p) {
     throw new Error("Could not build FighterPlus")
   }
-  applyFighterStats({ p, catchMetadata: options.metadata })
+  applyFighterStats({ p, catchMetadata })
 
   return transformWildlifeFighterPlus({
-    pokemonSet: fighter,
+    pokemonSet,
     pokemon: p,
   })
 }

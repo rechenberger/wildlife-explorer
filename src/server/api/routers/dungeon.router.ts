@@ -1,9 +1,12 @@
 import { TRPCError } from "@trpc/server"
+import { range } from "lodash-es"
 import { z } from "zod"
 import { RADIUS_IN_M_DUNGEON } from "~/config"
 import { createTRPCRouter } from "~/server/api/trpc"
 import { type MyPrismaClient } from "~/server/db"
 import { checkIfReadyForBattle } from "~/server/lib/battle/checkIfReadyForBattle"
+import { getDungeonFighter } from "~/server/lib/battle/getDungeonFighter"
+import { transformPokemonSetToPlus } from "~/server/lib/battle/getWildlifeFighterPlus"
 import { type BattleMetadata } from "~/server/schema/BattleMetadata"
 import { type BattleParticipationMetadata } from "~/server/schema/BattleParticipationMetadata"
 import { type PlayerMetadata } from "~/server/schema/PlayerMetadata"
@@ -78,6 +81,56 @@ export const dungeonRouter = createTRPCRouter({
       })
 
       return highscore
+    }),
+
+  getFighters: playerProcedure
+    .input(
+      z.object({
+        placeId: z.string(),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const playerHighestParticipation =
+        await ctx.prisma.battleParticipation.findFirst({
+          where: {
+            playerId: ctx.player.id,
+            battle: {
+              placeId: input.placeId,
+            },
+          },
+          orderBy: {
+            battle: {
+              tier: "desc",
+            },
+          },
+          select: {
+            battle: {
+              select: {
+                tier: true,
+              },
+            },
+          },
+        })
+
+      const highestTier = playerHighestParticipation?.battle.tier ?? 0
+      if (!highestTier) {
+        return []
+      }
+
+      const fighters = await Promise.all(
+        range(1, highestTier + 1).map(async (tier) => {
+          const pokemonSet = await getDungeonFighter({
+            level: tier,
+            seed: `${input.placeId}-${tier}`,
+          })
+          const fighter = transformPokemonSetToPlus({
+            pokemonSet,
+          })
+          return fighter
+        })
+      )
+
+      return fighters
     }),
 })
 

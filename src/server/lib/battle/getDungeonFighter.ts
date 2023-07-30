@@ -11,7 +11,7 @@ import { rngInt, rngItem, rngItemWithWeights, rngItems } from "~/utils/seed"
 export type GetDungeonFighterOptions = {
   seed: string
   level: number
-  idx: number
+  idx?: number
 }
 
 export const getDungeonFighter = async ({
