@@ -4,10 +4,10 @@ import { api } from "~/utils/api"
 import { BattleViewModal } from "./BattleViewModal"
 import { FighterChip } from "./FighterChip"
 import { FighterTypeBadges } from "./FighterTypeBadges"
+import { cn } from "./cn"
 import { Button } from "./shadcn/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./shadcn/ui/tabs"
 import { usePlayer } from "./usePlayer"
-import { cn } from "./cn"
 
 export const PlaceViewDungeon = ({ placeId }: { placeId: string }) => {
   const { playerId } = usePlayer()
@@ -44,6 +44,10 @@ export const PlaceViewDungeon = ({ placeId }: { placeId: string }) => {
 
   return (
     <>
+      <div className="text-sm text-gray-500 italic text-center">
+        Welcome, Explorer! Prepare to test your skills in the challenging
+        dungeons of the world&apos;s capitols.
+      </div>
       <Button
         onClick={() => {
           if (!playerId) return
@@ -58,6 +62,11 @@ export const PlaceViewDungeon = ({ placeId }: { placeId: string }) => {
         <TorchIcon className="w-6 h-6 rotate-45" />
         <span className="ml-2">Enter Dungeon</span>
       </Button>
+      <div className="text-sm text-gray-500 italic text-center">
+        As you traverse each tier, the strength of the opponents will amplify.
+        The level of the wildlife you encounter matches your team&apos;s max
+        level plus the tier you&apos;re attempting. Good luck!
+      </div>
       <Tabs defaultValue="highscore" className="w-full">
         <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger value="highscore">Highscore</TabsTrigger>
