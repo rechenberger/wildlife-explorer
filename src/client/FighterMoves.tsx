@@ -35,6 +35,16 @@ export const FighterMoves = ({
     })) ?? []
 
   const movesMerged = uniqBy([...moves, ...trappedMoves], (m) => m.id)
+  if (!movesMerged.length) {
+    movesMerged.push({
+      id: "struggle",
+      name: "Struggle",
+      status: null,
+      definition: null,
+      disabled: null,
+      disabledSource: null,
+    })
+  }
   return (
     <>
       <div className="grid flex-1 grid-cols-1 gap-1">
