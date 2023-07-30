@@ -5,7 +5,7 @@ import {
   type PokemonSet,
   type SideID,
 } from "@pkmn/sim"
-import { findIndex, first, map, max, orderBy } from "lodash-es"
+import { findIndex, first, map, orderBy, sum } from "lodash-es"
 import {
   BATTLE_INPUT_VERSION,
   BATTLE_REPORT_VERSION,
@@ -83,6 +83,16 @@ export const simulateBattle = async ({
     })
   }
 
+  const playerLevels = battleInput.battleParticipants
+    .filter((p) => !!p.player?.id)
+    .flatMap((p) => p.player?.catches ?? [])
+    .map((c) => c.metadata.level || FIGHTER_MAX_LEVEL)
+  const avgPlayerLevel = playerLevels.length
+    ? Math.ceil(sum(playerLevels) / playerLevels.length)
+    : FIGHTER_MAX_LEVEL
+  const isDungeon = battleInput.placeId && battleInput.tier
+  const normalizePlayerLevels = isDungeon
+
   // BUILD TEAMS
   const teams = await Promise.all(
     map(battleInput.battleParticipants, async (battleParticipant, idx) => {
@@ -122,6 +132,12 @@ export const simulateBattle = async ({
               fighter: await getWildlifeFighter({
                 ...c,
                 idx,
+                metadata: {
+                  ...c.metadata,
+                  level: normalizePlayerLevels
+                    ? avgPlayerLevel
+                    : c.metadata.level,
+                },
               }),
               wildlife: c.wildlife,
               catch: c,
@@ -154,22 +170,14 @@ export const simulateBattle = async ({
         battleParticipant.metadata.isPlaceEncounter &&
         battleInput?.placeId
       ) {
-        const playerLevels = battleInput.battleParticipants
-          .filter((p) => !!p.player?.id)
-          .flatMap((p) => p.player?.catches ?? [])
-          .map((c) => c.metadata.level || FIGHTER_MAX_LEVEL)
-
         if (!battleInput.tier) {
           throw new Error("Place encounter without tier")
         }
 
-        let level = playerLevels.length
-          ? Math.ceil(max(playerLevels) || FIGHTER_MAX_LEVEL)
-          : FIGHTER_MAX_LEVEL
         // let level = playerLevels.length
-        //   ? Math.ceil(sum(playerLevels) / playerLevels.length)
+        //   ? Math.ceil(max(playerLevels) || FIGHTER_MAX_LEVEL)
         //   : FIGHTER_MAX_LEVEL
-
+        let level = avgPlayerLevel
         level += battleInput.tier
 
         team = [
