@@ -154,34 +154,6 @@ export const battleRouter = createTRPCRouter({
           message: "Battle not found",
         })
       }
-      const alwaysAllowedBattleStatus: BattleStatus[] = [
-        BattleStatus.IN_PROGRESS,
-        BattleStatus.INVITING,
-      ]
-      if (
-        !alwaysAllowedBattleStatus.includes(battle.status) &&
-        battle.metadata.battleReport?.version !== BATTLE_REPORT_VERSION
-      ) {
-        throw new TRPCError({
-          code: "BAD_REQUEST",
-          message: "Battle report is outdated and cannot be viewed anymore",
-        })
-      }
-
-      if (battle?.metadata.battleReport) {
-        const battleReport = battle.metadata.battleReport
-        if (battleReport.version === BATTLE_REPORT_VERSION) {
-          return {
-            status: battle.status,
-            battleReport,
-          }
-        }
-      }
-
-      const { battleReport } = await simulateBattle({
-        prisma: ctx.prisma,
-        battleId: input.battleId,
-      })
 
       // Get DUNGEON
       let dungeon:
@@ -208,6 +180,36 @@ export const battleRouter = createTRPCRouter({
           }
         }
       }
+
+      const alwaysAllowedBattleStatus: BattleStatus[] = [
+        BattleStatus.IN_PROGRESS,
+        BattleStatus.INVITING,
+      ]
+      if (
+        !alwaysAllowedBattleStatus.includes(battle.status) &&
+        battle.metadata.battleReport?.version !== BATTLE_REPORT_VERSION
+      ) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Battle report is outdated and cannot be viewed anymore",
+        })
+      }
+
+      if (battle?.metadata.battleReport) {
+        const battleReport = battle.metadata.battleReport
+        if (battleReport.version === BATTLE_REPORT_VERSION) {
+          return {
+            status: battle.status,
+            battleReport,
+            dungeon,
+          }
+        }
+      }
+
+      const { battleReport } = await simulateBattle({
+        prisma: ctx.prisma,
+        battleId: input.battleId,
+      })
 
       return {
         battleReport,
