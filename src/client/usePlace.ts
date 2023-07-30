@@ -12,9 +12,9 @@ export const usePlace = ({ type }: { type: PlaceType }) => {
   const playerLocation = useAtomValue(playerLocationAtom)
 
   const placesByDistance = orderBy(
-    placesFiltered.map((careCenter) => {
-      const distanceInMeter = calcDistanceInMeter(careCenter, playerLocation)
-      return { careCenter, distanceInMeter }
+    placesFiltered.map((place) => {
+      const distanceInMeter = calcDistanceInMeter(place, playerLocation)
+      return { place, distanceInMeter }
     }),
     (c) => c.distanceInMeter,
     "asc"

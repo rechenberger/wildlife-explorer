@@ -28,7 +28,7 @@ export const MyCatchesButton = () => {
                 care()
               } else {
                 NiceModal.show(PlaceViewModal, {
-                  placeId: nearestCareCenter.careCenter.id,
+                  placeId: nearestCareCenter.place.id,
                 })
               }
             } else {
