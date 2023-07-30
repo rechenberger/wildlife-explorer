@@ -44,6 +44,7 @@ export const CatchDetailsModal = NiceModal.create<{
           showExp
           showStats
           showCaughtAt
+          showBigImage
           canSwapMoves
         />
       </DialogContent>

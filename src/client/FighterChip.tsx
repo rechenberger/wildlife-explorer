@@ -10,6 +10,18 @@ import { useGetWildlifeName } from "./useGetWildlifeName"
 import { usePlayer } from "./usePlayer"
 import { useShowFighters } from "./useShowFighter"
 
+export const ivScoreClasses = (ivScore?: number | null) => {
+  return (
+    ivScore && [
+      "bg-gradient-to-b from-gray-200",
+      "to-gray-200",
+      ivScore >= 75 && "to-amber-200",
+      ivScore >= 85 && "from-amber-200 to-red-200",
+      ivScore >= 95 && "from-red-200 to-gray-600",
+    ]
+  )
+}
+
 export const FighterChip = ({
   fighter,
   ltr = true,
@@ -67,13 +79,7 @@ export const FighterChip = ({
                   "h-full w-full rounded-full scale-[1] bg-gray-200",
                   fainted && "rotate-180",
                   "pointer-events-none",
-                  ivScore && [
-                    "bg-gradient-to-b from-gray-200",
-                    "to-gray-200",
-                    ivScore >= 75 && "to-amber-200",
-                    ivScore >= 85 && "from-amber-200 to-red-200",
-                    ivScore >= 95 && "from-red-200 to-gray-600",
-                  ]
+                  ivScoreClasses(ivScore)
                 )}
                 alt={"Observation"}
                 unoptimized

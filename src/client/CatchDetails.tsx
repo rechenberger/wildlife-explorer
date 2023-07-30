@@ -1,6 +1,7 @@
 import NiceModal from "@ebay/nice-modal-react"
 import { Edit2, ExternalLink, Network } from "lucide-react"
 import dynamic from "next/dynamic"
+import Image from "next/image"
 import { useMemo } from "react"
 import { DEV_MODE } from "~/config"
 import { type BattleReportFighter } from "~/server/lib/battle/BattleReport"
@@ -10,7 +11,7 @@ import { Away } from "./Away"
 import { CatchDetailsModal } from "./CatchDetailsModal"
 import { CurrentObservationModal } from "./CurrentObservationModal"
 import { DividerHeading } from "./DividerHeading"
-import { FighterChip } from "./FighterChip"
+import { FighterChip, ivScoreClasses } from "./FighterChip"
 import { FighterMoves } from "./FighterMoves"
 import { FighterStatsChart } from "./FighterStatsChart"
 import { FighterTypeBadges } from "./FighterTypeBadges"
@@ -18,6 +19,8 @@ import { MoveSwapperModal } from "./MoveSwapperModal"
 import { TaxonOverviewModal } from "./TaxonOverviewModal"
 import { TimeAgo } from "./TimeAgo"
 import { TypeBadge } from "./TypeBadge"
+import { cn } from "./cn"
+import { getFighterImage } from "./getFighterImage"
 import { Progress } from "./shadcn/ui/progress"
 import { evolveIcon, swapIcon } from "./typeIcons"
 import { useMyCatch } from "./useCatches"
@@ -25,6 +28,7 @@ import { useEvolve } from "./useEvolve"
 import { useGetWildlifeName } from "./useGetWildlifeName"
 import { useMapFlyTo } from "./useMapRef"
 import { usePlayer } from "./usePlayer"
+import { useShowFighters } from "./useShowFighter"
 
 const JsonViewer = dynamic(() => import("../client/JsonViewer"), { ssr: false })
 
@@ -40,6 +44,7 @@ export const CatchDetails = ({
   showExp,
   showStats,
   showCaughtAt,
+  showBigImage,
   canSwapMoves,
   fighter,
   buttonSlot,
@@ -55,6 +60,7 @@ export const CatchDetails = ({
   showExp?: boolean
   showStats?: boolean
   showCaughtAt?: boolean
+  showBigImage?: boolean
   canSwapMoves?: boolean
   fighter?: BattleReportFighter
   buttonSlot?: React.ReactNode
@@ -85,6 +91,7 @@ export const CatchDetails = ({
     },
   })
   const { evolve } = useEvolve()
+  const showFighters = useShowFighters()
 
   if (!c)
     return (
@@ -117,6 +124,29 @@ export const CatchDetails = ({
             <Edit2 className="w-4 h-4" />
           </button>
         </div>
+      )}
+      {showBigImage && showFighters && (
+        <>
+          <div className={cn("flex flex-col items-center relative")}>
+            <div
+              className={cn(
+                "bg-gray-100 rounded-full",
+                ivScoreClasses(c.fighter.ivScore)
+              )}
+            >
+              <Image
+                src={getFighterImage({
+                  fighterSpeciesNum: c.fighter.speciesNum,
+                })}
+                width={160}
+                height={160}
+                alt={"Fighter"}
+                className={cn("scale-125")}
+                unoptimized
+              />
+            </div>
+          </div>
+        </>
       )}
       <div className="p-2 flex flex-col gap-4">
         {showWildlife && (
