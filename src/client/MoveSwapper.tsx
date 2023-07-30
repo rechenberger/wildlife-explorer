@@ -211,7 +211,7 @@ export const MoveSwapper = ({ catchId }: { catchId: string }) => {
       {!!evolutionPreview && (
         <>
           <DividerHeading>
-            Evolution (Level {evolutionPreview.evoLevel})
+            Evolution ({evolutionPreview.evoConditionLabel})
           </DividerHeading>
           <div className="grid flex-1 grid-cols-[auto_1fr] gap-1 items-center gap-x-2">
             {map(evolutionPreview?.realNewMoves, (move) => {

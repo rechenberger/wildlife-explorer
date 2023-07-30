@@ -82,6 +82,8 @@ export const wildlifeRouter = createTRPCRouter({
           fighter: await getWildlifeFighterPlus({
             wildlife: w,
             seed: createSeed(w),
+            playerId: null,
+            originalPlayerId: null,
           }),
         }
       })
@@ -121,6 +123,8 @@ export const wildlifeRouter = createTRPCRouter({
       const fighter = await getWildlifeFighterPlus({
         wildlife,
         seed: createSeed(wildlife),
+        playerId: null,
+        originalPlayerId: null,
       })
 
       return {

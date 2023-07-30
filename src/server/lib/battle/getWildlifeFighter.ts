@@ -22,20 +22,25 @@ export type GetWildlifeFighterOptions = {
   seed: string
   idx?: number
   name?: string | null
+  playerId: string | null
+  originalPlayerId: string | null
 }
 
 export const getHightestPossibleEvoByLevel = ({
   species,
   level,
+  isTraded,
 }: {
   species: Species
   level: number
+  isTraded: boolean
 }) => {
   let highestPossibleEvo = null
   while (true) {
     const possibleEvo = getNextPossibleEvoByLevel({
       species,
       level,
+      isTraded,
     })
     if (!possibleEvo) break
     species = possibleEvo
@@ -47,15 +52,37 @@ export const getHightestPossibleEvoByLevel = ({
 export const getNextPossibleEvoByLevel = ({
   species,
   level,
+  isTraded,
 }: {
   species: Species
   level: number
+  isTraded: boolean
 }) => {
   const nextEvo = getNextEvo({
     species,
   })
-  if (nextEvo?.evoLevel && nextEvo.evoLevel > level) return null
+  if (!nextEvo) return null
+  const isPossible = isEvoPossible({
+    nextEvo,
+    level,
+    isTraded,
+  })
+  if (!isPossible) return null
   return nextEvo
+}
+
+export const isEvoPossible = ({
+  nextEvo,
+  level,
+  isTraded,
+}: {
+  nextEvo: Species
+  level: number
+  isTraded: boolean
+}) => {
+  if (nextEvo.evoType === "trade") return isTraded
+  if (nextEvo.evoLevel && nextEvo.evoLevel <= level) return true
+  return false
 }
 
 export const getNextEvo = ({ species }: { species: Species }) => {
@@ -65,6 +92,11 @@ export const getNextEvo = ({ species }: { species: Species }) => {
     // if (e.evoCondition) return false
     // if (e.evoItem) return false
     // if (e.evoMove) return false
+    if (e.evoType === "trade") {
+      if (e.evoItem) return false
+      if (e.evoCondition) return false
+      return true
+    }
 
     if (!e.evoLevel) return false
     return true
@@ -109,7 +141,11 @@ export const getWildlifeFighter = async ({
   // Evolve captives to highest possible evolution
   const canEvolveByLevel = wildlife.metadata.observationCaptive
   if (canEvolveByLevel) {
-    const highestPossibleEvo = getHightestPossibleEvoByLevel({ species, level })
+    const highestPossibleEvo = getHightestPossibleEvoByLevel({
+      species,
+      level,
+      isTraded: true,
+    })
     if (highestPossibleEvo) {
       species = highestPossibleEvo
       speciesName = species.name

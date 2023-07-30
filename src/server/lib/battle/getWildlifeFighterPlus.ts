@@ -22,15 +22,18 @@ export const getWildlifeFighterPlus = async (
   return transformPokemonSetToPlus({
     pokemonSet,
     catchMetadata: options.metadata,
+    isTraded: options.playerId !== options.originalPlayerId,
   })
 }
 
 export const transformPokemonSetToPlus = ({
   pokemonSet,
   catchMetadata,
+  isTraded,
 }: {
   pokemonSet: PokemonSet
   catchMetadata?: GetWildlifeFighterOptions["metadata"]
+  isTraded: boolean
 }) => {
   const battle = new Battle({
     formatid: toID("gen7randombattle"),
@@ -50,6 +53,7 @@ export const transformPokemonSetToPlus = ({
   return transformWildlifeFighterPlus({
     pokemonSet,
     pokemon: p,
+    isTraded,
   })
 }
 
@@ -67,16 +71,19 @@ export const transformWildlifeFighterPlus = ({
   pokemonSet,
   pokemon,
   foeTypes,
+  isTraded,
 }: {
   pokemonSet: PokemonSet
   pokemon: Pokemon
   foeTypes?: string[]
+  isTraded: boolean
 }) => {
   const p = pokemon
 
   const nextPossibleEvo = getNextPossibleEvoByLevel({
     species: Dex.species.get(pokemonSet.species),
     level: p.level,
+    isTraded,
   })
 
   const canEvolve = !!nextPossibleEvo

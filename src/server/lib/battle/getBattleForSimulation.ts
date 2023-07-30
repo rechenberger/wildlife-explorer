@@ -52,6 +52,8 @@ export const getBattleForSimulation = async ({
                   id: true,
                   seed: true,
                   name: true,
+                  playerId: true,
+                  originalPlayerId: true,
                   wildlife: {
                     select: {
                       id: true,

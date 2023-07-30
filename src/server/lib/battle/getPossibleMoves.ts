@@ -48,6 +48,8 @@ export const getPossibleMovesByCatch = async ({
       taxon: { fighterSpeciesName: string }
     }
     seed: string
+    playerId: string
+    originalPlayerId: string
   }
 }) => {
   const fighter = await getWildlifeFighterPlus(c)
