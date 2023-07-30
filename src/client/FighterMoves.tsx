@@ -1,4 +1,4 @@
-import { map, some } from "lodash-es"
+import { map, some, uniqBy } from "lodash-es"
 import { Fragment, useState } from "react"
 import { MAX_MOVES_PER_FIGHTER } from "~/config"
 import { type BattleReportFighter } from "~/server/lib/battle/BattleReport"
@@ -34,7 +34,7 @@ export const FighterMoves = ({
       disabledSource: null,
     })) ?? []
 
-  const movesMerged = [...moves, ...trappedMoves]
+  const movesMerged = uniqBy([...moves, ...trappedMoves], (m) => m.id)
   return (
     <>
       <div className="grid flex-1 grid-cols-1 gap-1">
@@ -176,7 +176,7 @@ export const FighterMove = ({
             </div>
           </button>
         </HoverCardTrigger>
-        {move && !!move.definition && (
+        {move && (
           <HoverCardContent
             className={cn(
               "w-80 flex flex-col gap-2",
@@ -189,55 +189,61 @@ export const FighterMove = ({
                 Disabled: {move.disabledSource}
               </div>
             )}
-            <div className="text-sm opacity-80">
-              {replaceByWildlife(move.definition?.desc || "")}
-            </div>
-            <div className="flex flex-row gap-1 text-center text-sm items-center mt-4">
-              <div className="flex-1 flex flex-col gap-1">
-                <div className="text-xs font-bold opacity-60">Category</div>
-                <div>{move.definition?.category}</div>
-              </div>
-              <div className="w-px bg-black/60 self-stretch" />
-              <div className="flex-1 flex flex-col gap-1">
-                <div className="text-xs font-bold opacity-60">Power</div>
-                <div>{move.definition?.basePower}</div>
-              </div>
-              <div className="w-px bg-black/60 self-stretch" />
-              <div className="flex-1 flex flex-col gap-1">
-                <div className="text-xs font-bold opacity-60">Accuracy</div>
-                <div>
-                  {move?.definition?.accuracy === true
-                    ? "Always hits"
-                    : move?.definition?.accuracy}
+            {!!move.definition && (
+              <>
+                <div className="text-sm opacity-80">
+                  {replaceByWildlife(move.definition?.desc || "")}
                 </div>
-              </div>
-            </div>
-            <div className="h-px bg-black/60 self-stretch" />
-            <div className="flex flex-row gap-1 text-center text-sm items-center">
-              <div className="flex-1 flex flex-col gap-1">
-                <div className="text-xs font-bold opacity-60">Type</div>
-                <div>{move?.definition?.type}</div>
-              </div>
-              <div className="w-px bg-black/60 self-stretch" />
-              {effectiveness && (
-                <>
+                <div className="flex flex-row gap-1 text-center text-sm items-center mt-4">
                   <div className="flex-1 flex flex-col gap-1">
-                    <div className="text-xs font-bold opacity-60">
-                      Effectiveness
-                    </div>
-                    <div>{effectiveness?.desc}</div>
+                    <div className="text-xs font-bold opacity-60">Category</div>
+                    <div>{move.definition?.category}</div>
                   </div>
                   <div className="w-px bg-black/60 self-stretch" />
-                </>
-              )}
-              <div className="flex-1 flex flex-col gap-1">
-                <div className="text-xs font-bold opacity-60">Uses Left</div>
-                <div>
-                  {move?.status?.pp ?? move?.definition?.pp}/
-                  {move?.definition?.pp}
+                  <div className="flex-1 flex flex-col gap-1">
+                    <div className="text-xs font-bold opacity-60">Power</div>
+                    <div>{move.definition?.basePower}</div>
+                  </div>
+                  <div className="w-px bg-black/60 self-stretch" />
+                  <div className="flex-1 flex flex-col gap-1">
+                    <div className="text-xs font-bold opacity-60">Accuracy</div>
+                    <div>
+                      {move?.definition?.accuracy === true
+                        ? "Always hits"
+                        : move?.definition?.accuracy}
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
+                <div className="h-px bg-black/60 self-stretch" />
+                <div className="flex flex-row gap-1 text-center text-sm items-center">
+                  <div className="flex-1 flex flex-col gap-1">
+                    <div className="text-xs font-bold opacity-60">Type</div>
+                    <div>{move?.definition?.type}</div>
+                  </div>
+                  <div className="w-px bg-black/60 self-stretch" />
+                  {effectiveness && (
+                    <>
+                      <div className="flex-1 flex flex-col gap-1">
+                        <div className="text-xs font-bold opacity-60">
+                          Effectiveness
+                        </div>
+                        <div>{effectiveness?.desc}</div>
+                      </div>
+                      <div className="w-px bg-black/60 self-stretch" />
+                    </>
+                  )}
+                  <div className="flex-1 flex flex-col gap-1">
+                    <div className="text-xs font-bold opacity-60">
+                      Uses Left
+                    </div>
+                    <div>
+                      {move?.status?.pp ?? move?.definition?.pp}/
+                      {move?.definition?.pp}
+                    </div>
+                  </div>
+                </div>
+              </>
+            )}
           </HoverCardContent>
         )}
       </HoverCard>
