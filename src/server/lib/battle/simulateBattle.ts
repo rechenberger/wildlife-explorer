@@ -144,22 +144,14 @@ export const simulateBattle = async ({
         const avgLevel =
           sum(playerTeam.map((t) => t.fighter.level)) / playerTeam.length
 
-        const placeFighter = {
-          fighter: await getDungeonFighter({
-            seed: `${battleInput.placeId}-${battleInput.tier}`,
-            level: avgLevel,
-          }),
-          wildlife: null,
-        }
-        const placeParticipant = {
-          sideId: `p${teams.length + 1}` as SideID,
-          name: battleInput.placeId,
-          team: [placeFighter],
-          player: null,
-          participationId: null,
-        }
-
-        // team = [placeParticipant]
+        team = [
+          {
+            fighter: await getDungeonFighter({
+              seed: `${battleInput.placeId}-${battleInput.tier}`,
+              level: avgLevel,
+            }),
+          },
+        ]
       } else {
         throw new Error(
           `Cant initiate Battle Participant ${battleParticipant.id}`
