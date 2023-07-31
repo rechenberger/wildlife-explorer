@@ -24,27 +24,10 @@ export const FighterMoves = ({
   hideMobileDetails?: boolean
 }) => {
   const moves = fighter.fighter.moves
-  const trappedMoves =
-    fighter.fighter.trappedInMoves?.map((m) => ({
-      id: m.id,
-      name: m.move,
-      status: null,
-      definition: null,
-      disabled: null,
-      disabledSource: null,
-    })) ?? []
+  const trappedMoves = fighter.fighter.moveRequestData?.moves ?? []
 
   const movesMerged = uniqBy([...moves, ...trappedMoves], (m) => m.id)
-  if (!movesMerged.length) {
-    movesMerged.push({
-      id: "struggle",
-      name: "Struggle",
-      status: null,
-      definition: null,
-      disabled: null,
-      disabledSource: null,
-    })
-  }
+
   return (
     <>
       <div className="grid flex-1 grid-cols-1 gap-1">
@@ -75,14 +58,9 @@ export type FighterMoveProps = {
   onClick?: (options: { moveId: string }) => void
   move:
     | BattleReportFighter["fighter"]["moves"][number]
-    | {
-        id: string
-        name: string
-        status: null
-        definition: null
-        disabled: boolean | null
-        disabledSource: string | null
-      }
+    | NonNullable<
+        NonNullable<BattleReportFighter["fighter"]["moveRequestData"]>["moves"]
+      >[number]
     | null
   hideMobileDetails?: boolean
 }
@@ -101,9 +79,9 @@ export const FighterMove = ({
     move.disabled ||
     allDisabled ||
     availablePp === 0 ||
-    (!!fighter.fighter.trappedInMoves &&
+    (!!fighter.fighter.moveRequestData?.moves &&
       !some(
-        fighter.fighter.trappedInMoves,
+        fighter.fighter.moveRequestData?.moves,
         (trappedMove) => trappedMove.id === move.id
       ))
 
