@@ -62,10 +62,12 @@ export const PlaceViewDungeon = ({ placeId }: { placeId: string }) => {
         <TorchIcon className="w-6 h-6 rotate-45" />
         <span className="ml-2">Enter Dungeon</span>
       </Button>
+      {/* FROM: https://teampilot.ai/team/wildlife/chat/b0f91b6c71ca3b880784fda3aa07152a */}
       <div className="text-sm text-gray-500 italic text-center">
-        As you traverse each tier, the strength of the opponents will amplify.
-        The level of the wildlife you encounter matches your team&apos;s max
-        level plus the tier you&apos;re attempting. Good luck!
+        As you ascend each tier, the opponents&apos; strength intensifies. The
+        level of the wildlife you&apos;ll face is determined by their tier level
+        added to the average level of your team. During the dungeon challenge,
+        all your fighters are promptly matched to this average. Good luck!
       </div>
       <Tabs defaultValue="highscore" className="w-full">
         <TabsList className="grid w-full grid-cols-2">
