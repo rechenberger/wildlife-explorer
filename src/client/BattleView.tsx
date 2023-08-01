@@ -297,9 +297,10 @@ export const BattleView = ({
                                 src={getFighterImage({
                                   fighterSpeciesNum: fighter.fighter.speciesNum,
                                   back: isMainSide,
+                                  animated: true,
                                 })}
-                                width={64}
-                                height={64}
+                                width={40}
+                                height={40}
                                 alt={"Fighter"}
                                 className={cn(
                                   "scale-[2]",
