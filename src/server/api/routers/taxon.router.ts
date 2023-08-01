@@ -228,6 +228,11 @@ export const taxonRouter = createTRPCRouter({
     }),
 
   getFighters: playerProcedure.query(async ({ ctx }) => {
+    // return uniqBy(
+    //   Dex.species.all().filter((s) => !!s.num && s.num > 0 && s.num <= 1010),
+    //   (s) => s.num
+    // )
+
     const taxons = await ctx.prisma.taxon.findMany({
       where: {
         isAnchor: true,
