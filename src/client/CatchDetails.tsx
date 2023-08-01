@@ -130,18 +130,18 @@ export const CatchDetails = ({
           <div className={cn("flex flex-col items-center relative")}>
             <div
               className={cn(
-                "bg-gray-100 rounded-full",
+                "bg-gray-100 rounded-full w-40 h-40 relative",
                 ivScoreClasses(c.fighter.ivScore)
               )}
             >
               <Image
                 src={getFighterImage({
                   fighterSpeciesNum: c.fighter.speciesNum,
+                  animated: true,
                 })}
-                width={160}
-                height={160}
+                fill
                 alt={"Fighter"}
-                className={cn("scale-125")}
+                className={cn("scale-125 object-contain")}
                 unoptimized
               />
             </div>
