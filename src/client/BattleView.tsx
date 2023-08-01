@@ -7,7 +7,7 @@ import { Fragment, useCallback, useLayoutEffect, useRef } from "react"
 import { toast } from "sonner"
 import {
   DEV_MODE,
-  FIGHTER_MAX_NUM_WITH_BACK_IMG,
+  FIGHTER_MAX_NUM_WITH_ANIMATION,
   REFETCH_MS_BATTLE_PVP,
 } from "~/config"
 import { parseBattleLog } from "~/server/lib/battle/battleLogParser"
@@ -306,7 +306,7 @@ export const BattleView = ({
                                   "scale-[2]",
                                   isMainSide &&
                                     fighter.fighter.speciesNum >
-                                      FIGHTER_MAX_NUM_WITH_BACK_IMG &&
+                                      FIGHTER_MAX_NUM_WITH_ANIMATION &&
                                     "transform scale-x-[-2]"
                                 )}
                                 unoptimized
