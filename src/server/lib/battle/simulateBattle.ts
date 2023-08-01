@@ -13,12 +13,13 @@ import {
   MAX_FIGHTERS_PER_TEAM,
 } from "~/config"
 import { type MyPrismaClient } from "~/server/db"
-import { createSeed, rngInt } from "~/utils/seed"
+import { createSeed, rngItemWithWeights } from "~/utils/seed"
 import {
   BattleReport,
   type BattleReportFighter,
   type BattleReportSide,
 } from "./BattleReport"
+import { getWildlifeFighterPlusMove } from "./WildlifeFighterPlusMove"
 import { applyFighterStats } from "./applyFighterStats"
 import {
   getBattleForSimulation,
@@ -258,13 +259,53 @@ export const simulateBattle = async ({
       let choseOther = false
       const other = sideId === "p1" ? battle.p2 : battle.p1
       const otherFighter = first(other.active)
-      const moves = otherFighter?.moves?.length
+      const moves = otherFighter?.baseMoveSlots?.length
       if (moves) {
-        const move = rngInt({
-          seed: [...battle.prngSeed, battle.turn, "move"],
-          min: 1,
-          max: moves,
+        const otherMovesParsed = otherFighter?.baseMoveSlots.map((move) => {
+          return getWildlifeFighterPlusMove({
+            move,
+            p: otherFighter,
+            foeTypes: first(otherFighter.foes())?.types,
+          })
         })
+        const lastMoveId = otherFighter.lastMoveUsed?.id
+        const movesWeighted = map(otherMovesParsed, (m) => {
+          const isStatusMove = m.definition.category === "Status"
+          const isDisabled = m.disabled || m.definition.pp === 0
+          const foeIsImmune = m.immunity === false
+
+          if (isDisabled || (foeIsImmune && !isStatusMove)) {
+            return {
+              item: m.id,
+              weight: 0,
+            }
+          }
+
+          const weightModifier = 0.5
+          let weight = 1
+
+          if (!isStatusMove) {
+            // non status moves are more likely
+            weight += weightModifier
+
+            // effectiveness is between -2 and 2, gets only accounted if its non status move
+            weight += weightModifier * (m.effectiveness ?? 0)
+
+            // last used move is less likely
+            weight += weightModifier * (m.id === lastMoveId ? -1 : 0)
+          }
+
+          return {
+            item: m.id,
+            weight,
+          }
+        })
+
+        const move = rngItemWithWeights({
+          seed: [...battle.prngSeed, battle.turn, "move"],
+          items: movesWeighted,
+        })
+
         const success = other.choose(`move ${move}`)
         choseOther = success
       }
