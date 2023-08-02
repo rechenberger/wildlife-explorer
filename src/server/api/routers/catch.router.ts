@@ -376,6 +376,14 @@ export const catchRouter = createTRPCRouter({
     await Promise.all(
       map(all, async (c) => {
         const fighter = await getWildlifeFighterPlus(c)
+
+        // Hardcore: Fainted fighters are not healed
+        if (ctx.player.metadata?.hardcore) {
+          if (fighter.hp <= 0) {
+            return
+          }
+        }
+
         let needToSave = false
 
         // PP
