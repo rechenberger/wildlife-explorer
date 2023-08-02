@@ -1,4 +1,5 @@
 import { HeartPulse } from "lucide-react"
+import { useCallback } from "react"
 import { toast } from "sonner"
 import { api } from "~/utils/api"
 import { Button } from "./shadcn/ui/button"
@@ -13,9 +14,10 @@ export const useCare = () => {
       trpc.catch.invalidate()
     },
   })
-  const care = () => {
+  const care = useCallback(async () => {
     if (!playerId) return
-    toast.promise(mutateAsync({ playerId }), {
+    const promise = mutateAsync({ playerId })
+    toast.promise(promise, {
       loading: "Caring...",
       success: (data) =>
         data.count
@@ -23,7 +25,10 @@ export const useCare = () => {
           : `Your team is already doing great!`,
       error: (err) => err?.message || "Failed to care",
     })
-  }
+    try {
+      await promise
+    } catch (error) {}
+  }, [mutateAsync, playerId])
 
   return { care, isLoading }
 }

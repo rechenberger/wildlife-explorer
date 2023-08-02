@@ -1,15 +1,22 @@
+import NiceModal from "@ebay/nice-modal-react"
+import { useAtom } from "jotai"
 import { map } from "lodash-es"
-import { ArrowLeftRight } from "lucide-react"
+import { ArrowLeftRight, Network, Squirrel } from "lucide-react"
 import Link from "next/link"
 import { Fragment } from "react"
+import { SwitchCard } from "./SwitchCard"
+import { TaxonFighterOverviewModal } from "./TaxonFighterOverviewModal"
+import { TaxonOverviewModal } from "./TaxonOverviewModal"
 import { cn } from "./cn"
 import { Button } from "./shadcn/ui/button"
 import { Label } from "./shadcn/ui/label"
 import { RadioGroup, RadioGroupItem } from "./shadcn/ui/radio-group"
 import { useSettingsMapStyle } from "./useSettingsMapStyle"
+import { showFightersAtom } from "./useShowFighter"
 
 export const SettingsView = () => {
   const { mapStyleOptions, mapStyleKey, setMapStyleKey } = useSettingsMapStyle()
+  const [showFighters, setShowFighters] = useAtom(showFightersAtom)
   return (
     <>
       <div className="flex flex-col gap-8">
@@ -61,6 +68,31 @@ export const SettingsView = () => {
               <div>Switch Character</div>
             </Button>
           </Link>
+        </div>
+        <div className="flex flex-col gap-2">
+          <div className="text-xs font-bold">More</div>
+          <SwitchCard
+            id="showFighters"
+            titleElement="Show Fighters"
+            checked={showFighters}
+            onCheckedChange={setShowFighters}
+          />
+          <Button
+            onClick={() => {
+              NiceModal.show(TaxonOverviewModal)
+            }}
+          >
+            <Network className="w-4 h-4 mr-1" />
+            <div>Taxon Overview</div>
+          </Button>
+          <Button
+            onClick={() => {
+              NiceModal.show(TaxonFighterOverviewModal)
+            }}
+          >
+            <Squirrel className="w-4 h-4 mr-1" />
+            <div>Fighter Overview</div>
+          </Button>
         </div>
       </div>
     </>

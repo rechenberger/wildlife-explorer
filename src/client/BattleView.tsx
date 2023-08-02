@@ -2,9 +2,14 @@ import NiceModal from "@ebay/nice-modal-react"
 import { useAtomValue, useSetAtom } from "jotai"
 import { find, flatMap, map, orderBy } from "lodash-es"
 import { Scroll, ScrollText, Undo2 } from "lucide-react"
+import Image from "next/image"
 import { Fragment, useCallback, useLayoutEffect, useRef } from "react"
 import { toast } from "sonner"
-import { DEV_MODE } from "~/config"
+import {
+  DEV_MODE,
+  FIGHTER_MAX_NUM_WITH_ANIMATION,
+  REFETCH_MS_BATTLE_PVP,
+} from "~/config"
 import { parseBattleLog } from "~/server/lib/battle/battleLogParser"
 import { api } from "~/utils/api"
 import { atomWithLocalStorage } from "~/utils/atomWithLocalStorage"
@@ -16,6 +21,7 @@ import { FighterMoves } from "./FighterMoves"
 import { FighterTypeBadges } from "./FighterTypeBadges"
 import { TypeBadge } from "./TypeBadge"
 import { cn } from "./cn"
+import { getFighterImage } from "./getFighterImage"
 import {
   catchIcon,
   leaveIcon,
@@ -29,6 +35,7 @@ import { useGetWildlifeName } from "./useGetWildlifeName"
 import { useKeyboardShortcut } from "./useKeyboardShortcut"
 import { useMakeChoice } from "./useMakeChoice"
 import { usePlayer } from "./usePlayer"
+import { useShowFighters } from "./useShowFighter"
 
 const BIG_INACTIVE_FIGHTER = false
 const SHOW_ENEMY_MOVES = DEV_MODE
@@ -76,7 +83,7 @@ export const BattleView = ({
       // onSuccess: (data) => {
       //   console.log(data)
       // },
-      refetchInterval: pvpStatus?.isPvp ? 1000 : undefined,
+      refetchInterval: pvpStatus?.isPvp ? REFETCH_MS_BATTLE_PVP : undefined,
     }
   )
 
@@ -125,7 +132,11 @@ export const BattleView = ({
 
   const getName = useGetWildlifeName()
 
-  const { doCatch } = useCatch()
+  const { doCatch } = useCatch({
+    battleId,
+  })
+
+  const showFighters = useShowFighters()
 
   const logRef = useRef<HTMLDivElement>(null)
 
@@ -136,13 +147,28 @@ export const BattleView = ({
 
   if (!data || !pvpStatus || error) {
     return (
-      <div className="flex items-center justify-center py-48 text-center text-sm opacity-60">
-        {error ? error.message : "Loading..."}
+      <div className="flex flex-col gap-8 items-center justify-center py-48 text-center text-sm">
+        <div className="opacity-60">{error ? error.message : "Loading..."}</div>
+        {!!error && (
+          <TypeBadge
+            size="big"
+            content="Try Running"
+            icon={runIcon}
+            onClick={() => {
+              if (!playerId) return
+              run({
+                battleId,
+                playerId,
+              })
+            }}
+            className="w-[76px] sm:w-28"
+          />
+        )}
       </div>
     )
   }
 
-  if (pvpStatus.status === "INVITING" && !pvpStatus.allReady) {
+  if (pvpStatus.status === "INVITING") {
     return <BattleViewPvp battleId={battleId} />
   }
 
@@ -157,7 +183,7 @@ export const BattleView = ({
     const wildlifeId = find(
       flatMap(battleReport.sides, (s) => s.fighters),
       (f) => !f.catch
-    )?.wildlife.id
+    )?.wildlife?.id
 
     if (!wildlifeId) {
       toast.error("No wildlife to catch")
@@ -174,7 +200,16 @@ export const BattleView = ({
     <>
       <div className="flex flex-row gap-2">
         <h3 className="flex-1">
-          {battleIsActive ? "Active Battle" : "Past Battle"}
+          {data.dungeon ? (
+            <div className="flex flex-row gap-1">
+              <strong>{data.dungeon.name}</strong>
+              <span>Dungeon</span>
+              <span>Tier</span>
+              <strong>#{data.dungeon.tier}</strong>
+            </div>
+          ) : (
+            <span>{battleIsActive ? "Active Battle" : "Past Battle"}</span>
+          )}
         </h3>
 
         <div className="absolute right-12 top-4 shrink-0 flex flex-row gap-4">
@@ -238,15 +273,46 @@ export const BattleView = ({
                       isMainSide ? "flex-col" : "flex-col-reverse"
                     )}
                   >
-                    {map(side.fighters, (fighter) => {
+                    {map(side.fighters, (fighter, fighterIdx) => {
                       const { isActive, lastMove, justFainted } =
                         fighter.fighter
                       if (!isActive && !BIG_INACTIVE_FIGHTER && !justFainted)
                         return null
                       return (
                         <Fragment
-                          key={fighter.catch?.id ?? fighter.wildlife.id}
+                          key={
+                            fighter.catch?.id ??
+                            fighter.wildlife?.id ??
+                            fighterIdx
+                          }
                         >
+                          {isActive && showFighters && (
+                            <div
+                              className={cn(
+                                "flex flex-row items-center gap-2 px-8",
+                                isMainSide ? "flex-row" : "flex-row-reverse"
+                              )}
+                            >
+                              <Image
+                                src={getFighterImage({
+                                  fighterSpeciesNum: fighter.fighter.speciesNum,
+                                  back: isMainSide,
+                                  animated: true,
+                                })}
+                                width={40}
+                                height={40}
+                                alt={"Fighter"}
+                                className={cn(
+                                  "scale-[2]",
+                                  isMainSide &&
+                                    fighter.fighter.speciesNum >
+                                      FIGHTER_MAX_NUM_WITH_ANIMATION &&
+                                    "transform scale-x-[-2]"
+                                )}
+                                unoptimized
+                              />
+                            </div>
+                          )}
                           {isActive && (
                             <div
                               className={cn(
@@ -271,7 +337,7 @@ export const BattleView = ({
                               ) : (
                                 <>
                                   <span className="italic text-black">
-                                    {getName(fighter.wildlife)}
+                                    {getName(fighter)}
                                   </span>{" "}
                                   {lastMove ? (
                                     <>
@@ -310,7 +376,7 @@ export const BattleView = ({
                               <FighterChip
                                 fighter={fighter}
                                 ltr={isMySide}
-                                showAbsoluteHp={isMySide}
+                                showAbsoluteHp={isMySide || DEV_MODE}
                                 grayscale={!isActive && !justFainted}
                                 onClick={
                                   isMySide && !!fighter.catch?.id
@@ -365,6 +431,7 @@ export const BattleView = ({
                               (isActive || SHOW_INACTIVE_MOVES) && (
                                 <FighterMoves
                                   fighter={fighter}
+                                  hideMobileDetails
                                   disabled={
                                     isLoading ||
                                     !isActive ||

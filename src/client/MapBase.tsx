@@ -1,9 +1,10 @@
-import { atom, useSetAtom } from "jotai"
-import { debounce } from "lodash-es"
+import { atom, useSetAtom, useStore } from "jotai"
+import { debounce, throttle } from "lodash-es"
 import { useMemo, useRef, type ReactNode } from "react"
 import { Map, type MapRef } from "react-map-gl"
-import { DEFAULT_LOCATION } from "~/config"
+import { DEFAULT_LOCATION, DEFAULT_MAP_ZOOM } from "~/config"
 import { env } from "~/env.mjs"
+import { stickToPlayerAtom } from "./MainNavigationButton"
 import { MapRefProvider } from "./useMapRef"
 import { useNavigation } from "./useNavigation"
 import { useSettingsMapStyle } from "./useSettingsMapStyle"
@@ -12,7 +13,12 @@ export const mapStateAtom = atom({
   lat: DEFAULT_LOCATION.lat,
   lng: DEFAULT_LOCATION.lng,
   radiusInKm: 0.5,
+  zoom: DEFAULT_MAP_ZOOM,
 })
+export const mapZoomAtom = atom((get) => {
+  return get(mapStateAtom).zoom
+})
+export const mapRadiusInKmAtom = atom(0.5)
 
 function calculateRadiusFromZoomLevel(zoomLevel: number): number {
   const earthCircumferenceKm = 40075.017
@@ -28,15 +34,28 @@ export const MapBase = ({
   isOverview?: boolean
 }) => {
   const setMapState = useSetAtom(mapStateAtom)
+  const setStickToPlayer = useSetAtom(stickToPlayerAtom)
+  const store = useStore()
 
   const setMapStateDebounced = useMemo(() => {
-    return debounce(
-      (newState: { lat: number; lng: number; radiusInKm: number }) => {
-        setMapState(newState)
-      },
-      100
-    )
+    return debounce((newState: { lat: number; lng: number; zoom: number }) => {
+      const radiusInKm = calculateRadiusFromZoomLevel(newState.zoom)
+      setMapState({
+        ...newState,
+        radiusInKm,
+      })
+    }, 100)
   }, [setMapState])
+
+  const setZoomThrottled = useMemo(() => {
+    return throttle(
+      (zoom: number) => {
+        store.set(mapRadiusInKmAtom, calculateRadiusFromZoomLevel(zoom))
+      },
+      300,
+      { trailing: true }
+    )
+  }, [store])
 
   const { navigate } = useNavigation()
 
@@ -67,9 +86,24 @@ export const MapBase = ({
           setMapStateDebounced({
             lat: e.viewState.latitude,
             lng: e.viewState.longitude,
-            radiusInKm: calculateRadiusFromZoomLevel(e.viewState.zoom),
+            zoom: e.viewState.zoom,
           })
         }}
+        onMouseDown={() => {
+          setStickToPlayer(false)
+        }}
+        onWheel={() => {
+          setStickToPlayer(false)
+        }}
+        onDragStart={() => {
+          setStickToPlayer(false)
+        }}
+        onZoom={(m) => {
+          setZoomThrottled(m.viewState.zoom)
+        }}
+        // onTouchMove={() => {
+        //   setStickToPlayer(false)
+        // }}
         onClick={(e) => {
           if (isOverview) return
           navigate(e.lngLat)

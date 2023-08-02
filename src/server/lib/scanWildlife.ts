@@ -1,6 +1,6 @@
 import { type Wildlife } from "@prisma/client"
 import { subSeconds } from "date-fns"
-import { chunk, filter, flatMap, map, uniqBy } from "lodash-es"
+import { chunk, filter, flatMap, includes, map, uniqBy } from "lodash-es"
 import {
   DEFAULT_DB_CHUNK_SIZE,
   LOG_SCAN_TIME,
@@ -10,6 +10,8 @@ import {
 import { type MyPrismaClient } from "~/server/db"
 import { findObservations } from "~/server/inaturalist/findObservations"
 import { type LatLng } from "~/server/schema/LatLng"
+import { ImportedTaxon, importTaxon } from "../inaturalist/importTaxon"
+import { WildlifeMetadata } from "../schema/WildlifeMetadata"
 
 export const scanWildlife = async ({
   location,
@@ -41,6 +43,51 @@ export const scanWildlife = async ({
     (o) => o.observationId
   )
 
+  LOG_SCAN_TIME && console.time("importTaxon")
+  const taxonIds = uniqBy(
+    map(observations, (o) => o.taxonId),
+    (id) => id
+  )
+  console.log(`Importing ${taxonIds.length} taxons`)
+
+  const existingTaxon = await prisma.taxon.findMany({
+    select: {
+      id: true,
+    },
+    where: {
+      id: { in: taxonIds },
+    },
+  })
+
+  const existingTaxonIds = existingTaxon.map((t) => t.id)
+
+  const taxonIdsWithoutExisting = filter(
+    taxonIds,
+    (id) => !includes(existingTaxonIds, id)
+  )
+
+  const batches = chunk(taxonIdsWithoutExisting, 20)
+  const importedTaxons: ImportedTaxon[] = []
+  for (const batch of batches) {
+    const importedBatch = await Promise.all(
+      map(batch, async (taxonId) => {
+        try {
+          return await importTaxon({
+            prisma,
+            taxonId,
+            playerId,
+            preFilteredExisting: true,
+          })
+        } catch (error) {
+          console.error(`Could not import taxon ${taxonId}`)
+          throw error
+        }
+      })
+    )
+    importedTaxons.push(...importedBatch)
+  }
+  LOG_SCAN_TIME && console.timeEnd("importTaxon")
+
   const now = new Date()
   const chunks = chunk(observations, DEFAULT_DB_CHUNK_SIZE)
   const wildlifes: Wildlife[] = []
@@ -51,7 +98,7 @@ export const scanWildlife = async ({
           observationId: o.observationId,
           lat: o.lat,
           lng: o.lng,
-          metadata: o,
+          metadata: WildlifeMetadata.parse(o),
           taxonId: o.taxonId,
         }
         return await prisma.wildlife.upsert({
@@ -77,10 +124,18 @@ export const scanWildlife = async ({
     (w) => w.foundById === playerId && w.createdAt >= minCreatedAt
   ).length
 
+  const countTaxons = taxonIds.length
+  const countTaxonsFound = filter(
+    importedTaxons,
+    (w) => w.foundById === playerId && w.createdAt >= minCreatedAt
+  ).length
+
   LOG_SCAN_TIME && console.timeEnd("scanWildlife")
 
   return {
     countAll,
     countFound,
+    countTaxons,
+    countTaxonsFound,
   }
 }

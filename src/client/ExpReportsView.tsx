@@ -1,18 +1,36 @@
+import NiceModal from "@ebay/nice-modal-react"
 import * as ProgressPrimitive from "@radix-ui/react-progress"
 import { map } from "lodash-es"
 import { Fragment } from "react"
 import { type RouterOutputs } from "~/utils/api"
+import { BattleViewModal } from "./BattleViewModal"
+import { ExpReportsModal } from "./ExpReportsModal"
 import { FighterChip } from "./FighterChip"
+import { TypeBadge } from "./TypeBadge"
 import { cn } from "./cn"
+import { battleIcon, leaveIcon, pastIcon } from "./typeIcons"
 
 export type ExpReports = NonNullable<
   RouterOutputs["battle"]["makeChoice"]
 >["expReports"]
 
-export const ExpReportsView = ({ expReports }: { expReports: ExpReports }) => {
+export type ExpReportsViewProps = {
+  expReports: ExpReports
+  prevBattleId?: string
+  nextBattleId?: string
+  reportsOnly?: boolean
+}
+export const ExpReportsView = ({
+  expReports,
+  prevBattleId,
+  nextBattleId,
+  reportsOnly,
+}: ExpReportsViewProps) => {
   return (
     <>
-      <div className="mb-4">🏆 Winner Winner, Exp Dinner 🎉</div>
+      {!reportsOnly && (
+        <div className="mb-4">🏆 Winner Winner, Exp Dinner 🎉</div>
+      )}
       <div className="grid grid-cols-[11rem_1fr] gap-4 justify-start items-center p-2">
         {map(expReports, (expReport, idx) => (
           <Fragment key={idx}>
@@ -88,6 +106,49 @@ export const ExpReportsView = ({ expReports }: { expReports: ExpReports }) => {
           </Fragment>
         ))}
       </div>
+      {!reportsOnly && (
+        <div className="flex flex-row gap-2 mt-4">
+          {prevBattleId && (
+            <TypeBadge
+              icon={pastIcon}
+              content="Back to Battle"
+              className="flex-1"
+              size="big"
+              onClick={() => {
+                NiceModal.hide(ExpReportsModal)
+                NiceModal.show(BattleViewModal, {
+                  battleId: prevBattleId,
+                })
+              }}
+            />
+          )}
+          {!nextBattleId && (
+            <TypeBadge
+              icon={leaveIcon}
+              content="Leave"
+              className="flex-1"
+              size="big"
+              onClick={() => {
+                NiceModal.hide(ExpReportsModal)
+              }}
+            />
+          )}
+          {nextBattleId && (
+            <TypeBadge
+              icon={battleIcon}
+              content="Next Battle"
+              className="flex-1"
+              size="big"
+              onClick={() => {
+                NiceModal.hide(ExpReportsModal)
+                NiceModal.show(BattleViewModal, {
+                  battleId: nextBattleId,
+                })
+              }}
+            />
+          )}
+        </div>
+      )}
     </>
   )
 }

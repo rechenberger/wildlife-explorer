@@ -1,4 +1,4 @@
-import { map, some } from "lodash-es"
+import { map, some, uniqBy } from "lodash-es"
 import { Fragment, useState } from "react"
 import { MAX_MOVES_PER_FIGHTER } from "~/config"
 import { type BattleReportFighter } from "~/server/lib/battle/BattleReport"
@@ -16,27 +16,37 @@ export const FighterMoves = ({
   fighter,
   disabled: allDisabled,
   onClick,
+  hideMobileDetails = false,
 }: {
   fighter: BattleReportFighter
   disabled?: boolean
   onClick?: (options: { moveId: string }) => void
+  hideMobileDetails?: boolean
 }) => {
   const moves = fighter.fighter.moves
+  const trappedMoves = fighter.fighter.moveRequestData?.moves ?? []
+
+  const movesMerged = uniqBy([...moves, ...trappedMoves], (m) => m.id)
+
   return (
     <>
       <div className="grid flex-1 grid-cols-1 gap-1">
-        {map(fillWithNulls(moves, MAX_MOVES_PER_FIGHTER), (move, moveIdx) => {
-          return (
-            <Fragment key={moveIdx}>
-              <FighterMove
-                fighter={fighter}
-                move={move}
-                onClick={onClick}
-                disabled={allDisabled}
-              />
-            </Fragment>
-          )
-        })}
+        {map(
+          fillWithNulls(movesMerged, MAX_MOVES_PER_FIGHTER),
+          (move, moveIdx) => {
+            return (
+              <Fragment key={moveIdx}>
+                <FighterMove
+                  fighter={fighter}
+                  move={move}
+                  onClick={onClick}
+                  disabled={allDisabled}
+                  hideMobileDetails={hideMobileDetails}
+                />
+              </Fragment>
+            )
+          }
+        )}
       </div>
     </>
   )
@@ -46,7 +56,13 @@ export type FighterMoveProps = {
   fighter: BattleReportFighter
   disabled?: boolean
   onClick?: (options: { moveId: string }) => void
-  move: BattleReportFighter["fighter"]["moves"][number] | null
+  move:
+    | BattleReportFighter["fighter"]["moves"][number]
+    | NonNullable<
+        NonNullable<BattleReportFighter["fighter"]["moveRequestData"]>["moves"]
+      >[number]
+    | null
+  hideMobileDetails?: boolean
 }
 
 export const FighterMove = ({
@@ -54,16 +70,22 @@ export const FighterMove = ({
   disabled: allDisabled,
   onClick,
   move,
+  hideMobileDetails = false,
 }: FighterMoveProps) => {
+  const availablePp = move?.status?.pp ?? move?.definition?.pp
+
   const disabled =
     !move ||
+    move.disabled ||
     allDisabled ||
-    (!!fighter.fighter.trappedInMoves &&
+    availablePp === 0 ||
+    (!!fighter.fighter.moveRequestData?.moves &&
       !some(
-        fighter.fighter.trappedInMoves,
+        fighter.fighter.moveRequestData?.moves,
         (trappedMove) => trappedMove.id === move.id
       ))
-  const typeIcon = move?.definition.type
+
+  const typeIcon = move?.definition?.type
     ? getTypeIcon(move?.definition.type)
     : null
   const effectiveness = readableEffectiveness((move as any) ?? {})
@@ -116,16 +138,29 @@ export const FighterMove = ({
                   {effectiveness.symbol}
                 </div>
               )}
-              <div className="hidden w-5 shrink-0 opacity-60 sm:block">
-                {move?.definition.basePower}
-              </div>
-              <div className="hidden w-5 shrink-0 opacity-60 sm:block">
-                {move?.definition.accuracy}
-              </div>
-              <div className="w-8 shrink-0 opacity-60">
-                {move?.status?.pp ?? move?.definition?.pp}/
-                {move?.definition?.pp}
-              </div>
+              {!!move?.definition && (
+                <>
+                  <div
+                    className={cn(
+                      "w-5 shrink-0 opacity-60",
+                      hideMobileDetails && "hidden sm:block"
+                    )}
+                  >
+                    {move?.definition?.basePower}
+                  </div>
+                  <div
+                    className={cn(
+                      "w-5 shrink-0 opacity-60",
+                      hideMobileDetails && "hidden sm:block"
+                    )}
+                  >
+                    {move?.definition?.accuracy}
+                  </div>
+                  <div className="w-8 shrink-0 opacity-60">
+                    {availablePp}/{move?.definition?.pp}
+                  </div>
+                </>
+              )}
             </div>
           </button>
         </HoverCardTrigger>
@@ -137,55 +172,66 @@ export const FighterMove = ({
             )}
           >
             <div className="font-bold opacity-80">{move.name}</div>
-            <div className="text-sm opacity-80">
-              {replaceByWildlife(move.definition.desc)}
-            </div>
-            <div className="flex flex-row gap-1 text-center text-sm items-center mt-4">
-              <div className="flex-1 flex flex-col gap-1">
-                <div className="text-xs font-bold opacity-60">Category</div>
-                <div>{move.definition.category}</div>
+            {move.disabledSource && (
+              <div className="font-bold opacity-80">
+                Disabled: {move.disabledSource}
               </div>
-              <div className="w-px bg-black/60 self-stretch" />
-              <div className="flex-1 flex flex-col gap-1">
-                <div className="text-xs font-bold opacity-60">Power</div>
-                <div>{move.definition.basePower}</div>
-              </div>
-              <div className="w-px bg-black/60 self-stretch" />
-              <div className="flex-1 flex flex-col gap-1">
-                <div className="text-xs font-bold opacity-60">Accuracy</div>
-                <div>
-                  {move.definition.accuracy === true
-                    ? "Always hits"
-                    : move.definition.accuracy}
+            )}
+            {!!move.definition && (
+              <>
+                <div className="text-sm opacity-80">
+                  {replaceByWildlife(move.definition?.desc || "")}
                 </div>
-              </div>
-            </div>
-            <div className="h-px bg-black/60 self-stretch" />
-            <div className="flex flex-row gap-1 text-center text-sm items-center">
-              <div className="flex-1 flex flex-col gap-1">
-                <div className="text-xs font-bold opacity-60">Type</div>
-                <div>{move.definition.type}</div>
-              </div>
-              <div className="w-px bg-black/60 self-stretch" />
-              {effectiveness && (
-                <>
+                <div className="flex flex-row gap-1 text-center text-sm items-center mt-4">
                   <div className="flex-1 flex flex-col gap-1">
-                    <div className="text-xs font-bold opacity-60">
-                      Effectiveness
-                    </div>
-                    <div>{effectiveness?.desc}</div>
+                    <div className="text-xs font-bold opacity-60">Category</div>
+                    <div>{move.definition?.category}</div>
                   </div>
                   <div className="w-px bg-black/60 self-stretch" />
-                </>
-              )}
-              <div className="flex-1 flex flex-col gap-1">
-                <div className="text-xs font-bold opacity-60">Uses Left</div>
-                <div>
-                  {move?.status?.pp ?? move?.definition?.pp}/
-                  {move?.definition?.pp}
+                  <div className="flex-1 flex flex-col gap-1">
+                    <div className="text-xs font-bold opacity-60">Power</div>
+                    <div>{move.definition?.basePower}</div>
+                  </div>
+                  <div className="w-px bg-black/60 self-stretch" />
+                  <div className="flex-1 flex flex-col gap-1">
+                    <div className="text-xs font-bold opacity-60">Accuracy</div>
+                    <div>
+                      {move?.definition?.accuracy === true
+                        ? "Always hits"
+                        : move?.definition?.accuracy}
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
+                <div className="h-px bg-black/60 self-stretch" />
+                <div className="flex flex-row gap-1 text-center text-sm items-center">
+                  <div className="flex-1 flex flex-col gap-1">
+                    <div className="text-xs font-bold opacity-60">Type</div>
+                    <div>{move?.definition?.type}</div>
+                  </div>
+                  <div className="w-px bg-black/60 self-stretch" />
+                  {effectiveness && (
+                    <>
+                      <div className="flex-1 flex flex-col gap-1">
+                        <div className="text-xs font-bold opacity-60">
+                          Effectiveness
+                        </div>
+                        <div>{effectiveness?.desc}</div>
+                      </div>
+                      <div className="w-px bg-black/60 self-stretch" />
+                    </>
+                  )}
+                  <div className="flex-1 flex flex-col gap-1">
+                    <div className="text-xs font-bold opacity-60">
+                      Uses Left
+                    </div>
+                    <div>
+                      {move?.status?.pp ?? move?.definition?.pp}/
+                      {move?.definition?.pp}
+                    </div>
+                  </div>
+                </div>
+              </>
+            )}
           </HoverCardContent>
         )}
       </HoverCard>

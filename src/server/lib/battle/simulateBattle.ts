@@ -5,24 +5,27 @@ import {
   type PokemonSet,
   type SideID,
 } from "@pkmn/sim"
-import { findIndex, first, map } from "lodash-es"
+import { findIndex, first, map, orderBy, sum } from "lodash-es"
 import {
   BATTLE_INPUT_VERSION,
   BATTLE_REPORT_VERSION,
+  FIGHTER_MAX_LEVEL,
   MAX_FIGHTERS_PER_TEAM,
 } from "~/config"
 import { type MyPrismaClient } from "~/server/db"
-import { createSeed, rngInt } from "~/utils/seed"
+import { createSeed, rngItemWithWeights } from "~/utils/seed"
 import {
   BattleReport,
   type BattleReportFighter,
   type BattleReportSide,
 } from "./BattleReport"
+import { getWildlifeFighterPlusMove } from "./WildlifeFighterPlusMove"
 import { applyFighterStats } from "./applyFighterStats"
 import {
   getBattleForSimulation,
   type BattleInput,
 } from "./getBattleForSimulation"
+import { getDungeonFighter } from "./getDungeonFighter"
 import { getWildlifeFighter } from "./getWildlifeFighter"
 import { transformWildlifeFighterPlus } from "./getWildlifeFighterPlus"
 
@@ -75,9 +78,21 @@ export const simulateBattle = async ({
     battle = new Battle({
       formatid: toID("gen7randombattle"),
       // formatid: toID("doubles"),
-      seed: [13103, 5088, 17178, 48392], // TODO:
+
+      // TODO: think about this:
+      // seed: [13103, 5088, 17178, 48392],
     })
   }
+
+  const playerLevels = battleInput.battleParticipants
+    .filter((p) => !!p.player?.id)
+    .flatMap((p) => p.player?.catches ?? [])
+    .map((c) => c.metadata.level || FIGHTER_MAX_LEVEL)
+  const avgPlayerLevel = playerLevels.length
+    ? Math.ceil(sum(playerLevels) / playerLevels.length)
+    : FIGHTER_MAX_LEVEL
+  const isDungeon = !!battleInput.placeId && !!battleInput.tier
+  const normalizePlayerLevels = isDungeon
 
   // BUILD TEAMS
   const teams = await Promise.all(
@@ -91,7 +106,7 @@ export const simulateBattle = async ({
 
       let team: {
         fighter: PokemonSet
-        wildlife: Omit<
+        wildlife?: Omit<
           NonNullable<typeof battleParticipant.wildlife>,
           "observationId" | "respawnsAt"
         >
@@ -99,16 +114,31 @@ export const simulateBattle = async ({
       }[] = []
 
       if (!!battleParticipant.player?.catches) {
+        let catches = battleParticipant.player.catches
         // Dont bring fainted fighters, they suck
-        const nonFainted = battleParticipant.player.catches.filter((c) =>
+        catches = catches.filter((c) =>
           typeof c.metadata.hp === "number" ? c.metadata.hp > 0 : true
         )
+        if (battleParticipant.metadata.startWithCatchId) {
+          catches = orderBy(
+            catches,
+            (c) => c.id === battleParticipant.metadata.startWithCatchId,
+            "desc"
+          )
+        }
+
         team = await Promise.all(
-          nonFainted.map(async (c, idx) => {
+          catches.map(async (c, idx) => {
             return {
               fighter: await getWildlifeFighter({
                 ...c,
                 idx,
+                metadata: {
+                  ...c.metadata,
+                  level: normalizePlayerLevels
+                    ? avgPlayerLevel
+                    : c.metadata.level,
+                },
               }),
               wildlife: c.wildlife,
               catch: c,
@@ -122,6 +152,8 @@ export const simulateBattle = async ({
               wildlife: battleParticipant.wildlife,
               seed: createSeed(battleParticipant.wildlife),
               idx: 0,
+              playerId: null,
+              originalPlayerId: null,
             }),
             wildlife: battleParticipant.wildlife,
           },
@@ -135,6 +167,33 @@ export const simulateBattle = async ({
           //   wildlife: { ...battleParticipant.wildlife, id: "fake-2" },
           // },
         ]
+      } else if (
+        battleParticipant.metadata.isPlaceEncounter &&
+        battleInput?.placeId
+      ) {
+        if (!battleInput.tier) {
+          throw new Error("Place encounter without tier")
+        }
+
+        // let level = playerLevels.length
+        //   ? Math.ceil(max(playerLevels) || FIGHTER_MAX_LEVEL)
+        //   : FIGHTER_MAX_LEVEL
+        let level = avgPlayerLevel
+        level += battleInput.tier
+
+        team = [
+          {
+            fighter: await getDungeonFighter({
+              seed: `${battleInput.placeId}-${battleInput.tier}`,
+              level,
+              idx: 0,
+            }),
+          },
+        ]
+      } else {
+        throw new Error(
+          `Cant initiate Battle Participant ${battleParticipant.id}`
+        )
       }
 
       if (!battleJson) {
@@ -147,7 +206,16 @@ export const simulateBattle = async ({
           if (!fighter) {
             throw new Error("Fighter not found in team")
           }
-          applyFighterStats({ p, catchMetadata: fighter.catch?.metadata })
+          let hp = fighter.catch?.metadata.hp
+          hp = normalizePlayerLevels ? hp : hp && Math.min(hp, p.maxhp)
+          applyFighterStats({
+            p,
+            catchMetadata: {
+              ...fighter.catch?.metadata,
+              // On first tier set hp to max (because of level normalization)
+              hp: normalizePlayerLevels && battleInput?.tier === 1 ? null : hp,
+            },
+          })
         })
       }
 
@@ -191,13 +259,53 @@ export const simulateBattle = async ({
       let choseOther = false
       const other = sideId === "p1" ? battle.p2 : battle.p1
       const otherFighter = first(other.active)
-      const moves = otherFighter?.moves?.length
+      const moves = otherFighter?.baseMoveSlots?.length
       if (moves) {
-        const move = rngInt({
-          seed: [...battle.prngSeed, battle.turn, "move"],
-          min: 1,
-          max: moves,
+        const otherMovesParsed = otherFighter?.baseMoveSlots.map((move) => {
+          return getWildlifeFighterPlusMove({
+            move,
+            p: otherFighter,
+            foeTypes: first(otherFighter.foes())?.types,
+          })
         })
+        const lastMoveId = otherFighter.lastMoveUsed?.id
+        const movesWeighted = map(otherMovesParsed, (m) => {
+          const isStatusMove = m.definition.category === "Status"
+          const isDisabled = m.disabled || m.definition.pp === 0
+          const foeIsImmune = m.immunity === false
+
+          if (isDisabled || (foeIsImmune && !isStatusMove)) {
+            return {
+              item: m.id,
+              weight: 0,
+            }
+          }
+
+          const weightModifier = 0.5
+          let weight = 1
+
+          if (!isStatusMove) {
+            // non status moves are more likely
+            weight += weightModifier
+
+            // effectiveness is between -2 and 2, gets only accounted if its non status move
+            weight += weightModifier * (m.effectiveness ?? 0)
+
+            // last used move is less likely
+            weight += weightModifier * (m.id === lastMoveId ? -1 : 0)
+          }
+
+          return {
+            item: m.id,
+            weight,
+          }
+        })
+
+        const move = rngItemWithWeights({
+          seed: [...battle.prngSeed, battle.turn, "move"],
+          items: movesWeighted,
+        })
+
         const success = other.choose(`move ${move}`)
         choseOther = success
       }
@@ -237,6 +345,8 @@ export const simulateBattle = async ({
           pokemon: p,
           pokemonSet: fighter!.fighter,
           foeTypes,
+          isTraded:
+            fighter?.catch?.playerId !== fighter?.catch?.originalPlayerId,
         })
 
         return {

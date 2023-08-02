@@ -15,7 +15,7 @@ export const wildlifeProcedure = playerProcedure
       include: {
         catches: {
           where: {
-            playerId: ctx.player.id,
+            originalPlayerId: ctx.player.id,
           },
         },
         battleParticipations: {
@@ -26,6 +26,11 @@ export const wildlifeProcedure = playerProcedure
           },
           select: {
             battleId: true,
+          },
+        },
+        taxon: {
+          select: {
+            fighterSpeciesName: true,
           },
         },
       },

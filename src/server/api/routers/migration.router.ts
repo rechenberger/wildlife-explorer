@@ -1,10 +1,12 @@
-import { flatMap, uniq } from "lodash-es"
+import { Dex, Species } from "@pkmn/dex"
+import { chunk, includes, orderBy, uniqBy } from "lodash-es"
 import { MAX_FIGHTERS_PER_TEAM } from "~/config"
 import { getExpRate } from "~/data/pokemonLevelExperienceMap"
 import { PokemonLevelingRate } from "~/data/pokemonLevelingRate"
 import { createTRPCRouter } from "~/server/api/trpc"
+import { importTaxon } from "~/server/inaturalist/importTaxon"
+import { getNextEvo } from "~/server/lib/battle/getWildlifeFighter"
 import { getWildlifeFighterPlus } from "~/server/lib/battle/getWildlifeFighterPlus"
-import { taxonMappingByAI } from "~/server/lib/battle/taxonMappingByAI"
 import { LevelingRate, type CatchMetadata } from "~/server/schema/CatchMetadata"
 import { devProcedure } from "../middleware/devProcedure"
 
@@ -55,7 +57,15 @@ export const migrationRouter = createTRPCRouter({
   catchMetadata: devProcedure.mutation(async ({ ctx }) => {
     const catches = await ctx.prisma.catch.findMany({
       include: {
-        wildlife: true,
+        wildlife: {
+          include: {
+            taxon: {
+              select: {
+                fighterSpeciesName: true,
+              },
+            },
+          },
+        },
       },
     })
 
@@ -67,6 +77,8 @@ export const migrationRouter = createTRPCRouter({
       const wildlifeFighterPlus = await getWildlifeFighterPlus({
         wildlife,
         seed: c.seed,
+        playerId: null,
+        originalPlayerId: null,
       })
 
       const speciesName = wildlifeFighterPlus.species
@@ -160,11 +172,150 @@ export const migrationRouter = createTRPCRouter({
     }
   }),
 
-  tmp: devProcedure.mutation(async ({ ctx }) => {
-    let allPokemon = flatMap(taxonMappingByAI, (m) => m.children).map(
-      (c) => c.pokemon
-    )
-    allPokemon = uniq(allPokemon)
-    return allPokemon
+  tmp: devProcedure.mutation(async ({}) => {
+    //
+  }),
+
+  fixTaxonProblems: devProcedure.mutation(async ({ ctx }) => {
+    const problems = await ctx.prisma.taxon.findMany({
+      where: {
+        isAnchor: false,
+        anchorId: null,
+      },
+    })
+
+    console.log(`${problems.length} problems`)
+    let done = 0
+    for await (const problem of problems) {
+      let candidateId = problem.ancestorId
+      while (true) {
+        if (!candidateId) {
+          throw new Error(`no ancestorId for taxonId: ${problem.id}`)
+        }
+        const candidate = await ctx.prisma.taxon.findUniqueOrThrow({
+          where: { id: candidateId },
+        })
+        if (candidate.isAnchor) {
+          break
+        } else {
+          candidateId = candidate.ancestorId
+        }
+      }
+      const anchorId = candidateId
+      await ctx.prisma.taxon.update({
+        where: {
+          id: problem.id,
+        },
+        data: {
+          anchorId,
+        },
+      })
+      console.log(`${++done} of ${problems.length} done`)
+    }
+    return problems
+  }),
+
+  wildlifeToTaxons: devProcedure.mutation(async ({ ctx }) => {
+    let wildlife = await ctx.prisma.wildlife.findMany({
+      distinct: ["taxonId"],
+      orderBy: {
+        createdAt: "asc",
+      },
+      select: {
+        taxonId: true,
+        metadata: true,
+        foundById: true,
+        createdAt: true,
+      },
+    })
+
+    const allTaxons = await ctx.prisma.taxon.findMany({
+      select: {
+        id: true,
+      },
+    })
+    const importedIds = allTaxons.map((t) => t.id)
+
+    wildlife = wildlife.filter((w) => !includes(importedIds, w.taxonId))
+
+    console.log(`Importing ${wildlife.length}`)
+
+    let done = 0
+    const chunkSize = 20
+    const chunks = chunk(wildlife, chunkSize)
+    for (const chunk of chunks) {
+      const doChunk = async () => {
+        await Promise.all(
+          chunk.map(async (w) => {
+            await importTaxon({
+              prisma: ctx.prisma,
+              taxonId: w.taxonId,
+              playerId: w.foundById,
+              createdAt: w.createdAt,
+            })
+            console.log(`${++done} of ${wildlife.length} done`)
+          })
+        )
+      }
+      // Retry Logic:
+      let retries = 0
+      while (true) {
+        try {
+          await doChunk()
+          break
+        } catch (e: any) {
+          console.error(e?.message || e)
+          retries++
+          const timeout = Math.min(1000 * 2 ** retries, 1000 * 60 * 5)
+          console.log(`CHUNK: Retry (${retries}) in ${timeout / 1000}s ...`)
+          await new Promise((resolve) => setTimeout(resolve, timeout))
+        }
+      }
+    }
+
+    return { length: wildlife.length }
+  }),
+
+  getFighters: devProcedure.mutation(async ({ ctx }) => {
+    const taxons = await ctx.prisma.taxon.findMany({
+      where: {
+        isAnchor: true,
+      },
+    })
+
+    const allSpecies = taxons.flatMap((t) => {
+      const anchored = Dex.species.get(t.fighterSpeciesName)
+      if (!anchored) {
+        throw new Error(
+          `Species not found ${t.fighterSpeciesName} for taxon ${t.id}`
+        )
+      }
+      let lowestEvo = anchored
+      while (lowestEvo.prevo) {
+        lowestEvo = Dex.species.get(lowestEvo.prevo)
+      }
+
+      let allEvos = []
+      let highestEvo: Species | undefined = lowestEvo
+      while (highestEvo) {
+        allEvos.push(highestEvo)
+        highestEvo = getNextEvo({
+          species: highestEvo,
+        })
+      }
+
+      return allEvos.map((s) => ({
+        name: s.name,
+        num: s.num,
+        taxonId: t.id,
+      }))
+    })
+
+    let species = allSpecies
+    species = orderBy(species, (s) => s.num)
+    species = uniqBy(species, (s) => s.num)
+    return {
+      allFighters: species.map((s) => s.name).join(", "),
+    }
   }),
 })

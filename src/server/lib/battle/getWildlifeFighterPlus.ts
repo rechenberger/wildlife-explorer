@@ -1,14 +1,16 @@
 import { Dex, type PokemonSet } from "@pkmn/dex"
 import { Battle, toID, type Pokemon } from "@pkmn/sim"
-import { first, mapValues } from "lodash-es"
+import { first, mapValues, sum } from "lodash-es"
 import { z } from "zod"
-import { SHOW_EXACT_IVS } from "~/config"
+import { IV_SCORE_MAX, SHOW_EXACT_IVS } from "~/config"
 import {
   WildlifeFighterPlusMove,
+  WildlifeFighterPlusMoveNullishDefinition,
   getWildlifeFighterPlusMove,
 } from "./WildlifeFighterPlusMove"
 import { applyFighterStats } from "./applyFighterStats"
 import {
+  getNextPossibleEvoByLevel,
   getWildlifeFighter,
   type GetWildlifeFighterOptions,
 } from "./getWildlifeFighter"
@@ -16,26 +18,43 @@ import {
 export const getWildlifeFighterPlus = async (
   options: GetWildlifeFighterOptions
 ) => {
-  const fighter = await getWildlifeFighter(options)
+  const pokemonSet = await getWildlifeFighter(options)
 
+  return transformPokemonSetToPlus({
+    pokemonSet,
+    catchMetadata: options.metadata,
+    isTraded: options.playerId !== options.originalPlayerId,
+  })
+}
+
+export const transformPokemonSetToPlus = ({
+  pokemonSet,
+  catchMetadata,
+  isTraded,
+}: {
+  pokemonSet: PokemonSet
+  catchMetadata?: GetWildlifeFighterOptions["metadata"]
+  isTraded: boolean
+}) => {
   const battle = new Battle({
     formatid: toID("gen7randombattle"),
     seed: [13103, 5088, 17178, 48392], // TODO:
   })
   battle.setPlayer("p1", {
     name: "Player",
-    team: [fighter],
+    team: [pokemonSet],
   })
 
   const p = first(first(battle.sides)?.pokemon)
   if (!p) {
     throw new Error("Could not build FighterPlus")
   }
-  applyFighterStats({ p, catchMetadata: options.metadata })
+  applyFighterStats({ p, catchMetadata })
 
   return transformWildlifeFighterPlus({
-    pokemonSet: fighter,
+    pokemonSet,
     pokemon: p,
+    isTraded,
   })
 }
 
@@ -53,14 +72,24 @@ export const transformWildlifeFighterPlus = ({
   pokemonSet,
   pokemon,
   foeTypes,
+  isTraded,
 }: {
   pokemonSet: PokemonSet
   pokemon: Pokemon
   foeTypes?: string[]
+  isTraded: boolean
 }) => {
   const p = pokemon
 
-  const moves = p.moves.map((move) => {
+  const nextPossibleEvo = getNextPossibleEvoByLevel({
+    species: Dex.species.get(pokemonSet.species),
+    level: p.level,
+    isTraded,
+  })
+
+  const canEvolve = !!nextPossibleEvo
+
+  const moves = p.baseMoveSlots.map((move) => {
     return getWildlifeFighterPlusMove({
       move,
       p,
@@ -104,7 +133,28 @@ export const transformWildlifeFighterPlus = ({
 
   const moveRequestData = p.getMoveRequestData()
 
+  const moveRequestMoves = p.getMoveRequestData()?.moves?.map((move) => {
+    const plusMove = getWildlifeFighterPlusMove({
+      move,
+      p,
+      foeTypes,
+    })
+
+    if (plusMove?.definition.exists === false) {
+      return {
+        ...plusMove,
+        definition: undefined,
+      }
+    }
+    return plusMove
+  })
+
+  const nature = Dex.natures.get(pokemonSet.nature)
+
   const ivLabels = mapValues(pokemonSet.ivs, (iv) => ivToLabel({ iv }))
+  const ivScore = Math.floor(
+    (IV_SCORE_MAX * sum(Object.values(pokemonSet.ivs))) / 6 / 31
+  )
   const fighterPlus = {
     hp: p.hp,
     hpMax: p.maxhp,
@@ -116,15 +166,18 @@ export const transformWildlifeFighterPlus = ({
     speciesNum: p.species.num,
     level: p.level,
     gender: p.gender,
-    nature: pokemonSet.nature,
+    nature: nature,
     stats,
     isActive: p.isActive,
     justFainted: p.side.faintedThisTurn === p,
     lastMove: p.lastMove,
-    trappedInMoves: moveRequestData?.trapped
-      ? moveRequestData.moves
-      : undefined,
+    moveRequestData: {
+      trapped: moveRequestData?.trapped,
+      moves: moveRequestMoves,
+    },
     ivLabels,
+    ivScore,
+    canEvolve,
     // statusState: p.statusState,
   } satisfies WildlifeFighterPlus
 
@@ -145,7 +198,11 @@ export const WildlifeFighterPlus = z.object({
   speciesNum: z.number(),
   level: z.number(),
   gender: z.string(),
-  nature: z.string(),
+  nature: z.object({
+    name: z.string(),
+    plus: z.string().optional(),
+    minus: z.string().optional(),
+  }),
   stats: z.object({
     hp: z.number(),
     atk: z.number(),
@@ -164,6 +221,7 @@ export const WildlifeFighterPlus = z.object({
       spe: z.string(),
     })
     .nullish(),
+  ivScore: z.number().nullish(),
   isActive: z.boolean(),
   justFainted: z.boolean(),
   lastMove: z
@@ -172,13 +230,12 @@ export const WildlifeFighterPlus = z.object({
       totalDamage: z.number().or(z.literal(false)).nullish(),
     })
     .nullish(),
-  trappedInMoves: z
-    .array(
-      z.object({
-        id: z.string(),
-        move: z.string(),
-      })
-    )
+  moveRequestData: z
+    .object({
+      trapped: z.boolean().optional(),
+      moves: z.array(WildlifeFighterPlusMoveNullishDefinition).optional(),
+    })
     .nullish(),
+  canEvolve: z.boolean().nullish(),
 })
 export type WildlifeFighterPlus = z.infer<typeof WildlifeFighterPlus>

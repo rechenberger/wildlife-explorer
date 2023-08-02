@@ -4,6 +4,7 @@ import { every, find, map } from "lodash-es"
 import { z } from "zod"
 import { BATTLE_REPORT_VERSION } from "~/config"
 import { createTRPCRouter } from "~/server/api/trpc"
+import { checkIfReadyForBattle } from "~/server/lib/battle/checkIfReadyForBattle"
 import { grantExp } from "~/server/lib/battle/grantExp"
 import { savePostBattleCatchMetadata } from "~/server/lib/battle/savePostBattleCatchMetadata"
 import { simulateBattle } from "~/server/lib/battle/simulateBattle"
@@ -13,6 +14,7 @@ import { type PlayerMetadata } from "~/server/schema/PlayerMetadata"
 import { devProcedure } from "../middleware/devProcedure"
 import { playerProcedure } from "../middleware/playerProcedure"
 import { wildlifeProcedure } from "../middleware/wildlifeProcedure"
+import { startDungeonBattle } from "./dungeon.router"
 
 export const battleRouter = createTRPCRouter({
   attackWildlife: wildlifeProcedure.mutation(async ({ ctx }) => {
@@ -23,47 +25,7 @@ export const battleRouter = createTRPCRouter({
       })
     }
 
-    const playerInFight = await ctx.prisma.battleParticipation.findFirst({
-      where: {
-        playerId: ctx.player.id,
-        battle: {
-          status: "IN_PROGRESS",
-        },
-      },
-    })
-    if (playerInFight || ctx.player.metadata?.activeBattleId) {
-      throw new TRPCError({
-        code: "BAD_REQUEST",
-        message: "You are already in a battle",
-      })
-    }
-
-    const team = await ctx.prisma.catch.findMany({
-      where: {
-        playerId: ctx.player.id,
-        battleOrderPosition: {
-          not: null,
-        },
-      },
-    })
-    if (!team?.length) {
-      throw new TRPCError({
-        code: "BAD_REQUEST",
-        message: "You need to catch at least one wildlife to battle 😉",
-      })
-    }
-    const fighterWithHp = find(team, (c) => {
-      if (typeof c.metadata?.hp !== "number") {
-        return true
-      }
-      return c.metadata?.hp > 0
-    })
-    if (!fighterWithHp) {
-      throw new TRPCError({
-        code: "BAD_REQUEST",
-        message: "Your whole team is fainted 🤦",
-      })
-    }
+    await checkIfReadyForBattle(ctx)
 
     const battle = await ctx.prisma.battle.create({
       data: {
@@ -149,6 +111,13 @@ export const battleRouter = createTRPCRouter({
             wildlife: true,
           },
         },
+        tier: true,
+        place: {
+          select: {
+            type: true,
+            metadata: true,
+          },
+        },
       },
       orderBy: {
         createdAt: "desc",
@@ -174,6 +143,8 @@ export const battleRouter = createTRPCRouter({
           id: true,
           status: true,
           metadata: true,
+          tier: true,
+          placeId: true,
         },
       })
       console.timeEnd("getBattleFast")
@@ -183,6 +154,33 @@ export const battleRouter = createTRPCRouter({
           message: "Battle not found",
         })
       }
+
+      // Get DUNGEON
+      let dungeon:
+        | {
+            placeId: string
+            name: string
+            tier: number
+          }
+        | undefined
+      if (battle.placeId && battle.tier) {
+        const place = await ctx.prisma.place.findFirst({
+          where: {
+            id: battle.placeId,
+          },
+          select: {
+            metadata: true,
+          },
+        })
+        if (place && place.metadata?.name) {
+          dungeon = {
+            placeId: battle.placeId,
+            name: place.metadata.name,
+            tier: battle.tier,
+          }
+        }
+      }
+
       const alwaysAllowedBattleStatus: BattleStatus[] = [
         BattleStatus.IN_PROGRESS,
         BattleStatus.INVITING,
@@ -203,6 +201,7 @@ export const battleRouter = createTRPCRouter({
           return {
             status: battle.status,
             battleReport,
+            dungeon,
           }
         }
       }
@@ -211,9 +210,11 @@ export const battleRouter = createTRPCRouter({
         prisma: ctx.prisma,
         battleId: input.battleId,
       })
+
       return {
         battleReport,
         status: battle.status,
+        dungeon,
       }
     }),
 
@@ -355,10 +356,27 @@ export const battleRouter = createTRPCRouter({
             prisma: ctx.prisma,
           })
 
+          let nextBattleId: string | undefined
+          if (iAmWinner && battleDb.placeId && battleDb.tier) {
+            const startWithCatchId = winnerSide.fighters.find(
+              (f) => f.fighter.isActive
+            )?.catch?.id
+
+            const nextBattle = await startDungeonBattle({
+              prisma: ctx.prisma,
+              placeId: battleDb.placeId,
+              tier: battleDb.tier + 1,
+              player: ctx.player,
+              startWithCatchId,
+            })
+            nextBattleId = nextBattle.id
+          }
+
           return {
             iAmWinner,
             expReports,
             winnerName: winnerSide.name,
+            nextBattleId,
           }
         }
       }

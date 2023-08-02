@@ -214,11 +214,11 @@ export const pvpRouter = createTRPCRouter({
       const battle = await ctx.prisma.battle.findFirst({
         where: {
           id: input.battleId,
-          battleParticipants: {
-            some: {
-              playerId: ctx.player.id,
-            },
-          },
+          // battleParticipants: {
+          //   some: {
+          //     playerId: ctx.player.id,
+          //   },
+          // },
         },
         select: {
           id: true,

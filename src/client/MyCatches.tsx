@@ -55,6 +55,11 @@ const orderOptions = [
     direction: "asc",
   },
   {
+    label: "Highest IVs",
+    by: "ivScore",
+    direction: "desc",
+  },
+  {
     label: "A-Z",
     by: "name",
     direction: "asc",
@@ -207,7 +212,7 @@ export const MyCatches = () => {
         [
           (c) => {
             if (order.by === "name") {
-              return c.name || getName(c.wildlife)
+              return getName(c)
             }
             if (order.by === "level") {
               return c.metadata.level
@@ -215,9 +220,12 @@ export const MyCatches = () => {
             if (order.by === "caughtAt") {
               return c.createdAt
             }
+            if (order.by === "ivScore") {
+              return c.fighter.ivScore
+            }
             return c.id
           },
-          (c) => c.name || getName(c.wildlife),
+          (c) => getName(c),
         ],
         [order.direction, "asc"]
       ),
@@ -237,7 +245,7 @@ export const MyCatches = () => {
           c.wildlife.metadata.taxonLocaleNames?.["de"],
           c.wildlife.metadata.taxonLocaleNames?.["en"],
           c.fighter.ability,
-          c.fighter.nature,
+          c.fighter.nature.name,
           c.fighter.species,
           c.fighter.speciesNum,
           ...c.fighter.types,

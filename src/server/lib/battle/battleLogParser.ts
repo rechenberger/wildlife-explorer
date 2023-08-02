@@ -1,5 +1,6 @@
 import { Protocol } from "@pkmn/protocol"
 import { LogFormatter } from "@pkmn/view"
+import { replaceByWildlife } from "~/utils/replaceByWildlife"
 
 export const parseBattleLog = (
   line?: string | string[] | undefined,
@@ -16,7 +17,7 @@ export const parseBattleLog = (
         ? formatter.formatHTML(args, kwArgs)
         : formatter.formatText(args, kwArgs)
     }
-    return out
+    return replaceByWildlife(out)
   }
   if (!line) return ""
   if (typeof line === "string") return extractMessage(line)

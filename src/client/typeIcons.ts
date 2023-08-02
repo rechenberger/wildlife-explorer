@@ -20,6 +20,7 @@ import {
   Gem,
   Ghost,
   HeartHandshake,
+  HeartPulse,
   HelpCircle,
   Leaf,
   Milestone,
@@ -29,6 +30,7 @@ import {
   Puzzle,
   Scale,
   Snowflake,
+  Sparkle,
   Sparkles,
   Swords,
   Zap,
@@ -214,6 +216,14 @@ export const catchIcon = {
   icon: HeartHandshake,
 }
 
+export const careIcon = {
+  name: "Care",
+  icon: HeartPulse,
+  bgFull: "bg-purple-500 text-white",
+  bgHalf: "bg-purple-500/50",
+  ringFull: "hover:ring ring-purple-500",
+}
+
 export const runIcon = {
   ...defaultIcon,
   name: "Run",
@@ -268,6 +278,24 @@ export const swapIcon = {
   ...defaultIcon,
   name: "Edit",
   icon: ArrowLeftRight,
+}
+
+export const evolveIcon = {
+  bgHalf: "bg-yellow-500/50",
+  bgFull: "bg-yellow-500",
+  ringFull: "hover:ring ring-yellow-500",
+  name: "Evolve",
+  icon: Sparkle,
+}
+export const pastIcon = {
+  ...defaultIcon,
+  name: "Past",
+  icon: Clock,
+}
+export const battleIcon = {
+  ...defaultIcon,
+  name: "Battle",
+  icon: Swords,
 }
 
 export type TypeIcon = {

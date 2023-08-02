@@ -1,10 +1,17 @@
 import NiceModal from "@ebay/nice-modal-react"
 import { atom, useAtomValue } from "jotai"
-import { Check, Clock, ExternalLink, Frown, LocateOff } from "lucide-react"
+import {
+  Check,
+  Clock,
+  ExternalLink,
+  Frown,
+  LocateOff,
+  Network,
+} from "lucide-react"
 import dynamic from "next/dynamic"
 import Image from "next/image"
 import Link from "next/link"
-import { toast } from "sonner"
+import { teampilot } from "~/client/teampilot"
 import {
   ENABLE_BATTLE_VIEW,
   MIN_METER_ACCURACY_SHOW_INACCURATE,
@@ -12,27 +19,23 @@ import {
 } from "~/config"
 import { api } from "~/utils/api"
 import { Away } from "./Away"
-import { BattleViewModal } from "./BattleViewModal"
 import { FighterChipByWildlife } from "./FighterChipByWildlife"
+import { TaxonOverviewModal } from "./TaxonOverviewModal"
 import { TimeAgo } from "./TimeAgo"
 import { cn } from "./cn"
 import { formatMeters } from "./formatMeters"
+import { useAttackWildlife } from "./useAttackWildlife"
 import { useCatch } from "./useCatch"
 import { useGetWildlifeName } from "./useGetWildlifeName"
 import { navigatingToObservationIdAtom, useNavigation } from "./useNavigation"
 import { usePlayer } from "./usePlayer"
+import { useShowFighters } from "./useShowFighter"
 
 const JsonViewer = dynamic(() => import("../client/JsonViewer"), { ssr: false })
 
 export const currentObservationIdAtom = atom<number | null>(null)
 
-export const CurrentObservation = ({
-  wildlifeId,
-  close,
-}: {
-  wildlifeId: string
-  close: () => void
-}) => {
+export const CurrentObservation = ({ wildlifeId }: { wildlifeId: string }) => {
   const { playerId } = usePlayer()
   const { data } = api.wildlife.getOne.useQuery(
     {
@@ -49,19 +52,10 @@ export const CurrentObservation = ({
 
   const { doCatch, isLoading: catching } = useCatch()
 
-  const trpc = api.useContext()
-  const { mutateAsync: attackWildlife, isLoading: attacking } =
-    api.battle.attackWildlife.useMutation({
-      onSuccess: (data) => {
-        close()
-        trpc.battle.invalidate()
-        NiceModal.show(BattleViewModal, {
-          battleId: data.id,
-        })
-      },
-    })
+  const { attackWildlife, attackWildlifeLoading } = useAttackWildlife()
 
   const getName = useGetWildlifeName()
+  const showFighters = useShowFighters()
 
   if (!data) return null
 
@@ -74,11 +68,16 @@ export const CurrentObservation = ({
     <>
       <>
         <div className="flex flex-row items-center gap-2">
-          <div className="flex-1 truncate text-2xl">{getName(w)}</div>
+          <div className="flex-1 truncate text-2xl">{getName(data)}</div>
           {/* <button className="shrink-0" onClick={() => close()}>
             <X size={16} />
           </button> */}
         </div>
+        {showFighters && (
+          <div className="-mt-4 text-xs italic opacity-60">
+            {getName({ wildlife: w })}
+          </div>
+        )}
         <div className="-mt-4 text-xs italic opacity-60">
           Found by {w.foundBy.name} <TimeAgo date={w.createdAt} addSuffix />
         </div>
@@ -125,16 +124,26 @@ export const CurrentObservation = ({
               unoptimized
               fill={true}
             />
+            {!!w.metadata.observationImageAttribution && (
+              <div className="absolute bottom-0 right-0 bg-white/50 text-black text-xs">
+                {w.metadata.observationImageAttribution}
+              </div>
+            )}
           </div>
         ) : w.metadata.taxonImageUrlMedium ? (
           <div className="relative -mx-4 aspect-square">
             <Image
               src={w.metadata.taxonImageUrlMedium}
               className="w-full object-cover object-center"
-              alt={getName(w)}
+              alt={getName(data)}
               unoptimized
               fill={true}
             />
+            {!!w.metadata.taxonImageAttribution && (
+              <div className="absolute bottom-0 right-0 bg-white/50 text-black text-xs">
+                {w.metadata.taxonImageAttribution}
+              </div>
+            )}
           </div>
         ) : null}
         {SHOW_OBSERVATION_JSON && (
@@ -143,27 +152,67 @@ export const CurrentObservation = ({
           </div>
         )}
         <div className="flex flex-row items-start justify-center gap-2 h-[44px] text-xs">
-          {w.metadata.observationUrl && (
-            <Link
-              href={w.metadata.observationUrl}
-              target="_blank"
-              className="flex flex-row items-center gap-1 rounded px-1 py-0.5 hover:bg-black/10 shrink-0"
-            >
-              <ExternalLink size={12} />
-              <div>iNaturalist</div>
-            </Link>
-          )}
-          {w.metadata.taxonWikiUrl && (
-            <Link
-              href={w.metadata.taxonWikiUrl}
-              target="_blank"
-              className="flex flex-row items-center gap-1 rounded px-1 py-0.5 hover:bg-black/10 shrink-0"
-            >
-              <ExternalLink size={12} />
-              <div>Wikipedia</div>
-            </Link>
-          )}
+          <div className="flex flex-col gap-1">
+            <div className="flex flex-row gap-2">
+              {w.metadata.observationUrl && (
+                <Link
+                  href={w.metadata.observationUrl}
+                  target="_blank"
+                  className="flex flex-row items-center gap-1 rounded px-1 py-0.5 hover:bg-black/10 shrink-0"
+                >
+                  <ExternalLink size={12} />
+                  <div>iNaturalist</div>
+                </Link>
+              )}
+              {w.metadata.taxonWikiUrl && (
+                <Link
+                  href={w.metadata.taxonWikiUrl}
+                  target="_blank"
+                  className="flex flex-row items-center gap-1 rounded px-1 py-0.5 hover:bg-black/10 shrink-0"
+                >
+                  <ExternalLink size={12} />
+                  <div>Wikipedia</div>
+                </Link>
+              )}
+            </div>
+            {(w.metadata.observationLicenseCode ||
+              w.metadata.observationUserName) && (
+              <div className="text-[8px] opacity-60 leading-tight">
+                {!!w.metadata.observationUserName && (
+                  <>
+                    ©{" "}
+                    <Link
+                      href={
+                        w.metadata.observationUserId
+                          ? `https://www.inaturalist.org/people/${w.metadata.observationUserId}`
+                          : `#`
+                      }
+                      target="_blank"
+                    >
+                      {w.metadata.observationUserName}
+                    </Link>
+                  </>
+                )}
+                {!!w.metadata.observationLicenseCode &&
+                  !!w.metadata.observationUserName && <br />}
+                {!!w.metadata.observationLicenseCode && (
+                  <>{w.metadata.observationLicenseCode}</>
+                )}
+              </div>
+            )}
+          </div>
           <div className="flex-1" />
+          <button
+            className="text-right text-xs font-normal text-black opacity-60 flex flex-col items-center hover:bg-gray-200 rounded-lg p-2"
+            onClick={() => {
+              NiceModal.show(TaxonOverviewModal, {
+                taxonId: w.taxonId,
+              })
+            }}
+          >
+            <Network className="w-4 h-4" />
+            <div>Taxon</div>
+          </button>
           <div className="max-w-[50%]">
             <FighterChipByWildlife w={w} showAbsoluteHp={false} ltr={false} />
           </div>
@@ -195,22 +244,29 @@ export const CurrentObservation = ({
           >
             Catch
           </button>
+          <button
+            className={cn(
+              "flex-1 rounded bg-black px-2 py-1 text-sm text-white"
+            )}
+            onClick={async () => {
+              const message = `I want to learn more about "${getName({
+                wildlife: w,
+              })}" and why its mapped to "${getName(data)}"`
+              teampilot().showChat()
+              teampilot().sendMessage(message)
+            }}
+          >
+            Chat
+          </button>
           {ENABLE_BATTLE_VIEW && (
             <button
               className={cn(
                 "flex-1 rounded bg-black px-2 py-1 text-sm text-white",
-                attacking && "cursor-progress opacity-50"
+                attackWildlifeLoading && "cursor-progress opacity-50"
               )}
               disabled={catching}
               onClick={async () => {
-                if (!playerId) return
-
-                toast.promise(attackWildlife({ wildlifeId: w.id, playerId }), {
-                  loading: "Starting Battle...",
-                  success: "The Battle is on! 🔥",
-                  error: (err) =>
-                    err.message || "Failed to start battle. Try again.",
-                })
+                attackWildlife({ wildlifeId: w.id })
               }}
             >
               Battle

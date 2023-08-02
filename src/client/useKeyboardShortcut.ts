@@ -17,7 +17,9 @@ export const useKeyboardShortcut = (
       ) {
         return
       }
-      if (shift && !e.shiftKey) return
+      if (shift !== !!e.shiftKey) return
+      if (e.ctrlKey) return
+      if (e.metaKey) return
       if (e.code === code) {
         callback()
       }

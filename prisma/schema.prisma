@@ -86,6 +86,8 @@ model Player {
     catches         Catch[]   @relation("CatchPlayer")
     originalCatches Catch[]   @relation("CatchOriginalPlayer")
     placesFound     Place[]
+    taxonsFound     Taxon[]
+    trades          Trade[]
 
     @@index([lat, lng])
     @@index([userId])
@@ -113,7 +115,9 @@ model Catch {
 
     battleOrderPosition Int?
 
-    @@unique([wildlifeId, playerId])
+    trades Trade[]
+
+    @@unique([wildlifeId, originalPlayerId])
     @@index([playerId, battleOrderPosition])
 }
 
@@ -125,8 +129,9 @@ model Wildlife {
     respawnsAt DateTime
     catches    Catch[]
 
-    observationId Int  @unique
+    observationId Int   @unique
     taxonId       Int
+    taxon         Taxon @relation(fields: [taxonId], references: [id])
     metadata      Json
 
     foundById String
@@ -142,6 +147,31 @@ model Wildlife {
     @@index([observationId])
 }
 
+model Taxon {
+    id        Int      @id
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    metadata Json
+
+    isAnchor           Boolean
+    fighterSpeciesName String
+    fighterSpeciesNum  Int
+
+    ancestorId  Int?
+    ancestor    Taxon?  @relation("TaxonAncestor", fields: [ancestorId], references: [id])
+    descendants Taxon[] @relation("TaxonAncestor")
+
+    anchorId            Int?
+    anchor              Taxon?  @relation("TaxonAncestorAnchor", fields: [anchorId], references: [id])
+    descendantsAnchored Taxon[] @relation("TaxonAncestorAnchor")
+
+    foundById String
+    foundBy   Player @relation(fields: [foundById], references: [id])
+
+    wildlife Wildlife[]
+}
+
 model Battle {
     id        String   @id @default(cuid())
     createdAt DateTime @default(now())
@@ -151,6 +181,11 @@ model Battle {
     status   BattleStatus
 
     battleParticipants BattleParticipation[]
+
+    placeId String?
+    place   Place?  @relation(fields: [placeId], references: [id], onDelete: Cascade)
+
+    tier Int?
 }
 
 enum BattleStatus {
@@ -196,9 +231,31 @@ model Place {
     foundById String
     foundBy   Player @relation(fields: [foundById], references: [id], onDelete: Cascade)
 
+    battles Battle[]
+
     @@index([lat, lng])
 }
 
 enum PlaceType {
     CARE_CENTER
+    AIRPORT
+    DUNGEON
+}
+
+model Trade {
+    id        String   @id @default(cuid())
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    metadata    Json
+    players     Player[]
+    catches     Catch[]
+    completedAt DateTime?
+    status      TradeStatus
+}
+
+enum TradeStatus {
+    PENDING
+    COMPLETED
+    CANCELLED
 }

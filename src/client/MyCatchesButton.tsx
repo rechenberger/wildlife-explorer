@@ -4,8 +4,8 @@ import { useCare } from "./CareButton"
 import { MyCatchesModal } from "./MyCatchesModal"
 import { PlaceViewModal } from "./PlaceViewModal"
 import { cn } from "./cn"
-import { useCareCenter } from "./useCareCenter"
 import { useKeyboardShortcut } from "./useKeyboardShortcut"
+import { useCareCenter } from "./usePlace"
 
 export const MyCatchesButton = () => {
   const { careCenterIsClose, nearestCareCenter } = useCareCenter()
@@ -28,7 +28,7 @@ export const MyCatchesButton = () => {
                 care()
               } else {
                 NiceModal.show(PlaceViewModal, {
-                  placeId: nearestCareCenter.careCenter.id,
+                  placeId: nearestCareCenter.place.id,
                 })
               }
             } else {

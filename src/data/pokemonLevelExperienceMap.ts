@@ -1,4 +1,4 @@
-import { find } from "lodash-es"
+import { findLast } from "lodash-es"
 import { type CatchMetadata } from "~/server/schema/CatchMetadata"
 
 export const getExpRate = ({
@@ -17,11 +17,11 @@ export const getLevelFromExp = ({
 }: Pick<CatchMetadata, "levelingRate" | "exp">) => {
   if (!levelingRate) return undefined
   if (!exp) return undefined
-  const nextLevel = find(
+  const currentLevel = findLast(
     pokemonExperienceMap,
-    (obj) => obj.requiredExperience > exp && obj.levelingRate === levelingRate
+    (obj) => obj.requiredExperience <= exp && obj.levelingRate === levelingRate
   )
-  const currentLevelBasedOnExp = (nextLevel?.level || 1) - 1
+  const currentLevelBasedOnExp = currentLevel?.level || 1
   return currentLevelBasedOnExp
 }
 

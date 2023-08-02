@@ -1,10 +1,9 @@
-import { Dex, type PokemonSet } from "@pkmn/dex"
+import { Dex, type PokemonSet, type Species } from "@pkmn/dex"
 import { filter, find, map, max, min, orderBy, take } from "lodash-es"
-import { MAX_MOVES_PER_FIGHTER, USE_LATEST_GEN } from "~/config"
+import { LEVELS, MAX_MOVES_PER_FIGHTER, USE_LATEST_GEN } from "~/config"
 import { type CatchMetadata } from "~/server/schema/CatchMetadata"
 import { type WildlifeMetadata } from "~/server/schema/WildlifeMetadata"
 import { rngInt, rngItem, rngItemWithWeights } from "~/utils/seed"
-import { taxonMappingByAncestors } from "./taxonMappingByAncestors"
 
 export type GetWildlifeFighterOptions = {
   wildlife: {
@@ -15,11 +14,94 @@ export type GetWildlifeFighterOptions = {
       | "taxonName"
       | "observationCaptive"
     >
+    taxon: {
+      fighterSpeciesName: string
+    }
   }
-  metadata?: Pick<CatchMetadata, "level" | "moves" | "evs">
+  metadata?: Pick<CatchMetadata, "level" | "moves" | "evs" | "speciesName">
   seed: string
   idx?: number
   name?: string | null
+  playerId: string | null
+  originalPlayerId: string | null
+}
+
+export const getHightestPossibleEvoByLevel = ({
+  species,
+  level,
+  isTraded,
+}: {
+  species: Species
+  level: number
+  isTraded: boolean
+}) => {
+  let highestPossibleEvo = null
+  while (true) {
+    const possibleEvo = getNextPossibleEvoByLevel({
+      species,
+      level,
+      isTraded,
+    })
+    if (!possibleEvo) break
+    species = possibleEvo
+    highestPossibleEvo = possibleEvo
+  }
+  return highestPossibleEvo
+}
+
+export const getNextPossibleEvoByLevel = ({
+  species,
+  level,
+  isTraded,
+}: {
+  species: Species
+  level: number
+  isTraded: boolean
+}) => {
+  const nextEvo = getNextEvo({
+    species,
+  })
+  if (!nextEvo) return null
+  const isPossible = isEvoPossible({
+    nextEvo,
+    level,
+    isTraded,
+  })
+  if (!isPossible) return null
+  return nextEvo
+}
+
+export const isEvoPossible = ({
+  nextEvo,
+  level,
+  isTraded,
+}: {
+  nextEvo: Species
+  level: number
+  isTraded: boolean
+}) => {
+  if (nextEvo.evoType === "trade") return isTraded
+  if (nextEvo.evoLevel && nextEvo.evoLevel <= level) return true
+  return false
+}
+
+export const getNextEvo = ({ species }: { species: Species }) => {
+  const evos = map(species.evos, (e) => Dex.species.get(e))
+  const possibleEvo = find(evos, (e) => {
+    // if (e.evoType) return false
+    // if (e.evoCondition) return false
+    // if (e.evoItem) return false
+    // if (e.evoMove) return false
+    if (e.evoType === "trade") {
+      if (e.evoItem) return false
+      if (e.evoCondition) return false
+      return true
+    }
+
+    if (!e.evoLevel) return false
+    return true
+  })
+  return possibleEvo
 }
 
 export const getWildlifeFighter = async ({
@@ -29,19 +111,12 @@ export const getWildlifeFighter = async ({
   metadata: catchMetaData,
   name: givenName,
 }: GetWildlifeFighterOptions) => {
-  const mapping = taxonMappingByAncestors(wildlife.metadata.taxonAncestorIds)
-  let speciesName = mapping.pokemon
-  let species = Dex.species.get(speciesName)
-
-  // Everything starts at lowest evolution
-  while (species.prevo) {
-    species = Dex.species.get(species.prevo)
-    speciesName = species.name
-  }
-
-  const minLevel = wildlife.metadata.observationCaptive ? 20 : 1
-  const maxLevel = wildlife.metadata.observationCaptive ? 100 : 20
-
+  const minLevel = wildlife.metadata.observationCaptive
+    ? LEVELS.CAPTIVE.MIN
+    : LEVELS.WILD.MIN
+  const maxLevel = wildlife.metadata.observationCaptive
+    ? LEVELS.CAPTIVE.MAX
+    : LEVELS.WILD.MAX
   const level =
     catchMetaData?.level ||
     rngInt({
@@ -50,29 +125,36 @@ export const getWildlifeFighter = async ({
       max: maxLevel,
     })
 
+  // const mapping = taxonMappingByAncestors(wildlife.metadata.taxonAncestorIds)
+  let speciesName =
+    catchMetaData?.speciesName ?? wildlife.taxon.fighterSpeciesName
+  let species = Dex.species.get(speciesName)
+
+  // Wildlife starts at lowest evolution
+  if (!catchMetaData?.speciesName) {
+    while (species.prevo) {
+      species = Dex.species.get(species.prevo)
+      speciesName = species.name
+    }
+  }
+
+  // Evolve captives to highest possible evolution
   const canEvolveByLevel = wildlife.metadata.observationCaptive
   if (canEvolveByLevel) {
-    while (true) {
-      const evos = map(species.evos, (e) => Dex.species.get(e))
-      const possibleEvo = find(evos, (e) => {
-        // if (e.evoType) return false
-        // if (e.evoCondition) return false
-        // if (e.evoItem) return false
-        // if (e.evoMove) return false
-
-        if (!e.evoLevel) return false
-        if (e.evoLevel > level) return false
-        return true
-      })
-      if (!possibleEvo) break
-      species = possibleEvo
+    const highestPossibleEvo = getHightestPossibleEvoByLevel({
+      species,
+      level,
+      isTraded: true,
+    })
+    if (highestPossibleEvo) {
+      species = highestPossibleEvo
       speciesName = species.name
     }
   }
 
   let moves: string[]
-  if (catchMetaData?.moves) {
-    // TODO: pp
+  if (catchMetaData?.moves?.length) {
+    // PP are done in applyFighterStats
     moves = catchMetaData?.moves?.map((m) => m.id)
   } else {
     const possibleMoves = await getMovesInLearnset(speciesName)

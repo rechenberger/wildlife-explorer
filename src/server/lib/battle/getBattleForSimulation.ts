@@ -16,6 +16,7 @@ const BattleSimulationCatchMetadata = CatchMetadata.pick({
   moves: true,
   hp: true,
   evs: true,
+  speciesName: true,
 })
 
 export const getBattleForSimulation = async ({
@@ -36,6 +37,7 @@ export const getBattleForSimulation = async ({
       battleParticipants: {
         select: {
           id: true,
+          metadata: true,
           player: {
             select: {
               id: true,
@@ -50,10 +52,18 @@ export const getBattleForSimulation = async ({
                   id: true,
                   seed: true,
                   name: true,
+                  playerId: true,
+                  originalPlayerId: true,
                   wildlife: {
                     select: {
                       id: true,
                       metadata: true,
+                      taxon: {
+                        select: {
+                          fighterSpeciesName: true,
+                          // fighterSpeciesNum: true,
+                        },
+                      },
                     },
                   },
                   metadata: true,
@@ -71,6 +81,12 @@ export const getBattleForSimulation = async ({
               metadata: true,
               observationId: true,
               respawnsAt: true,
+              taxon: {
+                select: {
+                  fighterSpeciesName: true,
+                  // fighterSpeciesNum: true,
+                },
+              },
             },
           },
         },
@@ -78,6 +94,8 @@ export const getBattleForSimulation = async ({
           id: "asc",
         },
       },
+      placeId: true,
+      tier: true,
     },
   })
   const battleInput = {
@@ -111,6 +129,8 @@ export const getBattleForSimulation = async ({
           }
         : null,
     })),
+    placeId: battleRaw.placeId,
+    tier: battleRaw.tier,
   }
   // console.log("battleInput", JSON.stringify(battleInput, null, 2))
 

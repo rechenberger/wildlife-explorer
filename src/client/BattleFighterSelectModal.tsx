@@ -3,7 +3,6 @@ import { type BattleReportFighter } from "~/server/lib/battle/BattleReport"
 import { BattleFighterSelect } from "./BattleFighterSelect"
 import { cn } from "./cn"
 import { Dialog, DialogContent } from "./shadcn/ui/dialog"
-import { ScrollArea } from "./shadcn/ui/scroll-area"
 
 export const BattleFighterSelectModal = NiceModal.create<{
   fighters: BattleReportFighter[]
@@ -25,16 +24,15 @@ export const BattleFighterSelectModal = NiceModal.create<{
       <DialogContent
         className={cn(
           "border-0 bg-white pt-3",
-          "rounded-t-lg max-sm:bottom-0 max-sm:top-auto max-sm:translate-y-0 max-sm:p-4 max-sm:pt-3"
+          "rounded-t-lg max-sm:bottom-0 max-sm:top-auto max-sm:translate-y-0 max-sm:p-4 max-sm:pt-3",
+          "max-h-[calc(100svh-100px)] overflow-auto"
         )}
         style={{
           paddingBottom: "calc(env(safe-area-inset-bottom) + 1.5rem)",
         }}
         onOpenAutoFocus={(event) => event.preventDefault()}
       >
-        <ScrollArea className="max-h-[calc(100svh-100px)]">
-          <BattleFighterSelect fighters={fighters} battleId={battleId} />
-        </ScrollArea>
+        <BattleFighterSelect fighters={fighters} battleId={battleId} />
       </DialogContent>
     </Dialog>
   )

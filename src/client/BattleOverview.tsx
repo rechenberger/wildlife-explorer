@@ -76,20 +76,36 @@ export const BattleOverview = () => {
               }}
             >
               <div className="flex-1">
-                <div className="flex flex-row gap-4">
-                  {battle.battleParticipants.map((p, idx) => (
-                    <Fragment key={p.id}>
-                      {idx > 0 && <div>vs</div>}
-                      <div>
-                        {p.player
-                          ? p.player.name
-                          : p.wildlife
-                          ? getName(p.wildlife)
-                          : "???"}
-                      </div>
-                    </Fragment>
-                  ))}
-                </div>
+                {battle.place ? (
+                  <>
+                    <div>
+                      <strong>{battle.place.metadata.name}</strong>{" "}
+                      <span className="capitalize">
+                        {battle.place.type.toLowerCase()}
+                      </span>{" "}
+                      {battle.tier && (
+                        <>
+                          Tier <strong>#{battle.tier}</strong>
+                        </>
+                      )}
+                    </div>
+                  </>
+                ) : (
+                  <div className="flex flex-row gap-4">
+                    {battle.battleParticipants.map((p, idx) => (
+                      <Fragment key={p.id}>
+                        {idx > 0 && <div>vs</div>}
+                        <div>
+                          {p.player
+                            ? p.player.name
+                            : p.wildlife
+                            ? getName({ wildlife: p.wildlife })
+                            : "???"}
+                        </div>
+                      </Fragment>
+                    ))}
+                  </div>
+                )}
                 <div className="flex flex-row gap-1 text-xs opacity-60">
                   <div>{statusLabel}</div>
                   <TimeAgo date={battle.updatedAt} addSuffix />

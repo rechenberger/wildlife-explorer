@@ -31,7 +31,16 @@ export const catchRouter = createTRPCRouter({
         playerId: ctx.player.id,
       },
       include: {
-        wildlife: true,
+        wildlife: {
+          include: {
+            taxon: {
+              select: {
+                fighterSpeciesName: true,
+                // fighterSpeciesNum: true,
+              },
+            },
+          },
+        },
       },
       orderBy: [
         {
@@ -164,7 +173,7 @@ export const catchRouter = createTRPCRouter({
     if (someCatch) {
       const status = battle?.metadata.battleReport?.sides
         .flatMap((s) => s.fighters)
-        ?.find((f) => !f.catch && f.wildlife.id === ctx.wildlife.id)?.fighter
+        ?.find((f) => !f.catch && f.wildlife?.id === ctx.wildlife.id)?.fighter
       const hpPercent = status ? status.hp / status.hpMax : 1
 
       goal =
@@ -237,6 +246,8 @@ export const catchRouter = createTRPCRouter({
     const wildlifeFighterPlus = await getWildlifeFighterPlus({
       wildlife: ctx.wildlife,
       seed,
+      playerId: null,
+      originalPlayerId: null,
     })
 
     const speciesName = wildlifeFighterPlus.species
@@ -349,7 +360,16 @@ export const catchRouter = createTRPCRouter({
         playerId: ctx.player.id,
       },
       include: {
-        wildlife: true,
+        wildlife: {
+          include: {
+            taxon: {
+              select: {
+                fighterSpeciesName: true,
+                // fighterSpeciesNum: true,
+              },
+            },
+          },
+        },
       },
     })
     let count = 0

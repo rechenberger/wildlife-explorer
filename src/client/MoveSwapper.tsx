@@ -56,6 +56,11 @@ export const MoveSwapper = ({ catchId }: { catchId: string }) => {
     })
   }, [allMoves])
 
+  const { data: evolutionPreview } = api.evolution.getPreview.useQuery(
+    { playerId: playerId!, catchId },
+    { enabled: !!playerId }
+  )
+
   const swapInMove = ({
     newMoveId,
     oldMoveId,
@@ -194,7 +199,28 @@ export const MoveSwapper = ({ catchId }: { catchId: string }) => {
               return (
                 <Fragment key={move.id}>
                   <div className="text-gray-500 text-sm">
-                    Level {move.learnAtLevel}
+                    {move.level ? `Level ${move.level}` : "?"}
+                  </div>
+                  <FighterMove fighter={c} move={move} />
+                </Fragment>
+              )
+            })}
+          </div>
+        </>
+      )}
+      {!!evolutionPreview && (
+        <>
+          <DividerHeading>
+            Evolution ({evolutionPreview.evoConditionLabel})
+          </DividerHeading>
+          <div className="grid flex-1 grid-cols-[auto_1fr] gap-1 items-center gap-x-2">
+            {map(evolutionPreview?.realNewMoves, (move) => {
+              return (
+                <Fragment key={move.id}>
+                  <div className="text-gray-500 text-sm">
+                    {move.level && move.level > c.fighter.level
+                      ? `Level ${move.level}`
+                      : "Instant!"}
                   </div>
                   <FighterMove fighter={c} move={move} />
                 </Fragment>

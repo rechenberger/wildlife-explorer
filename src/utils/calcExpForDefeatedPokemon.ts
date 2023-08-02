@@ -7,11 +7,13 @@ export const calcExpForDefeatedPokemon = ({
   receivingFighter,
   participatedInBattle,
   isOriginalOwner,
+  canEvolve,
 }: {
   defeatedFighter: Pick<WildlifeFighterPlus, "speciesNum" | "level">
   receivingFighter: Pick<CatchMetadata, "speciesNum" | "level" | "exp">
   participatedInBattle: boolean
   isOriginalOwner: boolean
+  canEvolve: boolean
 }) => {
   const { speciesNum: defeatedSpeciesNum, level: defeatedLevel } =
     defeatedFighter
@@ -24,7 +26,7 @@ export const calcExpForDefeatedPokemon = ({
       `Could not find baseExp for speciesNum ${defeatedSpeciesNum}}`
     )
   }
-  if (!receivingLevel) {
+  if (typeof receivingLevel !== "number" || receivingLevel < 0) {
     throw new Error(`receiving Pokemon has no level`)
   }
   //b is the base experience yield of the fainted Pokémon's species
@@ -54,8 +56,8 @@ export const calcExpForDefeatedPokemon = ({
   //v is
   //(~1.2) if the winning Pokémon is at or past the level where it would be able to evolve, but it has not
   //1 otherwise
-  //TODO: impelement Evolution. Infos here: https://bulbapedia.bulbagarden.net/wiki/List_of_Pok%C3%A9mon_that_evolve_at_or_above_a_certain_level
-  const v = 1
+  // Infos here: https://bulbapedia.bulbagarden.net/wiki/List_of_Pok%C3%A9mon_that_evolve_at_or_above_a_certain_level
+  const v = canEvolve ? 1.2 : 1
 
   //f is friendship stuff
   const f = 1

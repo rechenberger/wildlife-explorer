@@ -10,6 +10,7 @@ import { TypeBadge } from "./TypeBadge"
 import { cn } from "./cn"
 import { readyIcon, runIcon, waitingIcon } from "./typeIcons"
 import { usePlayer } from "./usePlayer"
+import { REFETCH_MS_BATTLE_PVP } from "~/config"
 
 export const BattleViewPvp = ({ battleId }: { battleId: string }) => {
   const { playerId } = usePlayer()
@@ -20,7 +21,7 @@ export const BattleViewPvp = ({ battleId }: { battleId: string }) => {
     },
     {
       enabled: !!playerId,
-      refetchInterval: 1000,
+      refetchInterval: REFETCH_MS_BATTLE_PVP,
       onSuccess: (data) => {
         if (data.status === "CANCELLED") {
           toast("PvP-Battle cancelled")

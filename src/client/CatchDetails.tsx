@@ -1,6 +1,7 @@
 import NiceModal from "@ebay/nice-modal-react"
-import { Edit2, ExternalLink } from "lucide-react"
+import { Edit2, ExternalLink, Network } from "lucide-react"
 import dynamic from "next/dynamic"
+import Image from "next/image"
 import { useMemo } from "react"
 import { DEV_MODE } from "~/config"
 import { type BattleReportFighter } from "~/server/lib/battle/BattleReport"
@@ -10,19 +11,24 @@ import { Away } from "./Away"
 import { CatchDetailsModal } from "./CatchDetailsModal"
 import { CurrentObservationModal } from "./CurrentObservationModal"
 import { DividerHeading } from "./DividerHeading"
-import { FighterChip } from "./FighterChip"
+import { FighterChip, ivScoreClasses } from "./FighterChip"
 import { FighterMoves } from "./FighterMoves"
 import { FighterStatsChart } from "./FighterStatsChart"
 import { FighterTypeBadges } from "./FighterTypeBadges"
 import { MoveSwapperModal } from "./MoveSwapperModal"
+import { TaxonOverviewModal } from "./TaxonOverviewModal"
 import { TimeAgo } from "./TimeAgo"
 import { TypeBadge } from "./TypeBadge"
+import { cn } from "./cn"
+import { getFighterImage } from "./getFighterImage"
 import { Progress } from "./shadcn/ui/progress"
-import { swapIcon } from "./typeIcons"
+import { evolveIcon, swapIcon } from "./typeIcons"
 import { useMyCatch } from "./useCatches"
+import { useEvolve } from "./useEvolve"
 import { useGetWildlifeName } from "./useGetWildlifeName"
 import { useMapFlyTo } from "./useMapRef"
 import { usePlayer } from "./usePlayer"
+import { useShowFighters } from "./useShowFighter"
 
 const JsonViewer = dynamic(() => import("../client/JsonViewer"), { ssr: false })
 
@@ -38,6 +44,7 @@ export const CatchDetails = ({
   showExp,
   showStats,
   showCaughtAt,
+  showBigImage,
   canSwapMoves,
   fighter,
   buttonSlot,
@@ -53,6 +60,7 @@ export const CatchDetails = ({
   showExp?: boolean
   showStats?: boolean
   showCaughtAt?: boolean
+  showBigImage?: boolean
   canSwapMoves?: boolean
   fighter?: BattleReportFighter
   buttonSlot?: React.ReactNode
@@ -82,6 +90,8 @@ export const CatchDetails = ({
       trpc.catch.invalidate()
     },
   })
+  const { evolve } = useEvolve()
+  const showFighters = useShowFighters()
 
   if (!c)
     return (
@@ -92,14 +102,15 @@ export const CatchDetails = ({
 
   const percentage = calcExpPercentage(c.metadata)
 
+  const catchName = getName(c)
   return (
     <>
       {showTitle && (
         <div className="flex flex-row gap-2">
-          <div>{c.name || getName(c.wildlife)}</div>
+          <div>{catchName}</div>
           <button
             onClick={() => {
-              const name = prompt("New Name", c.name || getName(c.wildlife))
+              const name = prompt("New Name", catchName)
               if (!playerId) return
               if (name) {
                 rename({
@@ -114,11 +125,34 @@ export const CatchDetails = ({
           </button>
         </div>
       )}
+      {showBigImage && showFighters && (
+        <>
+          <div className={cn("flex flex-col items-center relative")}>
+            <div
+              className={cn(
+                "bg-gray-100 rounded-full w-40 h-40 relative",
+                ivScoreClasses(c.fighter.ivScore)
+              )}
+            >
+              <Image
+                src={getFighterImage({
+                  fighterSpeciesNum: c.fighter.speciesNum,
+                  animated: true,
+                })}
+                fill
+                alt={"Fighter"}
+                className={cn("scale-125 object-contain")}
+                unoptimized
+              />
+            </div>
+          </div>
+        </>
+      )}
       <div className="p-2 flex flex-col gap-4">
         {showWildlife && (
           <>
             {showDividers && <DividerHeading>Wildlife</DividerHeading>}
-            <div className="flex flex-row gap-4 items-center justify-between">
+            <div className="flex flex-row gap-2 items-center justify-between">
               <div className="flex-1 max-w-[50%]">
                 <FighterChip
                   showAbsoluteHp
@@ -131,6 +165,19 @@ export const CatchDetails = ({
                   }}
                 />
               </div>
+              <>
+                <button
+                  className="text-right text-xs font-normal text-black opacity-60 flex flex-col items-center hover:bg-gray-200 rounded-lg p-2"
+                  onClick={() => {
+                    NiceModal.show(TaxonOverviewModal, {
+                      taxonId: c.wildlife.taxonId,
+                    })
+                  }}
+                >
+                  <Network className="w-4 h-4" />
+                  <div>Taxon</div>
+                </button>
+              </>
               {showCaughtAt && (
                 <button
                   className="text-right text-xs font-normal text-black opacity-60 inline-block hover:bg-gray-200 rounded-lg p-2"
@@ -159,6 +206,20 @@ export const CatchDetails = ({
               )}
               {buttonSlot}
             </div>
+          </>
+        )}
+
+        {c.fighter?.canEvolve && !player?.metadata?.activeBattleId && (
+          <>
+            <TypeBadge
+              content="Evolve"
+              icon={evolveIcon}
+              size="big"
+              onClick={() => {
+                evolve({ catchId: c.id, catchName })
+              }}
+              className="animate-pulse"
+            />
           </>
         )}
 
@@ -205,8 +266,20 @@ export const CatchDetails = ({
         {showExp && !!percentage && (
           <>
             {showDividers && <DividerHeading>Experience</DividerHeading>}
-            <div className="flex flex-1 items-center text-xs justify-center">
-              {percentage?.expAbsolute} / {percentage?.expNextLevelAbsolute}
+            <div className="flex flex-1 items-center text-xs justify-between opacity-60">
+              <div>
+                <strong>{percentage?.expAbsolute.toLocaleString()} Exp</strong>{" "}
+                (Level {c.fighter.level})
+              </div>
+              <div>
+                Next Level:{" "}
+                <strong>
+                  {(
+                    percentage?.expNextLevelAbsolute - percentage?.expAbsolute
+                  ).toLocaleString()}{" "}
+                  Exp
+                </strong>
+              </div>
             </div>
             <Progress className="w-full" value={percentage?.expPercentage} />
           </>
@@ -215,6 +288,11 @@ export const CatchDetails = ({
           <>
             <DividerHeading>Stats</DividerHeading>
             <FighterStatsChart fighter={c} />
+            {typeof c.fighter.ivScore === "number" && (
+              <div className="text-xs text-center opacity-60">
+                {c.fighter.ivScore}% IV Perfection
+              </div>
+            )}
           </>
         )}
         {showStats && DEV_MODE && (
