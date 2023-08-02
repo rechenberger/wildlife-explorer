@@ -61,4 +61,18 @@ export const WildlifeFighterPlusMove = z.object({
   disabled: z.string().or(z.boolean()).optional(),
   disabledSource: z.string().optional(),
 })
+
+export const WildlifeFighterPlusMoveNullishDefinition =
+  WildlifeFighterPlusMove.omit({
+    definition: true,
+  }).merge(
+    z.object({
+      definition: WildlifeFighterPlusMove.shape.definition.nullish(),
+    })
+  )
+
+export type WildlifeFighterPlusMoveNullishDefinition = z.infer<
+  typeof WildlifeFighterPlusMoveNullishDefinition
+>
+
 export type WildlifeFighterPlusMove = z.infer<typeof WildlifeFighterPlusMove>

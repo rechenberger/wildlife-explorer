@@ -5,6 +5,7 @@ import { z } from "zod"
 import { IV_SCORE_MAX, SHOW_EXACT_IVS } from "~/config"
 import {
   WildlifeFighterPlusMove,
+  WildlifeFighterPlusMoveNullishDefinition,
   getWildlifeFighterPlusMove,
 } from "./WildlifeFighterPlusMove"
 import { applyFighterStats } from "./applyFighterStats"
@@ -88,7 +89,7 @@ export const transformWildlifeFighterPlus = ({
 
   const canEvolve = !!nextPossibleEvo
 
-  const moves = p.getMoves().map((move) => {
+  const moves = p.baseMoveSlots.map((move) => {
     return getWildlifeFighterPlusMove({
       move,
       p,
@@ -132,6 +133,22 @@ export const transformWildlifeFighterPlus = ({
 
   const moveRequestData = p.getMoveRequestData()
 
+  const moveRequestMoves = p.getMoveRequestData()?.moves?.map((move) => {
+    const plusMove = getWildlifeFighterPlusMove({
+      move,
+      p,
+      foeTypes,
+    })
+
+    if (plusMove?.definition.exists === false) {
+      return {
+        ...plusMove,
+        definition: undefined,
+      }
+    }
+    return plusMove
+  })
+
   const nature = Dex.natures.get(pokemonSet.nature)
 
   const ivLabels = mapValues(pokemonSet.ivs, (iv) => ivToLabel({ iv }))
@@ -154,9 +171,10 @@ export const transformWildlifeFighterPlus = ({
     isActive: p.isActive,
     justFainted: p.side.faintedThisTurn === p,
     lastMove: p.lastMove,
-    trappedInMoves: moveRequestData?.trapped
-      ? moveRequestData.moves
-      : undefined,
+    moveRequestData: {
+      trapped: moveRequestData?.trapped,
+      moves: moveRequestMoves,
+    },
     ivLabels,
     ivScore,
     canEvolve,
@@ -212,13 +230,11 @@ export const WildlifeFighterPlus = z.object({
       totalDamage: z.number().or(z.literal(false)).nullish(),
     })
     .nullish(),
-  trappedInMoves: z
-    .array(
-      z.object({
-        id: z.string(),
-        move: z.string(),
-      })
-    )
+  moveRequestData: z
+    .object({
+      trapped: z.boolean().optional(),
+      moves: z.array(WildlifeFighterPlusMoveNullishDefinition).optional(),
+    })
     .nullish(),
   canEvolve: z.boolean().nullish(),
 })

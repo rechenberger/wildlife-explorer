@@ -32,7 +32,7 @@ export const BattleFighterSelectButton = ({
   const activeWildlifeIsMoveTrapped = !!find(
     side.fighters,
     (f) => f.fighter.isActive
-  )?.fighter?.trappedInMoves
+  )?.fighter?.moveRequestData?.trapped
 
   const onClickDisabled =
     !playerId || !isMySide || !battleIsActive || activeWildlifeIsMoveTrapped
