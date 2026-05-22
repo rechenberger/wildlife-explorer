@@ -53,20 +53,20 @@ export const PlayerRoute = ({
 
   const geoJson = useMemo(
     () =>
-      points?.length
+      points.length
         ? {
-            type: "Feature",
+            type: "Feature" as const,
             properties: {},
             geometry: {
-              type: "LineString",
+              type: "LineString" as const,
               coordinates: points.map((p) => [p.lng, p.lat]),
             },
           }
-        : null,
+        : undefined,
     [points]
   )
 
-  if (!timing) return null
+  if (!timing || !geoJson) return null
 
   const id = `route-${player.id}`
 

@@ -40,3 +40,9 @@ yarn-error.log*
 
 # typescript
 *.tsbuildinfo
+
+# tmp
+.tmp
+
+# gitenvs
+gitenvs.passphrases.json
