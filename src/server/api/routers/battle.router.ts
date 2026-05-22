@@ -390,13 +390,9 @@ export const battleRouter = createTRPCRouter({
     )
     .mutation(async ({ ctx, input }) => {
       // TODO: chance?
-      // TODO: SECURITY: check if player is in battle
-      const battle = await ctx.prisma.battle.update({
+      const battle = await ctx.prisma.battle.findUniqueOrThrow({
         where: {
           id: input.battleId,
-        },
-        data: {
-          status: "CANCELLED",
         },
         include: {
           battleParticipants: {
@@ -407,24 +403,28 @@ export const battleRouter = createTRPCRouter({
         },
       })
 
-      if (battle.metadata.battleReport) {
-        await savePostBattleCatchMetadata({
-          battleReport: battle.metadata.battleReport,
-          prisma: ctx.prisma,
+      const isParticipant = battle.battleParticipants.some(
+        (p) => p.playerId === ctx.player.id
+      )
+      if (!isParticipant) {
+        throw new TRPCError({
+          code: "UNAUTHORIZED",
+          message: "You are not part of this battle",
         })
       }
 
+      await ctx.prisma.battle.update({
+        where: {
+          id: input.battleId,
+        },
+        data: {
+          status: "CANCELLED",
+        },
+      })
+
       await Promise.all(
         map(battle.battleParticipants, async (p) => {
-          if (p.wildlifeId) {
-            await respawnWildlife({
-              prisma: ctx.prisma,
-              wildlifeId: p.wildlifeId,
-              reason: "PLAYER_RUN",
-            })
-          }
-
-          if (p.player) {
+          if (p.player?.metadata?.activeBattleId === input.battleId) {
             await ctx.prisma.player.update({
               where: {
                 id: p.player.id,
@@ -439,5 +439,31 @@ export const battleRouter = createTRPCRouter({
           }
         })
       )
+
+      await Promise.all(
+        map(battle.battleParticipants, async (p) => {
+          if (p.wildlifeId) {
+            await respawnWildlife({
+              prisma: ctx.prisma,
+              wildlifeId: p.wildlifeId,
+              reason: "PLAYER_RUN",
+            })
+          }
+        })
+      )
+
+      if (battle.metadata.battleReport) {
+        try {
+          await savePostBattleCatchMetadata({
+            battleReport: battle.metadata.battleReport,
+            prisma: ctx.prisma,
+          })
+        } catch (error) {
+          console.warn("Failed to save post-battle catch metadata", {
+            battleId: input.battleId,
+            error,
+          })
+        }
+      }
     }),
 })
