@@ -27,6 +27,7 @@ export const PlayerCreationForm = () => {
   const [myLocation, setMyLocation] = useState<LatLng | null>(null)
   const myLocationLoading = startAtMyLocation && !myLocation
   const disabled = myLocationLoading || mutationIsLoading
+  const [hardcore, setHardcore] = useState(false)
 
   useEffect(() => {
     if (startAtMyLocation) {
@@ -62,6 +63,7 @@ export const PlayerCreationForm = () => {
           ...parsed,
           lat: DEFAULT_LOCATION.lat,
           lng: DEFAULT_LOCATION.lng,
+          hardcore,
           ...myLocation,
         })
       }}
@@ -86,6 +88,19 @@ export const PlayerCreationForm = () => {
         />
         <div>Start at My Location</div>
         {myLocationLoading && <Loader2 size={16} className="animate-spin" />}
+      </label>
+      <label className="flex flex-row items-center gap-2">
+        <input
+          type="checkbox"
+          name="hardcore"
+          checked={hardcore}
+          onChange={(e) => setHardcore(e.target.checked)}
+          disabled={disabled}
+        />
+        <div className="flex flex-row gap-1 items-center">
+          <div>Hardcore</div>
+          <div className="text-xs text-gray-400">(not recommended)</div>
+        </div>
       </label>
       <button
         disabled={disabled}

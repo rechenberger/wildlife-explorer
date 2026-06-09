@@ -389,6 +389,13 @@ export const battleRouter = createTRPCRouter({
       })
     )
     .mutation(async ({ ctx, input }) => {
+      if (ctx.player.metadata?.hardcore) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "You cannot run from a battle in hardcore mode",
+        })
+      }
+
       // TODO: chance?
       const battle = await ctx.prisma.battle.findUniqueOrThrow({
         where: {

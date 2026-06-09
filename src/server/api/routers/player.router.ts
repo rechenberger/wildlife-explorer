@@ -39,14 +39,23 @@ export const playerRouter = createTRPCRouter({
     }),
   createMe: protectedProcedure
     .input(
-      z.object({ name: z.string().min(1), lat: z.number(), lng: z.number() })
+      z.object({
+        name: z.string().min(1),
+        lat: z.number(),
+        lng: z.number(),
+        hardcore: z.boolean(),
+      })
     )
     .mutation(async ({ ctx, input }) => {
       const player = await ctx.prisma.player.create({
         data: {
-          ...input,
+          name: input.name,
+          lat: input.lat,
+          lng: input.lng,
           userId: ctx.session.user.id,
-          metadata: {} satisfies PlayerMetadata,
+          metadata: {
+            hardcore: input.hardcore,
+          } satisfies PlayerMetadata,
         },
       })
       return player
